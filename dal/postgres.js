@@ -1,7 +1,7 @@
 var MyObject = require('../lib/MyObject');
 
 var Postgres = function() {
-    return MyObject.apply( MyObject.prototype._.extend( this, {
+    return MyObject.apply( Object.assign( this, {
         client: undefined,
         deferred: { connection: this.Q.defer(), query: this.Q.defer() },
         done: undefined } ), arguments )
@@ -53,8 +53,10 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
     },
 
     querySync: function( query, args ) {
-        this._pgNative.connectSync( this.connectionString )
-        this._pgNative.querySync( query, args )        
+        var client = new this._pgNative()
+        client.connectSync( this.connectionString )
+        var rows = client.querySync( query, args )
+        return rows        
     }
 
 } );

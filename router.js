@@ -4,7 +4,7 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
-    _postgresQuerySync: function( query, args ) {
+    _postgresQuerySync( query, args ) {
         return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
     },
 
@@ -27,7 +27,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
     },
 
-    getAllTables: function() {
+    getAllTables() {
         return this.format(
             "SELECT table_name",
            "FROM information_schema.tables",
@@ -35,11 +35,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
            "AND table_type='BASE TABLE';" )
     },
 
-    getTableColumns: function( tableName ) {
+    getTableColumns( tableName ) {
         return this.format(
             'SELECT column_name',
             'FROM information_schema.columns',
-            this.util.format( "WHERE table_name = '%s';", tableName ) )
+            this.format( "WHERE table_name = '%s';", tableName ) )
     },
 
     handleFailure( response, err, code ) {
@@ -72,9 +72,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
         .catch( err => this.handleFailure( response, err ) )
     },
 
-    initialize: function() {
-        var tableResults = this._postgresQuerySync( this.getAllTables() )
-        this.storeTableData( tableResults )
+    initialize() {
+        var tableResult = this._postgresQuerySync( this.getAllTables() )
+
+        this.storeTableData( tableResult )
 
         this.staticFolder = new (require('node-static').Server)();
 
@@ -83,12 +84,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
-    storeTableData: function( tableResult ) {
-        var columnResult = tableResult.rows.map( row => {
-            this._postgresQuerySync( this.getTableColumns.bind( this, row.table_name ) )
-        })
-
-        this.tables[ row.table_name ] = columnResult.rows.map( column => column.column_name )
+    storeTableData( tableResult ) {
+        tableResult.map( row => {
+            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
+            this.tables[ row.table_name ] = columnResult.map( column => column.column_name )
+        }, this )
     },
 
     url: require( 'url' )
