@@ -4,6 +4,10 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
+    _postgresQuerySync: function( query, args ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
+    },
+
     applyResource( request, response, path, resource ) {
 
         var file = this.format('./resources/%s', this.routes[ path[1] || "/" ] )
@@ -23,11 +27,19 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
     },
 
-    initialize() {
-        
-        this.staticFolder = new (require('node-static').Server)();
+    getAllTables: function() {
+        return this.format(
+            "SELECT table_name",
+           "FROM information_schema.tables",
+           "WHERE table_schema='public'",
+           "AND table_type='BASE TABLE';" )
+    },
 
-        return this;
+    getTableColumns: function( tableName ) {
+        return this.format(
+            'SELECT column_name',
+            'FROM information_schema.columns',
+            this.util.format( "WHERE table_name = '%s';", tableName ) )
     },
 
     handleFailure( response, err, code ) {
@@ -60,16 +72,34 @@ Object.assign( Router.prototype, MyObject.prototype, {
         .catch( err => this.handleFailure( response, err ) )
     },
 
+    initialize: function() {
+        var tableResults = this._postgresQuerySync( this.getAllTables() )
+        this.storeTableData( tableResults )
+
+        this.staticFolder = new (require('node-static').Server)();
+
+        return this;
+    },
+
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
-    url: require( 'url' ),
+    storeTableData: function( tableResult ) {
+        var columnResult = tableResult.rows.map( row => {
+            this._postgresQuerySync( this.getTableColumns.bind( this, row.table_name ) )
+        })
+
+        this.tables[ row.table_name ] = columnResult.rows.map( column => column.column_name )
+    },
+
+    url: require( 'url' )
 
 } );
 
 router = new Router( {
     routes: {
         "/": "root"
-    } 
+    },
+    tables: { } 
 } ).initialize();
 
 module.exports = router.handler.bind(router);

@@ -1,4 +1,4 @@
-var MyObject = require('./MyObject');
+var MyObject = require('../lib/MyObject');
 
 var Postgres = function() {
     return MyObject.apply( MyObject.prototype._.extend( this, {
@@ -7,7 +7,7 @@ var Postgres = function() {
         done: undefined } ), arguments )
 }
 
-MyObject.prototype._.extend( Postgres.prototype, MyObject.prototype, {
+Object.assign( Postgres.prototype, MyObject.prototype, {
 
     _handleConnect: function( err, client, done ) {
         if( err ) return this.deferred.connection.reject( new Error( "Error fetching client from pool : " + err ) )
@@ -32,6 +32,8 @@ MyObject.prototype._.extend( Postgres.prototype, MyObject.prototype, {
 
     _pg: require('pg'),
 
+    _pgNative: require('pg-native'),
+
     _query: function( query, args ) {
 
         this.client.query( query, args, this._handleQuery.bind( this, query, args ) );
@@ -48,6 +50,11 @@ MyObject.prototype._.extend( Postgres.prototype, MyObject.prototype, {
         this.connect().then( this._query.bind( this, query, args ) ).done();
         
         return this.deferred.query.promise;
+    },
+
+    querySync: function( query, args ) {
+        this._pgNative.connectSync( this.connectionString )
+        this._pgNative.querySync( query, args )        
     }
 
 } );
