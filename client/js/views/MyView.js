@@ -1,16 +1,30 @@
-var _ = require('underscore'),
-    $ = require('jquery'),
-    fs = require('fs'),
-    MyView = function( data ) { return _.extend( this, data ).initialize() },
-    user = require('../models/User');
+var MyView = function( data ) { return Object.assign( this, data ).initialize() }
 
-_.extend( MyView.prototype, require('events').EventEmitter.prototype, {
-
-    _: _,
-
-    $: $,
+Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     Collection: require('backbone').Collection.extend( { parse: ( response, options ) => response.result } ),
+
+    _: require('underscore'),
+
+    $: require('jquery'),
+
+    delegateEvents( key, el ) {
+
+        this._.each( this.events, ( eventData, elementKey ) => {
+            var type;
+
+            if( key === elementKey ) {
+                
+                var type = Object.prototype.toString.call( eventData );
+
+                if( type === '[object Object]' ) {
+                    this.bindEvent( elementKey, eventData, el );
+                } else if( type === '[object Array]' ) {
+                    eventData.forEach( singleEvent => this.bindEvent( elementKey, singleEvent, el ) )
+                }
+            }
+        } )
+    },
 
     delete: function() {
         this.templateData.container.remove()
@@ -132,23 +146,7 @@ _.extend( MyView.prototype, require('events').EventEmitter.prototype, {
         return this;
     },
     
-    delegateEvents: function( key, el ) {
-
-        this._.each( this.events, ( eventData, elementKey ) => {
-            var type;
-
-            if( key === elementKey ) {
-                
-                var type = Object.prototype.toString.call( eventData );
-
-                if( type === '[object Object]' ) {
-                    this.bindEvent( elementKey, eventData, el );
-                } else if( type === '[object Array]' ) {
-                    eventData.forEach( singleEvent => this.bindEvent( elementKey, singleEvent, el ) )
-                }
-            }
-        } );
-    },
+    
 
     bindEvent: function( elementKey, eventData, el ) {
         var elements = ( el ) ? el : this.templateData[ elementKey ];
@@ -177,9 +175,9 @@ _.extend( MyView.prototype, require('events').EventEmitter.prototype, {
 
     requiresLogin: true,
     
-    routeToApp: () => { window.location = '/ios/handle' },
+    size: () => { this },
 
-    size: function(){return this},
+    user: ('../models/User'),
 
     util: require('util')
 

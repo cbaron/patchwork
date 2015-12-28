@@ -1,0 +1,15 @@
+<div data-js="container" class="container col-sm-4 col-sm-offset-4">
+    <form class="form-horizontal">
+        {{#each fields}}
+            <div class="form-group">
+                <label for="{{this.name}}" class="col-sm-3 control-label">{{this.label}}</label>
+                <div class="col-sm-9">
+                    <input type="{{this.type}}" class="form-control" data-js="{{this.name}}">
+                </div>
+            </div>
+        {{/each}}
+    </form>
+    <div data-js="buttonRow" class="btn-row">
+        <button data-js="loginBtn" type="button" class="btn border">Log In</button>
+    </div>
+</div>
