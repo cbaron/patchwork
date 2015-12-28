@@ -8,6 +8,7 @@
     "bootstrap": "^3.3.6",
     "handlebars": "^4.0.5",
     "jquery": "^2.1.4",
+    "moment": "^2.10.6",
     "node-env-file": "^0.1.8",
     "node-static": "^0.7.7",
     "pg-native": "^1.10.0",

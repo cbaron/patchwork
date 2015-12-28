@@ -73,7 +73,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         return this;
     },
 
-    template: require('../../templates/chat/modal')( require('handlebars') ),
+    template: require('../templates/modal')( require('handlebars') ),
 
     updateContent: function( updates ) {
         this._.updates.each( ( value, key ) => this.templateData[ key ].html( value ) )

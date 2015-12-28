@@ -25,9 +25,9 @@ module.exports = function( grunt ) {
                       src: ['hbs/**/*.hbs'],
                       rename: function( dest, src ) {
                           if( ! /hbs\/server\//.test( src ) ) {
-                              return "client/js/templates" + src.replace(/^hbs[\/]/, '');
+                              return "client/js/templates/" + src.replace(/^hbs[\/]/, '');
                           } else {
-                              return "templates/" + src.replace(/^hbs[\/]/, '');
+                              return "templates/" + src.replace(/^.*[\\\/]/, '').split(".")[0] + ".js" 
                           }
                       },
                       ext: '.js'
