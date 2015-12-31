@@ -1,6 +1,6 @@
-var Home = function( data ) { return Object.assign( this, data ) }
+var Html = function( data ) { return Object.assign( this, data ) }
 
-Object.assign( Home.prototype, {
+Object.assign( Html.prototype, {
 
     GET() { return this.respond( this.page( { title: "Patchwork Gardens" } ) ) },
 
@@ -24,6 +24,6 @@ Object.assign( Home.prototype, {
         } )
     }
 
-} );
+} )
 
-module.exports = Home;
+module.exports = Html
