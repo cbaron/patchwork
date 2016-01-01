@@ -60,6 +60,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
+        console.log(path)
 
         request.setEncoding('utf8');
 

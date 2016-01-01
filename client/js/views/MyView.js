@@ -70,6 +70,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
                 require('./Header').onUser( this.user )
             } )
             return this
+        } else {
+            require('./Header')
         }
 
         this.$(window).resize( this.size.bind(this) )
