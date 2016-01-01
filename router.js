@@ -8,9 +8,21 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
     },
 
-    applyResource( request, response, path, resource ) {
+    applyHTMLResource( request, response ) {
+        return new Promise( ( resolve, reject ) => {
 
-        var file = this.format('./resources/%s', this.routes[ path[1] || "/" ] )
+            var file = './resources/html'
+
+            require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+                if( err ) reject( err )
+                new ( require(file) )( { response: response } )[ request.method ]().catch( err => reject( err ) )
+            } )
+        } )
+    },
+
+    applyResource( request, response, path ) {
+
+        var file = this.format('./resources/%s', path[1] )
 
         return new Promise( ( resolve, reject ) => {
 
@@ -67,10 +79,20 @@ Object.assign( Router.prototype, MyObject.prototype, {
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
+        if( /text\/html/.test( request.headers.accept ) ) {
+            return this.applyHTMLResource( request, response ).catch( err => this.handleFailure( response, err ) )
+        } else if( /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
+        }
+
+        return this.handleFailure( response, new Error("Not Found"), 404 )
+
+        /*
         if( this.routes[ path[1] || "/" ] === undefined ) return this.handleFailure( response, new Error("Not Found"), 404 )
 
         this.applyResource( request, response, path, this.routes[path[1]] )
         .catch( err => this.handleFailure( response, err ) )
+        */
     },
 
     initialize() {
@@ -86,7 +108,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
     storeTableData( tableResult ) {
-        tableResult.map( row => {
+        tableResult.forEach( row => {
             var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
             this.tables[ row.table_name ] = columnResult.map( column => column.column_name )
         }, this )
@@ -98,7 +120,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
 router = new Router( {
     routes: {
-        "/": "root"
+        REST: {
+            'user': true
+        }
     },
     tables: { } 
 } ).initialize();

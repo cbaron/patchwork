@@ -1,4 +1,4 @@
-var MyObject = require('../../lib/MyObject'),
+var MyObject = require('../lib/MyObject'),
     Resource = function() { return MyObject.apply( this, arguments ) }
 
 Object.assign( Resource.prototype, MyObject.prototype, {
@@ -94,9 +94,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.POST.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
-    queryBuilder: require('../../lib/queryBuilder'),
-
-    redisClient: require('../../lib/redis'),
+    queryBuilder: require('../lib/queryBuilder'),
 
     relations: [ ],
 

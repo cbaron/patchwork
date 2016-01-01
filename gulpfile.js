@@ -30,7 +30,7 @@ gulp.task('modules', function() {
 });
 
 gulp.task('less', function () {
-  return gulp.src('./client/less/*.less')
+  return gulp.src('./less/**/*.less')
     .pipe(plumber({errorHandler: onError}))
     .pipe(less({
       paths: [ path.join(__dirname, 'less', 'includes') ]
@@ -47,5 +47,5 @@ gulp.task('concatCss', [ 'less' ], function () {
 
 gulp.task("watch", function(){
     gulp.watch('./client/js/**/*.js', ['modules'])
-    gulp.watch('./client/less/*.less', ['concatCss'])
+    gulp.watch('./less/**/*.less', ['concatCss'])
 });
