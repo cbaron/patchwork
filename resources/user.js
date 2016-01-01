@@ -6,21 +6,9 @@ BaseResource.prototype._.extend( User.prototype, BaseResource.prototype, {
     GET: function() {
         var token = this.getCookieToken();
 
-        if( ! token ) return this.respond( { body: { }, code: 404 } )
+        if( ! token ) return new Promise( resolve => { this.respond( { body: { } } ); resolve() } )
 
-        return this.Q.ninvoke( this.redisClient, "HGETALL", token )
-            .then( function( user ) {
-                if( user ) user.roles = user.roles.split(',')
-
-                if( user && this.request.headers.iosapp ) {
-                    this.transform( user, require('./member').prototype.transformer.to.iOS )
-                    user.birthdate = ( user.birthdate ) ? new Date( user.birthdate ).getTime() / 1000 : null
-                    user.createdAt = new Date( user.createdAt ).getTime() / 1000
-                    user.updatedAt = new Date( user.updatedAt ).getTime() / 1000
-                }
-
-                return this.respond( { body: { success: true, result: user } } )
-            }.bind(this) )
+        return this.verifyToken( token ).then( user => this.respond( { body: user } ) )
     },
 
     getCookieToken() {
@@ -37,16 +25,15 @@ BaseResource.prototype._.extend( User.prototype, BaseResource.prototype, {
 
     jws: require('jws'),
 
-    verifyToken() {
+    verifyToken( token ) {
         return new Promise( ( resolve, reject ) => {
-            this.jws.process.env.createVerify( {
+            this.jws.createVerify( {
                 key: process.env.JWS_SECRET,
-                signature: this.token,
-            } ).on( 'done', ( verified, obj ) {
-                if( ! verified ) reject( this.getOurError( 'Invalid Signature' ) )
-                this.user = obj
+                signature: token,
+            } ).on( 'done', ( verified, obj ) => {
+                if( ! verified ) reject( 'Invalid Signature' )
                 resolve( obj )
-            } );
+            } )
         } )
     }
 

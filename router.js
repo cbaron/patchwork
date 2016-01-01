@@ -78,8 +78,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
-        console.log( request.headers )
-
         if( /text\/html/.test( request.headers.accept ) ) {
             return this.applyHTMLResource( request, response ).catch( err => this.handleFailure( response, err ) )
         } else if( /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {

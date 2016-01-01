@@ -34,7 +34,7 @@ module.exports = new (
         Q: require('q'),
 
         resources: {
-            admin: require('./views/Admin')
+            admin: require('./views/Admin'),
         },
 
         routes: {
