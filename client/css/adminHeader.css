@@ -1,0 +1,21 @@
+.admin-header {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  height: 5rem;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.admin-header > :first-child {
+  height: 100%;
+  margin: 0 auto;
+  max-width: 61.25rem;
+}
+.admin-header > :first-child .logo-container {
+  float: left;
+  line-height: 5rem;
+}
+.admin-header > :first-child .logo-container img {
+  height: 2rem;
+}

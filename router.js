@@ -8,14 +8,14 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
     },
 
-    applyHTMLResource( request, response ) {
+    applyHTMLResource( request, response, path ) {
         return new Promise( ( resolve, reject ) => {
 
             var file = './resources/html'
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 if( err ) reject( err )
-                new ( require(file) )( { response: response } )[ request.method ]().catch( err => reject( err ) )
+                new ( require(file) )( { path: path, response: response } )[ request.method ]().catch( err => reject( err ) )
             } )
         } )
     },
@@ -79,7 +79,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
         if( /text\/html/.test( request.headers.accept ) ) {
-            return this.applyHTMLResource( request, response ).catch( err => this.handleFailure( response, err ) )
+            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
         } else if( /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
         }
