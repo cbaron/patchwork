@@ -183,7 +183,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST: function() {
-            if( this.name === 'auth' || this.name === 'member' ) return
+            if( /(auth|member)/.test(this.path[1]) ) return
             
             this.validate.Token.call(this)
             

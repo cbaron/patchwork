@@ -3,10 +3,17 @@ var BaseResource = require('./__proto__'),
 
 Object.assign( Auth.prototype, BaseResource.prototype, {
 
-    createToken() {
-    },
+    User: require('./util/User'),
 
-    attachUserRoles: Member.prototype.attachUserRoles,
+    createToken() {
+        return new Promise( ( resolve, reject ) => {
+            this.jws.createSign( {
+                header: { "alg": "HS256", "typ": "JWT" },
+                payload: JSON.stringify( this.user ),
+                privateKey: process.env.JWS_SECRET,
+            } ).on( 'done', signature => resolve( signature ) )
+        } )
+    },
 
     bcrypt: require('bcrypt-nodejs'),
 
@@ -18,28 +25,21 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
 
         this.user = this._.omit( result.rows[0], [ 'password' ] )
 
-        return this.Q.fcall( this.buildUser.bind(this), result )
-            .then( this.attachUserRoles.bind(this) )
-            .then( this.addToSession.bind(this) )
-            .then( this.respond.bind(this) )
+        return this.User.attachUserRoles.call(this).then( () => this.createToken() )
+        .then( token => this.respond( { body: this.user, headers: { 'Set-Cookie': this.format('patchworkjwt=%s; Domain=%s;', token, process.env.DOMAIN ) } } ) )
     },
 
-    POST: function() {
-        
-        return [
-            this.slurpBody.bind(this),
-            this.queryByEmail.bind(this),
-            this.handleQueryResult.bind(this) ].reduce( this.Q.when, this.Q({}) );
+    jws: require('jws'),
+
+    POST() {
+        return this.slurpBody().then( () => this.queryByEmail() ).then( result => this.handleQueryResult( result ) )
     },
 
     queryByEmail() { return this.dbQuery( { query: "SELECT * FROM person WHERE username = $1", values: [ this.body.username ] } ) },
 
-    respond: Member.prototype.respond,
-
-    validatePOST: function() {
-
+    validatePOST() {
         [ 'password', 'username' ].forEach( attr => {
-            if( ! this.body[ attr ] ) throw new Error( this.util.format( "%s is a required field", attr ) )
+            if( ! this.body[ attr ] ) throw new Error( this.format( "%s is a required field", attr ) )
         } )
     }
 

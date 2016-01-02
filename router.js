@@ -1,6 +1,6 @@
 var router,
     MyObject = require('./lib/MyObject'),
-    Router = function() { return MyObject.apply( this, arguments ) };
+    Router = function() { return MyObject.apply( this, arguments ) }
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
@@ -80,7 +80,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         if( /text\/html/.test( request.headers.accept ) ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
-        } else if( /application\/json/.test( request.headers.accept ) && ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+        } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
+                   ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
         }
 
@@ -120,6 +121,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 router = new Router( {
     routes: {
         REST: {
+            'auth': true,
             'user': true
         }
     },

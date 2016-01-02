@@ -14,7 +14,7 @@ _.extend( FormView.prototype, {
 
     onSubmissionResponse: function() { },
     
-    postForm: function( data ) {
+    postForm( data ) {
 
         return this.Q(
             this.$.ajax( {

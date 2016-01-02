@@ -10,7 +10,7 @@ Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototy
     },
 
     fields: [
-            { name: "username", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: val => val.length >= 6 },
+            { name: "username", label: 'Username', type: 'text', error: "Please enter a valid email address.", validate: val => val.length >= 6 },
             { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: val => val.length >= 6 }
     ],
 
@@ -22,13 +22,13 @@ Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototy
 
     onSubmissionResponse( response ) {
         
-        if( Object,keys( response.length ) === 0 )
+        if( Object.keys( response ).length === 0 ) {
             return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
         }
         
         this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
     
-        require('../models/User').set( response.result.member );
+        require('../models/User').set( response );
         this.emit( "success" );
         this.hide().done();
     },

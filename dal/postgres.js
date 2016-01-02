@@ -23,7 +23,7 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
     _handleQuery: function( query, args, err, result ) {
         this.done();
 
-        if( err ) return this.deferred.query.reject( new Error( this.util.format( 'Running query (%s [%s]) : %s', query, args.join(), err ) ) )
+        if( err ) return this.deferred.query.reject( new Error( this.format( 'Running query (%s [%s]) : %s', query, args.join(), err ) ) )
 
         this.deferred.query.resolve( result );
 

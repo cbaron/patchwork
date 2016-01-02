@@ -58,8 +58,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         if( ! this.container ) this.container = this.$('#content')
         
-        if( ! this.user ) this.user = user
-
         this.router = this.getRouter()
 
         this.modalView = require('./modal')
@@ -177,7 +175,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     
     size: () => { this },
 
-    user: ('../models/User'),
+    user: require('../models/User'),
 
     util: require('util')
 
