@@ -151,7 +151,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     bindEvent: function( elementKey, eventData, el ) {
         var elements = ( el ) ? el : this.templateData[ elementKey ];
 
-        elements.on( eventData.event, eventData.selector, eventData.meta, this[ eventData.method ].bind(this) )
+        elements.on( eventData.event || 'click', eventData.selector, eventData.meta, this[ eventData.method ].bind(this) )
     },
 
     events: {},

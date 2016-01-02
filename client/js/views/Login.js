@@ -3,41 +3,45 @@ var MyView = require('./MyView'),
 
 Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototype, {
 
+    checkForEnter( e ) { if( e.keyCode === 13 ) this.login() },
+
     events: {
-        'loginBtn': { event: 'click', selector: '', method: 'login' }
+        'loginBtn': { method: 'login' }
     },
 
     fields: [
-            { name: "email", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
-            { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: function( val ) { return val.length >= 6 } }
+            { name: "username", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: val => val.length >= 6 },
+            { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: val => val.length >= 6 }
     ],
 
-    getTemplateOptions: function() { return { fields: this.fields } },
+    getTemplateOptions() { return { fields: this.fields } },
 
-    login: function() { this.submitForm( { resource: "auth" } ) },
+    login() { this.submitForm( { resource: "auth" } ) },
 
     name: "Login",
 
-    onSubmissionResponse: function( response ) {
+    onSubmissionResponse( response ) {
         
-        if( response.success === false ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.buttonRow, method: 'before' } } )
+        if( Object,keys( response.length ) === 0 )
+            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
         }
+        
+        this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
     
         require('../models/User').set( response.result.member );
         this.emit( "success" );
         this.hide().done();
     },
 
-    render: function() {
-        MyView.prototype.render.call(this);
+    postRender() {
         this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
+        this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
     },
 
     requiresLogin: false,
 
     template: require('../templates/login')( require('handlebars') )
 
-} );
+} )
 
 module.exports = new Login()
