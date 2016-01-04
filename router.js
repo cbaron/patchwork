@@ -5,7 +5,7 @@ var router,
 Object.assign( Router.prototype, MyObject.prototype, {
 
     _postgresQuerySync( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args );
     },
 
     applyHTMLResource( request, response, path ) {
@@ -20,15 +20,16 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
     },
     
-    applyResource( request, response, path, subPath = '' ) {
+    applyResource( request, response, path, subPath ) {
 
-        var file = this.format('./resources%s/%s', subPath, path[1] )
+        var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
+            file = this.format('./resources%s/%s', subPath || '', filename )
 
         return new Promise( ( resolve, reject ) => {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 if( err ) reject( err )
-                
+
                 new ( require(file) )( {
                     request: request,
                     response: response,
@@ -83,7 +84,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
                    ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
-        } else if( ( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) {
+        } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
             if( path[1] === "" ) path[1] === "index"
             return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err ) )
         }
@@ -99,9 +100,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     initialize() {
-        var tableResult = this._postgresQuerySync( this.getAllTables() )
-
-        this.storeTableData( tableResult )
+        this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
 
         this.staticFolder = new (require('node-static').Server)();
 
@@ -119,7 +118,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     url: require( 'url' )
 
-} );
+} )
 
 router = new Router( {
     routes: {
