@@ -34,7 +34,9 @@ module.exports = new (
         Q: require('q'),
 
         resources: {
-            admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } }
+            //about: { view: require('./views/About'), options: { } },
+            admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } },
+            //home:  { view: require('./views/Home'), options: { } }
         },
 
         routes: {

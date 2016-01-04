@@ -1,7 +1,7 @@
 var MyView = require('./MyView'),
-    Header = function() { return MyView.apply( this, arguments ) }
+    AdminHeader = function() { return MyView.apply( this, arguments ) }
 
-Object.assign( Header.prototype, MyView.prototype, {
+Object.assign( AdminHeader.prototype, MyView.prototype, {
 
     events: {
         'signoutBtn': { event: 'click', selector: '', method: 'signout' }
@@ -25,7 +25,6 @@ Object.assign( Header.prototype, MyView.prototype, {
 
     onUser: function( user ) {
         this.user = user
-
         /*            
         this.templateData.name.text( this.user.get('name') )
         this.templateData.signoutBtn.removeClass('hide')
@@ -57,4 +56,4 @@ Object.assign( Header.prototype, MyView.prototype, {
 
 } )
 
-module.exports = new Header()
+module.exports = new AdminHeader()

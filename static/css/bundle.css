@@ -86,3 +86,49 @@ li {
   line-height: 3em;
   text-align: center;
 }
+#header > .wrapper {
+  background-image: url("/static/img/unnamed (11).jpg");
+  background-size: 1300px 500px;
+  background-repeat: no-repeat;
+  color: #666;
+}
+
+.navbar {
+  height: 500px;
+}
+
+.navbar .navbar-nav {
+  width: 100%;
+  text-align: center;
+}
+
+.navbar .navbar-nav li {
+  display: inline-block;
+  float: none;
+  margin: 0 16.5px;
+  text-align: center;
+  font-family: "proxima-nova";
+  font-weight: 300;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 3em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#logo h1 {
+  text-align: center;
+  width: 100%;
+}
+
+#logo .site-title-span {
+  display: inline-block;
+  color: black;
+  font-family: "Raleway";
+  font-size: 75px;
+  line-height: 1em;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 100;
+  font-style: normal;
+}
