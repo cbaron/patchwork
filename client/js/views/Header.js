@@ -3,12 +3,18 @@ var MyView = require('./MyView'),
 
 Object.assign( Header.prototype, MyView.prototype, {
 
-    fields: [ 'sign up', 'about us', 'where to find us', 'member resources', 'employment', 'contact' ],
+    events: {},
 
-    getTemplateOptions() {
-        var fields = this.fields.map( function( field ) { return field.toUpperCase() } )
-        return { fields: fields }
-    },
+    fields: [
+            { label: 'Sign Up', name: 'signup' },
+            { label: 'About Us', name: 'about' },
+            { label: 'Where To Find Us', name: 'findUs' },
+            { label: 'Member Resources', name: 'member' },
+            { label: 'Employment', name: 'employment' },
+            { label: 'Contact Us', name: 'contact' }
+    ],
+
+    getTemplateOptions() { return { fields: this.fields } },
 
     insertionMethod: 'before',
 

@@ -1,3 +1,5 @@
+<header id="header">
+<div class="wrapper">
 <nav data-js="container" class="navbar navbar-default>
     <div class="container-fluid">
         <div class="navbar-header">
@@ -7,15 +9,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="../static/img/favicon.png"></a>
         </div>
 
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 {{#each fields}}
-                    <li data-js="navLink">{{this}}</li>
+                    <li data-js={{this.name}}>{{this.label}}</li>
                 {{/each}}
             </ul>
         </div>
+        <div id="logo">
+            <h1 class="site-title">
+                <span class="site-title-span">Patchwork Gardens</span>
+            </h1>
+        </div>
     </div>
 </nav>
+</div>
+</header>

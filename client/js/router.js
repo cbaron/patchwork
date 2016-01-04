@@ -35,6 +35,8 @@ module.exports = new (
 
         resources: {
             admin: require('./views/Admin'),
+            //about: require('./views/About'),
+            //home: require('./views/Home')
         },
 
         routes: {
