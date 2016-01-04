@@ -1,1 +1,0 @@
-ALTER TABLE person ADD COLUMN username VARCHAR(10);

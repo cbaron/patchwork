@@ -24,6 +24,7 @@ var onBrowserifyError = function (err) {
 gulp.task('modules', function() {
     return browserify( { entries: [ './client/js/main.js' ], debug: true, list: true } )
     .transform( babelify.configure( { compact: false } ) )
+    .transform("strictify")
     .bundle().on('error', onBrowserifyError)
     .pipe(source('bundle.js'))
     .pipe(gulp.dest('./static/js'));

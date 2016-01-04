@@ -1,8 +1,7 @@
-var _ = require('underscore'),
-    MyView = require('../MyView'),
+var MyView = require('../MyView'),
     ListView = function() { return MyView.apply( this, arguments ) };
 
-_.extend( ListView.prototype, MyView.prototype, {
+Object.assign( ListView.prototype, MyView.prototype, {
 
     addItem: function( model ) {
         this.itemViews[ model.id ] =
@@ -63,7 +62,7 @@ _.extend( ListView.prototype, MyView.prototype, {
         this[ method ]( model )
     },
 
-    postRender: function() {
+    postRender() {
 
         var extension = { }
 
@@ -103,7 +102,7 @@ _.extend( ListView.prototype, MyView.prototype, {
             .on( 'sort', () => this.reOrderDOM() )
 
         if( this.fetch ) {
-            this.Q( this.items.fetch( { headers: { token: this.user.get('token') } } ) )
+            this.Q( this.items.fetch( { headers: this.fetch.headers } ) )
             .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
             .done()
         }

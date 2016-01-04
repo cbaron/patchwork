@@ -1,5 +1,4 @@
-var MyObject = require('../../../../../lib/MyObject'),
-    Backbone = require('backbone'),
+var MyObject = require('../../../../lib/MyObject'),
     Collections = function() {
         this.collections = { }
         return MyObject.apply( this, arguments )
@@ -14,7 +13,7 @@ Object.assign( Collections.prototype, MyObject.prototype, {
         if( this.comparator ) extension.comparator = this.comparator
         if( this.model ) extension.model = this.model
 
-        collection = new ( Backbone.Collection.extend( extension ) )()
+        collection = new ( require('backbone').Collection.extend( extension ) )()
                 
         this.collections[ id ] = collection
 

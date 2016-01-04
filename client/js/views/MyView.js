@@ -65,7 +65,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         if( this.requiresLogin && ! this.user.id ) {
             require('./Login').show().once( "success", e => {
                 this.render()
-                require('./Header').onUser( this.user )
+                this.router.header.onUser( this.user )
             } )
             return this
         }

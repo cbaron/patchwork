@@ -26,7 +26,7 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
         this.user = this._.omit( result.rows[0], [ 'password' ] )
 
         return this.User.attachUserRoles.call(this).then( () => this.createToken() )
-        .then( token => this.respond( { body: this.user, headers: { 'Set-Cookie': this.format('patchworkjwt=%s; Domain=%s;', token, process.env.DOMAIN ) } } ) )
+        .then( token => this.respond( { body: this.user, headers: { 'Set-Cookie': this.format( 'patchworkjwt=%s;', token ) } } ) )
     },
 
     jws: require('jws'),

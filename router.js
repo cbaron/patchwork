@@ -19,10 +19,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
             } )
         } )
     },
+    
+    applyResource( request, response, path, subPath = '' ) {
 
-    applyResource( request, response, path ) {
-
-        var file = this.format('./resources/%s', path[1] )
+        var file = this.format('./resources%s/%s', subPath, path[1] )
 
         return new Promise( ( resolve, reject ) => {
 
@@ -32,7 +32,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
                 new ( require(file) )( {
                     request: request,
                     response: response,
-                    path: path
+                    path: path,
+                    tables: this.tables,
                 } )[ request.method ]()
                 .catch( err => reject( err ) )
             } )
@@ -56,8 +57,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     handleFailure( response, err, code ) {
 
-        var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err,
-            body = JSON.stringify( { success: false, message: message } );
+        var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err
 
         console.log( err.stack || err );
 
@@ -65,9 +65,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Keep-Alive': 'timeout=50, max=100',
-            'Date': new Date().toISOString() }, { "Content-Length": Buffer.byteLength( body ) } ) )
+            'Date': new Date().toISOString() }, { "Content-Length": Buffer.byteLength( message ) } ) )
 
-        response.end( body )
+        response.end( message )
     },
     
     handler( request, response ) {
@@ -83,6 +83,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
                    ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
+        } else if( ( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) {
+            if( path[1] === "" ) path[1] === "index"
+            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err ) )
         }
 
         return this.handleFailure( response, new Error("Not Found"), 404 )

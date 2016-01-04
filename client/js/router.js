@@ -26,7 +26,7 @@ module.exports = new (
 
                 if( this.views[ resource ] ) return this.views[ resource ].show()
 
-                this.views[ resource ] = new ( this.resources[ resource ] )()
+                this.views[ resource ] = new ( this.resources[ resource ].view )(this.resources[ resource ].options)
 
             } ).catch( err => new this.Error(err) )
         },
@@ -34,7 +34,7 @@ module.exports = new (
         Q: require('q'),
 
         resources: {
-            admin: require('./views/Admin'),
+            admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } }
         },
 
         routes: {
