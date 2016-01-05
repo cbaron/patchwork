@@ -87,7 +87,7 @@ li {
   text-align: center;
 }
 #header > .wrapper {
-  background-image: url("/static/img/unnamed (11).jpg");
+  background-image: url("/static/img/bucket_in_field.jpg");
   background-size: 1300px 500px;
   background-repeat: no-repeat;
   color: #666;
@@ -116,6 +116,10 @@ li {
   letter-spacing: 2px;
 }
 
+#logo {
+  cursor: pointer;
+}
+
 #logo h1 {
   text-align: center;
   width: 100%;
@@ -131,4 +135,9 @@ li {
   text-align: center;
   font-weight: 100;
   font-style: normal;
+}
+.carousel-inner > .item > img {
+  width: 65%;
+  height: 500px;
+  margin: auto;
 }

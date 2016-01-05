@@ -3,7 +3,9 @@ var MyView = require('./MyView'),
 
 Object.assign( Header.prototype, MyView.prototype, {
 
-    events: {},
+    events: {
+        'logo': { event: 'click', selector: '', method: 'showHome' },
+    },
 
     fields: [
             { label: 'Sign Up', name: 'signup' },
@@ -19,6 +21,8 @@ Object.assign( Header.prototype, MyView.prototype, {
     insertionMethod: 'before',
 
     requiresLogin: false,
+
+    showHome() { this.router.navigate( 'home' ) },
 
     size() {
         var content = this.$('#content'),

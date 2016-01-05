@@ -1,5 +1,5 @@
 #header > .wrapper {
-  background-image: url("/static/img/unnamed (11).jpg");
+  background-image: url("/static/img/bucket_in_field.jpg");
   background-size: 1300px 500px;
   background-repeat: no-repeat;
   color: #666;
@@ -23,6 +23,9 @@
   line-height: 3em;
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+#logo {
+  cursor: pointer;
 }
 #logo h1 {
   text-align: center;
