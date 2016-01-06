@@ -1,9 +1,11 @@
-var ListItem = require('./util/ListItem'),
-    Resource = function() { return ListItem.apply( this, arguments ) }
+var MyView = require('./MyView'),
+    Resource = function() { return MyView.apply( this, arguments ) }
 
-Object.assign( Resource.prototype, ListItem.prototype, {
+Object.assign( Resource.prototype, MyView.prototype, {
 
-    getTemplateOptions() { return { values: this.fields.map( field => ( { name: field, value: this.model.get(field) } ) ) } },
+    getTemplateOptions() {
+        return { resource: resource }
+    },
 
     template: require('../templates/resource')( require('handlebars') )
 

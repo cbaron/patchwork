@@ -51,3 +51,23 @@ li {
   line-height: 3em;
   text-align: center;
 }
+.sub-heading {
+  font-size: 2rem;
+  line-height: 3em;
+  text-align: center;
+}
+.w10 {
+  width: 10%;
+}
+.w15 {
+  width: 15%;
+}
+.w25 {
+  width: 25%;
+}
+.w50 {
+  width: 50%;
+}
+.w70 {
+  width: 70%;
+}

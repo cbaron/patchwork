@@ -4,6 +4,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     Collection: require('backbone').Collection.extend( { parse: ( response, options ) => response.result } ),
 
+    Error: require('../MyError'),
+
     _: require('underscore'),
 
     $: require('jquery'),

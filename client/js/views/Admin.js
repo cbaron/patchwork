@@ -3,13 +3,21 @@ var Table = require('./util/Table'),
 
 Object.assign( Admin.prototype, Table.prototype, {
 
-    ItemView: require('./Resource'),
+    ItemView: require('./ResourceRow'),
 
     fields: [
-        { name: 'name', label: 'Name' },
-        { name: 'label', label: 'Label' },
-        { name: 'description', label: 'Description' }
+        { name: 'name', label: 'Name', width: 25 },
+        { name: 'label', label: 'Label', width: 25 },
+        { name: 'description', label: 'Description', width: 50 }
     ],
+    
+    onItemClick( model ) {
+        this.hide().then( () => this.router.navigate( model.get('name') ) )
+        .fail( err => new this.Error( err ) )
+        .done()
+    },
+
+    selection: true,
 
     template: require('../templates/admin')( require('handlebars') )
 

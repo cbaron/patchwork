@@ -111,9 +111,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     reOrderDOM: function() {
         var container = this.getItemViewOptions().container || this.templateData.container
-        this.items.map( item ) => 
-            container[ ( this.reverseSort ) ? 'prepend' : 'append' ]( this.itemViews[item.id].templateData.container )
-        )
+        this.items.forEach( item => container[ ( this.reverseSort ) ? 'prepend' : 'append' ]( this.itemViews[item.id].templateData.container ) )
     },
 
     scrollToBottom: function() {

@@ -8,7 +8,7 @@ Object.assign( Table.prototype, List.prototype, {
     },
 
     getItemViewOptions() {
-        return { container: this.templateData.body, fields: this.fields.map( field => field.name ) }
+        return { container: this.templateData.body, fields: this.fields }
     },
 
     getTemplateOptions() { return { fields: this.fields } },
