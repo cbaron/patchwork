@@ -136,8 +136,24 @@ li {
   font-weight: 100;
   font-style: normal;
 }
+#carousel {
+  margin: 70px auto;
+  width: 900px;
+}
+
 .carousel-inner > .item > img {
-  width: 65%;
+  width: 80%;
   height: 500px;
+  margin: auto;
+}
+
+#homeText {
+  width: 100%;
+  margin: 75px auto 45px;
+}
+
+#homeText h3 {
+  text-align: center;
+  width: 80%;
   margin: auto;
 }
