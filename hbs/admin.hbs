@@ -1,1 +1,11 @@
 <div data-js="container" class="row"></div>
+<table data-js="table">
+    <thead data-js="header">
+        <tr class="clearfix">
+            {{#each fields}}
+                <th data-sort="{{this.name}}">{{this.label}}</th>
+            {{/each}}
+        </tr>
+    </thead>
+    <tbody data-js="body"></tbody>
+</table>

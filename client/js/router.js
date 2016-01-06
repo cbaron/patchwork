@@ -22,7 +22,7 @@ module.exports = new (
           
             this.userPromise.then( () => {
 
-                if( this.user.id ) this.header.onUser( this.user )
+                if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
 
                 if( this.views[ resource ] ) return this.views[ resource ].show()
 
@@ -35,7 +35,9 @@ module.exports = new (
 
         resources: {
             //about: { view: require('./views/About'), options: { } },
-            admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } },
+            admin: {
+                view: require('./views/Admin'),
+                options: { collection: { comparator: "name", url: "/", parse: response => response.resource }, fetch: { headers: { accept: "application/ld+json" } } } },
             //home:  { view: require('./views/Home'), options: { } }
         },
 
