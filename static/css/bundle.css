@@ -86,23 +86,68 @@ li {
   line-height: 3em;
   text-align: center;
 }
+#footer {
+  background-color: #131313;
+  color: #ccc;
+  height: 150px;
+  width: 100%;
+}
+
+#footer ul {
+  margin: 10px 0px 10px 10%;
+  width: 90%;
+  text-align: left;
+}
+
+#footer ul li {
+  display: inline-block;
+  float: none;
+  margin: 12px 16.5px 12px 0;
+  text-align: left;
+  font-family: "proxima-nova";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+}
+
+#footer .horizontalrule {
+  border-top: 1px solid white;
+  height: auto;
+  width: 85%;
+  margin: 0 auto 10px 10%;
+}
+
+#footer #futureDays {
+  display: inline-block;
+  float: none;
+  margin: 0 0 0 10%;
+  text-align: left;
+  font-family: "proxima-nova";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+}
 #header > .wrapper {
   background-image: url("/static/img/bucket_in_field.jpg");
-  background-size: 1300px 500px;
+  background-size: 100% 500px;
   background-repeat: no-repeat;
   color: #666;
 }
 
-.navbar {
+#header .navbar {
   height: 500px;
 }
 
-.navbar .navbar-nav {
+#header .navbar .navbar-nav {
   width: 100%;
   text-align: center;
 }
 
-.navbar .navbar-nav li {
+#header .navbar .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 0 16.5px;
@@ -138,22 +183,22 @@ li {
 }
 #carousel {
   margin: 70px auto;
-  width: 900px;
+  width: 75%;
 }
 
 .carousel-inner > .item > img {
-  width: 80%;
+  width: 90%;
   height: 500px;
   margin: auto;
 }
 
 #homeText {
   width: 100%;
-  margin: 75px auto 45px;
+  margin: 75px auto 75px;
 }
 
 #homeText h3 {
   text-align: center;
-  width: 80%;
+  width: 75%;
   margin: auto;
 }

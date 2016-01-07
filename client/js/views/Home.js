@@ -3,7 +3,7 @@ var MyView = require('./MyView'),
 
 Object.assign( Home.prototype, MyView.prototype, {
 
-    initialImage: { path: 'static/img/assortment.jpg', description: "Assorted vegetables" },
+    initialImage: { path: 'static/img/dog_fort.jpg', description: "Assorted vegetables" },
 
     getTemplateOptions() {
         return { initialImage: this.initialImage, images: this.images }

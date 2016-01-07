@@ -24,7 +24,7 @@ Object.assign( Header.prototype, MyView.prototype, {
 
     showHome() { this.router.navigate( 'home' ) },
 
-    size() {
+    /*size() {
         var content = this.$('#content'),
             jWindow = this.$(window)
 
@@ -33,7 +33,7 @@ Object.assign( Header.prototype, MyView.prototype, {
         content.height( jWindow.height() - this.templateData.container.outerHeight( true ) )
 
         return this
-    },
+    },*/
 
     template: require('../templates/header')( require('handlebars') )
 

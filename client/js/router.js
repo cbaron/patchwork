@@ -18,6 +18,8 @@ module.exports = new (
 
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
+            this.footer = require('./views/Footer')
+
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
             this.userPromise.then( () => {
