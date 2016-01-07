@@ -50,6 +50,17 @@
         
         tbody {
             display: block;
+
+            &.no-items {
+                color: gray;
+                padding-top: 20px;
+                text-align: center;
+
+                &:before {
+                    content: 'No items';
+                    display: block;
+                }
+            }
         }
         
     }

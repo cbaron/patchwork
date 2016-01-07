@@ -13,6 +13,8 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this.emit( 'itemAdded', model )
     },
 
+    collection: { },
+
     getClosestClickedIndex: function( model ) {
         var clickedIndex = this.items.indexOf( model ),
             closest = undefined,
@@ -78,7 +80,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this.selectedItems = { }
         
         this.items =
-            new ( this.Collection.extend( this.collection || {} ) )()
+            new ( this.Collection.extend( ( typeof this.collection === "function" ) ? this.collection() : this.collection ) )()
             .on( 'reset', () => {
                 var listContainer = this.getItemViewOptions().container || this.templateData.container 
                 listContainer.empty()
@@ -98,7 +100,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
             .on( 'sort', () => this.reOrderDOM() )
 
         if( this.fetch ) {
-            this.Q( this.items.fetch( { headers: this.fetch.headers } ) )
+            this.Q( this.items.fetch( { headers: this.fetch.headers, reset: true } ) )
             .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
             .done()
         }

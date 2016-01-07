@@ -18,6 +18,8 @@ module.exports = new (
 
         handler( resource ) {
 
+            console.log( resource )
+
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
@@ -44,7 +46,7 @@ module.exports = new (
 
                 if( this.views.resource ) return this.views.resource.update( resource )
 
-                this.views.resource = new this.Resource( { resource: resource } )()
+                this.views.resource = new this.Resource( { resource: resource } )
 
             } ).catch( err => new this.Error(err) )
         },
@@ -69,7 +71,7 @@ module.exports = new (
         routes: {
             '': 'handler',
             ':resource': 'handler',
-            '/admin/:resource': 'resourceHandler'
+            'admin/:resource': 'resourceHandler'
         }
 
     } )

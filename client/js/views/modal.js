@@ -42,7 +42,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
     requiresLogin: false,
 
-    show: function( options ) {
+    show( options ) {
 
         var bsOpts = { show: true }
 

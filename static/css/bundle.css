@@ -220,3 +220,14 @@ li {
 .mytable table tbody {
   display: block;
 }
+
+.mytable table tbody.no-items {
+  color: gray;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.mytable table tbody.no-items:before {
+  content: 'No items';
+  display: block;
+}

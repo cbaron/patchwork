@@ -12,7 +12,7 @@ Object.assign( Admin.prototype, Table.prototype, {
     ],
     
     onItemClick( model ) {
-        this.hide().then( () => this.router.navigate( model.get('name') ) )
+        this.hide().then( () => this.router.navigate( this.util.format( "/admin/%s", model.get('name') ) ) )
         .fail( err => new this.Error( err ) )
         .done()
     },

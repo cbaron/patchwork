@@ -28,7 +28,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return new Promise( ( resolve, reject ) => {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
-                if( err ) reject( err )
+                if( err ) { 
+                    if( err.code !== "ENOENT" ) return reject( err )
+                    file = './resources/hyper/__proto__'
+                }
 
                 new ( require(file) )( {
                     request: request,
@@ -41,6 +44,12 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
     },
 
+    dataTypeToRange: {
+        "integer": "Integer",
+        "money": "Float",
+        "character varying": "Text"
+    },
+
     getAllTables() {
         return this.format(
             "SELECT table_name",
@@ -51,7 +60,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     getTableColumns( tableName ) {
         return this.format(
-            'SELECT column_name',
+            'SELECT column_name, data_type',
             'FROM information_schema.columns',
             this.format( "WHERE table_name = '%s';", tableName ) )
     },
@@ -91,16 +100,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         return this.handleFailure( response, new Error("Not Found"), 404 )
 
-        /*
-        if( this.routes[ path[1] || "/" ] === undefined ) return this.handleFailure( response, new Error("Not Found"), 404 )
-
-        this.applyResource( request, response, path, this.routes[path[1]] )
-        .catch( err => this.handleFailure( response, err ) )
-        */
     },
 
     initialize() {
         this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
+        this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
 
         this.staticFolder = new (require('node-static').Server)();
 
@@ -111,9 +115,16 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     storeTableData( tableResult ) {
         tableResult.forEach( row => {
-            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-            this.tables[ row.table_name ] = columnResult.map( column => column.column_name )
-        }, this )
+             var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
+             this.tables[ row.table_name ] =
+                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+         } )
+    },
+    
+    storeTableMetaData( metaDataResult ) {
+        metaDataResult.forEach( row => {
+            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = { label: row.label, description: row.description }
+         } )
     },
 
     url: require( 'url' )
