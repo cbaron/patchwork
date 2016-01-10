@@ -5,7 +5,6 @@ window.$ = window.jQuery = $
 
 require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')
-require('./plugins/bootstrap-typeahead')
 
 $( () => {
     require('./views/modal')

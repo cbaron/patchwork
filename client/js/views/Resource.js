@@ -3,8 +3,6 @@ var Table = require('./util/Table'),
 
 Object.assign( Resource.prototype, Table.prototype, {
 
-    Bloodhound: require('../plugins/bloodhound'),
-
     Instance: require('../models/Instance'),
 
     ItemView: require('./InstanceRow'),
@@ -32,25 +30,23 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     initTypeahead( property ) {
-        
-        var bloodhound = new this.Bloodhound( {
-            datumTokenizer: this.Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: this.Bloodhound.tokenizers.whitespace,
+
+        var bloodhound = new Bloodhound( {
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            identify: obj => obj.id,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: this.util.format( "/%s?name=%QUERY", property.property ),
-                replace: ( url, query ) => url.replace( '%QUERY', encodeURIComponent(query) ),
+                replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query ) ),
+                url: this.util.format( "/%s?name=%QUERY", property.property )
             }
         } )
 
-        this.$( '#' + property.property ).typeahead( {
-            hint: true,
-            highlight: true,
-            minLength: 1
-        }, {
-            name: property.property,
-            display: obj => obj.name,
-            source: bloodhound.ttAdapter()
-        } )
+        bloodhound.initialize()
+
+        this.$( '#' + property.property ).typeahead(
+            { hint: true, minLength: 1 },
+            { display: obj => obj.name, source: bloodhound.ttAdapter() }
+        )
     },
 
     postRender() {
@@ -63,13 +59,15 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.modalView.show( {
             body: this.templates.create( {
                 fields: this.createProperties.map( property => 
-                    this.templates[ property.range ]( { name: property.property, label: this.getLabel( property.property ) } )
+                    this.templates[ property.range ]( {
+                        class: ( property.fk ) ? 'typeahead' : '',
+                        name: property.property,
+                        label: this.getLabel( property.property )
+                    } )
                 )
             } ),
             title: this.util.format( 'Create %s', this.label )
-        } )
-
-        this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } )
+        } ).on( 'shown', () => this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } ) )
     },
 
     template: require('../templates/resource')( require('handlebars') ),
