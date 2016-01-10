@@ -31,7 +31,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
         .then( result => {
             rv[ this.path[1] ] =
                 result.rows.map( row =>
-                    Object.assign( { "@id": this.format( "https://%s:%s/%s/%d", process.env.DOMAIN, process.env.PORT, name, row.id ) }, row ) )
+                    Object.assign( { "@id": this.format( "https://%s:%s/%s/%d", process.env.DOMAIN, process.env.PORT, this.path[1], row.id ) }, row ) )
 
             this.respond( { body: rv } )
         } )

@@ -34,7 +34,10 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
     },
 
     postRender: function() {
-        this.templateData.container.on( 'hidden.bs.modal', () => { this.hide( { reset: true } ); this.emit( 'hidden' ) } )
+        this.templateData.container.on( 'hidden.bs.modal', () => {
+            this.hide( { reset: true } )
+            this.emit( 'hidden' )
+        } )
         this.templateData.container.on( 'shown.bs.modal', () => { this.emit( 'shown' ) } )
 
         return this;

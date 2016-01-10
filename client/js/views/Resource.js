@@ -36,17 +36,20 @@ Object.assign( Resource.prototype, Table.prototype, {
             identify: obj => obj.id,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
+                filter: response => response[ property.fk.table ],
                 replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query ) ),
-                url: this.util.format( "/%s?name=%QUERY", property.property )
+                url: this.util.format( "/%s?name=%QUERY", property.fk.table )
             }
-        } )
+        } ),
+        el = this.$( '#' + property.property )
 
         bloodhound.initialize()
 
-        this.$( '#' + property.property ).typeahead(
-            { hint: true, minLength: 1 },
-            { display: obj => obj.name, source: bloodhound.ttAdapter() }
-        )
+        el.typeahead( { hint: true }, { display: obj => obj.name, source: bloodhound.ttAdapter() } )
+        .bind( 'typeahead:selected typeahead:autocompleted', ( obj, selected, name ) => {
+            this[ property.fk.table + "Typeahead" ] = selected
+            el.one( 'change', () => this[ property.fk.table + "Typeahead" ] = undefined )
+        } )
     },
 
     postRender() {
@@ -67,7 +70,11 @@ Object.assign( Resource.prototype, Table.prototype, {
                 )
             } ),
             title: this.util.format( 'Create %s', this.label )
-        } ).on( 'shown', () => this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } ) )
+        } )
+        .on( 'shown', () => this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } ) )
+        .on( 'submit', data => this.create(data) )
+
+
     },
 
     template: require('../templates/resource')( require('handlebars') ),
