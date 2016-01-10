@@ -65,6 +65,15 @@ Object.assign( Router.prototype, MyObject.prototype, {
             this.format( "WHERE table_name = '%s';", tableName ) )
     },
 
+    getForeignKeys() {
+        return [
+            "SELECT conrelid::regclass AS table_from, conname, pg_get_constraintdef(c.oid)",
+            "FROM pg_constraint c",
+            "JOIN pg_namespace n ON n.oid = c.connamespace",
+            "WHERE contype = 'f' AND n.nspname = 'public';"
+        ].join(' ')
+    },
+
     handleFailure( response, err, code ) {
 
         var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err
@@ -105,6 +114,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     initialize() {
         this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
         this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
+        this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
 
         this.staticFolder = new (require('node-static').Server)();
 
@@ -112,6 +122,15 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
+
+    storeForeignKeyData( foreignKeyResult ) {
+        foreignKeyResult.forEach( row => {
+            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
+            
+            column.fk = { table: match[2], column: match[3] }
+        } )
+    },
 
     storeTableData( tableResult ) {
         tableResult.forEach( row => {

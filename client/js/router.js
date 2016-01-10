@@ -18,8 +18,6 @@ module.exports = new (
 
         handler( resource ) {
 
-            console.log( resource )
-
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )

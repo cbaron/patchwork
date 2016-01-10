@@ -3,6 +3,8 @@ var Table = require('./util/Table'),
 
 Object.assign( Resource.prototype, Table.prototype, {
 
+    Bloodhound: require('../plugins/bloodhound'),
+
     Instance: require('../models/Instance'),
 
     ItemView: require('./InstanceRow'),
@@ -25,6 +27,32 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     fetch: { headers: { accept: "application/ld+json" } },
 
+    getLabel( property ) {
+        return this.format.capitalizeFirstLetter( property )
+    },
+
+    initTypeahead( property ) {
+        
+        var bloodhound = new this.Bloodhound( {
+            datumTokenizer: this.Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: this.Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: this.util.format( "/%s?name=%QUERY", property.property ),
+                replace: ( url, query ) => url.replace( '%QUERY', encodeURIComponent(query) ),
+            }
+        } )
+
+        this.$( '#' + property.property ).typeahead( {
+            hint: true,
+            highlight: true,
+            minLength: 1
+        }, {
+            name: property.property,
+            display: obj => obj.name,
+            source: bloodhound.ttAdapter()
+        } )
+    },
+
     postRender() {
         Table.prototype.postRender.call(this)
         this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )
@@ -33,14 +61,23 @@ Object.assign( Resource.prototype, Table.prototype, {
     showCreateDialog() {
 
         this.modalView.show( {
-            title: this.util.format( 'Create %s', this.label ),
-            body:
+            body: this.templates.create( {
+                fields: this.createProperties.map( property => 
+                    this.templates[ property.range ]( { name: property.property, label: this.getLabel( property.property ) } )
+                )
+            } ),
+            title: this.util.format( 'Create %s', this.label )
         } )
+
+        this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } )
     },
 
     template: require('../templates/resource')( require('handlebars') ),
     templates: {
-        'create': require('../templates/createInstance')
+        'create': require('../templates/createInstance')( require('handlebars') ),
+        'Float': require('../templates/form/Text')( require('handlebars') ),
+        'Integer': require('../templates/form/Text')( require('handlebars') ),
+        'Text': require('../templates/form/Text')( require('handlebars') ),
     }
 
 } )

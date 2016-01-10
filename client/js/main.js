@@ -5,8 +5,9 @@ window.$ = window.jQuery = $
 
 require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')
+require('./plugins/bootstrap-typeahead')
 
-$( function() {
+$( () => {
     require('./views/modal')
     require('backbone').history.start( { pushState: true } )
 } )

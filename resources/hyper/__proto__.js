@@ -21,7 +21,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                         "@id": "http://schema.org/Person",
                         "supportedProperty": this._( this.tables[ this.path[1] ].columns )
                             .filter( column => column.name !== 'id')
-                            .map( column => ( { property: column.name, range: column.range } ) )
+                            .map( column => ( { property: column.name, range: column.range, fk: column.fk } ) )
                     }
                 },
                 [this.path[1]]: []
