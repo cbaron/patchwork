@@ -1,7 +1,7 @@
-var MyView = require('./MyView'),
-    Footer = function() { return MyView.apply( this, arguments ) }
+var Nav = require('./util/Nav'),
+    Footer = function() { return Nav.apply( this, arguments ) }
 
-Object.assign( Footer.prototype, MyView.prototype, {
+Object.assign( Footer.prototype, Nav.prototype, {
 
     fields: [
             { label: 'Home', name: 'home' },
@@ -16,8 +16,6 @@ Object.assign( Footer.prototype, MyView.prototype, {
     getTemplateOptions() { return { fields: this.fields } },
 
     insertionMethod: 'after',
-
-    requiresLogin: false,
 
     template: require('../templates/footer')( require('handlebars') )
 

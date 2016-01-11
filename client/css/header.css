@@ -1,5 +1,5 @@
-#header > .wrapper {
-  background-image: url("/static/img/bucket_in_field.jpg");
+#header {
+  background-image: url('/static/img/bucket_in_field.jpg');
   background-size: 100% 500px;
   background-repeat: no-repeat;
   color: #666;
@@ -23,15 +23,16 @@
   line-height: 3em;
   text-transform: uppercase;
   letter-spacing: 2px;
-}
-#logo {
   cursor: pointer;
 }
-#logo h1 {
+#home {
+  cursor: pointer;
+}
+#home h1 {
   text-align: center;
   width: 100%;
 }
-#logo .site-title-span {
+#home .site-title-span {
   display: inline-block;
   color: black;
   font-family: "Raleway";

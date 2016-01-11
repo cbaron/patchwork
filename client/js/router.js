@@ -23,11 +23,10 @@ module.exports = new (
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
             this.userPromise.then( () => {
-
+                console.log('router being used')
                 if( this.user.id ) this.header.onUser( this.user )
-
+                console.log(this.views)
                 if( this.views[ resource ] ) return this.views[ resource ].show()
-
                 this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
 
             } ).catch( err => new this.Error(err) )
@@ -36,7 +35,7 @@ module.exports = new (
         Q: require('q'),
 
         resources: {
-            //about: { view: require('./views/About'), options: { } },
+            about: { view: require('./views/About'), options: { } },
             admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } },
             home:  { view: require('./views/Home'), options: { } }
         },

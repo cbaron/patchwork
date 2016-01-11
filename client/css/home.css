@@ -2,7 +2,7 @@
   margin: 70px auto;
   width: 75%;
 }
-.carousel-inner > .item > img {
+#carousel .carousel-inner > .item > img {
   width: 90%;
   height: 500px;
   margin: auto;
@@ -13,6 +13,7 @@
 }
 #homeText h3 {
   text-align: center;
+  font-family: "proxima-nova";
   width: 75%;
   margin: auto;
 }

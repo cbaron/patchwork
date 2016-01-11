@@ -1,14 +1,10 @@
-<div id="footer">
-    <nav data-js="container">
-        <div class="container-fluid">
-            <div class="row">        
-            <ul>
-                {{#each fields}}
-                    <li data-js={{this.name}}>{{this.label}}</li>
-                {{/each}}
-            </ul>
-            </div>       
-        </div>
+<div data-js="container" class="row" id="footer">
+    <nav>               
+        <ul>
+            {{#each fields}}
+                <li id={{this.name}} data-js={{this.name}}>{{this.label}}</li>
+            {{/each}}
+        </ul>
     </nav>
     <div class="horizontalrule"></div>
     <div id="futureDays">
