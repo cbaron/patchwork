@@ -85,6 +85,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
                 var listContainer = this.getItemViewOptions().container || this.templateData.container 
                 listContainer.empty()
                 this.itemViews = []
+                if( this.items.length && this.setFields ) { this.setFields( this.items.at(0).attributes ) }
                 this.items.forEach( item => this.addItem( item ) )
                 this.noItemCheck()
             } )

@@ -7,7 +7,12 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
         var data = { }, $ = this.$;
 
-        this.templateData.body.find('input,select,textarea').each( function( i ) { data[ $(this).attr('id') ] = $(this).val() } )
+        this.templateData.body.find('input,select,textarea').each(
+            function( i ) {
+                var el = $(this), id = el.attr('id')
+                if( id ) { data[ id ] = el.val() }
+            }
+        )
 
         this.emit( 'submit', data )
     },
@@ -37,6 +42,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         this.templateData.container.on( 'hidden.bs.modal', () => {
             this.hide( { reset: true } )
             this.emit( 'hidden' )
+            this.removeAllListeners( 'submit' )
         } )
         this.templateData.container.on( 'shown.bs.modal', () => { this.emit( 'shown' ) } )
 

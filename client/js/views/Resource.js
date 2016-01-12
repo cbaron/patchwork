@@ -19,6 +19,27 @@ Object.assign( Resource.prototype, Table.prototype, {
         }
     },
 
+    create( data ) {
+
+        this.createProperties.forEach( property => {
+            if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
+        } )
+
+        this.$.ajax( {
+            headers: { accept: 'application/json' },
+            contentType: 'application/json',
+            data: JSON.stringify( data ),
+            method: 'POST',
+            url: this.util.format( "/%s", this.resource )
+        } )
+        .done( ( response, textStatus, jqXHR ) => {
+            if( this.items.length === 0 ) this.setFields( response )
+            this.items.add( response )
+            this.modalView.hide()
+        } )
+            
+    },
+
     events: {
         'createBtn': { method: 'showCreateDialog' }
     },
@@ -54,7 +75,12 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     postRender() {
         Table.prototype.postRender.call(this)
-        this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )
+        this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
+    },
+
+    setFields( instance ) {
+        var keys = Object.keys( instance ), width = Math.floor( 100 / keys.length )
+        this.fields = keys.map( key => ( { name: key, label: this.format.capitalizeFirstLetter( name ), width: width } ) )
     },
 
     showCreateDialog() {
