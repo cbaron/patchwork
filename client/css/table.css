@@ -1,5 +1,6 @@
 .mytable {
   height: 100%;
+  position: relative;
 }
 .mytable.no-items {
   color: red;
@@ -49,4 +50,18 @@
 .mytable table tbody.no-items:before {
   content: 'No items';
   display: block;
+}
+.mytable table tbody .delete-btn,
+.mytable table tbody .edit-btn {
+  position: absolute;
+  transition: all 1s ease;
+}
+.mytable table tbody tr:hover {
+  border-color: #ccc;
+  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 3;
 }

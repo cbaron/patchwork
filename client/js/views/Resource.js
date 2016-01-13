@@ -41,7 +41,11 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     events: {
-        'createBtn': { method: 'showCreateDialog' }
+        'createBtn': { method: 'showCreateDialog' },
+        'body': [
+            { event: 'mouseenter', selector: 'tr', method: 'onRowMouseEnter' },
+            { event: 'mouseleave', selector: 'tr', method: 'onRowMouseLeave' }
+        ]
     },
 
     fetch: { headers: { accept: "application/ld+json" } },
@@ -73,6 +77,23 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
     },
 
+    onRowMouseEnter( e ) {
+        var row = this.$( e.currentTarget ),
+            position = row.position()
+
+        console.log( this.templateData )
+        //[ 'deleteBtn', 'editBtn' ].forEach( btn => this.templateData[ btn ].removeClass('hide').css( { top: position.top, right: '5px' } ) )
+        [ 'deleteBtn', 'editBtn' ].forEach( function( btn ) {
+            console.log( this )
+            console.log( btn )
+            this.templateData[ btn ].removeClass('hide').css( { top: position.top, right: '5px' } )
+        }, this )
+    },
+    
+    onRowMouseLeave() {
+        [ 'deleteBtn', 'editBtn' ].forEach( function( btn ) { this.templateData[ btn ].addClass('hide') }, this )
+    },
+
     postRender() {
         Table.prototype.postRender.call(this)
         this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
@@ -80,7 +101,11 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     setFields( instance ) {
         var keys = Object.keys( instance ), width = Math.floor( 100 / keys.length )
-        this.fields = keys.map( key => ( { name: key, label: this.format.capitalizeFirstLetter( name ), width: width } ) )
+        this.fields = keys.map( key => {
+            var field = { name: key, label: this.format.capitalizeFirstLetter( key ), width: width }
+            this.$( this.templateData.header.children('tr')[0] ).append( this.templates.headerColumn.call( this, field ) )
+            return field
+        } )
     },
 
     showCreateDialog() {
@@ -104,12 +129,13 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     template: require('../templates/resource')( require('handlebars') ),
-    templates: {
+
+    templates: Object.assign( {}, Table.prototype.templates, {
         'create': require('../templates/createInstance')( require('handlebars') ),
         'Float': require('../templates/form/Text')( require('handlebars') ),
         'Integer': require('../templates/form/Text')( require('handlebars') ),
         'Text': require('../templates/form/Text')( require('handlebars') ),
-    }
+    } )
 
 } )
 

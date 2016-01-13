@@ -1,5 +1,6 @@
 .mytable {
     height: 100%;
+    position: relative;
 
     &.no-items {
         color: red;
@@ -61,6 +62,26 @@
                     display: block;
                 }
             }
+
+            .delete-btn,
+            .edit-btn {
+                position: absolute;
+                transition: all 1s ease;
+            }
+
+            tr {
+
+                &:hover {
+                    border-color: #ccc;
+                    -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    -moz-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    -ms-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    cursor: pointer;
+                    z-index: 3;
+                }
+            }
+
         }
         
     }

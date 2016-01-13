@@ -22,6 +22,10 @@ Object.assign( Table.prototype, List.prototype, {
         this.items.comparator = comparator
 
         this.items.sort()        
+    },
+
+    templates: {
+        headerColumn: function( data ) { return this.util.format( '<th class="w%s" data-sort="%s">%s</th>', data.width, data.name, data.label ) }
     }
 
 } )

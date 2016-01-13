@@ -11,21 +11,17 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     $: require('jquery'),
 
     delegateEvents( key, el ) {
+        var type;
 
-        this._.each( this.events, ( eventData, elementKey ) => {
-            var type;
+        if( ! this.events[ key ] ) return
 
-            if( key === elementKey ) {
-                
-                var type = Object.prototype.toString.call( eventData );
+        type = Object.prototype.toString.call( this.events[key] );
 
-                if( type === '[object Object]' ) {
-                    this.bindEvent( elementKey, eventData, el );
-                } else if( type === '[object Array]' ) {
-                    eventData.forEach( singleEvent => this.bindEvent( elementKey, singleEvent, el ) )
-                }
-            }
-        } )
+        if( type === '[object Object]' ) {
+            this.bindEvent( key, this.events[key], el );
+        } else if( type === '[object Array]' ) {
+            this.events[key].forEach( singleEvent => this.bindEvent( key, singleEvent, el ) )
+        }
     },
 
     delete: function() {
@@ -121,8 +117,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         el.removeAttr('data-js');
 
-        if( this.events[ key ] ) this.delegateEvents(key, el)
-        if( el.attr('data-e') ) this.delegateEvents( el.attr('data-e'), el ); el.removeAttr('data-e')
+        if( this.events[ key ] ) this.delegateEvents( key, el )
 
         return this;
     },
@@ -146,8 +141,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         return this;
     },
     
-    
-
     bindEvent: function( elementKey, eventData, el ) {
         var elements = ( el ) ? el : this.templateData[ elementKey ];
 

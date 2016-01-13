@@ -28,13 +28,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
             }
 
         return this.dbQuery( { query: this.format( "SELECT * FROM %s", this.path[1] ) } )
-        .then( result => {
-            rv[ this.path[1] ] =
-                result.rows.map( row =>
-                    Object.assign( { "@id": this.format( "https://%s:%s/%s/%d", process.env.DOMAIN, process.env.PORT, this.path[1], row.id ) }, row ) )
-
-            this.respond( { body: rv } )
-        } )
+        .then( result => { rv[ this.path[1] ] = result.rows; this.respond( { body: rv } ) } )
     }
 
 } )
