@@ -5,15 +5,16 @@ Object.assign( Nav.prototype, MyView.prototype, {
 
     backgrounds: {
             home: '/static/img/bucket_in_field.jpg',
-            about: '/static/img/ole_barn.jpg'
+            about: '/static/img/ole_barn.jpg',
+            locations: '/static/img/broccoli_bucket.jpg'
     },
 
     events: {
         'home': { event: 'click', selector: '', method: 'navigate' },
         'signup': { event: 'click', selector: '', method: 'navigate' },
         'about': { event: 'click', selector: '', method: 'navigate' },
-        'findUs': { event: 'click', selector: '', method: 'navigate' },
-        'member': { event: 'click', selector: '', method: 'navigate' },
+        'locations': { event: 'click', selector: '', method: 'navigate' },
+        'members': { event: 'click', selector: '', method: 'navigate' },
         'employment': { event: 'click', selector: '', method: 'navigate' },
         'contact': { event: 'click', selector: '', method: 'navigate' }
     },
@@ -21,8 +22,8 @@ Object.assign( Nav.prototype, MyView.prototype, {
     fields: [
             { label: 'Sign Up', name: 'signup' },
             { label: 'About Us', name: 'about' },
-            { label: 'Where To Find Us', name: 'findUs' },
-            { label: 'Member Resources', name: 'member' },
+            { label: 'Locations', name: 'locations' },
+            { label: 'Member Resources', name: 'members' },
             { label: 'Employment', name: 'employment' },
             { label: 'Contact Us', name: 'contact' }
     ],

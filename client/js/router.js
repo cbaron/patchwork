@@ -35,9 +35,14 @@ module.exports = new (
         Q: require('q'),
 
         resources: {
-            about: { view: require('./views/About'), options: { } },
             admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } },
-            home:  { view: require('./views/Home'), options: { } }
+            home: { view: require('./views/Home'), options: { } },
+            signup: { view: require('./views/Signup'), options: { } },
+            about: { view: require('./views/About'), options: { } },
+            locations: { view: require('./views/Locations'), options: { } },
+            members: { view: require('./views/Members'), options: { } },
+            employment: { view: require('./views/Employment'), options: { } },
+            contact: { view: require('./views/Contact'), options: { } }
         },
 
         routes: {

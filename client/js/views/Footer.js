@@ -7,8 +7,8 @@ Object.assign( Footer.prototype, Nav.prototype, {
             { label: 'Home', name: 'home' },
             { label: 'Sign Up', name: 'signup' },
             { label: 'About Us', name: 'about' },
-            { label: 'Where To Find Us', name: 'findUs' },
-            { label: 'Member Resources', name: 'member' },
+            { label: 'Locations', name: 'locations' },
+            { label: 'Member Resources', name: 'members' },
             { label: 'Employment', name: 'employment' },
             { label: 'Contact Us', name: 'contact' }
     ],
