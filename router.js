@@ -28,7 +28,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return new Promise( ( resolve, reject ) => {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
-                if( err ) reject( err )
+                if( err ) { 
+                    if( err.code !== "ENOENT" ) return reject( err )
+                    file = './resources/hyper/__proto__'
+                }
 
                 new ( require(file) )( {
                     request: request,
@@ -41,6 +44,12 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
     },
 
+    dataTypeToRange: {
+        "integer": "Integer",
+        "money": "Float",
+        "character varying": "Text"
+    },
+
     getAllTables() {
         return this.format(
             "SELECT table_name",
@@ -51,9 +60,18 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     getTableColumns( tableName ) {
         return this.format(
-            'SELECT column_name',
+            'SELECT column_name, data_type',
             'FROM information_schema.columns',
             this.format( "WHERE table_name = '%s';", tableName ) )
+    },
+
+    getForeignKeys() {
+        return [
+            "SELECT conrelid::regclass AS table_from, conname, pg_get_constraintdef(c.oid)",
+            "FROM pg_constraint c",
+            "JOIN pg_namespace n ON n.oid = c.connamespace",
+            "WHERE contype = 'f' AND n.nspname = 'public';"
+        ].join(' ')
     },
 
     handleFailure( response, err, code ) {
@@ -73,7 +91,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
-        console.log(path)
 
         request.setEncoding('utf8');
 
@@ -92,16 +109,12 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         return this.handleFailure( response, new Error("Not Found"), 404 )
 
-        /*
-        if( this.routes[ path[1] || "/" ] === undefined ) return this.handleFailure( response, new Error("Not Found"), 404 )
-
-        this.applyResource( request, response, path, this.routes[path[1]] )
-        .catch( err => this.handleFailure( response, err ) )
-        */
     },
 
     initialize() {
         this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
+        this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
+        this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
 
         this.staticFolder = new (require('node-static').Server)();
 
@@ -110,11 +123,27 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
+    storeForeignKeyData( foreignKeyResult ) {
+        foreignKeyResult.forEach( row => {
+            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
+            
+            column.fk = { table: match[2], column: match[3] }
+        } )
+    },
+
     storeTableData( tableResult ) {
         tableResult.forEach( row => {
-            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-            this.tables[ row.table_name ] = columnResult.map( column => column.column_name )
-        }, this )
+             var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
+             this.tables[ row.table_name ] =
+                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+         } )
+    },
+    
+    storeTableMetaData( metaDataResult ) {
+        metaDataResult.forEach( row => {
+            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = { label: row.label, description: row.description }
+         } )
     },
 
     url: require( 'url' )

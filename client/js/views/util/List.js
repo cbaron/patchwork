@@ -6,14 +6,14 @@ Object.assign( ListView.prototype, MyView.prototype, {
     addItem: function( model ) {
         this.itemViews[ model.id ] =
             new this.ItemView(
-                this._.extend( { container: this.templateData.container, model: model, selection: this.selection }, this.getItemViewOptions() ) )
+                Object.assign( { container: this.templateData.container, model: model, selection: this.selection }, this.getItemViewOptions() ) )
             .on( 'removed', () => delete this.itemViews[ model.id ] )
 
         if( this.selection ) this.itemViews[ model.id ].on( 'clicked', model => this.onItemClick( model ) )
         this.emit( 'itemAdded', model )
     },
 
-    Collections: require('./Collections'),
+    collection: { },
 
     getClosestClickedIndex: function( model ) {
         var clickedIndex = this.items.indexOf( model ),
@@ -79,14 +79,13 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this.itemViews = []
         this.selectedItems = { }
         
-        if( this.url ) extension.url = this.url
-
         this.items =
-            new ( this.Collection.extend( extension ) )()
+            new ( this.Collection.extend( ( typeof this.collection === "function" ) ? this.collection() : this.collection ) )()
             .on( 'reset', () => {
                 var listContainer = this.getItemViewOptions().container || this.templateData.container 
                 listContainer.empty()
                 this.itemViews = []
+                if( this.items.length && this.setFields ) { this.setFields( this.items.at(0).attributes ) }
                 this.items.forEach( item => this.addItem( item ) )
                 this.noItemCheck()
             } )
@@ -102,7 +101,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
             .on( 'sort', () => this.reOrderDOM() )
 
         if( this.fetch ) {
-            this.Q( this.items.fetch( { headers: this.fetch.headers } ) )
+            this.Q( this.items.fetch( { headers: this.fetch.headers, reset: true } ) )
             .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
             .done()
         }
@@ -115,9 +114,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     reOrderDOM: function() {
         var container = this.getItemViewOptions().container || this.templateData.container
-        this.items.forEach( item => {
-            container[ ( this.reverseSort ) ? 'prepend' : 'append' ]( this.itemViews[item.id].templateData.container )
-            }, this )
+        this.items.forEach( item => container[ ( this.reverseSort ) ? 'prepend' : 'append' ]( this.itemViews[item.id].templateData.container ) )
     },
 
     scrollToBottom: function() {

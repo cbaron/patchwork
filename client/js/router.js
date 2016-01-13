@@ -3,6 +3,8 @@ module.exports = new (
 
         Error: require('./MyError'),
 
+        Resource: require('./views/Resource'),
+
         initialize: function() {
 
             this.user = require('./models/User');
@@ -14,7 +16,7 @@ module.exports = new (
             return this;
         },
 
-        handler: function( resource ) {
+        handler( resource ) {
 
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
@@ -23,9 +25,11 @@ module.exports = new (
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
             this.userPromise.then( () => {
-                console.log('router being used')
-                if( this.user.id ) this.header.onUser( this.user )
-                console.log(this.views)
+
+
+                if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
+
+
                 if( this.views[ resource ] ) return this.views[ resource ].show()
                 this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
 
@@ -34,8 +38,34 @@ module.exports = new (
         
         Q: require('q'),
 
+        resourceHandler( resource ) {
+            this.header = require('./views/AdminHeader')
+
+            this.userPromise.then( () => {
+
+                if( this.user.id ) this.header.onUser( this.user )
+
+                if( this.views.resource ) return this.views.resource.update( resource )
+
+                this.views.resource = new this.Resource( { resource: resource } )
+
+            } ).catch( err => new this.Error(err) )
+        },
+
         resources: {
-            admin: { view: require('./views/Admin'), options: { url: "/", fetch: { headers: { accept: "application/ld+json" } } } },
+
+            admin: {
+                view: require('./views/Admin'),
+                options: {
+                    collection: {
+                        comparator: "name",
+                        model: require('./models/Resource'),
+                        parse: response => response.resource,
+                        url: "/"
+                    },
+                    fetch: { headers: { accept: "application/ld+json" } }
+                }
+            },
             home: { view: require('./views/Home'), options: { } },
             signup: { view: require('./views/Signup'), options: { } },
             about: { view: require('./views/About'), options: { } },
@@ -47,7 +77,8 @@ module.exports = new (
 
         routes: {
             '': 'handler',
-            ':resource': 'handler'
+            ':resource': 'handler',
+            'admin/:resource': 'resourceHandler'
         }
 
     } )
