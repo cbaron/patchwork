@@ -1,17 +1,17 @@
-#carousel {
+.home-class #carousel {
   margin: 70px auto;
   width: 75%;
 }
-#carousel .carousel-inner > .item > img {
+.home-class #carousel .carousel-inner > .item > img {
   width: 90%;
   height: 500px;
   margin: auto;
 }
-#homeText {
+.home-class #homeText {
   width: 100%;
   margin: 75px auto 75px;
 }
-#homeText h3 {
+.home-class #homeText h3 {
   text-align: center;
   font-family: "proxima-nova";
   width: 75%;

@@ -1,10 +1,7 @@
-.about-class {
+.employment-class {
   margin: 25px 5% 75px 5%;
 }
-.about-class #aboutName {
-  clear: both;
-}
-.about-class h2 {
+.employment-class h2 {
   font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
@@ -15,7 +12,7 @@
   color: #555;
   margin: 0 0 .5em;
 }
-.about-class p {
+.employment-class h2 p {
   font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
@@ -24,7 +21,7 @@
   font-weight: 400;
   color: #666;
 }
-.about-class .horizontalrule {
+.employment-class .horizontalrule {
   border-top: 1px solid #555;
   height: 1px;
   width: auto;

@@ -1,0 +1,50 @@
+.locations-class {
+  margin: 25px 5% 75px 5%;
+}
+.locations-class h2 {
+  font-family: "Raleway";
+  font-size: 26px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  color: #555;
+  margin: 0 0 .5em;
+}
+.locations-class p,
+.locations-class li {
+  font-family: "proxima-nova";
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+  text-align: left;
+  font-weight: 400;
+  color: #666;
+}
+.locations-class p span,
+.locations-class li span {
+  font-family: "Raleway";
+  font-size: 16px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-style: normal;
+  font-weight: 200;
+  color: #c98702;
+}
+.locations-class p.business,
+.locations-class li.business {
+  margin-top: 30px;
+}
+.locations-class ul {
+  margin-top: 20px;
+}
+.locations-class ul li {
+  margin: 5px 0;
+}
+.locations-class .horizontalrule {
+  border-top: 1px solid #555;
+  height: 1px;
+  width: auto;
+  margin: 3em 0;
+}

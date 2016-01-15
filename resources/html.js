@@ -2,7 +2,7 @@ var Html = function( data ) { return Object.assign( this, data ) }
 
 Object.assign( Html.prototype, {
 
-    GET() { return this.respond( this.page( { bodyClass: this.path[1], title: "Patchwork Gardens" } ) ); console.log("this.path: " + this.path[1]) },
+    GET() { return this.respond( this.page( { bodyClass: this.path[1], title: "Patchwork Gardens" } ) ) },
 
     getHeaders( length ) {
         return {

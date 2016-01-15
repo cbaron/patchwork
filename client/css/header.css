@@ -1,17 +1,37 @@
-#header {
-  background-image: url('/static/img/bucket_in_field.jpg');
+.header-class {
   background-size: 100% 500px;
   background-repeat: no-repeat;
   color: #666;
 }
-#header .navbar {
+.home .header-class {
+  background-image: url('/static/img/bucket_in_field.jpg');
+}
+.signup .header-class {
+  background-image: url('/static/img/greens.jpg');
+}
+.about .header-class {
+  background-image: url('/static/img/ole_barn.jpg');
+}
+.locations .header-class {
+  background-image: url('/static/img/broccoli_bucket.jpg');
+}
+.members .header-class {
+  background-image: url('/static/img/dog_with_chard.jpg');
+}
+.employment .header-class {
+  background-image: url('/static/img/sun_on_tractor.jpg');
+}
+.contact .header-class {
+  background-image: url('/static/img/grazing_sheep.jpg');
+}
+.header-class .navbar {
   height: 500px;
 }
-#header .navbar .navbar-nav {
+.header-class .navbar .navbar-nav {
   width: 100%;
   text-align: center;
 }
-#header .navbar .navbar-nav li {
+.header-class .navbar .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 0 16.5px;
@@ -25,14 +45,17 @@
   letter-spacing: 2px;
   cursor: pointer;
 }
-#home {
+.locations .header-class .navbar .navbar-nav li {
+  color: #A5C329;
+}
+.header-class #headerTitle {
   cursor: pointer;
 }
-#home h1 {
+.header-class #headerTitle h1 {
   text-align: center;
   width: 100%;
 }
-#home .site-title-span {
+.header-class #headerTitle .site-title-span {
   display: inline-block;
   color: black;
   font-family: "Raleway";
@@ -42,4 +65,7 @@
   text-align: center;
   font-weight: 100;
   font-style: normal;
+}
+.locations .header-class #headerTitle .site-title-span {
+  color: #C7E53E;
 }

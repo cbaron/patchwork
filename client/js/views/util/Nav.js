@@ -3,12 +3,6 @@ var MyView = require('../MyView'),
 
 Object.assign( Nav.prototype, MyView.prototype, {
 
-    backgrounds: {
-            home: '/static/img/bucket_in_field.jpg',
-            about: '/static/img/ole_barn.jpg',
-            locations: '/static/img/broccoli_bucket.jpg'
-    },
-
     events: {
         'home': { event: 'click', selector: '', method: 'navigate' },
         'signup': { event: 'click', selector: '', method: 'navigate' },
@@ -35,12 +29,8 @@ Object.assign( Nav.prototype, MyView.prototype, {
     requiresLogin: false,
 
     navigate( e ) {
-        var currentPath = window.location.pathname.slice(1),
-            id = this.$( e.currentTarget ).attr( 'id' )
-        this.router.views[ currentPath ].hide().then( () => this.router.navigate( id, { trigger: true } ) )
-        if ( this.router.views[ id ] ) this.router.views[ id ].show()
-        this.router.header.templateData.container.css( 'background-image', this.util.format( 'url( %s )', this.backgrounds[ id ] ) )
-        this.$('body').scrollTop(0);
+        var id = this.$( e.currentTarget ).attr( 'data-id' )        
+        this.router.navigate( id, { trigger: true } )      
     }
 
 } )

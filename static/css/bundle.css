@@ -1,8 +1,12 @@
-#about {
+.about-class {
   margin: 25px 5% 75px 5%;
 }
 
-#about h2 {
+.about-class #aboutName {
+  clear: both;
+}
+
+.about-class h2 {
   font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
@@ -14,7 +18,7 @@
   margin: 0 0 .5em;
 }
 
-#about h2 p {
+.about-class p {
   font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
@@ -24,7 +28,7 @@
   color: #666;
 }
 
-#about .horizontalrule {
+.about-class .horizontalrule {
   border-top: 1px solid #555;
   height: 1px;
   width: auto;
@@ -162,21 +166,84 @@ li {
 .w70 {
   width: 70%;
 }
+.contact-class {
+  margin: 25px 5% 75px 5%;
+}
 
-#footer {
+.contact-class h2 {
+  font-family: "Raleway";
+  font-size: 26px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  color: #555;
+  margin: 0 0 .5em;
+}
+
+.contact-class p {
+  font-family: "proxima-nova";
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+  text-align: left;
+  font-weight: 400;
+  color: #666;
+}
+
+.contact-class .horizontalrule {
+  border-top: 1px solid #555;
+  height: 1px;
+  width: auto;
+  margin: 3em 0;
+}
+.employment-class {
+  margin: 25px 5% 75px 5%;
+}
+
+.employment-class h2 {
+  font-family: "Raleway";
+  font-size: 26px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  color: #555;
+  margin: 0 0 .5em;
+}
+
+.employment-class h2 p {
+  font-family: "proxima-nova";
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+  text-align: left;
+  font-weight: 400;
+  color: #666;
+}
+
+.employment-class .horizontalrule {
+  border-top: 1px solid #555;
+  height: 1px;
+  width: auto;
+  margin: 3em 0;
+}
+.footer-class {
   background-color: #131313;
   color: #ccc;
   height: 150px;
   width: auto;
 }
 
-#footer ul {
+.footer-class ul {
   margin: 10px 0px 10px 5%;
   width: auto;
   text-align: left;
 }
 
-#footer ul li {
+.footer-class ul li {
   display: inline-block;
   float: none;
   margin: 12px 16.5px 12px 0;
@@ -190,14 +257,14 @@ li {
   cursor: pointer;
 }
 
-#footer .horizontalrule {
+.footer-class .horizontalrule {
   border-top: 1px solid white;
   height: auto;
   width: 85%;
   margin: 0 auto 10px 5%;
 }
 
-#footer #futureDays {
+.footer-class #futureDays {
   display: inline-block;
   float: none;
   margin: 0 0 0 5%;
@@ -209,23 +276,50 @@ li {
   line-height: 1.5em;
   letter-spacing: 0px;
 }
-#header {
-  background-image: url("/static/img/bucket_in_field.jpg");
+.header-class {
   background-size: 100% 500px;
   background-repeat: no-repeat;
   color: #666;
 }
 
-#header .navbar {
+.home .header-class {
+  background-image: url("/static/img/bucket_in_field.jpg");
+}
+
+.signup .header-class {
+  background-image: url("/static/img/greens.jpg");
+}
+
+.about .header-class {
+  background-image: url("/static/img/ole_barn.jpg");
+}
+
+.locations .header-class {
+  background-image: url("/static/img/broccoli_bucket.jpg");
+}
+
+.members .header-class {
+  background-image: url("/static/img/dog_with_chard.jpg");
+}
+
+.employment .header-class {
+  background-image: url("/static/img/sun_on_tractor.jpg");
+}
+
+.contact .header-class {
+  background-image: url("/static/img/grazing_sheep.jpg");
+}
+
+.header-class .navbar {
   height: 500px;
 }
 
-#header .navbar .navbar-nav {
+.header-class .navbar .navbar-nav {
   width: 100%;
   text-align: center;
 }
 
-#header .navbar .navbar-nav li {
+.header-class .navbar .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 0 16.5px;
@@ -240,16 +334,20 @@ li {
   cursor: pointer;
 }
 
-#home {
+.locations .header-class .navbar .navbar-nav li {
+  color: #A5C329;
+}
+
+.header-class #headerTitle {
   cursor: pointer;
 }
 
-#home h1 {
+.header-class #headerTitle h1 {
   text-align: center;
   width: 100%;
 }
 
-#home .site-title-span {
+.header-class #headerTitle .site-title-span {
   display: inline-block;
   color: black;
   font-family: "Raleway";
@@ -260,27 +358,88 @@ li {
   font-weight: 100;
   font-style: normal;
 }
-#carousel {
+
+.locations .header-class #headerTitle .site-title-span {
+  color: #C7E53E;
+}
+.home-class #carousel {
   margin: 70px auto;
   width: 75%;
 }
 
-#carousel .carousel-inner > .item > img {
+.home-class #carousel .carousel-inner > .item > img {
   width: 90%;
   height: 500px;
   margin: auto;
 }
 
-#homeText {
+.home-class #homeText {
   width: 100%;
   margin: 75px auto 75px;
 }
 
-#homeText h3 {
+.home-class #homeText h3 {
   text-align: center;
   font-family: "proxima-nova";
   width: 75%;
   margin: auto;
+}
+.locations-class {
+  margin: 25px 5% 75px 5%;
+}
+
+.locations-class h2 {
+  font-family: "Raleway";
+  font-size: 26px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  color: #555;
+  margin: 0 0 .5em;
+}
+
+.locations-class p,
+.locations-class li {
+  font-family: "proxima-nova";
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+  text-align: left;
+  font-weight: 400;
+  color: #666;
+}
+
+.locations-class p span,
+.locations-class li span {
+  font-family: "Raleway";
+  font-size: 16px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-style: normal;
+  font-weight: 200;
+  color: #c98702;
+}
+
+.locations-class p.business,
+.locations-class li.business {
+  margin-top: 30px;
+}
+
+.locations-class ul {
+  margin-top: 20px;
+}
+
+.locations-class ul li {
+  margin: 5px 0;
+}
+
+.locations-class .horizontalrule {
+  border-top: 1px solid #555;
+  height: 1px;
+  width: auto;
+  margin: 3em 0;
 }
 .resource .sub-heading button {
   position: absolute;

@@ -1,6 +1,8 @@
 module.exports = new (
     require('backbone').Router.extend( {
 
+        $: require('jquery'),
+
         Error: require('./MyError'),
 
         Resource: require('./views/Resource'),
@@ -17,7 +19,7 @@ module.exports = new (
         },
 
         handler( resource ) {
-
+            console.log('router in use')
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
             this.footer = require('./views/Footer')
@@ -26,12 +28,16 @@ module.exports = new (
           
             this.userPromise.then( () => {
 
-
+                this.$('body').removeClass().addClass( resource )
+                console.log( this.$('body').attr('class') )
+                
                 if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
-
+                console.log( Object.keys(this.views) )
+                Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
 
                 if( this.views[ resource ] ) return this.views[ resource ].show()
                 this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
+                //setTimeout( function() { console.log('scrolling'); this.$('body').scrollTop(0) }, 2000 )
 
             } ).catch( err => new this.Error(err) )
         },

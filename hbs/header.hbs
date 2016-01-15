@@ -1,27 +1,27 @@
-<div data-js="container" class="row" id="header">
-<nav class="navbar navbar-default>
-    <div class="container-fluid">
-        <div class="row navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+<div data-js="container" class="row header-class">
+    <nav class="navbar navbar-default>
+        <div class="container-fluid">
+            <div class="row navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
 
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                {{#each fields}}
-                    <li id="{{this.name}}" data-js={{this.name}}>{{this.label}}</li>
-                {{/each}}
-            </ul>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    {{#each fields}}
+                        <li data-id="{{this.name}}" data-js={{this.name}}>{{this.label}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div id="headerTitle" data-js="{{home.name}}" data-id="{{home.name}}">
+                <h1 class="site-title">
+                    <span class="site-title-span">{{home.label}}</span>
+                </h1>
+            </div>
         </div>
-        <div data-js="{{home.name}}" id="{{home.name}}">
-            <h1 class="site-title">
-                <span class="site-title-span">{{home.label}}</span>
-            </h1>
-        </div>
-    </div>
-</nav>
+    </nav>
 </div>
