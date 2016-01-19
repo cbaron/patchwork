@@ -1,5 +1,21 @@
-<div data-js="container">
-
-
-
+<div data-js="container" class="container col-sm-4 col-sm-offset-4">
+    <div data-js="alreadyMemberHeader" class="header" style="display:none;">Welcome!<span class="glyphicon glyphicon-ok"></span></div>
+    <section data-js="memberInfo">
+        <div data-js="memberInfoHeader" class="header">Please enter your information.</div>
+        <button data-js="alreadyMember" type="button" class="btn btn-default">Already a member?</button>
+        <form data-js="memberInfoFields" class="form-horizontal">
+            {{#each fields}}
+                <div class="form-group">
+                    <label for="{{this.name}}" class="col-sm-3 control-label">{{this.label}}</label>
+                    <div class="col-sm-9">
+                        <input type="{{this.type}}" class="form-control" data-js="{{this.name}}">
+                    </div>
+                </div>
+            {{/each}}
+        </form>
+        <div data-js="buttonRow" class="btn-row">
+            <button data-js="cancelBtn" type="button" class="btn btn-default">Cancel</button>
+            <button data-js="registerBtn" type="button" class="btn btn-primary">Register</button>
+        </div>
+    </section>
 </div>

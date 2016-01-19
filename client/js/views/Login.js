@@ -10,8 +10,8 @@ Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototy
     },
 
     fields: [
-            { name: "username", label: 'Username', type: 'text', error: "Please enter a valid email address.", validate: val => val.length >= 6 },
-            { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: val => val.length >= 6 }
+            { name: "email", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
+            { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: function( val ) { return val.length >= 6 } }
     ],
 
     getTemplateOptions() { return { fields: this.fields } },

@@ -7,7 +7,7 @@ return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,
     + alias4(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data}) : helper)))
     + "</title></head><body class=\""
     + alias4(((helper = (helper = helpers.bodyClass || (depth0 != null ? depth0.bodyClass : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"bodyClass","hash":{},"data":data}) : helper)))
-    + "\"><div class=\"container-fluid\"><div class=\"row\" id=\"content\"></div></div></body></html>";
+    + "\"><div class=\"container\"><div class=\"row\" id=\"content\"></div></div></body></html>";
 },"useData":true});
 
 };

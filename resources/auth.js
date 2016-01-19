@@ -35,10 +35,10 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
         return this.slurpBody().then( () => this.queryByEmail() ).then( result => this.handleQueryResult( result ) )
     },
 
-    queryByEmail() { return this.dbQuery( { query: "SELECT * FROM person WHERE username = $1", values: [ this.body.username ] } ) },
+    queryByEmail() { return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.email ] } ) },
 
     validatePOST() {
-        [ 'password', 'username' ].forEach( attr => {
+        [ 'password', 'email' ].forEach( attr => {
             if( ! this.body[ attr ] ) throw new Error( this.format( "%s is a required field", attr ) )
         } )
     }

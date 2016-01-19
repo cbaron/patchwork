@@ -15,10 +15,10 @@ _.extend( FormView.prototype, {
     onSubmissionResponse: function() { },
     
     postForm( data ) {
-
+        console.log(data.values)
         return this.Q(
             this.$.ajax( {
-                data: JSON.stringify( this.getFormData() ),
+                data: JSON.stringify( data.values ) || JSON.stringify( this.getFormData() ),
                 headers: { token: ( this.user ) ? this.user.get('token') : '' },
                 type: "POST",
                 url: this.util.format( "/%s", data.resource )
@@ -37,7 +37,7 @@ _.extend( FormView.prototype, {
     submitForm: function( resource ) {
         
         if ( this.validateForm() === false ) return
-        this.postForm(resource)
+        this.postForm( resource )
           .then( this.onSubmissionResponse.bind(this) )
           .fail( this.onFormFail.bind(this) )
           .done()
@@ -54,16 +54,16 @@ _.extend( FormView.prototype, {
         if ( this.templateData.invalidLoginError ) this.templateData.invalidLoginError.remove();
         if ( this.templateData.serverError ) this.templateData.serverError.remove();
 
-        this.fields.forEach( function( data ) {
+        this.fields.forEach( function( field ) {
           
-          this.templateData[data.name].parent().removeClass('has-error');
-          this.templateData[data.name].next().remove();
+          this.templateData[ field.name ].parent().removeClass('has-error');
+          this.templateData[ field.name ].next().remove();
 
-          if ( data.validate.call( this, this.templateData[data.name].val() ) === false ) {
+          if ( field.validate.call( this, this.templateData[ field.name ].val() ) === false ) {
             valid = false
 
-            this.templateData[data.name].parent().addClass('has-error');
-            this.slurpTemplate( { template: this.templates.fieldError( data ), insertion: { $el: this.templateData[data.name].parent(), method: 'append' } } )
+            this.templateData[ field.name ].parent().addClass('has-error');
+            this.slurpTemplate( { template: this.templates.fieldError( field ), insertion: { $el: this.templateData[ field.name ].parent(), method: 'append' } } )
           }
 
         }, this )
