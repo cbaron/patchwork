@@ -31,8 +31,8 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
     modalLogin: require('../templates/modalLogin')( require('handlebars') ),
 
     modalSubmissionResponse( response ) {
-        
-        if( Object.keys( response ).length === 0 ) {
+        console.log(response)
+        if( Object.keys( response ).length === 0 ) {            
             return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.$('.modal-body') } } )
         }
         
@@ -62,9 +62,7 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
             confirmText: "Log In"
         } ).on( 'submit', ( data ) => this.submitModalForm( data ) )
 
-        setTimeout( function() {
-            this.$( '#email, #password' ).on( 'focus', this.removeErrors.bind(this) )
-        }, 3000 )
+        this.$( '.modal-body' ).on( 'focus', '#email, #password', this.removeErrors.bind(this) )
         
     },
 
