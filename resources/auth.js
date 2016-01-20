@@ -20,7 +20,7 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
     handleQueryResult: function( result ) {
 
         if( ( result.rows.length !== 1 ) || ( this.bcrypt.compareSync( this.body.password, result.rows[0].password ) === false ) ) {
-            return BaseResource.prototype.respond.call( this, { } )
+            return BaseResource.prototype.respond.call( this, { body: {} } )
         }
 
         this.user = this._.omit( result.rows[0], [ 'password' ] )
