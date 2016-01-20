@@ -43,8 +43,8 @@ Object.assign( Resource.prototype, Table.prototype, {
     events: {
         'createBtn': { method: 'showCreateDialog' },
         'body': [
-            { event: 'mouseenter', selector: 'tr', method: 'onRowMouseEnter' },
-            { event: 'mouseleave', selector: 'tr', method: 'onRowMouseLeave' }
+            { event: 'mouseover', selector: 'tr', method: 'onRowMouseEnter' },
+            { event: 'mouseout', selector: 'tr', method: 'onRowMouseLeave' }
         ]
     },
 
@@ -79,13 +79,22 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     onRowMouseEnter( e ) {
         var row = this.$( e.currentTarget ),
-            position = row.position()
+            position = row.position(),
+            top = position.top + ( row.outerHeight( true ) / 2 )
 
-        this.templateData.editBtn.removeClass('hide').css( { top: position.top, right: '25px' } )
-        this.templateData.deleteBtn.removeClass('hide').css( { top: position.top, right: '15px' } )
+        this.templateData.editBtn.removeClass('hide')
+        this.templateData.deleteBtn.removeClass('hide')
+
+        top -= ( this.templateData.editBtn.outerHeight() / 2 )
+        
+        this.templateData.editBtn.css( { top: top, right: '35px' } )
+        this.templateData.deleteBtn.css( { top: top, right: '5px' } )
     },
     
-    onRowMouseLeave() {
+    onRowMouseLeave( e ) {
+
+        if( this.isMouseOnEl( e, this.templateData.deleteBtn ) || this.isMouseOnEl( e, this.templateData.editBtn ) ) return
+
         [ 'deleteBtn', 'editBtn' ].forEach( function( btn ) { this.templateData[ btn ].addClass('hide') }, this )
     },
 
