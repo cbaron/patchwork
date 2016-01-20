@@ -142,7 +142,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
     storeTableMetaData( metaDataResult ) {
         metaDataResult.forEach( row => {
-            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = { label: row.label, description: row.description }
+            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
          } )
     },
 

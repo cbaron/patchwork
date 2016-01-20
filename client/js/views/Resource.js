@@ -81,13 +81,8 @@ Object.assign( Resource.prototype, Table.prototype, {
         var row = this.$( e.currentTarget ),
             position = row.position()
 
-        console.log( this.templateData )
-        //[ 'deleteBtn', 'editBtn' ].forEach( btn => this.templateData[ btn ].removeClass('hide').css( { top: position.top, right: '5px' } ) )
-        [ 'deleteBtn', 'editBtn' ].forEach( function( btn ) {
-            console.log( this )
-            console.log( btn )
-            this.templateData[ btn ].removeClass('hide').css( { top: position.top, right: '5px' } )
-        }, this )
+        this.templateData.editBtn.removeClass('hide').css( { top: position.top, right: '25px' } )
+        this.templateData.deleteBtn.removeClass('hide').css( { top: position.top, right: '15px' } )
     },
     
     onRowMouseLeave() {
