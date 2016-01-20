@@ -2,12 +2,17 @@
   margin: 0 auto;
 }
 .header-class .navbar {
-  height: 500px;
+  height: 475px;
   width: 100%;
-  background-size: 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #666;
-  margin: 0 auto;
+  margin: 0 auto 5px;
+}
+@media only screen and (max-width: 500px) {
+  .header-class .navbar {
+    height: 275px;
+  }
 }
 .home .header-class .navbar {
   background-image: url('/static/img/bucket_in_field.jpg');
@@ -68,12 +73,12 @@
   font-style: normal;
   margin: 0 auto;
 }
-@media only screen and (max-width: 475px) {
+@media only screen and (max-width: 500px) {
   .header-class .header-title .site-title-text {
     font-size: 45px;
   }
 }
-@media only screen and (max-width: 325px) {
+@media only screen and (max-width: 350px) {
   .header-class .header-title .site-title-text {
     font-size: 30px;
   }

@@ -6,7 +6,13 @@
 
         .carousel-inner > .item > img {
             width: 90%;
-            height: 500px;
+            height: 450px;
+            @media only screen and (max-width: 650px) {
+                height: 325px;
+            }
+            @media only screen and (max-width: 425px) {
+                height: 250px;
+            }
             margin: auto;
         }
     }

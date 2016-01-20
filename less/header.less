@@ -2,15 +2,17 @@
 
 	margin: 0 auto;
 	
-
 	.navbar {		
 		
-		height: 500px;
+		height: 475px;
+		@media only screen and (max-width: 500px) {
+			height: 275px;
+		}
 		width: 100%;
-		background-size: 100%;
+		background-size: 100% 100%;
 		background-repeat: no-repeat;
 		color: #666;
-		margin: 0 auto;
+		margin: 0 auto 5px;
 
 		.home & {
 			background-image: url('/static/img/bucket_in_field.jpg');
@@ -79,10 +81,10 @@
 			color: black;
 			font-family: "Raleway";
 			font-size: 60px;
-			@media only screen and (max-width: 475px) {
+			@media only screen and (max-width: 500px) {
 				font-size: 45px;
 			}
-			@media only screen and (max-width: 325px) {
+			@media only screen and (max-width: 350px) {
 				font-size: 30px;
 			}
 			line-height: 1em;

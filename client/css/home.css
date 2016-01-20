@@ -4,8 +4,18 @@
 }
 .home-class #carousel .carousel-inner > .item > img {
   width: 90%;
-  height: 500px;
+  height: 450px;
   margin: auto;
+}
+@media only screen and (max-width: 650px) {
+  .home-class #carousel .carousel-inner > .item > img {
+    height: 325px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .home-class #carousel .carousel-inner > .item > img {
+    height: 250px;
+  }
 }
 .home-class #homeText {
   width: 100%;
