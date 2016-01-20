@@ -107,6 +107,10 @@ body {
   height: 100%;
 }
 
+body > div.container {
+  max-width: 900px;
+}
+
 body.admin {
   padding-top: 5rem;
 }
@@ -310,46 +314,49 @@ li {
   letter-spacing: 0px;
 }
 .header-class {
-  background-size: 100% 500px;
-  background-repeat: no-repeat;
-  color: #666;
-}
-
-.home .header-class {
-  background-image: url("/static/img/bucket_in_field.jpg");
-}
-
-.signup .header-class {
-  background-image: url("/static/img/greens.jpg");
-}
-
-.about .header-class {
-  background-image: url("/static/img/ole_barn.jpg");
-}
-
-.locations .header-class {
-  background-image: url("/static/img/broccoli_bucket.jpg");
-}
-
-.members .header-class {
-  background-image: url("/static/img/dog_with_chard.jpg");
-}
-
-.employment .header-class {
-  background-image: url("/static/img/sun_on_tractor.jpg");
-}
-
-.contact .header-class {
-  background-image: url("/static/img/grazing_sheep.jpg");
+  margin: 0 auto;
 }
 
 .header-class .navbar {
   height: 500px;
+  width: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  color: #666;
+  margin: 0 auto;
+}
+
+.home .header-class .navbar {
+  background-image: url("/static/img/bucket_in_field.jpg");
+}
+
+.signup .header-class .navbar {
+  background-image: url("/static/img/greens.jpg");
+}
+
+.about .header-class .navbar {
+  background-image: url("/static/img/ole_barn.jpg");
+}
+
+.locations .header-class .navbar {
+  background-image: url("/static/img/broccoli_bucket.jpg");
+}
+
+.members .header-class .navbar {
+  background-image: url("/static/img/dog_with_chard.jpg");
+}
+
+.employment .header-class .navbar {
+  background-image: url("/static/img/sun_on_tractor.jpg");
+}
+
+.contact .header-class .navbar {
+  background-image: url("/static/img/grazing_sheep.jpg");
 }
 
 .header-class .navbar .navbar-nav {
-  width: 100%;
   text-align: center;
+  margin: auto;
 }
 
 .header-class .navbar .navbar-nav li {
@@ -361,7 +368,7 @@ li {
   font-weight: 300;
   font-style: normal;
   font-size: 15px;
-  line-height: 3em;
+  line-height: 2em;
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
@@ -371,28 +378,38 @@ li {
   color: #A5C329;
 }
 
-.header-class #headerTitle {
+.header-class .header-title ul {
+  margin: 5px auto;
   cursor: pointer;
 }
 
-.header-class #headerTitle h1 {
-  text-align: center;
+.header-class .header-title .site-title-text {
   width: 100%;
-}
-
-.header-class #headerTitle .site-title-span {
   display: inline-block;
   color: black;
   font-family: "Raleway";
-  font-size: 75px;
+  font-size: 60px;
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
   font-weight: 100;
   font-style: normal;
+  margin: 0 auto;
 }
 
-.locations .header-class #headerTitle .site-title-span {
+@media only screen and (max-width: 475px) {
+  .header-class .header-title .site-title-text {
+    font-size: 45px;
+  }
+}
+
+@media only screen and (max-width: 325px) {
+  .header-class .header-title .site-title-text {
+    font-size: 30px;
+  }
+}
+
+.locations .header-class .header-title .site-title-text {
   color: #C7E53E;
 }
 .home-class #carousel {

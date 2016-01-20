@@ -1,6 +1,6 @@
 <div data-js="container" class="header-class">
     <nav class="navbar navbar-default>
-        <div class="container-fluid">
+        <div class="container">
             <div class="row navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
@@ -17,10 +17,11 @@
                     {{/each}}
                 </ul>
             </div>
-            <div id="headerTitle" data-js="{{home.name}}" data-id="{{home.name}}">
-                <h1 class="site-title">
-                    <span class="site-title-span">{{home.label}}</span>
-                </h1>
+            <div class="header-title" data-js="{{home.name}}" data-id="{{home.name}}">
+                <ul class="site-title">
+                    <li class="site-title-text">Patchwork</li>
+                    <li class="site-title-text">Gardens</li>
+                </ul>
             </div>
         </div>
     </nav>
