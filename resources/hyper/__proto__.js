@@ -15,7 +15,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
             } )
         
-        return this.format( "Select %s.*, %s FROM %s %s", this.path[1], fkSelect.join(', '), this.path[1], fkFrom.join(' ') )
+        return this.format( "Select %s.* %s FROM %s %s", this.path[1], ( fkSelect.length ) ? ", " + fkSelect.join(', ') : "", this.path[1], fkFrom.join(' ') )
     },
 
     GET() {

@@ -40,9 +40,40 @@ Object.assign( Resource.prototype, Table.prototype, {
             
     },
 
+    edit( data ) {
+
+        var modelAttrs = { }
+
+        this.createProperties.forEach( property => {
+            if( property.fk ) {
+                if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ property.property ]; return }
+
+                data[ property.property ] = this[ property.fk.table + "Typeahead" ].id
+                modelAttrs[ property.fk.recorddescriptor ].id = this[ property.fk.table + "Typeahead" ].id
+                modelAttrs[ property.fk.recorddescriptor ].value = this[ property.fk.table + "Typeahead" ][property.fk.recorddescriptor]
+            } else {
+                modelAttrs[ property.property ] = data[ property.property ]
+            }
+        } )
+
+        this.$.ajax( {
+            headers: { accept: 'application/json' },
+            contentType: 'application/json',
+            data: JSON.stringify( data ),
+            method: 'PATCH',
+            url: this.util.format( "/%s/%d", this.resource, this.modelToEdit.id )
+        } )
+        .done( ( response, textStatus, jqXHR ) => {
+            this.modelToEdit.set( modelAttrs )
+            this.modalView.hide()
+        } )
+            
+    },
+
     events: {
-        'createBtn': { method: 'showCreateDialog' },
-        'body': [
+        createBtn: { method: 'showCreateDialog' },
+        editBtn: { method: 'showEditDialog' },
+        body: [
             { event: 'mouseover', selector: 'tr', method: 'onRowMouseEnter' },
             { event: 'mouseout', selector: 'tr', method: 'onRowMouseLeave' }
         ]
@@ -82,6 +113,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             position = row.position(),
             top = position.top + ( row.outerHeight( true ) / 2 )
 
+        this.hoveredModel = this.items.get( row.attr( 'data-id' ) )
         this.templateData.editBtn.removeClass('hide')
         this.templateData.deleteBtn.removeClass('hide')
 
@@ -95,7 +127,10 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         if( this.isMouseOnEl( e, this.templateData.deleteBtn ) || this.isMouseOnEl( e, this.templateData.editBtn ) ) return
 
-        [ 'deleteBtn', 'editBtn' ].forEach( function( btn ) { this.templateData[ btn ].addClass('hide') }, this )
+        this.hoveredModel = undefined
+
+        this.templateData.deleteBtn.addClass('hide')
+        this.templateData.editBtn.addClass('hide')
     },
 
     postRender() {
@@ -110,6 +145,17 @@ Object.assign( Resource.prototype, Table.prototype, {
             this.$( this.templateData.header.children('tr')[0] ).append( this.templates.headerColumn.call( this, field ) )
             return field
         } )
+    },
+
+    populateModalField( property ) {
+        var el = this.$( '#' + property.property )
+
+        if( ! el ) return
+        if( ! property.fk ) return el.val( this.modelToEdit.get( property.property ) )
+        
+        this.initTypeahead( property ) 
+
+        el.typeahead( 'val', this.modelToEdit.get( property.fk.recorddescriptor ).value )
     },
 
     showCreateDialog() {
@@ -129,7 +175,26 @@ Object.assign( Resource.prototype, Table.prototype, {
         .on( 'shown', () => this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } ) )
         .on( 'submit', data => this.create(data) )
 
+    },
 
+    showEditDialog() {
+
+        this.modelToEdit = this.hoveredModel
+
+        this.modalView.show( {
+            body: this.templates.create( {
+                fields: this.createProperties.map( property => 
+                    this.templates[ property.range ]( {
+                        class: ( property.fk ) ? 'typeahead' : '',
+                        name: property.property,
+                        label: this.getLabel( property.property ),
+                    } )
+                )
+            } ),
+            title: this.util.format( 'Edit %s', this.label )
+        } )
+        .on( 'shown', () => this.createProperties.forEach( property => this.populateModalField( property ) ) )
+        .on( 'submit', data => this.edit(data) )
     },
 
     template: require('../templates/resource')( require('handlebars') ),

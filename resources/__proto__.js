@@ -78,6 +78,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             .done();
     },
 
+    jws: require('jws'),
+
     PATCH: function() {
         return [
             this.slurpBody.bind(this),
@@ -183,23 +185,37 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST: function() {
-            if( /(auth|member)/.test(this.path[1]) ) return
+            if( /(auth)/.test(this.path[1]) ) return
             
             this.validate.Token.call(this)
             
             return this.validate.User.call(this)
         },
-
+    
         Token: function() {
-            if( ! this.request.headers.token ) throw new Error("No token provided")
+            var list = {},
+                rc = this.request.headers.cookie
+
+            rc && rc.split(';').forEach( cookie => {
+                var parts = cookie.split('=');
+                list[ parts.shift().trim() ] = parts.join('=')
+            } )
+
+            this.token = list.patchworkjwt
         },
 
-        User: function() {
-            return this.Q.ninvoke( this.redisClient, "HGETALL", this.request.headers.token )
-            .then( function( user ) {
-                if( ! user ) throw new Error("Invalid Token")
-                this.user = user;
-            }.bind(this) )
+        User() {
+            return new Promise( ( resolve, reject ) => {
+                this.jws.createVerify( {
+                    algorithm: "HS256",
+                    key: process.env.JWS_SECRET,
+                    signature: this.token,
+                } ).on( 'done', ( verified, obj ) => {
+                    if( ! verified ) reject( 'Invalid Signature' )
+                    this.user = obj.payload
+                    resolve()
+                } ).on( 'error', reject )
+            } )
         }
     }
 

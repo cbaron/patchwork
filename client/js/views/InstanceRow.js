@@ -3,14 +3,20 @@ var ListItem = require('./util/ListItem'),
 
 Object.assign( InstanceRow.prototype, ListItem.prototype, {
 
+    getFieldValue( field ) { return ( typeof this.model.get(field) === "object" ) ? this.model.get(field).value : this.model.get(field) },
+
     getTemplateOptions() {
         return {
-            values: this.fields.map( field => ( {
-                name: field.name,
-                value: ( typeof this.model.get(field.name) === "object" ) ? this.model.get(field.name).value : this.model.get(field.name),
-                width: field.width
-            } ) )
+            id: this.model.id,
+            values: this.fields.map( field => ( { name: field.name, value: this.getFieldValue( field.name ), width: field.width } ) )
         }
+    },
+
+    postRender() {
+        ListItem.prototype.postRender.call(this)
+        this.model.on( 'change', () =>
+            Object.keys( this.model.attributes ).forEach( field => this.templateData[ field ].text( this.getFieldValue( field ) ) )
+        )
     },
 
     template: require('../templates/instanceRow')( require('handlebars') )

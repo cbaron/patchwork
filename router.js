@@ -127,8 +127,12 @@ Object.assign( Router.prototype, MyObject.prototype, {
         foreignKeyResult.forEach( row => {
             var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
                 column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
-            
-            column.fk = { table: match[2], column: match[3] }
+           
+            column.fk = {
+                table: match[2],
+                column: match[3],
+                recorddescriptor: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recorddescriptor : null
+            }
         } )
     },
 
