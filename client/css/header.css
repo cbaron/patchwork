@@ -20,6 +20,9 @@
 .about .header-class {
   background-image: url('/static/img/ole_barn.jpg');
 }
+.csa .header-class {
+  background-image: url('/static/img/veggies_on_table.jpg');
+}
 .markets .header-class {
   background-image: url('/static/img/broccoli_bucket.jpg');
 }
@@ -59,9 +62,8 @@
   float: none;
   margin: 0 16.5px;
   text-align: center;
-  font-family: "proxima-nova";
-  font-weight: 300;
   font-size: 15px;
+  font-weight: 500;
   line-height: 2em;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -81,24 +83,33 @@
   }
 }
 .markets .header-class .navbar-collapse .navbar-nav li {
-  color: #A5C329;
-  font-weight: 500;
+  color: #E0F78D;
+  font-weight: 700;
+}
+.csa .header-class .navbar-collapse .navbar-nav li {
+  color: #D4800E;
+  font-weight: 700;
+}
+.members .header-class .navbar-collapse .navbar-nav li {
+  color: #8C3733;
+}
+.employment .header-class .navbar-collapse .navbar-nav li {
+  color: #966F70;
 }
 .header-class .header-title ul {
-  margin: 5px auto;
+  margin: 10px auto;
   cursor: pointer;
 }
 .header-class .header-title .site-title-text {
   width: 100%;
   display: inline-block;
   color: black;
-  font-family: "Raleway";
+  font-family: "RalewayRegular";
   font-size: 60px;
+  font-weight: 550;
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
-  font-weight: 100;
-  font-style: normal;
   margin: 0 auto;
 }
 @media only screen and (max-width: 500px) {
@@ -113,4 +124,16 @@
 }
 .markets .header-class .header-title .site-title-text {
   color: #C7E53E;
+}
+.csa .header-class .header-title .site-title-text {
+  color: #BF5A03;
+}
+.signup .header-class .header-title .site-title-text {
+  color: #413137;
+}
+.members .header-class .header-title .site-title-text {
+  color: #5B050F;
+}
+.employment .header-class .header-title .site-title-text {
+  color: #4B2531;
 }

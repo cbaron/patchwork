@@ -7,24 +7,17 @@
 }
 
 .about-class h2 {
-  font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
   letter-spacing: 1px;
-  font-weight: 200;
-  font-style: normal;
-  text-transform: none;
   color: #555;
   margin: 0 0 .5em;
 }
 
 .about-class p {
-  font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
-  letter-spacing: 0px;
   text-align: left;
-  font-weight: 400;
   color: #666;
 }
 table tbody tr:hover {
@@ -87,6 +80,12 @@ table tbody tr:hover {
   src: url("/static/fonts/Lato-Light.woff2") format('woff2'), url("/static/fonts/Lato-Light.woff") format('woff'), url("/static/fonts/Lato-Light.ttf") format('truetype');
 }
 
+@font-face {
+  font-family: 'RalewayRegular';
+  src: url("/static/fonts/Raleway-Regular-webfont.eot");
+  src: url("/static/fonts/Raleway-Regular-webfont.woff") format('woff'), url("/static/fonts/Raleway-Regular-webfont.ttf") format('truetype'), url("/static/fonts/Raleway-Regular-webfont.svg") format('svg');
+}
+
 .modal-backdrop {
   bottom: 0;
 }
@@ -97,6 +96,7 @@ html {
 }
 
 body {
+  font-family: "Lato";
   height: 100%;
 }
 
@@ -112,6 +112,16 @@ body > div.container {
 
 body.admin {
   padding-top: 5rem;
+}
+
+.client-view {
+  margin: 15px 5% 25px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "RalewayRegular";
 }
 
 a {
@@ -208,63 +218,35 @@ li {
 .w70 {
   width: 70%;
 }
-.contact-class {
-  margin: 10px 5%;
-}
-
 .contact-class h2 {
-  font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
   letter-spacing: 1px;
-  font-weight: 200;
-  font-style: normal;
-  text-transform: none;
   color: #555;
   margin: 0 0 .5em;
 }
 
 .contact-class p {
-  font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
-  letter-spacing: 0px;
   text-align: left;
-  font-weight: 400;
   color: #666;
 }
 
-.employment-class {
-  margin: 25px 5% 75px 5%;
-}
-
 .employment-class h2 {
-  font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
   letter-spacing: 1px;
-  font-weight: 200;
-  font-style: normal;
-  text-transform: none;
   color: #555;
   margin: 0 0 .5em;
 }
 
-.employment-class h2 p {
-  font-family: "proxima-nova";
+.employment-class p {
   font-size: 15px;
   line-height: 1.5em;
   letter-spacing: 0px;
   text-align: left;
-  font-weight: 400;
   color: #666;
-}
-
-.employment-class .horizontalrule {
-  border-top: 1px solid #555;
-  height: 1px;
-  width: auto;
-  margin: 3em 0;
 }
 .footer-class {
   background-color: #131313;
@@ -284,12 +266,8 @@ li {
   float: none;
   margin: 5px 10px;
   text-align: center;
-  font-family: "proxima-nova";
-  font-weight: 400;
-  font-style: normal;
   font-size: 15px;
   line-height: 1.2em;
-  letter-spacing: 0px;
   cursor: pointer;
 }
 
@@ -304,8 +282,6 @@ li {
   float: none;
   margin: 10px auto;
   text-align: center;
-  font-family: "proxima-nova";
-  font-weight: 400;
   font-size: 15px;
   line-height: 1.5em;
 }
@@ -334,6 +310,10 @@ li {
 
 .about .header-class {
   background-image: url("/static/img/ole_barn.jpg");
+}
+
+.csa .header-class {
+  background-image: url("/static/img/veggies_on_table.jpg");
 }
 
 .markets .header-class {
@@ -383,9 +363,8 @@ li {
   float: none;
   margin: 0 16.5px;
   text-align: center;
-  font-family: "proxima-nova";
-  font-weight: 300;
   font-size: 15px;
+  font-weight: 500;
   line-height: 2em;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -407,12 +386,25 @@ li {
 }
 
 .markets .header-class .navbar-collapse .navbar-nav li {
-  color: #A5C329;
-  font-weight: 500;
+  color: #E0F78D;
+  font-weight: 700;
+}
+
+.csa .header-class .navbar-collapse .navbar-nav li {
+  color: #D4800E;
+  font-weight: 700;
+}
+
+.members .header-class .navbar-collapse .navbar-nav li {
+  color: #8C3733;
+}
+
+.employment .header-class .navbar-collapse .navbar-nav li {
+  color: #966F70;
 }
 
 .header-class .header-title ul {
-  margin: 5px auto;
+  margin: 10px auto;
   cursor: pointer;
 }
 
@@ -420,13 +412,12 @@ li {
   width: 100%;
   display: inline-block;
   color: black;
-  font-family: "Raleway";
+  font-family: "RalewayRegular";
   font-size: 60px;
+  font-weight: 550;
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
-  font-weight: 100;
-  font-style: normal;
   margin: 0 auto;
 }
 
@@ -445,39 +436,43 @@ li {
 .markets .header-class .header-title .site-title-text {
   color: #C7E53E;
 }
-.home-class #carousel {
+
+.csa .header-class .header-title .site-title-text {
+  color: #BF5A03;
+}
+
+.signup .header-class .header-title .site-title-text {
+  color: #413137;
+}
+
+.members .header-class .header-title .site-title-text {
+  color: #5B050F;
+}
+
+.employment .header-class .header-title .site-title-text {
+  color: #4B2531;
+}
+.home-class .carousel {
   margin: 70px auto;
   width: 75%;
 }
 
-.home-class #carousel .carousel-inner > .item > img {
+.home-class .carousel .carousel-inner > .item > img {
   width: 90%;
   height: 450px;
   margin: auto;
 }
 
 @media only screen and (max-width: 650px) {
-  .home-class #carousel .carousel-inner > .item > img {
+  .home-class .carousel .carousel-inner > .item > img {
     height: 325px;
   }
 }
 
 @media only screen and (max-width: 425px) {
-  .home-class #carousel .carousel-inner > .item > img {
+  .home-class .carousel .carousel-inner > .item > img {
     height: 250px;
   }
-}
-
-.home-class #homeText {
-  width: 100%;
-  margin: 75px auto 75px;
-}
-
-.home-class #homeText h3 {
-  text-align: center;
-  font-family: "proxima-nova";
-  width: 75%;
-  margin: auto;
 }
 .locations-class {
   margin: 25px 5% 75px 5%;
@@ -529,41 +524,29 @@ li {
 .locations-class ul li {
   margin: 5px 0;
 }
-.markets-class {
-  margin: 25px 5% 75px 5%;
-}
-
 .markets-class h2 {
-  font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
   letter-spacing: 1px;
-  font-weight: 200;
-  font-style: normal;
-  text-transform: none;
   color: #555;
   margin: 0 0 .5em;
 }
 
 .markets-class p,
 .markets-class li {
-  font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
   letter-spacing: 0px;
   text-align: left;
-  font-weight: 400;
   color: #666;
 }
 
 .markets-class p span,
 .markets-class li span {
-  font-family: "Raleway";
+  font-family: "RalewayRegular";
   font-size: 16px;
   line-height: 1.2em;
   letter-spacing: 1px;
-  font-style: normal;
-  font-weight: 200;
   color: #c98702;
 }
 

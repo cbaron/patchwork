@@ -20,6 +20,11 @@
   src: url('/static/fonts/Lato-Light.eot');
   src: url('/static/fonts/Lato-Light.woff2') format('woff2'), url('/static/fonts/Lato-Light.woff') format('woff'), url('/static/fonts/Lato-Light.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'RalewayRegular';
+  src: url('/static/fonts/Raleway-Regular-webfont.eot');
+  src: url('/static/fonts/Raleway-Regular-webfont.woff') format('woff'), url('/static/fonts/Raleway-Regular-webfont.ttf') format('truetype'), url('/static/fonts/Raleway-Regular-webfont.svg') format('svg');
+}
 .modal-backdrop {
   bottom: 0;
 }
@@ -28,6 +33,7 @@ html {
   height: 100%;
 }
 body {
+  font-family: "Lato";
   height: 100%;
 }
 body > div.container {
@@ -40,6 +46,14 @@ body > div.container {
 }
 body.admin {
   padding-top: 5rem;
+}
+.client-view {
+  margin: 15px 5% 25px;
+}
+h1,
+h2,
+h3 {
+  font-family: "RalewayRegular";
 }
 a {
   cursor: pointer;

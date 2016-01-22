@@ -1,12 +1,12 @@
 var MyView = require('./MyView'),
-    Locations = function() { return MyView.apply( this, arguments ) }
+    Markets = function() { return MyView.apply( this, arguments ) }
 
-Object.assign( Locations.prototype, MyView.prototype, {
+Object.assign( Markets.prototype, MyView.prototype, {
 
     requiresLogin: false,
 
-    template: require('../templates/locations')( require('handlebars') )
+    template: require('../templates/markets')( require('handlebars') )
 
 } )
 
-module.exports = Locations
+module.exports = Markets

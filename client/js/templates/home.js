@@ -11,7 +11,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "<div data-js=\"container\" class=\"home-class\"><div id=\"carousel\" class=\"carousel slide\" data-ride=\"carousel\"><div class=\"carousel-inner\" role=\"listbox\"><div class=\"item active\"><img src=\""
+  return "<div data-js=\"container\" class=\"home-class client-view\"><div id=\"carousel\" class=\"carousel slide\" data-ride=\"carousel\"><div class=\"carousel-inner\" role=\"listbox\"><div class=\"item active\"><img src=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.initialImage : depth0)) != null ? stack1.path : stack1), depth0))
     + "\" alt=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.initialImage : depth0)) != null ? stack1.description : stack1), depth0))
