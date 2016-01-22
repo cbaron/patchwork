@@ -27,13 +27,6 @@
   font-weight: 400;
   color: #666;
 }
-
-.about-class .horizontalrule {
-  border-top: 1px solid #555;
-  height: 1px;
-  width: auto;
-  margin: 3em 0;
-}
 table tbody tr:hover {
   border-color: #ccc;
   -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
@@ -108,7 +101,13 @@ body {
 }
 
 body > div.container {
-  max-width: 900px;
+  width: 100%;
+}
+
+@media only screen and (min-width: 1224px) {
+  body > div.container {
+    max-width: 1224px;
+  }
 }
 
 body.admin {
@@ -136,6 +135,12 @@ div.header {
 .form-group {
   margin-top: 10px;
   margin-bottom: 20px;
+}
+
+hr {
+  border-top: 1px solid #ddd;
+  height: 0;
+  margin: 2em auto;
 }
 
 .glyphicon-ok {
@@ -204,7 +209,7 @@ li {
   width: 70%;
 }
 .contact-class {
-  margin: 25px 5% 75px 5%;
+  margin: 10px 5%;
 }
 
 .contact-class h2 {
@@ -229,12 +234,6 @@ li {
   color: #666;
 }
 
-.contact-class .horizontalrule {
-  border-top: 1px solid #555;
-  height: 1px;
-  width: auto;
-  margin: 3em 0;
-}
 .employment-class {
   margin: 25px 5% 75px 5%;
 }
@@ -270,22 +269,21 @@ li {
 .footer-class {
   background-color: #131313;
   color: #ccc;
-  height: 150px;
   width: auto;
   margin-top: 10px;
 }
 
 .footer-class ul {
-  margin: 10px 0px 10px 5%;
-  width: auto;
-  text-align: left;
+  margin: 10px 0px;
+  width: 100%;
+  text-align: center;
 }
 
 .footer-class ul li {
   display: inline-block;
   float: none;
-  margin: 5px 16.5px 5px 0;
-  text-align: left;
+  margin: 5px 10px;
+  text-align: center;
   font-family: "proxima-nova";
   font-weight: 400;
   font-style: normal;
@@ -295,85 +293,98 @@ li {
   cursor: pointer;
 }
 
-.footer-class .horizontalrule {
+.footer-class hr {
   border-top: 1px solid white;
-  height: auto;
-  width: 85%;
-  margin: 0 auto 10px 5%;
-}
-
-.footer-class #futureDays {
-  display: inline-block;
-  float: none;
-  margin: 0 0 0 5%;
-  text-align: left;
-  font-family: "proxima-nova";
-  font-weight: 400;
-  font-style: normal;
-  font-size: 15px;
-  line-height: 1.5em;
-  letter-spacing: 0px;
-}
-.header-class {
   margin: 0 auto;
 }
 
-.header-class .navbar {
-  height: 475px;
+.footer-class .future-days {
   width: 100%;
+  display: inline-block;
+  float: none;
+  margin: 10px auto;
+  text-align: center;
+  font-family: "proxima-nova";
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5em;
+}
+.header-class {
+  height: 475px;
+  width: auto;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #666;
-  margin: 0 auto 5px;
+  position: relative;
 }
 
 @media only screen and (max-width: 500px) {
-  .header-class .navbar {
-    height: 275px;
+  .header-class {
+    height: 315px;
   }
 }
 
-.home .header-class .navbar {
+.home .header-class {
   background-image: url("/static/img/bucket_in_field.jpg");
 }
 
-.signup .header-class .navbar {
+.signup .header-class {
   background-image: url("/static/img/greens.jpg");
 }
 
-.about .header-class .navbar {
+.about .header-class {
   background-image: url("/static/img/ole_barn.jpg");
 }
 
-.locations .header-class .navbar {
+.markets .header-class {
   background-image: url("/static/img/broccoli_bucket.jpg");
 }
 
-.members .header-class .navbar {
+.members .header-class {
   background-image: url("/static/img/dog_with_chard.jpg");
 }
 
-.employment .header-class .navbar {
+.employment .header-class {
   background-image: url("/static/img/sun_on_tractor.jpg");
 }
 
-.contact .header-class .navbar {
+.contact .header-class {
   background-image: url("/static/img/grazing_sheep.jpg");
 }
 
-.header-class .navbar .navbar-nav {
-  text-align: center;
-  margin: auto;
+.header-class .navbar-collapse {
+  width: 100%;
+  border: none;
 }
 
-.header-class .navbar .navbar-nav li {
+.header-class .navbar-collapse .navbar-nav {
+  text-align: center;
+  width: 100%;
+}
+
+@media only screen and (max-width: 767px) {
+  .header-class .navbar-collapse .navbar-nav {
+    position: absolute;
+    width: 90%;
+    top: 50px;
+    left: 5%;
+    margin: 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .header-class .navbar-collapse .navbar-nav > li:first-child {
+    display: none;
+  }
+}
+
+.header-class .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 0 16.5px;
   text-align: center;
   font-family: "proxima-nova";
   font-weight: 300;
-  font-style: normal;
   font-size: 15px;
   line-height: 2em;
   text-transform: uppercase;
@@ -381,8 +392,23 @@ li {
   cursor: pointer;
 }
 
-.locations .header-class .navbar .navbar-nav li {
+@media only screen and (max-width: 767px) {
+  .header-class .navbar-collapse .navbar-nav li {
+    height: 100%;
+    background-color: #131313;
+    color: #ccc;
+    display: block;
+    border: 1px solid #ccc;
+    float: none;
+    width: auto;
+    margin: 0;
+    line-height: 2em;
+  }
+}
+
+.markets .header-class .navbar-collapse .navbar-nav li {
   color: #A5C329;
+  font-weight: 500;
 }
 
 .header-class .header-title ul {
@@ -410,13 +436,13 @@ li {
   }
 }
 
-@media only screen and (max-width: 350px) {
+@media only screen and (max-width: 400px) {
   .header-class .header-title .site-title-text {
     font-size: 30px;
   }
 }
 
-.locations .header-class .header-title .site-title-text {
+.markets .header-class .header-title .site-title-text {
   color: #C7E53E;
 }
 .home-class #carousel {
@@ -503,12 +529,55 @@ li {
 .locations-class ul li {
   margin: 5px 0;
 }
+.markets-class {
+  margin: 25px 5% 75px 5%;
+}
 
-.locations-class .horizontalrule {
-  border-top: 1px solid #555;
-  height: 1px;
-  width: auto;
-  margin: 3em 0;
+.markets-class h2 {
+  font-family: "Raleway";
+  font-size: 26px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-weight: 200;
+  font-style: normal;
+  text-transform: none;
+  color: #555;
+  margin: 0 0 .5em;
+}
+
+.markets-class p,
+.markets-class li {
+  font-family: "proxima-nova";
+  font-size: 15px;
+  line-height: 1.5em;
+  letter-spacing: 0px;
+  text-align: left;
+  font-weight: 400;
+  color: #666;
+}
+
+.markets-class p span,
+.markets-class li span {
+  font-family: "Raleway";
+  font-size: 16px;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  font-style: normal;
+  font-weight: 200;
+  color: #c98702;
+}
+
+.markets-class p.business,
+.markets-class li.business {
+  margin-top: 30px;
+}
+
+.markets-class ul {
+  margin-top: 20px;
+}
+
+.markets-class ul li {
+  margin: 5px 0;
 }
 .resource .sub-heading button {
   position: absolute;

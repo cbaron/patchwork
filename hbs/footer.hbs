@@ -1,13 +1,11 @@
-<div data-js="container" class="row footer-class">
-    <nav>               
-        <ul>
-            {{#each fields}}
-                <li data-id={{this.name}} data-js={{this.name}}>{{this.label}}</li>
-            {{/each}}
-        </ul>
-    </nav>
-    <div class="horizontalrule"></div>
-    <div id="futureDays">
+<nav data-js="container" class="row footer-class">
+    <ul>
+        {{#each fields}}
+            <li data-id={{this.name}} data-js={{this.name}}>{{this.label}}</li>
+        {{/each}}
+    </ul>
+    <hr>
+    <div class="future-days">
         <p>A <a href='mailto:topher.baron@gmail.com'>FutureDays </a>site</p>
     </div>
-</div>
+</nav>

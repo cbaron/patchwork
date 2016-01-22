@@ -1,7 +1,7 @@
-.locations-class {
+.markets-class {
   margin: 25px 5% 75px 5%;
 }
-.locations-class h2 {
+.markets-class h2 {
   font-family: "Raleway";
   font-size: 26px;
   line-height: 1.2em;
@@ -12,8 +12,8 @@
   color: #555;
   margin: 0 0 .5em;
 }
-.locations-class p,
-.locations-class li {
+.markets-class p,
+.markets-class li {
   font-family: "proxima-nova";
   font-size: 15px;
   line-height: 1.5em;
@@ -22,8 +22,8 @@
   font-weight: 400;
   color: #666;
 }
-.locations-class p span,
-.locations-class li span {
+.markets-class p span,
+.markets-class li span {
   font-family: "Raleway";
   font-size: 16px;
   line-height: 1.2em;
@@ -32,13 +32,13 @@
   font-weight: 200;
   color: #c98702;
 }
-.locations-class p.business,
-.locations-class li.business {
+.markets-class p.business,
+.markets-class li.business {
   margin-top: 30px;
 }
-.locations-class ul {
+.markets-class ul {
   margin-top: 20px;
 }
-.locations-class ul li {
+.markets-class ul li {
   margin: 5px 0;
 }

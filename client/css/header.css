@@ -1,60 +1,88 @@
 .header-class {
-  margin: 0 auto;
-}
-.header-class .navbar {
   height: 475px;
-  width: 100%;
+  width: auto;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   color: #666;
-  margin: 0 auto 5px;
+  position: relative;
 }
 @media only screen and (max-width: 500px) {
-  .header-class .navbar {
-    height: 275px;
+  .header-class {
+    height: 315px;
   }
 }
-.home .header-class .navbar {
+.home .header-class {
   background-image: url('/static/img/bucket_in_field.jpg');
 }
-.signup .header-class .navbar {
+.signup .header-class {
   background-image: url('/static/img/greens.jpg');
 }
-.about .header-class .navbar {
+.about .header-class {
   background-image: url('/static/img/ole_barn.jpg');
 }
-.locations .header-class .navbar {
+.markets .header-class {
   background-image: url('/static/img/broccoli_bucket.jpg');
 }
-.members .header-class .navbar {
+.members .header-class {
   background-image: url('/static/img/dog_with_chard.jpg');
 }
-.employment .header-class .navbar {
+.employment .header-class {
   background-image: url('/static/img/sun_on_tractor.jpg');
 }
-.contact .header-class .navbar {
+.contact .header-class {
   background-image: url('/static/img/grazing_sheep.jpg');
 }
-.header-class .navbar .navbar-nav {
-  text-align: center;
-  margin: auto;
+.header-class .navbar-collapse {
+  width: 100%;
+  border: none;
 }
-.header-class .navbar .navbar-nav li {
+.header-class .navbar-collapse .navbar-nav {
+  text-align: center;
+  width: 100%;
+}
+@media only screen and (max-width: 767px) {
+  .header-class .navbar-collapse .navbar-nav {
+    position: absolute;
+    width: 90%;
+    top: 50px;
+    left: 5%;
+    margin: 0;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .header-class .navbar-collapse .navbar-nav > li:first-child {
+    display: none;
+  }
+}
+.header-class .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 0 16.5px;
   text-align: center;
   font-family: "proxima-nova";
   font-weight: 300;
-  font-style: normal;
   font-size: 15px;
   line-height: 2em;
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
 }
-.locations .header-class .navbar .navbar-nav li {
+@media only screen and (max-width: 767px) {
+  .header-class .navbar-collapse .navbar-nav li {
+    height: 100%;
+    background-color: #131313;
+    color: #ccc;
+    display: block;
+    border: 1px solid #ccc;
+    float: none;
+    width: auto;
+    margin: 0;
+    line-height: 2em;
+  }
+}
+.markets .header-class .navbar-collapse .navbar-nav li {
   color: #A5C329;
+  font-weight: 500;
 }
 .header-class .header-title ul {
   margin: 5px auto;
@@ -78,11 +106,11 @@
     font-size: 45px;
   }
 }
-@media only screen and (max-width: 350px) {
+@media only screen and (max-width: 400px) {
   .header-class .header-title .site-title-text {
     font-size: 30px;
   }
 }
-.locations .header-class .header-title .site-title-text {
+.markets .header-class .header-title .site-title-text {
   color: #C7E53E;
 }

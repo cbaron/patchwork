@@ -1,5 +1,5 @@
 .contact-class {
-  margin: 25px 5% 75px 5%;
+  margin: 10px 5%;
 }
 .contact-class h2 {
   font-family: "Raleway";
@@ -20,10 +20,4 @@
   text-align: left;
   font-weight: 400;
   color: #666;
-}
-.contact-class .horizontalrule {
-  border-top: 1px solid #555;
-  height: 1px;
-  width: auto;
-  margin: 3em 0;
 }

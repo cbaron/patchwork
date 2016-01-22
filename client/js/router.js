@@ -19,7 +19,7 @@ module.exports = new (
         },
 
         handler( resource ) {
-            console.log('router in use')
+            
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
 
             this.footer = require('./views/Footer')
@@ -29,10 +29,9 @@ module.exports = new (
             this.userPromise.then( () => {
 
                 this.$('body').removeClass().addClass( resource )
-                console.log( this.$('body').attr('class') )
                 
                 if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
-                console.log( Object.keys(this.views) )
+                
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
 
                 if( this.views[ resource ] ) return this.views[ resource ].show()
@@ -73,9 +72,10 @@ module.exports = new (
                 }
             },
             home: { view: require('./views/Home'), options: { } },
-            signup: { view: require('./views/Signup'), options: { } },
+            csa: { view: require('./views/CSA'), options: { } },
             about: { view: require('./views/About'), options: { } },
-            locations: { view: require('./views/Locations'), options: { } },
+            markets: { view: require('./views/Markets'), options: { } },
+            signup: { view: require('./views/Signup'), options: { } },
             members: { view: require('./views/Members'), options: { } },
             employment: { view: require('./views/Employment'), options: { } },
             contact: { view: require('./views/Contact'), options: { } }

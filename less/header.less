@@ -1,73 +1,101 @@
 .header-class {
+				
+	height: 475px;
+	@media only screen and (max-width: 500px) {
+		height: 315px;
+	}
+	width: auto;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	color: #666;
+	position: relative;
 
-	margin: 0 auto;
-	
-	.navbar {		
-		
-		height: 475px;
-		@media only screen and (max-width: 500px) {
-			height: 275px;
-		}
+	.home & {
+		background-image: url('/static/img/bucket_in_field.jpg');
+	}
+
+	.signup & {
+		background-image: url('/static/img/greens.jpg');
+	}
+
+	.about & {
+		background-image: url('/static/img/ole_barn.jpg');
+	}
+
+	.markets & {
+		background-image: url('/static/img/broccoli_bucket.jpg');
+	}
+
+	.members & {
+		background-image: url('/static/img/dog_with_chard.jpg');
+	}
+
+	.employment & {
+		background-image: url('/static/img/sun_on_tractor.jpg');
+	}
+
+	.contact & {
+		background-image: url('/static/img/grazing_sheep.jpg');
+	}
+
+	.navbar-collapse {
 		width: 100%;
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-		color: #666;
-		margin: 0 auto 5px;
-
-		.home & {
-			background-image: url('/static/img/bucket_in_field.jpg');
-		}
-
-		.signup & {
-			background-image: url('/static/img/greens.jpg');
-		}
-
-		.about & {
-			background-image: url('/static/img/ole_barn.jpg');
-		}
-
-		.locations & {
-			background-image: url('/static/img/broccoli_bucket.jpg');
-		}
-
-		.members & {
-			background-image: url('/static/img/dog_with_chard.jpg');
-		}
-
-		.employment & {
-			background-image: url('/static/img/sun_on_tractor.jpg');
-		}
-
-		.contact & {
-			background-image: url('/static/img/grazing_sheep.jpg');
-		}
+		border: none;
 
 		.navbar-nav {
-			
+
 			text-align: center;
-			margin: auto;
+			width: 100%;
+		
+			@media only screen and (max-width: 767px) {
+				position: absolute;
+				width: 90%;
+				top: 50px;
+				left: 5%;
+				margin: 0;
+				
+			}
+
+			>li:first-child {
+				@media only screen and (min-width: 768px) {
+					display: none;
+				}
+			}
 
 			li {
+
+				@media only screen and (max-width: 767px) {
+					height: 100%;
+					background-color: #131313;
+					color: #ccc;
+					display: block;
+					border: 1px solid #ccc;
+					float: none;
+					width: auto;
+					margin: 0;
+					line-height: 2em;
+				}
+
 				display: inline-block;
 				float: none;
 				margin: 0 16.5px;
 				text-align: center;
 				font-family: "proxima-nova";
 				font-weight: 300;
-				font-style: normal;
 				font-size: 15px;
 				line-height: 2em;
 				text-transform: uppercase;
 				letter-spacing: 2px;
 				cursor: pointer;
 
-				.locations & {
+				.markets & {
 					color: #A5C329;
+					font-weight: 500;
 				}
 			}
 		}
 	}
-
+	
 	.header-title {
 
 		ul {
@@ -84,7 +112,7 @@
 			@media only screen and (max-width: 500px) {
 				font-size: 45px;
 			}
-			@media only screen and (max-width: 350px) {
+			@media only screen and (max-width: 400px) {
 				font-size: 30px;
 			}
 			line-height: 1em;
@@ -94,12 +122,10 @@
 			font-style: normal;
 			margin: 0 auto;
 
-			.locations & {
+			.markets & {
 				color: #C7E53E;
 			}
 		}
-
-		
 	}
 
 }

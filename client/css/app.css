@@ -31,7 +31,12 @@ body {
   height: 100%;
 }
 body > div.container {
-  max-width: 900px;
+  width: 100%;
+}
+@media only screen and (min-width: 1224px) {
+  body > div.container {
+    max-width: 1224px;
+  }
 }
 body.admin {
   padding-top: 5rem;
@@ -53,6 +58,11 @@ div.header {
 .form-group {
   margin-top: 10px;
   margin-bottom: 20px;
+}
+hr {
+  border-top: 1px solid #ddd;
+  height: 0;
+  margin: 2em auto;
 }
 .glyphicon-ok {
   color: green;

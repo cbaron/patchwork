@@ -5,18 +5,20 @@ Object.assign( Nav.prototype, MyView.prototype, {
 
     events: {
         'home': { event: 'click', selector: '', method: 'navigate' },
-        'signup': { event: 'click', selector: '', method: 'navigate' },
         'about': { event: 'click', selector: '', method: 'navigate' },
-        'locations': { event: 'click', selector: '', method: 'navigate' },
+        'csa': { event: 'click', selector: '', method: 'navigate' },
+        'markets': { event: 'click', selector: '', method: 'navigate' },
+        'signup': { event: 'click', selector: '', method: 'navigate' },
         'members': { event: 'click', selector: '', method: 'navigate' },
         'employment': { event: 'click', selector: '', method: 'navigate' },
         'contact': { event: 'click', selector: '', method: 'navigate' }
     },
 
     fields: [
-            { label: 'Sign Up', name: 'signup' },
             { label: 'About Us', name: 'about' },
-            { label: 'Locations', name: 'locations' },
+            { label: 'CSA Program', name: 'csa' },
+            { label: 'Markets', name: 'markets' },
+            { label: 'Sign Up', name: 'signup' },
             { label: 'Member Resources', name: 'members' },
             { label: 'Employment', name: 'employment' },
             { label: 'Contact Us', name: 'contact' }
