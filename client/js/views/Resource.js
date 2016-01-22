@@ -12,6 +12,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             model: this.Instance,
             parse: response => {
                 this.label = response.label;
+                this.recordDescriptor = response.recordDescriptor;
                 if( response.operation["@type"] === "Create" ) this.createProperties = response.operation.expects.supportedProperty
                 return response[ this.resource ]
             },
@@ -40,6 +41,21 @@ Object.assign( Resource.prototype, Table.prototype, {
             
     },
 
+    deleteModel() {
+        
+        this.$.ajax( {
+            headers: { accept: 'application/json' },
+            contentType: 'application/json',
+            method: 'DELETE',
+            url: this.util.format( "/%s/%s", this.resource, this.modelToDelete.id )
+        } )
+        .done( ( response, textStatus, jqXHR ) => {
+            this.items.remove( this.modelToDelete )
+            this.modelToDelete = undefined
+            this.modalView.hide()
+        } )
+    },
+
     edit( data ) {
 
         var modelAttrs = { }
@@ -65,6 +81,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .done( ( response, textStatus, jqXHR ) => {
             this.modelToEdit.set( modelAttrs )
+            this.modelToEdit = undefined
             this.modalView.hide()
         } )
             
@@ -72,6 +89,7 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     events: {
         createBtn: { method: 'showCreateDialog' },
+        deleteBtn: { method: 'showDeleteDialog' },
         editBtn: { method: 'showEditDialog' },
         body: [
             { event: 'mouseover', selector: 'tr', method: 'onRowMouseEnter' },
@@ -178,6 +196,19 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     },
 
+    showDeleteDialog() {
+        
+        this.modelToDelete = this.hoveredModel
+
+        this.modalView.show( {
+            body: this.util.format( 'Are you sure you would like to delete %s?', this.modelToDelete.get( this.recordDescriptor ) ),
+            confirmText: 'Yes',
+            title: this.util.format( 'Delete %s', this.label )
+        } )
+        .on( 'submit', () => this.deleteModel() )
+        .on( 'hidden', () => this.modelToDelete = undefined )
+    },
+
     showEditDialog() {
 
         this.modelToEdit = this.hoveredModel
@@ -196,6 +227,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .on( 'shown', () => this.createProperties.forEach( property => this.populateModalField( property ) ) )
         .on( 'submit', data => this.edit(data) )
+        .on( 'hidden', () => this.modelToEdit = undefined )
     },
 
     template: require('../templates/resource')( require('handlebars') ),

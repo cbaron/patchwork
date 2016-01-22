@@ -19,8 +19,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
     },
 
     GET() {
-        var metadata = {},
-            rv = {
+        var rv = {
                 "@context": [
                     "http://www.w3.org/ns/hydra/core",
                     {
@@ -29,6 +28,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 ],
                 "@id": this.format( "https://%s:%s/%s", process.env.DOMAIN, process.env.PORT, this.path[1] ),
                 label: ( this.tables[ this.path[1] ].meta ) ? this.tables[ this.path[1] ].meta.label : this.path[1],
+                recordDescriptor:( this.tables[ this.path[1] ].meta ) ? this.tables[ this.path[1] ].meta.recorddescriptor : this.path[1],
                 operation: {
                     "@type": "Create",
                     "method": "POST",
