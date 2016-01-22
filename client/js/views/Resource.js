@@ -165,8 +165,9 @@ Object.assign( Resource.prototype, Table.prototype, {
                 fields: this.createProperties.map( property => 
                     this.templates[ property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
+                        label: this.getLabel( property.property ),
                         name: property.property,
-                        label: this.getLabel( property.property )
+                        password: ( property.property === "password" ) ? true : false
                     } )
                 )
             } ),
@@ -200,10 +201,10 @@ Object.assign( Resource.prototype, Table.prototype, {
     template: require('../templates/resource')( require('handlebars') ),
 
     templates: Object.assign( {}, Table.prototype.templates, {
-        'create': require('../templates/createInstance')( require('handlebars') ),
-        'Float': require('../templates/form/Text')( require('handlebars') ),
-        'Integer': require('../templates/form/Text')( require('handlebars') ),
-        'Text': require('../templates/form/Text')( require('handlebars') ),
+        create: require('../templates/createInstance')( require('handlebars') ),
+        Float: require('../templates/form/Text')( require('handlebars') ),
+        Integer: require('../templates/form/Text')( require('handlebars') ),
+        Text: require('../templates/form/Text')( require('handlebars') ),
     } )
 
 } )

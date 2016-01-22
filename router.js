@@ -45,9 +45,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     dataTypeToRange: {
+        "character varying": "Text",
         "integer": "Integer",
         "money": "Float",
-        "character varying": "Text"
+        "timestamp with time zone": "DateTime"
     },
 
     getAllTables() {

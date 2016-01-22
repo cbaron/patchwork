@@ -42,6 +42,8 @@ module.exports = new (
 
                 if( this.user.id ) this.header.onUser( this.user )
 
+                Object.keys( this.views ).forEach( key => this.views[key].hide() )
+
                 if( this.views.resource ) return this.views.resource.update( resource )
 
                 this.views.resource = new this.Resource( { resource: resource } )

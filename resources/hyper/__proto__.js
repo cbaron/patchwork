@@ -35,7 +35,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     "expects": {
                         "@id": "http://schema.org/Person",
                         "supportedProperty": this._( this.tables[ this.path[1] ].columns )
-                            .filter( column => column.name !== 'id')
+                            .filter( column => column.name !== 'id' && column.name !== 'created' && column.name !== 'updated' )
                             .map( column => ( { property: column.name, range: column.range, fk: column.fk } ) )
                     }
                 },

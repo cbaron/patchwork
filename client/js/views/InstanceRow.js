@@ -3,7 +3,10 @@ var ListItem = require('./util/ListItem'),
 
 Object.assign( InstanceRow.prototype, ListItem.prototype, {
 
-    getFieldValue( field ) { return ( typeof this.model.get(field) === "object" ) ? this.model.get(field).value : this.model.get(field) },
+    getFieldValue( field ) {
+        var modelValue = this.model.get(field)
+        return ( typeof modelValue === "object" && modelValue !== null ) ? modelValue.value : modelValue
+    },
 
     getTemplateOptions() {
         return {
