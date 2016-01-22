@@ -1,5 +1,6 @@
 <nav data-js="container" class="row footer-class">
     <ul>
+        <li data-id={{home.name}} data-js={{home.name}}>{{home.footerLabel}}</li>
         {{#each fields}}
             <li data-id={{this.name}} data-js={{this.name}}>{{this.label}}</li>
         {{/each}}

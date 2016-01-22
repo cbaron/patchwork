@@ -3,18 +3,6 @@ var Nav = require('./util/Nav'),
 
 Object.assign( Footer.prototype, Nav.prototype, {
 
-    fields: [
-            { label: 'Home', name: 'home' },
-            { label: 'Sign Up', name: 'signup' },
-            { label: 'About Us', name: 'about' },
-            { label: 'Locations', name: 'locations' },
-            { label: 'Member Resources', name: 'members' },
-            { label: 'Employment', name: 'employment' },
-            { label: 'Contact Us', name: 'contact' }
-    ],
-
-    getTemplateOptions() { return { fields: this.fields } },
-
     insertionMethod: 'after',
 
     template: require('../templates/footer')( require('handlebars') )

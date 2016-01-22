@@ -20,13 +20,13 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'Markets', name: 'markets' },
             { label: 'Sign Up', name: 'signup' },
             { label: 'Member Resources', name: 'members' },
-            { label: 'Employment', name: 'employment' },
+            { label: 'Get Involved', name: 'employment' },
             { label: 'Contact Us', name: 'contact' }
     ],
 
     getTemplateOptions() { return { fields: this.fields, home: this.home } },
 
-    home: { label: 'Patchwork Gardens', name: 'home' },
+    home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' },
 
     requiresLogin: false,
 
