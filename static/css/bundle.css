@@ -267,6 +267,7 @@ li {
   margin: 5px 10px;
   text-align: center;
   font-size: 15px;
+  font-family: "RalewayRegular";
   line-height: 1.2em;
   cursor: pointer;
 }
@@ -361,13 +362,14 @@ li {
 .header-class .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
-  margin: 0 16.5px;
+  margin: 5px 16.5px 0;
   text-align: center;
   font-size: 15px;
-  font-weight: 500;
-  line-height: 2em;
+  font-family: "RalewayRegular";
+  font-weight: 550;
+  line-height: 1.5em;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   cursor: pointer;
 }
 
@@ -404,7 +406,7 @@ li {
 }
 
 .header-class .header-title ul {
-  margin: 10px auto;
+  margin: 5px auto;
   cursor: pointer;
 }
 
