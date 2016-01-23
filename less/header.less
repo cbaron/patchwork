@@ -50,11 +50,11 @@
 
 			text-align: center;
 			width: 100%;
+			margin-bottom: 10px;
 		
 			@media only screen and (max-width: 767px) {
 				position: absolute;
 				width: 90%;
-				top: 50px;
 				left: 5%;
 				margin: 0;
 				
@@ -117,12 +117,16 @@
 
 		ul {
 			margin: 5px auto;
-			cursor: pointer;
+			text-align: center;
 		}
 
 		.site-title-text {
-			width: 100%;
+			
+			cursor: pointer;
 			display: inline-block;
+			@media only screen and (max-width: 767px) {
+				display: block;
+			}
 			color: black;
 			font-family: "RalewayRegular";
 			font-size: 60px;
@@ -136,7 +140,7 @@
 			line-height: 1em;
 			text-transform: uppercase;
 			text-align: center;
-			margin: 0 auto;
+			padding: 0 15px;
 
 			.markets & {
 				color: #C7E53E;

@@ -1,7 +1,7 @@
 var Nav = require('./util/Nav'),
     Header = function() { return Nav.apply( this, arguments ) }
 
-Object.assign( Header.prototype, Nav.prototype, {
+Object.assign( Header.prototype, Nav.prototype, {      
 
     insertionMethod: 'before',
 

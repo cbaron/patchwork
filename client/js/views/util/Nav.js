@@ -4,6 +4,7 @@ var MyView = require('../MyView'),
 Object.assign( Nav.prototype, MyView.prototype, {
 
     events: {
+        'hamburger': { event: 'click', selector: '', method: 'toggleLogo' },
         'home': { event: 'click', selector: '', method: 'navigate' },
         'about': { event: 'click', selector: '', method: 'navigate' },
         'csa': { event: 'click', selector: '', method: 'navigate' },
@@ -33,7 +34,9 @@ Object.assign( Nav.prototype, MyView.prototype, {
     navigate( e ) {
         var id = this.$( e.currentTarget ).attr( 'data-id' )        
         this.router.navigate( id, { trigger: true } )      
-    }
+    },
+
+    toggleLogo() { this.$('.header-title').toggle() }
 
 } )
 

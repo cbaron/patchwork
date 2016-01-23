@@ -341,13 +341,13 @@ li {
 .header-class .navbar-collapse .navbar-nav {
   text-align: center;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 767px) {
   .header-class .navbar-collapse .navbar-nav {
     position: absolute;
     width: 90%;
-    top: 50px;
     left: 5%;
     margin: 0;
   }
@@ -407,11 +407,11 @@ li {
 
 .header-class .header-title ul {
   margin: 5px auto;
-  cursor: pointer;
+  text-align: center;
 }
 
 .header-class .header-title .site-title-text {
-  width: 100%;
+  cursor: pointer;
   display: inline-block;
   color: black;
   font-family: "RalewayRegular";
@@ -420,7 +420,13 @@ li {
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
-  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media only screen and (max-width: 767px) {
+  .header-class .header-title .site-title-text {
+    display: block;
+  }
 }
 
 @media only screen and (max-width: 500px) {
