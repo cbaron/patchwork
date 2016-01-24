@@ -68,7 +68,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
             return this
         }
 
-        this.$(window).resize( this.size.bind(this) )
+        this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         return this.render()
     },

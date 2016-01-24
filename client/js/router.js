@@ -21,7 +21,6 @@ module.exports = new (
         handler( resource ) {
             
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
-
             this.footer = require('./views/Footer')
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
@@ -34,9 +33,12 @@ module.exports = new (
                 
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
 
-                if( this.views[ resource ] ) return this.views[ resource ].show()
-                this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
-                //setTimeout( function() { console.log('scrolling'); this.$('body').scrollTop(0) }, 2000 )
+                if( this.views[ resource ] ) this.views[ resource ].show()
+                else this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
+                
+                if( this.header.$('.site-title-text').css( 'display' ) === 'none' ) this.header.toggleLogo()
+                this.header.$('.navbar-collapse').removeClass( 'in' )
+                this.$('body').scrollTop(0)
 
             } ).catch( err => new this.Error(err) )
         },

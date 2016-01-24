@@ -19,8 +19,8 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'About Us', name: 'about' },
             { label: 'CSA Program', name: 'csa' },
             { label: 'Markets', name: 'markets' },
-            { label: 'Sign Up', name: 'signup' },
-            { label: 'Member Resources', name: 'members' },
+            //{ label: 'Sign Up', name: 'signup' },
+            //{ label: 'Member Resources', name: 'members' },
             { label: 'Get Involved', name: 'employment' },
             { label: 'Contact Us', name: 'contact' }
     ],
@@ -33,10 +33,10 @@ Object.assign( Nav.prototype, MyView.prototype, {
 
     navigate( e ) {
         var id = this.$( e.currentTarget ).attr( 'data-id' )        
-        this.router.navigate( id, { trigger: true } )      
+        this.router.navigate( id, { trigger: true } )     
     },
 
-    toggleLogo() { this.$('.header-title').toggle() }
+    toggleLogo() { this.$('.site-title-text').toggle() }
 
 } )
 
