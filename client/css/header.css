@@ -69,28 +69,40 @@
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
+  text-shadow: .5px .5px 0 #131313;
 }
 @media only screen and (max-width: 767px) {
   .header-class .navbar-collapse .navbar-nav li {
     height: 100%;
     background-color: #131313;
     color: #ccc;
-    display: block;
     border: 1px solid #ccc;
     float: none;
+    display: block;
     width: auto;
     margin: 0;
     padding: 5px 0;
     line-height: 2em;
   }
 }
+.header-class .navbar-collapse .navbar-nav li:hover {
+  text-shadow: 3px 3px 3px #708285;
+}
 .markets .header-class .navbar-collapse .navbar-nav li {
   color: #E0F78D;
   font-weight: 800;
+  text-shadow: 1.5px 1.5px 0 #131313;
+}
+.markets .header-class .navbar-collapse .navbar-nav li:hover {
+  color: #2E832D;
 }
 .csa .header-class .navbar-collapse .navbar-nav li {
   color: #D4800E;
   font-weight: 700;
+  text-shadow: 1.5px 1.5px 0 #131313;
+}
+.csa .header-class .navbar-collapse .navbar-nav li:hover {
+  color: #FBA110;
 }
 .members .header-class .navbar-collapse .navbar-nav li {
   color: #8C3733;
@@ -98,7 +110,7 @@
 .employment .header-class .navbar-collapse .navbar-nav li {
   color: #966F70;
 }
-.header-class .header-title ul {
+.header-class .header-title {
   margin: 5px auto;
   text-align: center;
 }
@@ -112,28 +124,41 @@
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
+  text-shadow: 1.5px 1.5px 0 #306142;
   padding: 0 15px;
 }
-@media only screen and (max-width: 767px) {
-  .header-class .header-title .site-title-text {
-    display: block;
-  }
+.header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 3px #306142;
 }
 @media only screen and (max-width: 500px) {
   .header-class .header-title .site-title-text {
-    font-size: 45px;
+    font-size: 55px;
   }
 }
 @media only screen and (max-width: 400px) {
   .header-class .header-title .site-title-text {
-    font-size: 30px;
+    font-size: 40px;
   }
+}
+.about .header-class .header-title .site-title-text {
+  text-shadow: 1.5px 1.5px 0 #965D00;
+}
+.about .header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 3px #965D00;
 }
 .markets .header-class .header-title .site-title-text {
   color: #C7E53E;
+  text-shadow: 2px 2px 0 #131313;
+}
+.markets .header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 3px #131313;
 }
 .csa .header-class .header-title .site-title-text {
   color: #BF5A03;
+  text-shadow: 2px 2px 0 #131313;
+}
+.csa .header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 0 #131313;
 }
 .signup .header-class .header-title .site-title-text {
   color: #413137;
@@ -143,4 +168,14 @@
 }
 .employment .header-class .header-title .site-title-text {
   color: #4B2531;
+  text-shadow: 1.5px 1.5px 0 #65726F;
+}
+.employment .header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 3px #65726F;
+}
+.contact .header-class .header-title .site-title-text {
+  text-shadow: 1.5px 1.5px 0 #9B8337;
+}
+.contact .header-class .header-title .site-title-text:hover {
+  text-shadow: 3px 3px 3px #9B8337;
 }
