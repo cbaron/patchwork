@@ -26,6 +26,7 @@
 .footer-class hr {
   border-top: 1px solid #ddd;
   margin: 0 5%;
+  opacity: 0.25;
 }
 .footer-class .future-days {
   width: 100%;

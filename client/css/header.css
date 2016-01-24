@@ -1,4 +1,5 @@
 .header-class {
+  border: none;
   height: 475px;
   width: auto;
   background-size: 100% 100%;
@@ -6,34 +7,29 @@
   color: #666;
   position: relative;
 }
-@media only screen and (max-width: 500px) {
-  .header-class {
-    height: 315px;
-  }
-}
 .home .header-class {
-  background-image: url('/static/img/bucket_in_field.jpg');
+  background-image: url('/static/img/fieldrows-sm.jpg');
 }
 .signup .header-class {
   background-image: url('/static/img/greens.jpg');
 }
 .about .header-class {
-  background-image: url('/static/img/ole_barn.jpg');
+  background-image: url('/static/img/cauliflower-sm.jpg');
 }
 .csa .header-class {
-  background-image: url('/static/img/veggies_on_table.jpg');
+  background-image: url('/static/img/on-the-tractor-sm.jpg');
 }
 .markets .header-class {
-  background-image: url('/static/img/broccoli_bucket.jpg');
+  background-image: url('/static/img/canned-tomatoes-sm.jpg');
 }
 .members .header-class {
   background-image: url('/static/img/dog_with_chard.jpg');
 }
 .employment .header-class {
-  background-image: url('/static/img/sun_on_tractor.jpg');
+  background-image: url('/static/img/working-the-hoe-sm.jpg');
 }
 .contact .header-class {
-  background-image: url('/static/img/grazing_sheep.jpg');
+  background-image: url('/static/img/george-sm.jpg');
 }
 .header-class .navbar-collapse {
   width: 100%;
@@ -88,6 +84,13 @@
 .header-class .navbar-collapse .navbar-nav li:hover {
   text-shadow: 3px 3px 3px #708285;
 }
+.home .header-class .navbar-collapse .navbar-nav li {
+  color: white;
+}
+.home .header-class .navbar-collapse .navbar-nav li:hover {
+  color: #ccc;
+  text-shadow: none;
+}
 .markets .header-class .navbar-collapse .navbar-nav li {
   color: #E0F78D;
   font-weight: 800;
@@ -117,7 +120,7 @@
 .header-class .header-title .site-title-text {
   cursor: pointer;
   display: inline-block;
-  color: black;
+  color: white;
   font-family: "RalewayRegular";
   font-size: 70px;
   font-weight: 300;
@@ -178,4 +181,24 @@
 }
 .contact .header-class .header-title .site-title-text:hover {
   text-shadow: 3px 3px 3px #9B8337;
+}
+@media only screen and (max-width: 500px) {
+  .header-class {
+    height: 315px;
+  }
+  .about .header-class {
+    background-image: url('/static/img/cauliflower-xs.jpg');
+  }
+  .csa .header-class {
+    background-image: url('/static/img/on-the-tractor-xs.jpg');
+  }
+  .employment .header-class {
+    background-image: url('/static/img/working-the-hoe-xs.jpg');
+  }
+  .home .header-class {
+    background-image: url('/static/img/fieldrows-xs.jpg');
+  }
+  .markets .header-class {
+    background-image: url('/static/img/canned-tomatoes-xs.jpg');
+  }
 }

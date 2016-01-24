@@ -1,9 +1,7 @@
 .header-class {
-				
+
+    border: none;				
 	height: 475px;
-	@media only screen and (max-width: 500px) {
-		height: 315px;
-	}
 	width: auto;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
@@ -11,7 +9,7 @@
 	position: relative;
 
 	.home & {
-		background-image: url('/static/img/bucket_in_field.jpg');
+		background-image: url('/static/img/fieldrows-sm.jpg');
 	}
 
 	.signup & {
@@ -19,15 +17,15 @@
 	}
 
 	.about & {
-		background-image: url('/static/img/ole_barn.jpg');
+		background-image: url('/static/img/cauliflower-sm.jpg');
 	}
 
 	.csa & {
-		background-image: url('/static/img/veggies_on_table.jpg');
+		background-image: url('/static/img/on-the-tractor-sm.jpg');
 	}
 
 	.markets & {
-		background-image: url('/static/img/broccoli_bucket.jpg');
+		background-image: url('/static/img/canned-tomatoes-sm.jpg');
 	}
 
 	.members & {
@@ -35,11 +33,11 @@
 	}
 
 	.employment & {
-		background-image: url('/static/img/sun_on_tractor.jpg');
+		background-image: url('/static/img/working-the-hoe-sm.jpg');
 	}
 
 	.contact & {
-		background-image: url('/static/img/grazing_sheep.jpg');
+		background-image: url('/static/img/george-sm.jpg');
 	}
 
 	.navbar-collapse {
@@ -98,6 +96,15 @@
 					text-shadow: 3px 3px 3px #708285;
 				}
 
+                .home & {
+					color: white;
+					
+                    &:hover {
+						color: #ccc;
+                        text-shadow: none;
+					}
+                }
+
 				.markets & {
 					color: #E0F78D;
 					font-weight: 800;
@@ -140,7 +147,7 @@
 			}
 			display: inline-block;
 			
-			color: black;
+			color: white;
 			font-family: "RalewayRegular";
 			font-size: 70px;
 			font-weight: 300;
@@ -202,6 +209,32 @@
 				}
 			}
 		}
+	}
+
+
+    @media only screen and (max-width: 500px) {
+
+		height: 315px;
+
+        .about & {
+            background-image: url('/static/img/cauliflower-xs.jpg');
+        }
+
+        .csa & {
+            background-image: url('/static/img/on-the-tractor-xs.jpg');
+        }
+
+        .employment & {
+            background-image: url('/static/img/working-the-hoe-xs.jpg');
+        }
+
+        .home & {
+            background-image: url('/static/img/fieldrows-xs.jpg');
+        }
+
+        .markets & {
+            background-image: url('/static/img/canned-tomatoes-xs.jpg');
+        }
 	}
 
 }
