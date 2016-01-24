@@ -25,9 +25,9 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))
     + "\" data-id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\"><p class=\"site-title-text\">"
+    + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.label : stack1), depth0))
-    + "</p></div></nav>";
+    + "</div></nav>";
 },"useData":true});
 
 };
