@@ -36,7 +36,7 @@ module.exports = new (
                 if( this.views[ resource ] ) this.views[ resource ].show()
                 else this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
                 
-                if( this.header.$('.site-title-text').css( 'display' ) === 'none' ) this.header.toggleLogo()
+                if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
                 this.header.$('.navbar-collapse').removeClass( 'in' )
                 this.$('body').scrollTop(0)
 

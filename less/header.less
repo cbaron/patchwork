@@ -129,79 +129,75 @@
 	
 	.header-title {
 
-		margin: 5px auto;
+		width: 100%;
+		margin: 5px auto;			
+		cursor: pointer;
+		&:hover {
+			text-shadow: 3px 3px 3px #306142;
+		}
+		display: inline-block;			
+		color: black;
+		font-family: "RalewayRegular";
+		font-size: 70px;
+		font-weight: 300;
+		@media only screen and (max-width: 500px) {
+			font-size: 55px;
+		}
+		@media only screen and (max-width: 400px) {
+			font-size: 40px;
+		}
+		line-height: 1em;
+		text-transform: uppercase;
 		text-align: center;
+		text-shadow: 1.5px 1.5px 0 #306142;
+		padding: 0 15px;
 
-		.site-title-text {
-			
-			cursor: pointer;
+		.about & {
+			text-shadow: 1.5px 1.5px 0 #965D00; 
 			&:hover {
-				text-shadow: 3px 3px 3px #306142;
-			}
-			display: inline-block;
-			
-			color: black;
-			font-family: "RalewayRegular";
-			font-size: 70px;
-			font-weight: 300;
-			@media only screen and (max-width: 500px) {
-				font-size: 55px;
-			}
-			@media only screen and (max-width: 400px) {
-				font-size: 40px;
-			}
-			line-height: 1em;
-			text-transform: uppercase;
-			text-align: center;
-			text-shadow: 1.5px 1.5px 0 #306142;
-			padding: 0 15px;
-
-			.about & {
-				text-shadow: 1.5px 1.5px 0 #965D00; 
-				&:hover {
-					text-shadow: 3px 3px 3px #965D00;
-				}
-			}
-
-			.markets & {
-				color: #C7E53E;
-				text-shadow: 2px 2px 0 #131313;
-				&:hover {
-					text-shadow: 3px 3px 3px #131313;
-				}
-			}
-
-			.csa & {
-				color: #BF5A03;
-				text-shadow: 2px 2px 0 #131313;
-				&:hover {
-					text-shadow: 3px 3px 0 #131313;
-				}
-			}
-
-			.signup & {
-				color: #413137;
-			}
-
-			.members & {
-				color: #5B050F;
-			}
-
-			.employment & {
-				color: #4B2531;
-				text-shadow: 1.5px 1.5px 0 #65726F;
-				&:hover {
-					text-shadow: 3px 3px 3px #65726F;
-				}
-			}
-
-			.contact & {
-				text-shadow: 1.5px 1.5px 0 #9B8337;
-				&:hover {
-					text-shadow: 3px 3px 3px #9B8337;
-				}
+				text-shadow: 3px 3px 3px #965D00;
 			}
 		}
+
+		.markets & {
+			color: #C7E53E;
+			text-shadow: 2px 2px 0 #131313;
+			&:hover {
+				text-shadow: 3px 3px 3px #131313;
+			}
+		}
+
+		.csa & {
+			color: #BF5A03;
+			text-shadow: 2px 2px 0 #131313;
+			&:hover {
+				text-shadow: 3px 3px 0 #131313;
+			}
+		}
+
+		.signup & {
+			color: #413137;
+		}
+
+		.members & {
+			color: #5B050F;
+		}
+
+		.employment & {
+			color: #4B2531;
+			text-shadow: 1.5px 1.5px 0 #65726F;
+			&:hover {
+				text-shadow: 3px 3px 3px #65726F;
+			}
+		}
+
+		.contact & {
+			text-shadow: 1.5px 1.5px 0 #9B8337;
+			&:hover {
+				text-shadow: 3px 3px 3px #9B8337;
+			}
+		}
+		
 	}
 
 }

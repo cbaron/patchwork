@@ -91,7 +91,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
-        console.log("path: " + path)
         request.setEncoding('utf8');
 
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {

@@ -111,10 +111,8 @@
   color: #966F70;
 }
 .header-class .header-title {
+  width: 100%;
   margin: 5px auto;
-  text-align: center;
-}
-.header-class .header-title .site-title-text {
   cursor: pointer;
   display: inline-block;
   color: black;
@@ -127,55 +125,55 @@
   text-shadow: 1.5px 1.5px 0 #306142;
   padding: 0 15px;
 }
-.header-class .header-title .site-title-text:hover {
+.header-class .header-title:hover {
   text-shadow: 3px 3px 3px #306142;
 }
 @media only screen and (max-width: 500px) {
-  .header-class .header-title .site-title-text {
+  .header-class .header-title {
     font-size: 55px;
   }
 }
 @media only screen and (max-width: 400px) {
-  .header-class .header-title .site-title-text {
+  .header-class .header-title {
     font-size: 40px;
   }
 }
-.about .header-class .header-title .site-title-text {
+.about .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #965D00;
 }
-.about .header-class .header-title .site-title-text:hover {
+.about .header-class .header-title:hover {
   text-shadow: 3px 3px 3px #965D00;
 }
-.markets .header-class .header-title .site-title-text {
+.markets .header-class .header-title {
   color: #C7E53E;
   text-shadow: 2px 2px 0 #131313;
 }
-.markets .header-class .header-title .site-title-text:hover {
+.markets .header-class .header-title:hover {
   text-shadow: 3px 3px 3px #131313;
 }
-.csa .header-class .header-title .site-title-text {
+.csa .header-class .header-title {
   color: #BF5A03;
   text-shadow: 2px 2px 0 #131313;
 }
-.csa .header-class .header-title .site-title-text:hover {
+.csa .header-class .header-title:hover {
   text-shadow: 3px 3px 0 #131313;
 }
-.signup .header-class .header-title .site-title-text {
+.signup .header-class .header-title {
   color: #413137;
 }
-.members .header-class .header-title .site-title-text {
+.members .header-class .header-title {
   color: #5B050F;
 }
-.employment .header-class .header-title .site-title-text {
+.employment .header-class .header-title {
   color: #4B2531;
   text-shadow: 1.5px 1.5px 0 #65726F;
 }
-.employment .header-class .header-title .site-title-text:hover {
+.employment .header-class .header-title:hover {
   text-shadow: 3px 3px 3px #65726F;
 }
-.contact .header-class .header-title .site-title-text {
+.contact .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #9B8337;
 }
-.contact .header-class .header-title .site-title-text:hover {
+.contact .header-class .header-title:hover {
   text-shadow: 3px 3px 3px #9B8337;
 }

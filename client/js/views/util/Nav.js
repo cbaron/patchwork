@@ -36,7 +36,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
         this.router.navigate( id, { trigger: true } )     
     },
 
-    toggleLogo() { this.$('.site-title-text').toggle() }
+    toggleLogo() { this.$('.header-title').toggle() }
 
 } )
 
