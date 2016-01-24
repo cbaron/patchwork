@@ -19,6 +19,10 @@
   line-height: 1.2em;
   cursor: pointer;
 }
+.footer-class ul li:hover {
+  color: #73756A;
+  text-shadow: 1px 1px 1px #337ab7;
+}
 .footer-class hr {
   border-top: 1px solid #ddd;
   margin: 0 5%;
