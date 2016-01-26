@@ -15,7 +15,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 if( err ) reject( err )
-                new ( require(file) )( { path: path, response: response } )[ request.method ]().catch( err => reject( err ) )
+                new ( require(file) )( { path: path, request: request, response: response } )[ request.method ]().catch( err => reject( err ) )
             } )
         } )
     },

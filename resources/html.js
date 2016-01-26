@@ -2,7 +2,13 @@ var Html = function( data ) { return Object.assign( this, data ) }
 
 Object.assign( Html.prototype, {
 
-    GET() { return this.respond( this.page( { bodyClass: this.path[1], title: "Patchwork Gardens" } ) ) },
+    GET() {
+        return this.respond( this.page( {
+            bodyClass: this.path[1],
+            firefox: /Firefox/.test( this.request.headers[ 'user-agent' ] ),
+            title: "Patchwork Gardens"
+        } ) )
+    },
 
     getHeaders( length ) {
         return {
