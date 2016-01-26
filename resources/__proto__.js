@@ -123,14 +123,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.respond( payload )
         },
 
-        POST: function( result ) {
-            this.respond( { body: {
-                success: true,
-                result: ( this.request.headers.iosapp )
-                    ? this._.pick( result.rows[0], [ 'serverId', 'createdAt', 'updatedAt' ] )
-                    : result.rows[0].id
-            } } )
-        }
+        POST: function( result ) { this.respond( { body: result.rows[0] } ) }
     },
 
     slurpBody: function() {

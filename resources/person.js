@@ -6,7 +6,7 @@ Object.assign( Person.prototype, BaseResource.prototype, {
     bcrypt: require('bcrypt-nodejs'),
 
     context: Object.assign( {}, BaseResource.prototype.context, {
-        POST: () => { this.body.password = this.bcrypt.hashSync( this.body.password ) }
+        POST: function() { this.body.password = this.bcrypt.hashSync( this.body.password ) }
     } )
 } )
 

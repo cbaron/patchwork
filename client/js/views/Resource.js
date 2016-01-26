@@ -103,6 +103,10 @@ Object.assign( Resource.prototype, Table.prototype, {
         return this.format.capitalizeFirstLetter( property )
     },
 
+    initDatepicker( property ) {
+        this.$( '#' + property.property ).datetimepicker( { format: "YYYY-MM-DD", minDate: this.moment() } )
+    },
+
     initTypeahead( property ) {
 
         var bloodhound = new Bloodhound( {
@@ -111,8 +115,8 @@ Object.assign( Resource.prototype, Table.prototype, {
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 filter: response => response[ property.fk.table ],
-                replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query ) ),
-                url: this.util.format( "/%s?name=%QUERY", property.fk.table )
+                replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query) ),
+                url: this.util.format( "/%s?%s=%QUERY", property.descriptor.table, property.descriptor.column.name )
             }
         } ),
         el = this.$( '#' + property.property )
@@ -186,12 +190,15 @@ Object.assign( Resource.prototype, Table.prototype, {
                         label: this.getLabel( property.property ),
                         name: property.property,
                         password: ( property.property === "password" ) ? true : false
-                    } )
+                    } ) 
                 )
             } ),
             title: this.util.format( 'Create %s', this.label )
         } )
-        .on( 'shown', () => this.createProperties.forEach( property => { if( property.fk ) { this.initTypeahead( property ) } } ) )
+        .on( 'shown', () => this.createProperties.forEach( property => {
+            if( property.fk ) this.initTypeahead( property )
+            else if( property.range === "Date" ) this.initDatepicker( property )
+        } ) )
         .on( 'submit', data => this.create(data) )
 
     },
@@ -234,10 +241,25 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     templates: Object.assign( {}, Table.prototype.templates, {
         create: require('../templates/createInstance')( require('handlebars') ),
+        Date: require('../templates/form/Date')( require('handlebars') ),
         Float: require('../templates/form/Text')( require('handlebars') ),
         Integer: require('../templates/form/Text')( require('handlebars') ),
         Text: require('../templates/form/Text')( require('handlebars') ),
-    } )
+    } ),
+
+    update( resource ) {
+        this.resource = resource
+
+        this.items.reset( null )
+        this.fields = [ ]
+        this.$( this.templateData.header.children('tr')[0] ).empty()
+
+        this.createItems()
+
+        this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
+        
+        this.fetchItems().show()
+    }
 
 } )
 

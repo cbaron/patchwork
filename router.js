@@ -46,6 +46,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     dataTypeToRange: {
         "character varying": "Text",
+        "date": "Date",
         "integer": "Integer",
         "money": "Float",
         "timestamp with time zone": "DateTime"

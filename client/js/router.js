@@ -26,6 +26,8 @@ module.exports = new (
 
                 if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
 
+                Object.keys( this.views ).forEach( resource => this.views[ resource ].hide() )
+
                 if( this.views[ resource ] ) return this.views[ resource ].show()
 
                 this.views[ resource ] = new ( this.resources[ resource ].view )(this.resources[ resource ].options)
