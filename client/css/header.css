@@ -40,19 +40,6 @@
   width: 100%;
   margin-bottom: 10px;
 }
-@media only screen and (max-width: 767px) {
-  .header-class .navbar-collapse .navbar-nav {
-    position: absolute;
-    width: 90%;
-    left: 5%;
-    margin: 0;
-  }
-}
-@media only screen and (min-width: 768px) {
-  .header-class .navbar-collapse .navbar-nav > li:first-child {
-    display: none;
-  }
-}
 .header-class .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
@@ -66,20 +53,6 @@
   letter-spacing: 1.5px;
   cursor: pointer;
   text-shadow: .5px .5px 0 #131313;
-}
-@media only screen and (max-width: 767px) {
-  .header-class .navbar-collapse .navbar-nav li {
-    height: 100%;
-    background-color: #131313;
-    color: #ccc;
-    border: 1px solid #ccc;
-    float: none;
-    display: block;
-    width: auto;
-    margin: 0;
-    padding: 5px 0;
-    line-height: 2em;
-  }
 }
 .header-class .navbar-collapse .navbar-nav li:hover {
   text-shadow: 3px 3px 3px #708285;
@@ -115,6 +88,7 @@
 }
 .header-class .header-title {
   width: 100%;
+  padding: 0 15px;
   margin: 5px auto;
   cursor: pointer;
   display: inline-block;
@@ -126,66 +100,18 @@
   text-transform: uppercase;
   text-align: center;
   text-shadow: 1.5px 1.5px 0 #306142;
-  padding: 0 15px;
-}
-.header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #306142;
-}
-@media only screen and (max-width: 500px) {
-  .header-class .header-title {
-    font-size: 55px;
-  }
-}
-@media only screen and (max-width: 400px) {
-  .header-class .header-title {
-    font-size: 40px;
-  }
 }
 .about .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #965D00;
-  display: inline-block;
   color: white;
-  font-family: "RalewayRegular";
-  font-size: 70px;
-  font-weight: 300;
-  line-height: 1em;
-  text-transform: uppercase;
-  text-align: center;
-  text-shadow: 1.5px 1.5px 0 #306142;
-  padding: 0 15px;
-}
-.about .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #306142;
-}
-@media only screen and (max-width: 500px) {
-  .about .header-class .header-title {
-    font-size: 55px;
-  }
-}
-@media only screen and (max-width: 400px) {
-  .about .header-class .header-title {
-    font-size: 40px;
-  }
-}
-.about .about .header-class .header-title {
-  text-shadow: 1.5px 1.5px 0 #965D00;
-}
-.about .about .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #965D00;
 }
 .markets .header-class .header-title {
   color: #C7E53E;
   text-shadow: 2px 2px 0 #131313;
 }
-.markets .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #131313;
-}
 .csa .header-class .header-title {
   color: #BF5A03;
   text-shadow: 2px 2px 0 #131313;
-}
-.csa .header-class .header-title:hover {
-  text-shadow: 3px 3px 0 #131313;
 }
 .signup .header-class .header-title {
   color: #413137;
@@ -197,18 +123,20 @@
   color: #4B2531;
   text-shadow: 1.5px 1.5px 0 #65726F;
 }
-.employment .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #65726F;
-}
 .contact .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #9B8337;
-}
-.contact .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #9B8337;
 }
 @media only screen and (max-width: 500px) {
   .header-class {
     height: 315px;
+  }
+  .header-class .header-title {
+    font-size: 55px;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .header-class .header-title {
+    font-size: 40px;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -226,5 +154,49 @@
   }
   .markets .header-class {
     background-image: url('/static/img/canned-tomatoes-xs.jpg');
+  }
+  .header-class .navbar-collapse .navbar-nav {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    margin: 0;
+  }
+  .header-class .navbar-collapse .navbar-nav li {
+    height: 100%;
+    background-color: #131313;
+    color: #ccc;
+    border: 1px solid #ccc;
+    float: none;
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 5px 0;
+    line-height: 2em;
+  }
+  .header-class .header-title {
+    cursor: default;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .header-class .navbar-collapse .navbar-nav > li:first-child {
+    display: none;
+  }
+  .header-class .header-title:hover {
+    text-shadow: 3px 3px 3px #306142;
+  }
+  .about .header-class:hover {
+    text-shadow: 3px 3px 3px #306142;
+  }
+  .markets .header-class:hover {
+    text-shadow: 3px 3px 3px #131313;
+  }
+  .csa .header-class:hover {
+    text-shadow: 3px 3px 0 #131313;
+  }
+  .employment .header-class:hover {
+    text-shadow: 3px 3px 3px #65726F;
+  }
+  .contact .header-class:hover {
+    text-shadow: 3px 3px 3px #9B8337;
   }
 }

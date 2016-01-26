@@ -1,0 +1,13 @@
+.csa-class figure {
+  margin: 0 auto;
+  padding: 20px 0;
+}
+.csa-class figure img {
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+}
+.csa-class figure figcaption {
+  text-align: center;
+  font-style: italic;
+}

@@ -5,6 +5,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
 
     events: {
         'hamburger': { event: 'click', selector: '', method: 'toggleLogo' },
+        'headerTitle': { event: 'click', selector: '', method: 'navigate' },
         'home': { event: 'click', selector: '', method: 'navigate' },
         'about': { event: 'click', selector: '', method: 'navigate' },
         'csa': { event: 'click', selector: '', method: 'navigate' },

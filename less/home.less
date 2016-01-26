@@ -2,18 +2,30 @@
 
     .carousel {
         margin: 70px auto;
-        width: 75%;
+        width: 85%;
 
-        .carousel-inner > .item > img {
-            width: 90%;
-            height: 450px;
-            @media only screen and (max-width: 650px) {
-                height: 325px;
-            }
-            @media only screen and (max-width: 425px) {
-                height: 250px;
-            }
+        .carousel-inner img {
+            width: 95%;
+            height: 475px;
             margin: auto;
+        }
+    }
+
+    @media only screen and (max-width: 675px) {
+        .carousel .carousel-inner img {
+            height: 325px;
+        }
+    }
+
+    @media only screen and (max-width: 425px) {
+        .carousel .carousel-inner img {
+            height: 225px;
+        }
+    }
+
+    @media only screen and (min-width: 1150px) {
+        .carousel .carousel-inner img {
+            height: 650px;
         }
     }
 

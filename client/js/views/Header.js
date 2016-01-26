@@ -6,10 +6,14 @@ Object.assign( Header.prototype, Nav.prototype, {
     insertionMethod: 'before',
 
     size() {
+        console.log('size')
         if( this.$(window).width() > 767 && this.$('.header-title').css( 'display' ) === "none" )
             this.$('.header-title').css( 'display', 'inline-block' )
-        if( this.$(window).width() < 768 && this.$('.navbar-collapse').hasClass('in') )
-            this.$('.header-title').css( 'display', 'none' )
+        if( this.$(window).width() < 768 ) {
+            this.templateData.headerTitle.off( 'click' )
+            if( this.$('.navbar-collapse').hasClass('in') )
+                this.$('.header-title').css( 'display', 'none' )
+        }
     },
 
     template: require('../templates/header')( require('handlebars') )

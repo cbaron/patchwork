@@ -21,9 +21,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.label : stack1), depth0))
     + "</li>            "
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.fields : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </ul></div><div class=\"header-title\" data-js=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\" data-id=\""
+    + "        </ul></div><div class=\"header-title\" data-js=\"headerTitle\" data-id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))
     + "\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.label : stack1), depth0))

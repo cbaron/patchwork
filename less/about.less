@@ -1,24 +1,28 @@
 .about-class {
-    
-    margin: 25px 5% 75px 5%;
 
-    #aboutName {
-        clear: both;
+    .staff-bios {
+        .bio {
+       
+            img {               
+                float: left;                
+                width: 30%;
+                height: auto;
+                margin-right: 8%;               
+            }
+
+            h3 {
+                color: #c98702;
+            }
+
+            span, h3 {
+            
+            }
+        }
     }
 
-    h2 {
-        font-size: 26px;
-        line-height: 1.2em;
-        letter-spacing: 1px;
-        color: #555;
-        margin: 0 0 .5em;
+    @media only screen and (max-width: 500px) {
+        .staff-bios .bio img {
+            width: 40%;
+        }
     }
-
-    p {
-        font-size: 15px;
-        line-height: 1.5em;
-        text-align: left;
-        color: #666;
-    }
-    
 }

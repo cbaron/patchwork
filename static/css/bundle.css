@@ -1,24 +1,18 @@
-.about-class {
-  margin: 25px 5% 75px 5%;
+.about-class .staff-bios .bio img {
+  float: left;
+  width: 30%;
+  height: auto;
+  margin-right: 8%;
 }
 
-.about-class #aboutName {
-  clear: both;
+.about-class .staff-bios .bio h3 {
+  color: #c98702;
 }
 
-.about-class h2 {
-  font-size: 26px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  color: #555;
-  margin: 0 0 .5em;
-}
-
-.about-class p {
-  font-size: 15px;
-  line-height: 1.5em;
-  text-align: left;
-  color: #666;
+@media only screen and (max-width: 500px) {
+  .about-class .staff-bios .bio img {
+    width: 40%;
+  }
 }
 table tbody tr:hover {
   border-color: #ccc;
@@ -98,6 +92,11 @@ html {
 body {
   font-family: "Lato";
   height: 100%;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5em;
+  text-align: left;
+  color: #666;
 }
 
 body > div.container {
@@ -122,6 +121,24 @@ h1,
 h2,
 h3 {
   font-family: "RalewayRegular";
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 1px;
+  color: #555;
+  margin: 0 0 .5em;
+}
+
+h2 {
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+img {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 a {
@@ -232,21 +249,28 @@ li {
   text-align: left;
   color: #666;
 }
-
-.employment-class h2 {
-  font-size: 26px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  color: #555;
-  margin: 0 0 .5em;
+.csa-class figure {
+  margin: 0 auto;
+  padding: 20px 0;
 }
 
-.employment-class p {
-  font-size: 15px;
-  line-height: 1.5em;
-  letter-spacing: 0px;
-  text-align: left;
-  color: #666;
+.csa-class figure img {
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.csa-class figure figcaption {
+  text-align: center;
+  font-style: italic;
+}
+.employment-class li {
+  list-style-type: circle;
+}
+
+.employment-class h3 {
+  margin-top: 1em;
+  color: #c98702;
 }
 .footer-class {
   background-color: #131313;
@@ -345,21 +369,6 @@ li {
   margin-bottom: 10px;
 }
 
-@media only screen and (max-width: 767px) {
-  .header-class .navbar-collapse .navbar-nav {
-    position: absolute;
-    width: 90%;
-    left: 5%;
-    margin: 0;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  .header-class .navbar-collapse .navbar-nav > li:first-child {
-    display: none;
-  }
-}
-
 .header-class .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
@@ -373,21 +382,6 @@ li {
   letter-spacing: 1.5px;
   cursor: pointer;
   text-shadow: .5px .5px 0 #131313;
-}
-
-@media only screen and (max-width: 767px) {
-  .header-class .navbar-collapse .navbar-nav li {
-    height: 100%;
-    background-color: #131313;
-    color: #ccc;
-    border: 1px solid #ccc;
-    float: none;
-    display: block;
-    width: auto;
-    margin: 0;
-    padding: 5px 0;
-    line-height: 2em;
-  }
 }
 
 .header-class .navbar-collapse .navbar-nav li:hover {
@@ -433,6 +427,7 @@ li {
 
 .header-class .header-title {
   width: 100%;
+  padding: 0 15px;
   margin: 5px auto;
   cursor: pointer;
   display: inline-block;
@@ -444,61 +439,11 @@ li {
   text-transform: uppercase;
   text-align: center;
   text-shadow: 1.5px 1.5px 0 #306142;
-  padding: 0 15px;
-}
-
-.header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #306142;
-}
-
-@media only screen and (max-width: 500px) {
-  .header-class .header-title {
-    font-size: 55px;
-  }
-}
-
-@media only screen and (max-width: 400px) {
-  .header-class .header-title {
-    font-size: 40px;
-  }
 }
 
 .about .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #965D00;
-  display: inline-block;
   color: white;
-  font-family: "RalewayRegular";
-  font-size: 70px;
-  font-weight: 300;
-  line-height: 1em;
-  text-transform: uppercase;
-  text-align: center;
-  text-shadow: 1.5px 1.5px 0 #306142;
-  padding: 0 15px;
-}
-
-.about .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #306142;
-}
-
-@media only screen and (max-width: 500px) {
-  .about .header-class .header-title {
-    font-size: 55px;
-  }
-}
-
-@media only screen and (max-width: 400px) {
-  .about .header-class .header-title {
-    font-size: 40px;
-  }
-}
-
-.about .about .header-class .header-title {
-  text-shadow: 1.5px 1.5px 0 #965D00;
-}
-
-.about .about .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #965D00;
 }
 
 .markets .header-class .header-title {
@@ -506,17 +451,9 @@ li {
   text-shadow: 2px 2px 0 #131313;
 }
 
-.markets .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #131313;
-}
-
 .csa .header-class .header-title {
   color: #BF5A03;
   text-shadow: 2px 2px 0 #131313;
-}
-
-.csa .header-class .header-title:hover {
-  text-shadow: 3px 3px 0 #131313;
 }
 
 .signup .header-class .header-title {
@@ -532,21 +469,23 @@ li {
   text-shadow: 1.5px 1.5px 0 #65726F;
 }
 
-.employment .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #65726F;
-}
-
 .contact .header-class .header-title {
   text-shadow: 1.5px 1.5px 0 #9B8337;
-}
-
-.contact .header-class .header-title:hover {
-  text-shadow: 3px 3px 3px #9B8337;
 }
 
 @media only screen and (max-width: 500px) {
   .header-class {
     height: 315px;
+  }
+
+  .header-class .header-title {
+    font-size: 55px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .header-class .header-title {
+    font-size: 40px;
   }
 }
 
@@ -570,27 +509,87 @@ li {
   .markets .header-class {
     background-image: url("/static/img/canned-tomatoes-xs.jpg");
   }
+
+  .header-class .navbar-collapse .navbar-nav {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    margin: 0;
+  }
+
+  .header-class .navbar-collapse .navbar-nav li {
+    height: 100%;
+    background-color: #131313;
+    color: #ccc;
+    border: 1px solid #ccc;
+    float: none;
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 5px 0;
+    line-height: 2em;
+  }
+
+  .header-class .header-title {
+    cursor: default;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .header-class .navbar-collapse .navbar-nav > li:first-child {
+    display: none;
+  }
+
+  .header-class .header-title:hover {
+    text-shadow: 3px 3px 3px #306142;
+  }
+
+  .about .header-class:hover {
+    text-shadow: 3px 3px 3px #306142;
+  }
+
+  .markets .header-class:hover {
+    text-shadow: 3px 3px 3px #131313;
+  }
+
+  .csa .header-class:hover {
+    text-shadow: 3px 3px 0 #131313;
+  }
+
+  .employment .header-class:hover {
+    text-shadow: 3px 3px 3px #65726F;
+  }
+
+  .contact .header-class:hover {
+    text-shadow: 3px 3px 3px #9B8337;
+  }
 }
 .home-class .carousel {
   margin: 70px auto;
-  width: 75%;
+  width: 85%;
 }
 
-.home-class .carousel .carousel-inner > .item > img {
-  width: 90%;
-  height: 450px;
+.home-class .carousel .carousel-inner img {
+  width: 95%;
+  height: 475px;
   margin: auto;
 }
 
-@media only screen and (max-width: 650px) {
-  .home-class .carousel .carousel-inner > .item > img {
+@media only screen and (max-width: 675px) {
+  .home-class .carousel .carousel-inner img {
     height: 325px;
   }
 }
 
 @media only screen and (max-width: 425px) {
-  .home-class .carousel .carousel-inner > .item > img {
-    height: 250px;
+  .home-class .carousel .carousel-inner img {
+    height: 225px;
+  }
+}
+
+@media only screen and (min-width: 1150px) {
+  .home-class .carousel .carousel-inner img {
+    height: 650px;
   }
 }
 .locations-class {
@@ -643,35 +642,14 @@ li {
 .locations-class ul li {
   margin: 5px 0;
 }
-.markets-class h2 {
-  font-size: 26px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  color: #555;
-  margin: 0 0 .5em;
-}
-
-.markets-class p,
-.markets-class li {
-  font-size: 15px;
-  line-height: 1.5em;
-  letter-spacing: 0px;
-  text-align: left;
-  color: #666;
-}
-
-.markets-class p span,
-.markets-class li span {
+.markets-class .business,
+.markets-class .restaurants span,
+.markets-class .restaurants span a {
   font-family: "RalewayRegular";
   font-size: 16px;
   line-height: 1.2em;
   letter-spacing: 1px;
   color: #c98702;
-}
-
-.markets-class p.business,
-.markets-class li.business {
-  margin-top: 30px;
 }
 
 .markets-class ul {
