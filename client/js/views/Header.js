@@ -7,8 +7,11 @@ Object.assign( Header.prototype, Nav.prototype, {
 
     size() {
         console.log('size')
-        if( this.$(window).width() > 767 && this.$('.header-title').css( 'display' ) === "none" )
-            this.$('.header-title').css( 'display', 'inline-block' )
+        if( this.$(window).width() > 767 ) {
+            this.templateData.headerTitle.on( 'click', this.navigate.bind(this) )
+            if( this.$('.header-title').css( 'display' ) === "none" )
+                this.$('.header-title').css( 'display', 'inline-block' )
+        }
         if( this.$(window).width() < 768 ) {
             this.templateData.headerTitle.off( 'click' )
             if( this.$('.navbar-collapse').hasClass('in') )
