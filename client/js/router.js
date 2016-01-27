@@ -79,7 +79,7 @@ module.exports = new (
             markets: { view: require('./views/Markets'), options: { } },
             signup: { view: require('./views/Signup'), options: { } },
             members: { view: require('./views/Members'), options: { } },
-            "get-involved": { view: require('./views/Get-involved'), options: { } },
+            "get-involved": { view: require('./views/GetInvolved'), options: { } },
             contact: { view: require('./views/Contact'), options: { } }
         },
 

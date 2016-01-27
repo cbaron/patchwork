@@ -5,7 +5,7 @@ Object.assign( GetInvolved.prototype, MyView.prototype, {
 
     requiresLogin: false,
 
-    template: require('../templates/get-involved')( require('handlebars') )
+    template: require('../templates/getInvolved')( require('handlebars') )
 
 } )
 
