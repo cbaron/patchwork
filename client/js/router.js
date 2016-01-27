@@ -38,7 +38,7 @@ module.exports = new (
                 
                 if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
                 this.header.$('.navbar-collapse').removeClass( 'in' )
-                this.$('body').scrollTop(0)
+                this.$(window).scrollTop(0)
 
             } ).catch( err => new this.Error(err) )
         },
