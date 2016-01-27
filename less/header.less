@@ -56,23 +56,28 @@
 				text-align: center;
 				font-size: 15px;
 				font-family: "RalewayRegular";
-				font-weight: 500;
+				font-weight: 600;
 				line-height: 1.5em;
 				text-transform: uppercase;
 				letter-spacing: 1.5px;
 				cursor: pointer;
-				text-shadow: .5px .5px 0 #131313;
-				&:hover {
-					text-shadow: 3px 3px 3px #708285;
-				}
 
                 .home & {
 					color: white;
-					
+					text-shadow: 2px 2px 0 black;					
                     &:hover {
-						color: #ccc;
-                        text-shadow: none;
+						color: yellow;
+						font-weight: 700;
+                        
 					}
+                }
+
+                .about & {
+                	color: #A3B19C;
+                	text-shadow: 1px 1px 0 black;
+                	&:hover {
+                		color: #ccc;
+                	}
                 }
 
 				.markets & {
@@ -80,14 +85,14 @@
 					font-weight: 800;
 					text-shadow: 1.5px 1.5px 0 #131313;
 					&:hover {
-						color: #2E832D;
+						color: #808000;
 					}
 				}
 
 				.csa & {
 					color: #D4800E;
 					font-weight: 700;
-					text-shadow: 1.5px 1.5px 0 #131313;
+					text-shadow: .5px .5px 0 black;
 					&:hover {
 						color: #FBA110;
 					}
@@ -97,8 +102,23 @@
 					color: #8C3733;
 				}
 
-				.employment & {
-					color: #966F70;
+				.get-involved & {
+					color: #c98702;
+					font-weight: 800;
+					text-shadow: 1.5px 1.5px 0 black;
+					&:hover {
+						color: #FFDEAD;
+					}
+				}
+
+				.contact & {
+					
+					font-weight: 700;
+					
+					&:hover {
+						color: #A9A9A9;
+						text-shadow: 1px 1px 2px #ccc;
+					}
 				}
 			}
 		}
@@ -111,28 +131,31 @@
 		margin: 5px auto;			
 		cursor: pointer;
 		display: inline-block;			
-		color: black;
 		font-family: "RalewayRegular";
 		font-size: 70px;
 		font-weight: 300;
 		line-height: 1em;
 		text-transform: uppercase;
-		text-align: center;
-		text-shadow: 1.5px 1.5px 0 #306142;		
+		text-align: center;		
 
+		.home & {
+			color: #FFFF66;
+			text-shadow: 2.5px 2.5px 0 black;
+
+		}
 		.about & {
-			text-shadow: 1.5px 1.5px 0 #965D00; 
-			color: white;
+			text-shadow: 2px 2px 0 black; 
+			color: #7C907A;
 		}
 
 		.markets & {
-			color: #C7E53E;
-			text-shadow: 2px 2px 0 #131313;
+			color: #BDC33E;
+			text-shadow: 2px 2px 0 black;
 		}
 
 		.csa & {
 			color: #BF5A03;
-			text-shadow: 2px 2px 0 #131313;
+			text-shadow: 2px 2px 0 black;
 		}
 
 		.signup & {
@@ -143,13 +166,14 @@
 			color: #5B050F;
 		}
 
-		.employment & {
-			color: #4B2531;
-			text-shadow: 1.5px 1.5px 0 #65726F;
+		.get-involved & {
+			color: #c98702;
+			text-shadow: 2.5px 2.5px 0 black;
 		}
 
 		.contact & {
-			text-shadow: 1.5px 1.5px 0 #9B8337;
+			color: #5A492A;
+			text-shadow: 2px 2px 0 black;
 		}
 		
 	}
@@ -197,8 +221,8 @@
 
 			li {
 				height: 100%;
-				background-color: #131313;
 				color: #ccc;
+				background-color: #131313;
 				border: 1px solid #ccc;
 				float: none;
 				display:block;
@@ -207,6 +231,7 @@
 				padding: 5px 0;
 				line-height: 2em;
 			}
+
 		}
 
 		.header-title {
@@ -216,43 +241,58 @@
 
 	@media only screen and (min-width: 768px) {
 
+		.navbar-collapse .navbar-nav li {
+			.contact & {
+				color: black;
+				text-shadow: .5px .5px 0 #ccc;
+			}
+		}
+
 		.navbar-collapse .navbar-nav>li:first-child {
 			display: none;
 		}
 
 		.header-title {
-			&:hover {
-				text-shadow: 3px 3px 3px #306142;
-			}
-		}
 
-		.about & { 
-			&:hover {
-				text-shadow: 3px 3px 3px #306142;
+			.home & {
+				&:hover {
+					color: yellow;
+					text-shadow: 3px 3px 2px black;
+				}
 			}
-		}
 
-		.markets & {
-			&:hover {
-				text-shadow: 3px 3px 3px #131313;
+			.about & { 
+				&:hover {
+					color: #cdc;
+					text-shadow: 2.5px 2.5px 3px black;
+				}
 			}
-		}
 
-		.csa & {
-			&:hover {
-				text-shadow: 3px 3px 0 #131313;
+			.markets & {
+				&:hover {
+					color: #808000;
+					text-shadow: 2.5px 2.5px 2px black;
+				}
 			}
-		}
 
-		.get-involved & {
-			&:hover {
-				text-shadow: 3px 3px 3px #65726F;
+			.csa & {
+				&:hover {
+					color: #D4800E;
+					text-shadow: 2.3px 2.3px 2px black;
+				}
 			}
-		}
 
-		.contact & {
-			&:hover {
-				text-shadow: 3px 3px 3px #9B8337;
+			.get-involved & {
+				&:hover {
+					color: #FFCC6F;
+					text-shadow: 2.8px 2.8px 2px black;
+				}
+			}
+
+			.contact & {
+				&:hover {
+					color: #897B4D;
+				}
 			}
 		}		
 	}

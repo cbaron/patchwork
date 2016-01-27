@@ -47,22 +47,26 @@
   text-align: center;
   font-size: 15px;
   font-family: "RalewayRegular";
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.5em;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
-  text-shadow: .5px .5px 0 #131313;
-}
-.header-class .navbar-collapse .navbar-nav li:hover {
-  text-shadow: 3px 3px 3px #708285;
 }
 .home .header-class .navbar-collapse .navbar-nav li {
   color: white;
+  text-shadow: 2px 2px 0 black;
 }
 .home .header-class .navbar-collapse .navbar-nav li:hover {
+  color: yellow;
+  font-weight: 700;
+}
+.about .header-class .navbar-collapse .navbar-nav li {
+  color: #A3B19C;
+  text-shadow: 1px 1px 0 black;
+}
+.about .header-class .navbar-collapse .navbar-nav li:hover {
   color: #ccc;
-  text-shadow: none;
 }
 .markets .header-class .navbar-collapse .navbar-nav li {
   color: #E0F78D;
@@ -70,12 +74,12 @@
   text-shadow: 1.5px 1.5px 0 #131313;
 }
 .markets .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #2E832D;
+  color: #808000;
 }
 .csa .header-class .navbar-collapse .navbar-nav li {
   color: #D4800E;
   font-weight: 700;
-  text-shadow: 1.5px 1.5px 0 #131313;
+  text-shadow: .5px .5px 0 black;
 }
 .csa .header-class .navbar-collapse .navbar-nav li:hover {
   color: #FBA110;
@@ -83,8 +87,20 @@
 .members .header-class .navbar-collapse .navbar-nav li {
   color: #8C3733;
 }
-.employment .header-class .navbar-collapse .navbar-nav li {
-  color: #966F70;
+.get-involved .header-class .navbar-collapse .navbar-nav li {
+  color: #c98702;
+  font-weight: 800;
+  text-shadow: 1.5px 1.5px 0 black;
+}
+.get-involved .header-class .navbar-collapse .navbar-nav li:hover {
+  color: #FFDEAD;
+}
+.contact .header-class .navbar-collapse .navbar-nav li {
+  font-weight: 700;
+}
+.contact .header-class .navbar-collapse .navbar-nav li:hover {
+  color: #A9A9A9;
+  text-shadow: 1px 1px 2px #ccc;
 }
 .header-class .header-title {
   width: 100%;
@@ -92,26 +108,28 @@
   margin: 5px auto;
   cursor: pointer;
   display: inline-block;
-  color: black;
   font-family: "RalewayRegular";
   font-size: 70px;
   font-weight: 300;
   line-height: 1em;
   text-transform: uppercase;
   text-align: center;
-  text-shadow: 1.5px 1.5px 0 #306142;
+}
+.home .header-class .header-title {
+  color: #FFFF66;
+  text-shadow: 2.5px 2.5px 0 black;
 }
 .about .header-class .header-title {
-  text-shadow: 1.5px 1.5px 0 #965D00;
-  color: white;
+  text-shadow: 2px 2px 0 black;
+  color: #7C907A;
 }
 .markets .header-class .header-title {
-  color: #C7E53E;
-  text-shadow: 2px 2px 0 #131313;
+  color: #BDC33E;
+  text-shadow: 2px 2px 0 black;
 }
 .csa .header-class .header-title {
   color: #BF5A03;
-  text-shadow: 2px 2px 0 #131313;
+  text-shadow: 2px 2px 0 black;
 }
 .signup .header-class .header-title {
   color: #413137;
@@ -119,12 +137,13 @@
 .members .header-class .header-title {
   color: #5B050F;
 }
-.employment .header-class .header-title {
-  color: #4B2531;
-  text-shadow: 1.5px 1.5px 0 #65726F;
+.get-involved .header-class .header-title {
+  color: #c98702;
+  text-shadow: 2.5px 2.5px 0 black;
 }
 .contact .header-class .header-title {
-  text-shadow: 1.5px 1.5px 0 #9B8337;
+  color: #5A492A;
+  text-shadow: 2px 2px 0 black;
 }
 @media only screen and (max-width: 500px) {
   .header-class {
@@ -163,8 +182,8 @@
   }
   .header-class .navbar-collapse .navbar-nav li {
     height: 100%;
-    background-color: #131313;
     color: #ccc;
+    background-color: #131313;
     border: 1px solid #ccc;
     float: none;
     display: block;
@@ -178,25 +197,34 @@
   }
 }
 @media only screen and (min-width: 768px) {
+  .contact .header-class .navbar-collapse .navbar-nav li {
+    color: black;
+    text-shadow: .5px .5px 0 #ccc;
+  }
   .header-class .navbar-collapse .navbar-nav > li:first-child {
     display: none;
   }
-  .header-class .header-title:hover {
-    text-shadow: 3px 3px 3px #306142;
+  .home .header-class .header-title:hover {
+    color: yellow;
+    text-shadow: 3px 3px 2px black;
   }
-  .about .header-class:hover {
-    text-shadow: 3px 3px 3px #306142;
+  .about .header-class .header-title:hover {
+    color: #cdc;
+    text-shadow: 2.5px 2.5px 3px black;
   }
-  .markets .header-class:hover {
-    text-shadow: 3px 3px 3px #131313;
+  .markets .header-class .header-title:hover {
+    color: #808000;
+    text-shadow: 2.5px 2.5px 2px black;
   }
-  .csa .header-class:hover {
-    text-shadow: 3px 3px 0 #131313;
+  .csa .header-class .header-title:hover {
+    color: #D4800E;
+    text-shadow: 2.3px 2.3px 2px black;
   }
-  .get-involved .header-class:hover {
-    text-shadow: 3px 3px 3px #65726F;
+  .get-involved .header-class .header-title:hover {
+    color: #FFCC6F;
+    text-shadow: 2.8px 2.8px 2px black;
   }
-  .contact .header-class:hover {
-    text-shadow: 3px 3px 3px #9B8337;
+  .contact .header-class .header-title:hover {
+    color: #897B4D;
   }
 }
