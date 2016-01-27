@@ -7,6 +7,7 @@
 
 .about-class .staff-bios .bio h3 {
   color: #c98702;
+  margin-top: 15px;
 }
 
 @media only screen and (max-width: 500px) {
@@ -249,6 +250,10 @@ li {
   text-align: left;
   color: #666;
 }
+.csa-class h2 {
+  color: #c98702;
+}
+
 .csa-class figure {
   margin: 0 auto;
   padding: 20px 0;
@@ -263,6 +268,29 @@ li {
 .csa-class figure figcaption {
   text-align: center;
   font-style: italic;
+}
+
+.csa-class ul {
+  display: inline-block;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.csa-class ul li {
+  margin-bottom: 3px;
+  margin-right: 10px;
+  color: #155D75;
+  list-style-type: circle;
+}
+
+@media only screen and (max-width: 375px) {
+  .csa-class .first-column {
+    margin-bottom: 0;
+  }
+
+  .csa-class .second-column {
+    margin-top: 0;
+  }
 }
 .employment-class li {
   list-style-type: circle;
@@ -316,6 +344,21 @@ li {
   font-size: 15px;
   line-height: 1.5em;
 }
+.get-involved-class ul {
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.get-involved-class ul li {
+  list-style-type: circle;
+  color: #155D75;
+}
+
+.get-involved-class h3 {
+  margin-top: 1em;
+  color: #c98702;
+}
 .header-class {
   border: none;
   height: 475px;
@@ -350,7 +393,7 @@ li {
   background-image: url("/static/img/dog_with_chard.jpg");
 }
 
-.employment .header-class {
+.get-involved .header-class {
   background-image: url("/static/img/working-the-hoe-sm.jpg");
 }
 
@@ -498,7 +541,7 @@ li {
     background-image: url("/static/img/on-the-tractor-xs.jpg");
   }
 
-  .employment .header-class {
+  .get-involved .header-class {
     background-image: url("/static/img/working-the-hoe-xs.jpg");
   }
 
@@ -556,7 +599,7 @@ li {
     text-shadow: 3px 3px 0 #131313;
   }
 
-  .employment .header-class:hover {
+  .get-involved .header-class:hover {
     text-shadow: 3px 3px 3px #65726F;
   }
 
@@ -564,8 +607,16 @@ li {
     text-shadow: 3px 3px 3px #9B8337;
   }
 }
+.home-class h4 {
+  font-size: 30px;
+  font-weight: 500;
+  font-style: italic;
+  text-align: center;
+  margin: 15px auto;
+}
+
 .home-class .carousel {
-  margin: 70px auto;
+  margin: 45px auto;
   width: 85%;
 }
 
@@ -643,7 +694,6 @@ li {
   margin: 5px 0;
 }
 .markets-class .business,
-.markets-class .restaurants span,
 .markets-class .restaurants span a {
   font-family: "RalewayRegular";
   font-size: 16px;

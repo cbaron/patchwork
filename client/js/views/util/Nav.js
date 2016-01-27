@@ -12,7 +12,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
         'markets': { event: 'click', selector: '', method: 'navigate' },
         'signup': { event: 'click', selector: '', method: 'navigate' },
         'members': { event: 'click', selector: '', method: 'navigate' },
-        'employment': { event: 'click', selector: '', method: 'navigate' },
+        'get-involved': { event: 'click', selector: '', method: 'navigate' },
         'contact': { event: 'click', selector: '', method: 'navigate' }
     },
 
@@ -22,7 +22,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'Markets', name: 'markets' },
             //{ label: 'Sign Up', name: 'signup' },
             //{ label: 'Member Resources', name: 'members' },
-            { label: 'Get Involved', name: 'employment' },
+            { label: 'Get Involved', name: 'get-involved' },
             { label: 'Contact Us', name: 'contact' }
     ],
 

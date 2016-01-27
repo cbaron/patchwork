@@ -25,7 +25,7 @@
 .members .header-class {
   background-image: url('/static/img/dog_with_chard.jpg');
 }
-.employment .header-class {
+.get-involved .header-class {
   background-image: url('/static/img/working-the-hoe-sm.jpg');
 }
 .contact .header-class {
@@ -146,7 +146,7 @@
   .csa .header-class {
     background-image: url('/static/img/on-the-tractor-xs.jpg');
   }
-  .employment .header-class {
+  .get-involved .header-class {
     background-image: url('/static/img/working-the-hoe-xs.jpg');
   }
   .home .header-class {
@@ -193,7 +193,7 @@
   .csa .header-class:hover {
     text-shadow: 3px 3px 0 #131313;
   }
-  .employment .header-class:hover {
+  .get-involved .header-class:hover {
     text-shadow: 3px 3px 3px #65726F;
   }
   .contact .header-class:hover {

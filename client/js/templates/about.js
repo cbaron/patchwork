@@ -7,9 +7,9 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias2(alias1((depth0 != null ? depth0.path : depth0), depth0))
     + "\" alt=\""
     + alias2(alias1((depth0 != null ? depth0.description : depth0), depth0))
-    + "\"><h3>"
+    + "\"><div class=\"inner\"><h3>"
     + alias2(alias1((depth0 != null ? depth0.description : depth0), depth0))
-    + "</h3><span>filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler </span></div><hr>        ";
+    + "</h3><div>filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler filler </div></div></div><hr>        ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 

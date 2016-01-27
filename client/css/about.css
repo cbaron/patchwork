@@ -6,6 +6,7 @@
 }
 .about-class .staff-bios .bio h3 {
   color: #c98702;
+  margin-top: 15px;
 }
 @media only screen and (max-width: 500px) {
   .about-class .staff-bios .bio img {
