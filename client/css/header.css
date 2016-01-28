@@ -8,7 +8,7 @@
   position: relative;
 }
 .home .header-class {
-  background-image: url('/static/img/saplings-sm.jpg');
+  background-image: url('/static/img/headers/saplings-sm.jpg');
 }
 .signup .header-class {
   background-image: url('/static/img/greens.jpg');
