@@ -385,7 +385,7 @@ li {
 }
 
 .home .header-class {
-  background-image: url("/static/img/headers/saplings-sm.jpg");
+  background-image: url("/static/img/headers/crop-fields-sm.jpg");
 }
 
 .signup .header-class {
@@ -393,15 +393,15 @@ li {
 }
 
 .about .header-class {
-  background-image: url("/static/img/cauliflower-sm.jpg");
+  background-image: url("/static/img/headers/dog-and-chard-sm.jpg");
 }
 
 .csa .header-class {
-  background-image: url("/static/img/on-the-tractor-sm.jpg");
+  background-image: url("/static/img/headers/cauliflower-sm.jpg");
 }
 
 .markets .header-class {
-  background-image: url("/static/img/canned-tomatoes-sm.jpg");
+  background-image: url("/static/img/headers/greens-sm.jpg");
 }
 
 .members .header-class {
@@ -409,11 +409,11 @@ li {
 }
 
 .get-involved .header-class {
-  background-image: url("/static/img/working-the-hoe-sm.jpg");
+  background-image: url("/static/img/headers/on-the-tractor-sm.jpg");
 }
 
 .contact .header-class {
-  background-image: url("/static/img/george-sm.jpg");
+  background-image: url("/static/img/headers/sidekick-shed-sm.jpg");
 }
 
 .header-class .navbar-collapse {
@@ -441,68 +441,6 @@ li {
   cursor: pointer;
 }
 
-.home .header-class .navbar-collapse .navbar-nav li {
-  color: white;
-  text-shadow: 2px 2px 0 black;
-}
-
-.home .header-class .navbar-collapse .navbar-nav li:hover {
-  color: yellow;
-  font-weight: 700;
-}
-
-.about .header-class .navbar-collapse .navbar-nav li {
-  color: #A3B19C;
-  text-shadow: 1px 1px 0 black;
-}
-
-.about .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #ccc;
-}
-
-.markets .header-class .navbar-collapse .navbar-nav li {
-  color: #E0F78D;
-  font-weight: 800;
-  text-shadow: 1.5px 1.5px 0 #131313;
-}
-
-.markets .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #808000;
-}
-
-.csa .header-class .navbar-collapse .navbar-nav li {
-  color: #D4800E;
-  font-weight: 700;
-  text-shadow: .5px .5px 0 black;
-}
-
-.csa .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #FBA110;
-}
-
-.members .header-class .navbar-collapse .navbar-nav li {
-  color: #8C3733;
-}
-
-.get-involved .header-class .navbar-collapse .navbar-nav li {
-  color: #c98702;
-  font-weight: 800;
-  text-shadow: 1.5px 1.5px 0 black;
-}
-
-.get-involved .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #FFDEAD;
-}
-
-.contact .header-class .navbar-collapse .navbar-nav li {
-  font-weight: 700;
-}
-
-.contact .header-class .navbar-collapse .navbar-nav li:hover {
-  color: #A9A9A9;
-  text-shadow: 1px 1px 2px #ccc;
-}
-
 .header-class .header-title {
   width: 100%;
   padding: 0 15px;
@@ -518,41 +456,27 @@ li {
 }
 
 .home .header-class .header-title {
-  color: #FFFF66;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  color: black;
 }
 
 .about .header-class .header-title {
-  text-shadow: 2px 2px 0 black;
-  color: #7C907A;
+  color: #59020C;
 }
 
 .markets .header-class .header-title {
-  color: #BDC33E;
-  text-shadow: 2px 2px 0 black;
+  color: white;
 }
 
 .csa .header-class .header-title {
-  color: #BF5A03;
-  text-shadow: 2px 2px 0 black;
-}
-
-.signup .header-class .header-title {
-  color: #413137;
-}
-
-.members .header-class .header-title {
-  color: #5B050F;
+  color: white;
 }
 
 .get-involved .header-class .header-title {
-  color: #c98702;
-  text-shadow: 2.5px 2.5px 0 black;
+  color: #0A2D3F;
 }
 
 .contact .header-class .header-title {
-  color: #5A492A;
-  text-shadow: 2px 2px 0 black;
+  color: black;
 }
 
 @media only screen and (max-width: 500px) {
@@ -572,24 +496,28 @@ li {
 }
 
 @media only screen and (max-width: 767px) {
+  .home .header-class {
+    background-image: url("/static/img/headers/crop-fields-xs.jpg");
+  }
+
   .about .header-class {
-    background-image: url("/static/img/cauliflower-xs.jpg");
+    background-image: url("/static/img/headers/dog-and-chard-xs.jpg");
   }
 
   .csa .header-class {
-    background-image: url("/static/img/on-the-tractor-xs.jpg");
-  }
-
-  .get-involved .header-class {
-    background-image: url("/static/img/working-the-hoe-xs.jpg");
-  }
-
-  .home .header-class {
-    background-image: url("/static/img/fieldrows-xs.jpg");
+    background-image: url("/static/img/headers/cauliflower-xs.jpg");
   }
 
   .markets .header-class {
-    background-image: url("/static/img/canned-tomatoes-xs.jpg");
+    background-image: url("/static/img/headers/greens-xs.jpg");
+  }
+
+  .get-involved .header-class {
+    background-image: url("/static/img/headers/on-the-tractor-xs.jpg");
+  }
+
+  .contact .header-class {
+    background-image: url("/static/img/headers/sidekick-shed-xs.jpg");
   }
 
   .header-class .navbar-collapse .navbar-nav {
@@ -618,9 +546,52 @@ li {
 }
 
 @media only screen and (min-width: 768px) {
+  .home .header-class .navbar-collapse .navbar-nav li {
+    color: black;
+  }
+
+  .home .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #4d4d4d;
+  }
+
+  .about .header-class .navbar-collapse .navbar-nav li {
+    color: #59020C;
+  }
+
+  .about .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #8b0313;
+  }
+
+  .csa .header-class .navbar-collapse .navbar-nav li {
+    color: white;
+  }
+
+  .csa .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #e6e6e6;
+  }
+
+  .markets .header-class .navbar-collapse .navbar-nav li {
+    color: white;
+  }
+
+  .markets .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #e6e6e6;
+  }
+
+  .get-involved .header-class .navbar-collapse .navbar-nav li {
+    color: #0A2D3F;
+  }
+
+  .get-involved .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #145c81;
+  }
+
   .contact .header-class .navbar-collapse .navbar-nav li {
     color: black;
-    text-shadow: .5px .5px 0 #ccc;
+  }
+
+  .contact .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #333333;
   }
 
   .header-class .navbar-collapse .navbar-nav > li:first-child {
@@ -628,32 +599,27 @@ li {
   }
 
   .home .header-class .header-title:hover {
-    color: yellow;
-    text-shadow: 3px 3px 2px black;
+    color: #4d4d4d;
   }
 
   .about .header-class .header-title:hover {
-    color: #cdc;
-    text-shadow: 2.5px 2.5px 3px black;
-  }
-
-  .markets .header-class .header-title:hover {
-    color: #808000;
-    text-shadow: 2.5px 2.5px 2px black;
+    color: #8b0313;
   }
 
   .csa .header-class .header-title:hover {
-    color: #D4800E;
-    text-shadow: 2.3px 2.3px 2px black;
+    color: #e6e6e6;
+  }
+
+  .markets .header-class .header-title:hover {
+    color: #e6e6e6;
   }
 
   .get-involved .header-class .header-title:hover {
-    color: #FFCC6F;
-    text-shadow: 2.8px 2.8px 2px black;
+    color: #145c81;
   }
 
   .contact .header-class .header-title:hover {
-    color: #897B4D;
+    color: #262626;
   }
 }
 .home-class h4 {
