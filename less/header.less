@@ -1,3 +1,11 @@
+@black-hover: lighten(black, 30%);
+@white-hover: darken(white, 10%);
+@about-maroon: #59020C;
+@about-hover: lighten(@about-maroon, 10%);
+@get-involved-blue: #0A2D3F;
+@get-involved-hover: lighten(@get-involved-blue, 15%);
+
+
 .header-class {
 
     border: none;				
@@ -9,7 +17,7 @@
 	position: relative;
 
 	.home & {
-		background-image: url('/static/img/headers/saplings-sm.jpg');
+		background-image: url('/static/img/headers/crop-fields-sm.jpg');
 	}
 
 	.signup & {
@@ -17,15 +25,15 @@
 	}
 
 	.about & {
-		background-image: url('/static/img/cauliflower-sm.jpg');
+		background-image: url('/static/img/headers/dog-and-chard-sm.jpg');
 	}
 
 	.csa & {
-		background-image: url('/static/img/on-the-tractor-sm.jpg');
+		background-image: url('/static/img/headers/cauliflower-sm.jpg');
 	}
 
 	.markets & {
-		background-image: url('/static/img/canned-tomatoes-sm.jpg');
+		background-image: url('/static/img/headers/greens-sm.jpg');
 	}
 
 	.members & {
@@ -33,11 +41,11 @@
 	}
 
 	.get-involved & {
-		background-image: url('/static/img/working-the-hoe-sm.jpg');
+		background-image: url('/static/img/headers/on-the-tractor-sm.jpg');
 	}
 
 	.contact & {
-		background-image: url('/static/img/george-sm.jpg');
+		background-image: url('/static/img/headers/sidekick-shed-sm.jpg');
 	}
 
 	.navbar-collapse {
@@ -61,65 +69,6 @@
 				text-transform: uppercase;
 				letter-spacing: 1.5px;
 				cursor: pointer;
-
-                .home & {
-					color: white;
-					text-shadow: 2px 2px 0 black;					
-                    &:hover {
-						color: yellow;
-						font-weight: 700;
-                        
-					}
-                }
-
-                .about & {
-                	color: #A3B19C;
-                	text-shadow: 1px 1px 0 black;
-                	&:hover {
-                		color: #ccc;
-                	}
-                }
-
-				.markets & {
-					color: #E0F78D;
-					font-weight: 800;
-					text-shadow: 1.5px 1.5px 0 #131313;
-					&:hover {
-						color: #808000;
-					}
-				}
-
-				.csa & {
-					color: #D4800E;
-					font-weight: 700;
-					text-shadow: .5px .5px 0 black;
-					&:hover {
-						color: #FBA110;
-					}
-				}
-
-				.members & {
-					color: #8C3733;
-				}
-
-				.get-involved & {
-					color: #c98702;
-					font-weight: 800;
-					text-shadow: 1.5px 1.5px 0 black;
-					&:hover {
-						color: #FFDEAD;
-					}
-				}
-
-				.contact & {
-					
-					font-weight: 700;
-					
-					&:hover {
-						color: #A9A9A9;
-						text-shadow: 1px 1px 2px #ccc;
-					}
-				}
 			}
 		}
 	}
@@ -139,42 +88,35 @@
 		text-align: center;		
 
 		.home & {
-			color: #FFFF66;
-			text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-			
-
+			color: black;			
 		}
+
 		.about & {
-			text-shadow: 2px 2px 0 black; 
-			color: #7C907A;
+			color: @about-maroon;
 		}
 
 		.markets & {
-			color: #BDC33E;
-			text-shadow: 2px 2px 0 black;
+			color: white;
 		}
 
 		.csa & {
-			color: #BF5A03;
-			text-shadow: 2px 2px 0 black;
+			color: white;
 		}
 
 		.signup & {
-			color: #413137;
+			
 		}
 
 		.members & {
-			color: #5B050F;
+			
 		}
 
 		.get-involved & {
-			color: #c98702;
-			text-shadow: 2.5px 2.5px 0 black;
+			color: @get-involved-blue;
 		}
 
 		.contact & {
-			color: #5A492A;
-			text-shadow: 2px 2px 0 black;
+			color: black;
 		}
 		
 	}
@@ -194,24 +136,29 @@
 	}
 
     @media only screen and (max-width: 767px) {
+
+        .home & {
+            background-image: url('/static/img/headers/crop-fields-xs.jpg');
+        }
+
         .about & {
-            background-image: url('/static/img/cauliflower-xs.jpg');
+            background-image: url('/static/img/headers/dog-and-chard-xs.jpg');
         }
 
         .csa & {
-            background-image: url('/static/img/on-the-tractor-xs.jpg');
-        }
-
-        .get-involved & {
-            background-image: url('/static/img/working-the-hoe-xs.jpg');
-        }
-
-        .home & {
-            background-image: url('/static/img/fieldrows-xs.jpg');
+            background-image: url('/static/img/headers/cauliflower-xs.jpg');
         }
 
         .markets & {
-            background-image: url('/static/img/canned-tomatoes-xs.jpg');
+            background-image: url('/static/img/headers/greens-xs.jpg');
+        }
+
+        .get-involved & {
+            background-image: url('/static/img/headers/on-the-tractor-xs.jpg');
+        }
+
+        .contact & {
+        	background-image: url('/static/img/headers/sidekick-shed-xs.jpg');
         }
 
 		.navbar-collapse .navbar-nav {
@@ -243,10 +190,53 @@
 	@media only screen and (min-width: 768px) {
 
 		.navbar-collapse .navbar-nav li {
+
+        	.home & {
+				color: black;					
+                &:hover {
+					color: @black-hover;                      
+				}
+            }
+
+            .about & {
+            	color: @about-maroon;
+            	&:hover {
+            		color: @about-hover;
+            	}
+            }
+
+			.csa & {
+				color: white;
+				&:hover {
+					color: @white-hover;
+				}
+			}
+
+			.markets & {
+				color: white;
+				&:hover {
+					color: @white-hover;
+				}
+			}
+
+			.members & {
+				
+			}
+
+			.get-involved & {
+				color: @get-involved-blue;
+				&:hover {
+					color: @get-involved-hover;
+				}
+			}
+
 			.contact & {
 				color: black;
-				text-shadow: .5px .5px 0 #ccc;
+				&:hover {
+					color: lighten(black, 20%);
+				}
 			}
+
 		}
 
 		.navbar-collapse .navbar-nav>li:first-child {
@@ -257,42 +247,37 @@
 
 			.home & {
 				&:hover {
-					color: yellow;
-					text-shadow: 3px 3px 2px black;
+					color: @black-hover;
 				}
 			}
 
 			.about & { 
 				&:hover {
-					color: #cdc;
-					text-shadow: 2.5px 2.5px 3px black;
-				}
-			}
-
-			.markets & {
-				&:hover {
-					color: #808000;
-					text-shadow: 2.5px 2.5px 2px black;
+					color: @about-hover;
 				}
 			}
 
 			.csa & {
 				&:hover {
-					color: #D4800E;
-					text-shadow: 2.3px 2.3px 2px black;
+					color: @white-hover;
+				}
+			}
+
+			.markets & {
+				&:hover {
+					color: @white-hover;
 				}
 			}
 
 			.get-involved & {
 				&:hover {
-					color: #FFCC6F;
-					text-shadow: 2.8px 2.8px 2px black;
+					color: @get-involved-hover;
 				}
 			}
 
 			.contact & {
 				&:hover {
-					color: #897B4D;
+					color: lighten(black, 15%);
 				}
 			}
 		}		

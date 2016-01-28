@@ -6,7 +6,6 @@ Object.assign( Header.prototype, Nav.prototype, {
     insertionMethod: 'before',
 
     size() {
-        console.log('size')
         if( this.$(window).width() > 767 ) {
             this.templateData.headerTitle.on( 'click', this.navigate.bind(this) )
             if( this.$('.header-title').css( 'display' ) === "none" )
