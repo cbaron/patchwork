@@ -4,6 +4,7 @@
     "node": "5.1.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.3.14",
     "backbone": "^1.2.3",
     "bcrypt-nodejs": "0.0.3",
     "bootstrap": "^3.3.6",
