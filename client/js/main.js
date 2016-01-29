@@ -3,7 +3,6 @@ var $ = require('jquery'),
 
 window.$ = window.jQuery = $
 
-require('babel-polyfill')
 require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')
 
