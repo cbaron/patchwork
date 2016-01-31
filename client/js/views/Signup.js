@@ -3,7 +3,7 @@ var MyView = require('./MyView'),
 
 Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').prototype, {
 
-    //checkForEnter( e ) { if( e.keyCode === 13 ) this.submitModalForm() },
+    //checkForEnter( e ) { if( e.keyCode === 13 ) this.submitForm() },
 
     events: {
         'alreadyMember': { event: 'click', selector: '', method: 'showModalLogin' },
@@ -20,12 +20,12 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
 
     loginFields: [
         { name: "email", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
-        { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: function( val ) { return val.length >= 6 } }
+        { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: function( val ) { return this.validatePassword(val) } }
     ],
 
     modalFormFail: function( error ) {
         console.log( error.stack || error );
-        this.slurpTemplate( { template: this.templates.serverError( error ), insertion: { $el: this.$('.modal-body') } } )
+        this.slurpTemplate( { template: this.templates.serverError( error ), insertion: { $el: this.modalView.templateData.body } } )
     },
 
     modalLogin: require('../templates/modalLogin')( require('handlebars') ),
@@ -33,10 +33,8 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
     modalSubmissionResponse( response ) {
         
         if( Object.keys( response ).length === 0 ) {            
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.$('.modal-body') } } )
+            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.modalView.templateData.body } } )
         }
-        
-        //this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
     
         require('../models/User').set( response );
         this.emit( "success" );
@@ -61,8 +59,10 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
             cancelText: "Cancel",
             confirmText: "Log In"
         } ).on( 'submit', ( data ) => this.submitModalForm( data ) )
+        
+        this.$(':focus').blur()
 
-        this.$( '.modal-body' ).on( 'focus', '#email, #password', this.removeErrors.bind(this) )
+        this.$('.modal-body').on( 'focus', '#email, #password', this.removeErrors.bind(this) )
         
     },
 
@@ -80,19 +80,19 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
         
         var valid = true
         
-        //if ( this.templateData.invalidLoginError ) this.templateData.invalidLoginError.remove();
-        //if ( this.templateData.serverError ) this.templateData.serverError.remove();
+        if ( this.templateData.invalidLoginError ) this.templateData.invalidLoginError.remove();
+        if ( this.templateData.serverError ) this.templateData.serverError.remove();
 
         this.loginFields.forEach( field => {
-            var id = field.name
-            this.$('#' + id).parent().removeClass('has-error');
-            this.$('#' + id).next().remove();
+
+            this.modalView.templateData[ field.name ].parent().removeClass('has-error');
+            this.modalView.templateData[ field.name ].next().remove();
 
             if ( field.validate.call( this, data[ field.name ] ) === false ) {
                 valid = false
 
-                this.$('#' + id).parent().addClass('has-error');
-                this.slurpTemplate( { template: this.templates.fieldError( field ), insertion: { $el: this.$('#' + id).parent(), method: 'append' } } )
+                this.modalView.templateData[ field.name ].parent().addClass('has-error');
+                this.slurpTemplate( { template: this.templates.fieldError( field ), insertion: { $el: this.modalView.templateData[ field.name ].parent(), method: 'append' } } )
           }
 
         }, this )

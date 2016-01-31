@@ -7,7 +7,9 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
     + "\" class=\"col-sm-3 control-label\">"
     + alias2(alias1((depth0 != null ? depth0.label : depth0), depth0))
-    + "</label><div class=\"col-sm-9\"><input type=\""
+    + "</label><div class=\"col-sm-9\"><input data-js=\""
+    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + "\" type=\""
     + alias2(alias1((depth0 != null ? depth0.type : depth0), depth0))
     + "\" class=\"form-control\" id=\""
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
