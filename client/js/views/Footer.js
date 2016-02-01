@@ -8,9 +8,13 @@ Object.assign( Footer.prototype, Nav.prototype, {
     size() {
         var body = this.$('body'),
             position = this.templateData.container.position(),
-            difference = body.outerHeight( true ) - ( position.top + this.templateData.container.outerHeight( true ) )
+            difference
 
-        if( difference > 0 ) this.templateData.container.height( this.templateData.container.height( true ) + difference )
+        if( this.templateData.container.prop('style').height ) this.templateData.container.attr('style','')
+
+        difference = body.outerHeight( true ) - ( position.top + this.templateData.container.outerHeight( true ) )
+
+        if( difference > 0 ) this.templateData.container.height( this.templateData.container.height() + difference )
 
         return this
     },
