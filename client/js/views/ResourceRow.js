@@ -3,7 +3,10 @@ var ListItem = require('./util/ListItem'),
 
 Object.assign( ResourceRow.prototype, ListItem.prototype, {
 
-    getTemplateOptions() { return { values: this.fields.map( field => ( { name: field.name, value: this.model.get(field.name), width: field.width } ) ) } },
+    getTemplateOptions() { return {
+        id: this.model.id,
+        values: this.fields.map( field => ( { name: field.name, value: this.model.get(field.name), width: field.width } ) )
+    } },
 
     template: require('../templates/resourceRow')( require('handlebars') )
 

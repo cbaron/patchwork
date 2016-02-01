@@ -15,6 +15,25 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     collection: { },
 
+    createItems() {
+        this.items =
+            new ( this.Collection.extend( ( typeof this.collection === "function" ) ? this.collection() : this.collection ) )()
+            .on( 'reset', () => this.onItemsReset() )
+            .on( 'add', item => this.addItem( item ) )
+            .on( 'remove', item => this.removeItem( item ) )
+            .on( 'update', () => this.noItemCheck() )
+            .on( 'sort', () => this.reOrderDOM() )
+
+        return this
+    },
+
+    fetchItems() {
+        this.items.fetch( { headers: this.fetch.headers, reset: true } )
+        .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
+
+        return this
+    },
+
     getClosestClickedIndex: function( model ) {
         var clickedIndex = this.items.indexOf( model ),
             closest = undefined,
@@ -62,9 +81,17 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this[ method ]( model )
     },
 
-    postRender() {
+    onItemsReset() {
+        var listContainer = this.getItemViewOptions().container || this.templateData.container 
+        
+        listContainer.empty()
+        this.itemViews = []
+        if( this.items.length && this.setFields ) { this.setFields( this.items.at(0).attributes ) }
+        this.items.forEach( item => this.addItem( item ) )
+        this.noItemCheck()
+    },
 
-        var extension = { }
+    postRender() {
 
         if( this.selection === 'multi' ) {
 
@@ -78,38 +105,15 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
         this.itemViews = []
         this.selectedItems = { }
-        
-        this.items =
-            new ( this.Collection.extend( ( typeof this.collection === "function" ) ? this.collection() : this.collection ) )()
-            .on( 'reset', () => {
-                var listContainer = this.getItemViewOptions().container || this.templateData.container 
-                listContainer.empty()
-                this.itemViews = []
-                if( this.items.length && this.setFields ) { this.setFields( this.items.at(0).attributes ) }
-                this.items.forEach( item => this.addItem( item ) )
-                this.noItemCheck()
-            } )
+       
+        this.createItems() 
 
-            .on( 'add', item => this.addItem( item ) )
-
-            .on( 'remove', item => {
-                if( this.itemViews[ item.id ].templateData.container.hasClass('selected') ) this.unselectItem( item )
-                this.itemViews[ item.id ].templateData.container.remove()
-            })
-
-            .on( 'update', () => this.noItemCheck() )
-            .on( 'sort', () => this.reOrderDOM() )
-
-        if( this.fetch ) {
-            this.Q( this.items.fetch( { headers: this.fetch.headers, reset: true } ) )
-            .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
-            .done()
-        }
+        if( this.fetch )  this.fetchItems()
     },
 
-    removeItem: function( model ) {
-        this.itemViews[ model.id ].delete()
-        this.emit( 'itemRemoved', model )
+    removeItem( item ) {
+        if( this.itemViews[ item.id ].templateData.container.hasClass('selected') ) this.unselectItem( item )
+        this.itemViews[ item.id ].templateData.container.remove()
     },
 
     reOrderDOM: function() {
@@ -120,7 +124,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
     scrollToBottom: function() {
         var height
 
-        var intervalId = setInterval( function() {
+        var intervalId = setInterval( () => {
             var newHeight = this.templateData.container.outerHeight( true );
             if( height === newHeight ){    
                 clearInterval( intervalId );
@@ -128,7 +132,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
             } else {
                 height = this.templateData.container.outerHeight( true );
             }
-        }.bind(this), 100);
+        }, 100 );
 
     },
 

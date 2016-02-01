@@ -3,3 +3,9 @@
   right: 25px;
   top: 2rem;
 }
+.resource .mytable button {
+  line-height: .5rem;
+  font-size: .5rem;
+  padding: 3px;
+  position: absolute;
+}
