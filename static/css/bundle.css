@@ -300,20 +300,20 @@ li {
   margin-top: 1em;
   color: #c98702;
 }
-.footer-class {
+footer {
   background-color: #131313;
   color: #ccc;
   width: auto;
   margin-top: 10px;
 }
 
-.footer-class ul {
+footer ul {
   margin: 10px 0px;
   width: 100%;
   text-align: center;
 }
 
-.footer-class ul li {
+footer ul li {
   display: inline-block;
   float: none;
   margin: 5px 10px;
@@ -324,18 +324,18 @@ li {
   cursor: pointer;
 }
 
-.footer-class ul li:hover {
+footer ul li:hover {
   color: #73756A;
   text-shadow: 1px 1px 1px #337ab7;
 }
 
-.footer-class hr {
+footer hr {
   border-top: 1px solid #ddd;
   margin: 0 5%;
   opacity: 0.25;
 }
 
-.footer-class .future-days {
+footer .future-days {
   width: 100%;
   display: inline-block;
   float: none;
