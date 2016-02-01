@@ -39,7 +39,11 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
             this.emit( 'hidden' )
             this.removeAllListeners( 'submit' )
         } )
-        this.templateData.container.on( 'shown.bs.modal', () => { this.emit( 'shown' ) } )
+
+        this.templateData.container.on( 'shown.bs.modal', () => { 
+            this.emit( 'shown' )
+            this.$('.modal-body input:first').focus()
+        } )
 
         return this;
     },
