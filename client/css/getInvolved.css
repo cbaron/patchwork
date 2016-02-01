@@ -4,8 +4,9 @@
   margin-bottom: 15px;
 }
 .get-involved-class ul li {
-  list-style-type: circle;
   color: #155D75;
+  list-style-type: circle;
+  margin-left: 15px;
 }
 .get-involved-class h3 {
   margin-top: 1em;

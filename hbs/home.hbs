@@ -1,15 +1,10 @@
 <div data-js="container" class="home-class client-view">
     <h4>Fresh food from farmers you know!</h4>
-    <div id="carousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner" role="listbox">
+    <div data-js="carousel" id="carousel" class="carousel slide">
+        <div data-js="carouselInner" class="carousel-inner" role="listbox">
             <div class="item active">
-                <img src="{{initialImage.path}}" alt="{{initialImage.description}}">
+                <img src="/static/img/{{image.path}}" alt="{{image.description}}">
             </div>
-            {{#each images}}
-            <div class="item">           
-                <img src="{{this.path}}" alt="{{this.description}}">
-            </div>
-            {{/each}}
         </div>
         <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

@@ -111,11 +111,13 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     initialize() {
+        var static = require('node-static')
+
         this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
         this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
         this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
 
-        this.staticFolder = new (require('node-static').Server)();
+        this.staticFolder = new static.Server( undefined, { cache: false } )
 
         return this;
     },
