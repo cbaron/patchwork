@@ -65,3 +65,6 @@
   cursor: pointer;
   z-index: 3;
 }
+.mytable table tbody td {
+  overflow: auto;
+}

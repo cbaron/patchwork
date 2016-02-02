@@ -731,6 +731,13 @@ footer .future-days {
   top: 2rem;
 }
 
+.resource .mytable button {
+  line-height: .5rem;
+  font-size: .5rem;
+  padding: 3px;
+  position: absolute;
+}
+
 .mytable {
   height: 100%;
   position: relative;
@@ -810,4 +817,8 @@ footer .future-days {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 3;
+}
+
+.mytable table tbody td {
+  overflow: auto;
 }

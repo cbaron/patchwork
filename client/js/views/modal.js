@@ -21,19 +21,17 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         'confirmBtn': { event: 'click', selector: '', method: 'emitConfirmation' }
     },
 
-    hide: function( options ) {
+    hide: function() {
 
         this.templateData.container.modal('hide')
 
-        if( options.reset ) {
-            this.templateData.title.text('')
-            this.templateData.header.show()
-            this.templateData.body.empty()
-            this.templateData.footer.show()
-            this.templateData.cancelBtn.show().text('Cancel')
-            this.templateData.closeBtn.show()
-            this.templateData.confirmBtn.show().text('Save')
-        }
+        this.templateData.title.text('')
+        this.templateData.header.show()
+        this.templateData.body.empty()
+        this.templateData.footer.show()
+        this.templateData.cancelBtn.show().text('Cancel')
+        this.templateData.closeBtn.show()
+        this.templateData.confirmBtn.show().text('Save')
 
         return this
     },
