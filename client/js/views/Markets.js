@@ -3,22 +3,16 @@ var MyView = require('./MyView'),
 
 Object.assign( Markets.prototype, MyView.prototype, {
 
-    getData(url) {        
-        return new Promise( ( resolve, reject ) => {            
-            this.$.ajax( {
-                type: "GET",
-                url: this.util.format("/%s", url),
-                headers: { accept: "application/json" },
-                success: data => resolve( data )
-            } )                                  
-        } )        
+    getData( url ) {
+        return new ( this.Collection.extend( { comparator: 'name', url: this.util.format("/%s", url ) } ) )()
+        .fetch( { parse: true, success: response => console.log(response) } )           
     },
 
     postRender() {
         [ 'farmermarket', 'retailoutlet', 'restaurant' ].forEach( table => {
-            this.getData( table ).then( data => data[ table ].forEach( datum => {
+            this.getData( table ).done( data => data[ table ].forEach( datum => {
                 this.templateData[ table ].append( this.templates[ table ]( datum ) )
-            }) ).catch( err => new this.Error( err ) )
+            }) ).fail( err => new this.Error( err ) )
         } )        
     },
 
