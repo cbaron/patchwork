@@ -1,11 +1,14 @@
 CREATE TABLE internshipduty (
     id             SERIAL PRIMARY KEY,
-    name           VARCHAR(100),
-    text           VARCHAR(100)
+    text           VARCHAR(1000)
 );
 
 CREATE TABLE internshipqualification (
     id             SERIAL PRIMARY KEY,
-    name           VARCHAR(100),
-    text           VARCHAR(100)
+    text           VARCHAR(1000)
+);
+
+CREATE TABLE internshipcompensation (
+    id             SERIAL PRIMARY KEY,
+    text           VARCHAR(1000)
 );

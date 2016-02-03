@@ -15,7 +15,6 @@ _.extend( FormView.prototype, {
     onSubmissionResponse: function() { },
     
     postForm( data ) {
-        console.log(data.values)
         return this.Q(
             this.$.ajax( {
                 data: JSON.stringify( data.values ) || JSON.stringify( this.getFormData() ),
