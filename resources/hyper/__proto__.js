@@ -39,9 +39,12 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 this._( this.tables[ this.path[1] ].columns )
                     .filter( column => column.fk )
                     .forEach( column => {
-                        var fkDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor
-                        row[ fkDescriptor ] = { table: column.fk.table, id: row[ column.name ], value: row[ fkDescriptor ] }
+                        var fkDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor,
+                            columnName = [ column.fk.table, fkDescriptor ].join('.')
+                        row[ this.tables[ column.fk.table ].meta.label ] =
+                            { table: column.fk.table, id: row[ column.name ], value: row[ [ column.fk.table, fkDescriptor ].join('.') ] }
                         delete row[ column.name ]
+                        delete row[ columnName ]
                     } )
                 return row
             } )
@@ -53,7 +56,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
         var table = this.tables[ tableName ],
             descriptorColumn = this._( table.columns ).find( column => column.name === table.meta.recorddescriptor )
 
-        if( !descriptorColumn.fk ) return { table: tableName, column: descriptorColumn, path }
+        if( !descriptorColumn || !descriptorColumn.fk ) return { table: tableName, column: descriptorColumn, path }
 
         path.push( { table: tableName, column: descriptorColumn } )
 
@@ -71,18 +74,23 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor )
 
                 if( /id$/.test( fkTableDescriptor ) ) {
-                    fkSelect.push( this.format( '%s.%s', column.fk.table, column.fk.column ) )
                     fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
-                    fkSelect.push( this.format( '%s.id', fkTableDescriptorColumn.fk.table ) )
-                    fkSelect.push( this.format( '%s.%s', fkTableDescriptorColumn.fk.table, this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor ) )
+                    fkSelect.push(
+                        this.format( '%s.%s AS "%s.%s"',
+                            fkTableDescriptorColumn.fk.table,
+                            this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor,
+                            fkTableDescriptorColumn.fk.table,
+                            this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor )
+                    )
                     fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s',
                         fkTableDescriptorColumn.fk.table,
                         fkTableDescriptorColumn.fk.table,
                         "id",
                         column.fk.table, fkTableDescriptorColumn.name ) )
                 } else {
-                    fkSelect.push( this.format( '%s.%s', column.fk.table, column.fk.column ) )
-                    fkSelect.push( this.format( '%s.%s', column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ) )
+                    if( fkTableDescriptor ) {
+                        fkSelect.push( this.format( '%s.%s AS "%s.%s"', column.fk.table, fkTableDescriptor, column.fk.table, fkTableDescriptor ) )
+                    }
                     fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
                 }
             } )

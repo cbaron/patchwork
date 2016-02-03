@@ -23,6 +23,8 @@ module.exports = new (
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
             this.footer = require('./views/Footer')
 
+            this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
+
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
             this.userPromise.then( () => {
@@ -48,6 +50,8 @@ module.exports = new (
 
         resourceHandler( resource ) {
             this.header = require('./views/AdminHeader')
+
+            if( this.footer ) this.footer.hide()
 
             this.userPromise.then( () => {
 

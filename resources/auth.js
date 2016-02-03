@@ -32,10 +32,17 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
     jws: require('jws'),
 
     POST() {
-        return this.slurpBody().then( () => this.queryByEmail() ).then( result => this.handleQueryResult( result ) )
+        return this.slurpBody().then( () => this.queryMemberTable() ).then( result => this.handleQueryResult( result ) )
     },
 
-    queryByEmail() { return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.email ] } ) },
+    query( attr ) { return this.dbQuery( { query: this.format("SELECT * FROM person WHERE %s = $1", attr ), values: [ this.body.email ] } ) },
+
+    queryMemberTable() {
+        return this.query( "email" ).then( result => {
+            if( result.rows.length === 1 ) return result
+            return this.query( "username" )
+        } )
+    },
 
     validatePOST() {
         [ 'password', 'email' ].forEach( attr => {

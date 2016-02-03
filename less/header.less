@@ -21,7 +21,7 @@
 	}
 
 	.signup & {
-		background-image: url('/static/img/greens.jpg');
+		background-image: url('/static/img/cherry-tomatoes-sm.jpg');
 	}
 
 	.about & {
@@ -104,7 +104,7 @@
 		}
 
 		.signup & {
-			
+			color: white;
 		}
 
 		.members & {
@@ -151,6 +151,10 @@
 
         .markets & {
             background-image: url('/static/img/headers/greens-xs.jpg');
+        }
+
+        .signup & {
+        	background-image: url('/static/img/headers/cherry-tomatoes-xs.jpg');
         }
 
         .get-involved & {
@@ -219,8 +223,11 @@
 				}
 			}
 
-			.members & {
-				
+			.signup & {
+				color: white;
+				&:hover {
+					color: @white-hover;
+				}
 			}
 
 			.get-involved & {

@@ -1,9 +1,7 @@
 var MyView = require('./MyView'),
     Signup = function() { return MyView.apply( this, arguments ) }
 
-Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').prototype, {
-
-    //checkForEnter( e ) { if( e.keyCode === 13 ) this.submitModalForm() },
+Object.assign( Signup.prototype, MyView.prototype, {
 
     events: {
         'alreadyMember': { event: 'click', selector: '', method: 'showModalLogin' },
@@ -16,7 +14,7 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
         { name: 'address', label: 'Address', type: 'text', validate: function() { } },        
     ],
 
-    getTemplateOptions() { return { fields: this.fields, loginFields: this.loginFields } },
+    getTemplateOptions() { return { fields: this.fields } },
 
     loginFields: [
         { name: "email", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
@@ -47,9 +45,45 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
     },
 
     postRender() {
-        this.templateData.container.find( 'input' ).on( 'blur', this.validateForm.bind(this) )
-                                                   .on( 'focus', this.removeErrors.bind(this) )
-        //this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
+        this.shares = new ( this.Collection.extend( { url: "/share" } ) )()
+
+        this.shares.fetch()
+            .done( () => this.shares.forEach( share => {
+
+                this.slurpTemplate( {
+                    insertion: { $el: this.templateData.shares },
+                    template: this.templates.share( share.attributes )
+                } )
+
+                share.set( { shareoptionids: new ( this.Collection.extend( { url: "/shareoptionshare" } ) )() } )
+                share.get('shareoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
+                    share.set( { shareoptions: new ( this.Collection.extend( { url: "/shareoption" } ) )() } )
+                    share.get('shareoptions')
+                        .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.shareoptionid ).join(',') } } )
+                        .done( () => 
+                            share.get('shareoptions').forEach( shareoption => {
+                                shareoption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
+                                shareoption.get('options').fetch( { data: { shareoptionid: shareoption.id } } )
+                            } )
+                        )
+                } )
+            } ) )
+    },
+
+    renderShareOptions() {
+
+        this.shares.forEach( share => {
+            this.slurpTemplate( {
+                insertion: { $el: this.templateData.shareOptions },
+                template: this.templates.shareOption( {
+                    share: share.label,
+                    options: share.get('shareoptions').map( shareoption => ( {
+                        id: shareoption.id,
+                        label: shareoption.get('label'),
+                        options: shareoption.get('options').models } ) )
+                } )
+            } )
+        } )
     },
 
     requiresLogin: false,
@@ -76,13 +110,15 @@ Object.assign( Signup.prototype, MyView.prototype, require('./util/Form').protot
 
     template: require('../templates/signup')( require('handlebars') ),
 
+    templates: {
+        share: require('../templates/share')( require('handlebars') ),
+        shareOption: require('../templates/share')( require('handlebars') )
+    },
+
     validateModalForm( data ) {
         
         var valid = true
         
-        //if ( this.templateData.invalidLoginError ) this.templateData.invalidLoginError.remove();
-        //if ( this.templateData.serverError ) this.templateData.serverError.remove();
-
         this.loginFields.forEach( field => {
             var id = field.name
             this.$('#' + id).parent().removeClass('has-error');

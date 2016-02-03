@@ -15,9 +15,9 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div data-js=\"container\" class=\"container col-sm-4 col-sm-offset-4\"><div data-js=\"alreadyMemberHeader\" class=\"header\" style=\"display:none;\">Welcome!<span class=\"glyphicon glyphicon-ok\"></span></div><section data-js=\"memberInfo\"><div data-js=\"memberInfoHeader\" class=\"header\">Please enter your information.</div><button data-js=\"alreadyMember\" type=\"button\" class=\"btn btn-default\">Already a member?</button><form data-js=\"memberInfoFields\" class=\"form-horizontal\">            "
+  return "<div data-js=\"container\" class=\"col-sm-12\"><div data-js=\"alreadyMemberHeader\" class=\"header\" style=\"display:none;\">Welcome!<span class=\"glyphicon glyphicon-ok\"></span></div><section data-js=\"memberInfo\"><div data-js=\"memberInfoHeader\" class=\"header\">Please enter your information.</div><button data-js=\"alreadyMember\" type=\"button\" class=\"btn btn-default\">Already a member?</button><form data-js=\"memberInfoFields\" class=\"form-horizontal\">            "
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.fields : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </form><div data-js=\"buttonRow\" class=\"btn-row\"><button data-js=\"cancelBtn\" type=\"button\" class=\"btn btn-default\">Cancel</button><button data-js=\"registerBtn\" type=\"button\" class=\"btn btn-primary\">Register</button></div></section></div>";
+    + "        </form></section><section><h3>Shares</h3><ul data-js=\"shares\"></ul></section><section><h3>Share Options</h3><ul data-js=\"shareoptions\"></ul></section></div>";
 },"useData":true});
 
 };

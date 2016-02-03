@@ -390,7 +390,7 @@ footer .future-days {
 }
 
 .signup .header-class {
-  background-image: url("/static/img/greens.jpg");
+  background-image: url("/static/img/cherry-tomatoes-sm.jpg");
 }
 
 .about .header-class {
@@ -472,6 +472,10 @@ footer .future-days {
   color: white;
 }
 
+.signup .header-class .header-title {
+  color: white;
+}
+
 .get-involved .header-class .header-title {
   color: #0A2D3F;
 }
@@ -511,6 +515,10 @@ footer .future-days {
 
   .markets .header-class {
     background-image: url("/static/img/headers/greens-xs.jpg");
+  }
+
+  .signup .header-class {
+    background-image: url("/static/img/headers/cherry-tomatoes-xs.jpg");
   }
 
   .get-involved .header-class {
@@ -576,6 +584,14 @@ footer .future-days {
   }
 
   .markets .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #e6e6e6;
+  }
+
+  .signup .header-class .navbar-collapse .navbar-nav li {
+    color: white;
+  }
+
+  .signup .header-class .navbar-collapse .navbar-nav li:hover {
     color: #e6e6e6;
   }
 

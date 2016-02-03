@@ -110,7 +110,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     initTypeahead( property ) {
 
         var bloodhound = new Bloodhound( {
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace(property.descriptor.column.name),
             identify: obj => obj.id,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
@@ -123,7 +123,7 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         bloodhound.initialize()
 
-        el.typeahead( { hint: true }, { display: obj => obj.name, source: bloodhound.ttAdapter() } )
+        el.typeahead( { hint: true }, { display: obj => obj[ property.descriptor.column.name ], source: bloodhound.ttAdapter() } )
         .bind( 'typeahead:selected typeahead:autocompleted', ( obj, selected, name ) => {
             this[ property.fk.table + "Typeahead" ] = selected
             el.one( 'change', () => this[ property.fk.table + "Typeahead" ] = undefined )
