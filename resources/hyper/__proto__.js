@@ -22,7 +22,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     "supportedProperty": this._( this.tables[ this.path[1] ].columns )
                         .filter( column => column.name !== 'id' && column.name !== 'created' && column.name !== 'updated' )
                         .map( column => ( {
-                            descriptor: ( column.fk ) ? this.getDescriptor( column.fk.table, [ ] ) : undefined,
+                            descriptor: ( column.fk && this.tables[ column.fk.table ].meta ) ? this.getDescriptor( column.fk.table, [ ] ) : undefined,
                             fk: column.fk,
                             property: column.name,
                             range: column.range
@@ -68,7 +68,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
             fkFrom = [ ]
 
         this._( this.tables[ this.path[1] ].columns )
-            .filter( column => column.fk )
+            .filter( column => column.fk && this.tables[ column.fk.table ].meta )
             .forEach( column => {
                 var fkTableDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor
                     fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor )

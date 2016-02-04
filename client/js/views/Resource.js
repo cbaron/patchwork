@@ -172,7 +172,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         var el = this.$( '#' + property.property )
 
         if( ! el ) return
-        if( ! property.fk ) return el.val( this.modelToEdit.get( property.property ) )
+        if( ! property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
         
         this.initTypeahead( property ) 
 
@@ -195,7 +195,8 @@ Object.assign( Resource.prototype, Table.prototype, {
             title: this.util.format( 'Create %s', this.label )
         } )
         .on( 'shown', () => this.createProperties.forEach( property => {
-            if( property.fk ) this.initTypeahead( property )
+            console.log( property )
+            if( property.fk && property.descriptor ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
         } ) )
         .on( 'submit', data => this.create(data) )

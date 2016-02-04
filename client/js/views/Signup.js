@@ -50,8 +50,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.shares.fetch()
             .done( () => this.shares.forEach( share => {
 
-                console.log("sup")
-
                 this.slurpTemplate( {
                     insertion: { $el: this.templateData.shares },
                     template: this.templates.share( share.attributes )
@@ -60,20 +58,47 @@ Object.assign( Signup.prototype, MyView.prototype, {
                 share.set( { shareoptionids: new ( this.Collection.extend( { url: "/shareoptionshare" } ) )() } )
                 share.get('shareoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
                     share.set( { shareoptions: new ( this.Collection.extend( { url: "/shareoption" } ) )() } )
-                    share.get('shareoptions')
-                        .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.get('shareoptionid') ).join(',') } } )
-                        .done( () => Promise.all( 
-                            share.get('shareoptions').map( shareoption => {
-                                shareoption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
-                                return new Promise( ( resolve, reject ) =>
-                                    shareoption.get('options')
-                                               .fetch( { data: { shareoptionid: shareoption.id } } )
-                                               .done( resolve )
-                                               .fail( reject ) )
-                            } )
-                        ).then( () => this.renderShareOptions() ) )
+                    if( share.get('shareoptionids') ) {
+                        share.get('shareoptions')
+                            .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.get('shareoptionid') ).join(',') } } )
+                            .done( () => Promise.all( 
+                                share.get('shareoptions').map( shareoption => {
+                                    shareoption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
+                                    return new Promise( ( resolve, reject ) =>
+                                        shareoption.get('options')
+                                                   .fetch( { data: { shareoptionid: shareoption.id } } )
+                                                   .done( resolve )
+                                                   .fail( reject ) )
+                                } )
+                            ).then( () => this.renderShareOptions() ) )
+                    }
+                } )
+
+                share.set( { deliveryoptionids: new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )() } )
+                share.get('deliveryoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
+                    if( share.get('deliveryoptionsids') ) {
+                        share.set( { deliveryoptions: new ( this.Collection.extend( { url: "/deliveryoption" } ) )() } )
+                        share.get('deliveryoptions')
+                            .fetch( { data: { id: share.get('deliveryoptionsids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
+                            .done( () => this.renderDeliveryOptions() )
+                    }
                 } )
             } ) )
+    },
+
+    renderDeliveryOptions() {
+        this.shares.forEach( share => {
+            this.slurpTemplate( {
+                insertion: { $el: this.templateData.deliveryOptions },
+                template: this.templates.deliveryOptions( {
+                    share: share.get('label'),
+                    options: share.get('deliveryoptions').map( deliveryoption => ( {
+                        id: deliveryoption.id,
+                        label: deliveryoption.get('label')
+                    } ) )
+                } )
+            } )
+        } )
     },
 
     renderShareOptions() {
@@ -117,6 +142,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
     template: require('../templates/signup')( require('handlebars') ),
 
     templates: {
+        deliveryOptions: require('../templates/deliveryOptions')( require('handlebars') ),
         share: require('../templates/share')( require('handlebars') ),
         shareOptions: require('../templates/shareOptions')( require('handlebars') )
     },

@@ -4,6 +4,9 @@
     {{#each options}}
         <div>
             <span>{{label}}</span>
+            {{#each options}}
+                <span>{{label}}</span>
+            {{/each}}
         </div>
     {{/each}}
 </li>
