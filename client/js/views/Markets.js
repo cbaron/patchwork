@@ -1,30 +1,13 @@
-var MyView = require('./MyView'),
-    Markets = function() { return MyView.apply( this, arguments ) }
+var GetData = require('./util/GetData'),
+    Markets = function() { return GetData.apply( this, arguments ) }
 
-Object.assign( Markets.prototype, MyView.prototype, {
+Object.assign( Markets.prototype, GetData.prototype, {
 
     dataTables: [
         { name: 'farmermarket', comparator: 'id'},
         { name: 'retailoutlet', comparator: 'id'},
         { name: 'restaurant', comparator: 'name'}
     ],
-
-    getData( table ) {
-        var self = this
-        return new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
-        .fetch( { 
-            success: function(response) {
-                response.models.forEach( datum =>
-                    self.templateData[ table.name ].append( self.templates[ table.name ]( datum.attributes ) )
-                )
-            },
-            error: function(error) { return new self.Error( err ) }
-        } )           
-    },
-
-    postRender() { 
-        this.dataTables.forEach( table => this.getData( table ) )
-    },
 
     requiresLogin: false,
 

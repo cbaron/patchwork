@@ -1,26 +1,13 @@
-var MyView = require('./MyView'),
-    GetInvolved = function() { return MyView.apply( this, arguments ) }
+var GetData = require('./util/GetData'),
+    GetInvolved = function() { return GetData.apply( this, arguments ) }
 
-Object.assign( GetInvolved.prototype, MyView.prototype, {
+Object.assign( GetInvolved.prototype, GetData.prototype, {
 
-    getData(url) {        
-        return new Promise( ( resolve, reject ) => {            
-            this.$.ajax( {
-                type: "GET",
-                url: this.util.format("/%s", url),
-                headers: { accept: "application/json" },
-                success: data => resolve( data )
-            } )                                  
-        } )        
-    },
-
-    postRender() {
-        [ 'internshipduty', 'internshipqualification', 'internshipcompensation' ].forEach( table => {
-            this.getData( table ).then( data => data[ table ].forEach( datum => {
-                this.templateData[ table ].append( this.templates[ table ]( datum ) )
-            }) ).catch( err => new this.Error( err ) )
-        } )        
-    },
+    dataTables: [
+        { name: 'internshipduty', comparator: 'id'},
+        { name: 'internshipqualification', comparator: 'id'},
+        { name: 'internshipcompensation', comparator: 'id'}
+    ],
 
     requiresLogin: false,
 

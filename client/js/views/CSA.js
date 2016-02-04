@@ -1,7 +1,7 @@
-var MyView = require('./MyView'),
-    CSA = function() { return MyView.apply( this, arguments ) }
+var GetData = require('./util/GetData'),
+    CSA = function() { return GetData.apply( this, arguments ) }
 
-Object.assign( CSA.prototype, MyView.prototype, {
+Object.assign( CSA.prototype, GetData.prototype, {
 
     dataTables: [
         { name: 'csapageimage', comparator: 'id'},
@@ -9,23 +9,6 @@ Object.assign( CSA.prototype, MyView.prototype, {
         { name: 'largeshareexamplecolumnone', comparator: 'id'},
         { name: 'largeshareexamplecolumntwo', comparator: 'id'}
     ],
-
-    getData( table ) {
-        var self = this
-        return new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
-        .fetch( { 
-            success: function(response) {
-                response.models.forEach( datum =>
-                    self.templateData[ table.name ].append( self.templates[ table.name ]( datum.attributes ) )
-                )
-            },
-            error: function(error) { return new self.Error( err ) }
-        } )           
-    },
-
-    postRender() { 
-        this.dataTables.forEach( table => this.getData( table ) )
-    },
 
     requiresLogin: false,
 
