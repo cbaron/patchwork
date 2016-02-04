@@ -3,17 +3,27 @@ var MyView = require('./MyView'),
 
 Object.assign( Markets.prototype, MyView.prototype, {
 
-    getData( url ) {
-        return new ( this.Collection.extend( { comparator: 'name', url: this.util.format("/%s", url ) } ) )()
-        .fetch( { parse: true, success: response => console.log(response) } )           
+    dataTables: [
+        { name: 'farmermarket', comparator: 'id'},
+        { name: 'retailoutlet', comparator: 'id'},
+        { name: 'restaurant', comparator: 'name'}
+    ],
+
+    getData( table ) {
+        var self = this
+        return new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
+        .fetch( { 
+            success: function(response) {
+                response.models.forEach( datum =>
+                    self.templateData[ table.name ].append( self.templates[ table.name ]( datum.attributes ) )
+                )
+            },
+            error: function(error) { return new self.Error( err ) }
+        } )           
     },
 
-    postRender() {
-        [ 'farmermarket', 'retailoutlet', 'restaurant' ].forEach( table => {
-            this.getData( table ).done( data => data[ table ].forEach( datum => {
-                this.templateData[ table ].append( this.templates[ table ]( datum ) )
-            }) ).fail( err => new this.Error( err ) )
-        } )        
+    postRender() { 
+        this.dataTables.forEach( table => this.getData( table ) )
     },
 
     requiresLogin: false,

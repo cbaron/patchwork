@@ -17,7 +17,7 @@ Object.assign( GetInvolved.prototype, MyView.prototype, {
     postRender() {
         [ 'internshipduty', 'internshipqualification', 'internshipcompensation' ].forEach( table => {
             this.getData( table ).then( data => data[ table ].forEach( datum => {
-                this.templateData[ table ].append( this.templates.internshipListItem( datum ) )
+                this.templateData[ table ].append( this.templates[ table ]( datum ) )
             }) ).catch( err => new this.Error( err ) )
         } )        
     },
@@ -27,7 +27,9 @@ Object.assign( GetInvolved.prototype, MyView.prototype, {
     template: require('../templates/getInvolved')( require('handlebars') ),
 
     templates: {
-        internshipListItem: require('../templates/internshipListItem')( require('handlebars') ),
+        internshipduty: require('../templates/listItem')( require('handlebars') ),
+        internshipqualification: require('../templates/listItem')( require('handlebars') ),
+        internshipcompensation: require('../templates/listItem')( require('handlebars') )
     }
 
 } )
