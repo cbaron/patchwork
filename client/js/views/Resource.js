@@ -114,9 +114,8 @@ Object.assign( Resource.prototype, Table.prototype, {
             identify: obj => obj.id,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                filter: response => response[ property.fk.table ],
                 replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query) ),
-                url: this.util.format( "/%s?%s=%QUERY", property.descriptor.table, property.descriptor.column.name )
+                url: this.util.format( "/%s?%s=%QUERY&like=1", property.descriptor.table, property.descriptor.column.name )
             }
         } ),
         el = this.$( '#' + property.property )

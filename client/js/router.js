@@ -22,7 +22,7 @@ module.exports = new (
             
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
             this.footer = require('./views/Footer')
-
+    
             this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )

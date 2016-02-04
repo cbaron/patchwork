@@ -112,7 +112,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function( result ) {
             var body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
-            return this.respond( { body: { success: true, result: body } } )
+            return this.respond( { body: body } )
         },
 
         PATCH: function( result ) {

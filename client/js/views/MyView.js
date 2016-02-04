@@ -2,7 +2,7 @@ var MyView = function( data ) { return Object.assign( this, data ).initialize() 
 
 Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
-    Collection: require('backbone').Collection.extend( { parse: function(response) { return response[ this.url.slice(1) ] } } ),
+    Collection: require('backbone').Collection,
 
     Error: require('../MyError'),
 
@@ -46,10 +46,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     getTemplateOptions: () => ({}),
 
     hide: function() {
-        return this.Q.Promise( function( resolve, reject ) {
-            this.templateData.container.hide();
-            resolve();
-        }.bind(this) );
+        return this.Q.Promise( ( resolve, reject ) => {
+            this.templateData.container.hide()
+            resolve()
+        } )
     },
 
     initialize() {

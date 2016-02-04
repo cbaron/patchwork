@@ -30,7 +30,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 if( err ) { 
                     if( err.code !== "ENOENT" ) return reject( err )
-                    file = './resources/hyper/__proto__'
+                    file = this.format( './resources%s/__proto__', subPath || '' )
                 }
 
                 new ( require(file) )( {

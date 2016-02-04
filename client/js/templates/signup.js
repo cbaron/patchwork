@@ -17,7 +17,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 
   return "<div data-js=\"container\" class=\"col-sm-12\"><div data-js=\"alreadyMemberHeader\" class=\"header\" style=\"display:none;\">Welcome!<span class=\"glyphicon glyphicon-ok\"></span></div><section data-js=\"memberInfo\"><div data-js=\"memberInfoHeader\" class=\"header\">Please enter your information.</div><button data-js=\"alreadyMember\" type=\"button\" class=\"btn btn-default\">Already a member?</button><form data-js=\"memberInfoFields\" class=\"form-horizontal\">            "
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.fields : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </form></section><section><h3>Shares</h3><ul data-js=\"shares\"></ul></section><section><h3>Share Options</h3><ul data-js=\"shareoptions\"></ul></section></div>";
+    + "        </form></section><section><h3>Shares</h3><ul data-js=\"shares\"></ul></section><section><h3>Share Options</h3><ul data-js=\"shareOptions\"></ul></section></div>";
 },"useData":true});
 
 };

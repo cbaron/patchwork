@@ -50,6 +50,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.shares.fetch()
             .done( () => this.shares.forEach( share => {
 
+                console.log("sup")
+
                 this.slurpTemplate( {
                     insertion: { $el: this.templateData.shares },
                     template: this.templates.share( share.attributes )
@@ -59,13 +61,17 @@ Object.assign( Signup.prototype, MyView.prototype, {
                 share.get('shareoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
                     share.set( { shareoptions: new ( this.Collection.extend( { url: "/shareoption" } ) )() } )
                     share.get('shareoptions')
-                        .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.shareoptionid ).join(',') } } )
-                        .done( () => 
-                            share.get('shareoptions').forEach( shareoption => {
+                        .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.get('shareoptionid') ).join(',') } } )
+                        .done( () => Promise.all( 
+                            share.get('shareoptions').map( shareoption => {
                                 shareoption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
-                                shareoption.get('options').fetch( { data: { shareoptionid: shareoption.id } } )
+                                return new Promise( ( resolve, reject ) =>
+                                    shareoption.get('options')
+                                               .fetch( { data: { shareoptionid: shareoption.id } } )
+                                               .done( resolve )
+                                               .fail( reject ) )
                             } )
-                        )
+                        ).then( () => this.renderShareOptions() ) )
                 } )
             } ) )
     },
@@ -75,12 +81,12 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.shares.forEach( share => {
             this.slurpTemplate( {
                 insertion: { $el: this.templateData.shareOptions },
-                template: this.templates.shareOption( {
-                    share: share.label,
+                template: this.templates.shareOptions( {
+                    share: share.get('label'),
                     options: share.get('shareoptions').map( shareoption => ( {
                         id: shareoption.id,
                         label: shareoption.get('label'),
-                        options: shareoption.get('options').models } ) )
+                        options: shareoption.get('options').models.map( model => model.attributes ) } ) )
                 } )
             } )
         } )
@@ -112,7 +118,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     templates: {
         share: require('../templates/share')( require('handlebars') ),
-        shareOption: require('../templates/share')( require('handlebars') )
+        shareOptions: require('../templates/shareOptions')( require('handlebars') )
     },
 
     validateModalForm( data ) {

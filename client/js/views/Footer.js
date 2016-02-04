@@ -10,6 +10,7 @@ Object.assign( Footer.prototype, Nav.prototype, {
             position = this.templateData.container.position(),
             difference
 
+        if( this.templateData.container.prop('style').display === 'none' ) return
         if( this.templateData.container.prop('style').height ) this.templateData.container.attr('style','')
 
         difference = body.outerHeight( true ) - ( position.top + this.templateData.container.outerHeight( true ) )
