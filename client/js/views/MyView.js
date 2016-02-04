@@ -2,12 +2,7 @@ var MyView = function( data ) { return Object.assign( this, data ).initialize() 
 
 Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
-    Collection: require('backbone').Collection.extend( { 
-        parse: function(response) {
-            return response[ this.url.slice(1) ]   
-        }
-    } ),
-    
+    Collection: require('backbone').Collection.extend( { parse: function(response) { return response[ this.url.slice(1) ] } } ),   
 
     Error: require('../MyError'),
 

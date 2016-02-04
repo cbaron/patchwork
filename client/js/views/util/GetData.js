@@ -5,20 +5,18 @@ Object.assign( GetData.prototype, MyView.prototype, {
 
     dataTables: [],
 
-    getData( table ) {
-        var self = this
-        return new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
-        .fetch( { 
-            success: function(response) {
-                response.models.forEach( datum =>
-                    self.templateData[ table.name ].append( self.templates[ table.name ]( datum.attributes ) )
-                )
-            },
-            error: function(error) { return new self.Error( err ) }
-        } )           
+    getData( table ) {        
+        this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
+        this.collections[ table.name ].fetch().then( () => this.collections[ table.name ].models.forEach( model => {
+            console.log(model)
+            this.templateData[ table.name ].append( this.templates[ table.name ]( model.attributes ) )
+        }
+        ) )
+        .fail( err => new this.Error(err) )       
     },
 
-    postRender() { 
+    postRender() {
+        this.collections = { }
         this.dataTables.forEach( table => this.getData( table ) )
     },
 

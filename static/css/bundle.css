@@ -236,20 +236,7 @@ li {
 .w70 {
   width: 70%;
 }
-.contact-class h2 {
-  font-size: 26px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  color: #555;
-  margin: 0 0 .5em;
-}
 
-.contact-class p {
-  font-size: 15px;
-  line-height: 1.5em;
-  text-align: left;
-  color: #666;
-}
 .csa-class h2 {
   color: #c98702;
 }
