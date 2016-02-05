@@ -1,3 +1,9 @@
+.signup section h2 {
+  text-align: center;
+}
 .signup .intro {
   margin-bottom: 30px;
+}
+.signup .member-info-header {
+  display: inline;
 }

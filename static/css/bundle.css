@@ -749,8 +749,16 @@ footer .future-days {
   padding: 3px;
   position: absolute;
 }
+.signup section h2 {
+  text-align: center;
+}
+
 .signup .intro {
   margin-bottom: 30px;
+}
+
+.signup .member-info-header {
+  display: inline;
 }
 .mytable {
   height: 100%;

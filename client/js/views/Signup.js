@@ -7,6 +7,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
         'alreadyMember': { event: 'click', selector: '', method: 'showModalLogin' },
     },
 
+    emailRegex: require('./util/Form').prototype.emailRegex,
+
     fields: [ {
         name: 'name',
         label: 'Name',
@@ -23,13 +25,27 @@ Object.assign( Signup.prototype, MyView.prototype, {
         name: 'phonenumber',
         label: 'Phone Number',
         type: 'text',
-        error: "Please enter a valid email address.",
-        validate: function() { }
-    },
-        { name: 'address', label: 'Address', type: 'text', validate: function() { } },
-        { name: 'password', label: 'Password', type: 'text', validate: val => val.length > 5 },
-        { name: 'repeatpassword', label: 'Repeat Password', type: 'text', validate: val => val === this.templateData.password.val() }
-    ],
+        error: "Please enter a valid phone number.",
+        validate: val => val.length > 8,
+    }, {
+        name: 'address',
+        label: 'Address',
+        type: 'text',
+        error: "Please enter an address.",
+        validate: val => val.length
+    }, {
+        name: 'password',
+        label: 'Password',
+        type: 'password',
+        error: "Password must be at least six characters.",
+        validate: val => val.length > 5
+    }, {
+        name: 'repeatpassword',
+        label: 'Repeat Password',
+        type: 'password',
+        error: "Passwords must match.",
+        validate: function( val ) { return val === this.templateData.password.val() }
+    } ],
 
     getTemplateOptions() { return { fields: this.fields } },
 
@@ -62,7 +78,25 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     postRender() {
+        var self = this
+
+        return;
+
         this.shares = new ( this.Collection.extend( { url: "/share" } ) )()
+
+        this.templateData.container.find('input').on( 'blur', function() {
+            var $el = self.$(this),
+                valid = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
+                        .validate.call( self, $el.val() )
+
+            if( valid ) {
+                $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
+                $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
+            } else {
+                $el.parent().parent().removeClass('has-success').addClass('has-feedback has-error')
+                $el.next().removeClass('hide').removeClass('glyphicon-ok').addClass('glyphicon-remove')
+            }
+        } )
 
         this.shares.fetch()
             .done( () => this.shares.forEach( share => {
@@ -183,7 +217,10 @@ Object.assign( Signup.prototype, MyView.prototype, {
         }, this )
         
         return valid
-    }
+    },
+
+    views: [
+    ],
 
 } )
 
