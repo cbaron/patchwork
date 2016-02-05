@@ -7,11 +7,28 @@ Object.assign( Signup.prototype, MyView.prototype, {
         'alreadyMember': { event: 'click', selector: '', method: 'showModalLogin' },
     },
 
-    fields: [
-        { name: 'name', label: 'Name', type: 'text', error: "Name is a required field.", validate: function( val ) { return this.$.trim(val) !== '' } },
-        { name: 'email', label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
-        { name: 'phonenumber', label: 'Phone Number', type: 'text', validate: function() { } },
-        { name: 'address', label: 'Address', type: 'text', validate: function() { } },        
+    fields: [ {
+        name: 'name',
+        label: 'Name',
+        type: 'text',
+        error: "Name is a required field.",
+        validate: function( val ) { return this.$.trim(val) !== '' }
+    }, {
+        name: 'email',
+        label: 'Email',
+        type: 'text',
+        error: "Please enter a valid email address.",
+        validate: function( val ) { return this.emailRegex.test(val) }
+    }, {
+        name: 'phonenumber',
+        label: 'Phone Number',
+        type: 'text',
+        error: "Please enter a valid email address.",
+        validate: function() { }
+    },
+        { name: 'address', label: 'Address', type: 'text', validate: function() { } },
+        { name: 'password', label: 'Password', type: 'text', validate: val => val.length > 5 },
+        { name: 'repeatpassword', label: 'Repeat Password', type: 'text', validate: val => val === this.templateData.password.val() }
     ],
 
     getTemplateOptions() { return { fields: this.fields } },
@@ -76,10 +93,10 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
                 share.set( { deliveryoptionids: new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )() } )
                 share.get('deliveryoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
-                    if( share.get('deliveryoptionsids') ) {
+                    if( share.get('deliveryoptionids') ) {
                         share.set( { deliveryoptions: new ( this.Collection.extend( { url: "/deliveryoption" } ) )() } )
                         share.get('deliveryoptions')
-                            .fetch( { data: { id: share.get('deliveryoptionsids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
+                            .fetch( { data: { id: share.get('deliveryoptionids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
                             .done( () => this.renderDeliveryOptions() )
                     }
                 } )

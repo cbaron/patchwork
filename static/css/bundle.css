@@ -146,10 +146,6 @@ a {
   cursor: pointer;
 }
 
-button {
-  margin: 5px;
-}
-
 div.btn-row {
   text-align: center;
 }
@@ -753,7 +749,9 @@ footer .future-days {
   padding: 3px;
   position: absolute;
 }
-
+.signup .intro {
+  margin-bottom: 30px;
+}
 .mytable {
   height: 100%;
   position: relative;

@@ -195,8 +195,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             title: this.util.format( 'Create %s', this.label )
         } )
         .on( 'shown', () => this.createProperties.forEach( property => {
-            console.log( property )
-            if( property.fk && property.descriptor ) this.initTypeahead( property )
+            if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
         } ) )
         .on( 'submit', data => this.create(data) )

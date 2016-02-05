@@ -7,7 +7,7 @@ CREATE TABLE deliveryoption (
 
 CREATE TABLE sharedeliveryoption (
     id               SERIAL PRIMARY KEY,
-    shareid          INTEGER REFERENCES shareoption (id),
+    shareid          INTEGER REFERENCES share (id),
     deliveryoptionid INTEGER REFERENCES deliveryoption (id)
 );
 
@@ -44,5 +44,7 @@ CREATE TABLE zipcoderoute (
     zipcode        VARCHAR(10),
     routeid        INTEGER REFERENCES deliveryroute (id)
 );
+
+INSERT INTO tablemeta ( name, label, description, recorddescriptor ) VALUES ( 'deliveryoption', 'Delivery Option', 'Each row represents a potential delivery option for a CSA share', 'label' );
 
 --COPY zipcoderoute(zipcode,routeid) FROM '/tmp/data.csv' (DELIMITER ',', FORMAT csv, HEADER false);
