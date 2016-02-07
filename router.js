@@ -28,18 +28,23 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return new Promise( ( resolve, reject ) => {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+                var instance
+
                 if( err ) { 
                     if( err.code !== "ENOENT" ) return reject( err )
                     file = './resources/hyper/__proto__'
                 }
 
-                new ( require(file) )( {
+                instance = new ( require(file) )( {
                     request: request,
                     response: response,
                     path: path,
                     tables: this.tables,
-                } )[ request.method ]()
-                .catch( err => reject( err ) )
+                } )
+
+                if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
+
+                instance[ request.method ]().catch( err => reject( err ) )
             } )
         } )
     },
@@ -74,11 +79,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
         ].join(' ')
     },
 
-    handleFailure( response, err, code ) {
+    handleFailure( response, err, code, log ) {
 
         var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err
 
-        console.log( err.stack || err );
+        if( log ) console.log( err.stack || err );
 
         response.writeHead( code || 500, Object.assign( {
             'Content-Type': 'application/json',
@@ -96,17 +101,17 @@ Object.assign( Router.prototype, MyObject.prototype, {
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
-        if( /text\/html/.test( request.headers.accept ) ) {
-            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
+        if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
+            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, true ) )
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
                    ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
-            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err ) )
+            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, true ) )
         } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
             if( path[1] === "" ) path[1] === "index"
-            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err ) )
+            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, true ) )
         }
 
-        return this.handleFailure( response, new Error("Not Found"), 404 )
+        return this.handleFailure( response, new Error("Not Found"), 404, false )
 
     },
 
