@@ -11,6 +11,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         return {
             model: this.Instance,
             parse: response => {
+                console.log(response)
                 this.label = response.label;
                 this.recordDescriptor = response.recordDescriptor;
                 if( response.operation["@type"] === "Create" ) this.createProperties = response.operation.expects.supportedProperty
@@ -107,6 +108,18 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.$( '#' + property.property ).datetimepicker( { format: "YYYY-MM-DD", minDate: this.moment() } )
     },
 
+    initFileUpload: function( e ) {
+        var reader = new FileReader();
+        
+        reader.onload = function( evt ) {
+            console.log( evt.target.result )
+            //new this.MessageImage( { container: this.templateData.imageList, src: evt.target.result } )
+        }.bind(this);
+
+        reader.readAsDataURL( this.$('input[type=file]').files[0] )
+        //reader.readAsDataURL( e.originalEvent.target.files[0] );  
+    },
+
     initTypeahead( property ) {
 
         var bloodhound = new Bloodhound( {
@@ -196,10 +209,13 @@ Object.assign( Resource.prototype, Table.prototype, {
             title: this.util.format( 'Create %s', this.label )
         } )
         .on( 'shown', () => this.createProperties.forEach( property => {
+            console.log(this.$('input[type=file]') )
             if( property.fk ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
+            //else if( property.range === "File" ) this.initFileUpload()
         } ) )
         .on( 'submit', data => this.create(data) )
+        //.on( 'shown.bs.modal', () => console.log(this.modalView.templateData) )
 
     },
 
@@ -242,6 +258,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     templates: Object.assign( {}, Table.prototype.templates, {
         create: require('../templates/createInstance')( require('handlebars') ),
         Date: require('../templates/form/Date')( require('handlebars') ),
+        File: require('../templates/form/imageUpload')( require('handlebars') ),
         Float: require('../templates/form/Text')( require('handlebars') ),
         Integer: require('../templates/form/Text')( require('handlebars') ),
         Text: require('../templates/form/Text')( require('handlebars') ),
