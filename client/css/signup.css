@@ -1,8 +1,29 @@
+.signup .header {
+  margin-bottom: 30px;
+  font-size: 2rem;
+  line-height: 2rem;
+}
 .signup .intro {
   margin-bottom: 30px;
 }
+.signup .nav {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+.signup .nav .glyphicon {
+  cursor: pointer;
+}
+.signup .nav .glyphicon:hover {
+  color: #c98702;
+}
 .signup .shares {
+  padding: 30px 30px 0px 30px;
   text-align: center;
+}
+.signup .shares.has-error {
+  border: 1px solid #a94442;
+  border-radius: 15px;
 }
 .signup .shares .share {
   border: 2px solid black;
@@ -24,4 +45,12 @@
 .signup .shares .share > div:nth-child(2) {
   color: #155D75;
   font-size: .75rem;
+}
+.error {
+  color: #a94442;
+  display: none;
+  margin-top: 30px;
+}
+.has-error .error {
+  display: block;
 }

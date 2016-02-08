@@ -1,7 +1,7 @@
-var _ = require('underscore'),
-    FormView = function() { return this }
+var MyView = require('../MyView'),
+    Form = function() { return MyView.apply( this, arguments ) }
 
-_.extend( FormView.prototype, {
+Object.assign( Form.prototype, MyView.prototype, {
 
     emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
@@ -71,6 +71,6 @@ _.extend( FormView.prototype, {
 
     }
 
-} );
+} )
 
-module.exports = FormView
+module.exports = Form

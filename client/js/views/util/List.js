@@ -1,5 +1,5 @@
 var MyView = require('../MyView'),
-    ListView = function() { return MyView.apply( this, arguments ) };
+    ListView = function() { return MyView.apply( this, arguments ) }
 
 Object.assign( ListView.prototype, MyView.prototype, {
 

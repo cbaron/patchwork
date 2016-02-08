@@ -4,7 +4,7 @@ var MyView = require('./MyView'),
 Object.assign( Signup.prototype, MyView.prototype, {
 
     events: {
-        'alreadyMember': { event: 'click', selector: '', method: 'showModalLogin' },
+        'rightBtn': { method: 'validateView' },
     },
 
     emailRegex: require('./util/Form').prototype.emailRegex,
@@ -80,17 +80,10 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     postRender() {
-        var currentViewName
-
+        
         if( ! this.currentIndex ) this.currentIndex = 0
 
-        currentViewName = this.views[ this.currentIndex ].name
-
-        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show()
-
-        this.instances[ currentViewName ] = new this.views[ this.currentIndex ].view( { container: this.templateData.walkthrough } )
-
-        return
+        return this.showProperView()
 
         this.shares = new ( this.Collection.extend( { url: "/share" } ) )()
 
@@ -192,6 +185,38 @@ Object.assign( Signup.prototype, MyView.prototype, {
         
     },
 
+    showNext() {
+        this.currentIndex += 1
+        this.showProperView()
+    }
+
+    showProperNav() {
+        var left = this.templateData.leftBtn, right = this.templateData.rightBtn
+        if( this.currentIndex === 0 ) {
+            left.hide()
+            if( right.is(':hidden') ) right.show()
+        }
+        else if( this.currentIndex === this.views.length - 1 ) {
+            right.hide()
+            if( left.is(':hidden') ) left.show()
+        } else {
+            if( left.is(':hidden') ) left.show()
+            if( right.is(':hidden') ) right.show()
+        }
+    },
+
+    showProperView() {
+        var currentViewName = this.views[ this.currentIndex ].name
+
+        this.showProperNav()
+
+        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show()
+
+        this.instances[ currentViewName ] = new this.views[ this.currentIndex ].view( { container: this.templateData.walkthrough } )
+
+        return this
+    },
+
     submitModalForm( data ) {
         if( this.validateModalForm( data ) === false ) return
         this.postForm( { resource: 'auth', values: data } )
@@ -205,6 +230,10 @@ Object.assign( Signup.prototype, MyView.prototype, {
     templates: {
         deliveryOptions: require('../templates/deliveryOptions')( require('handlebars') ),
         shareOptions: require('../templates/shareOptions')( require('handlebars') )
+    },
+
+    validateView() {
+        if( this.instances[ this.views[ this.currentIndex ].name ].validate() ) this.showNext()
     },
 
     validateModalForm( data ) {
@@ -229,7 +258,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     views: [
-        { name: 'shares', view: require('./signup/Shares') }
+        { name: 'shares', view: require('./signup/Shares') },
+        { name: 'shares', view: require('./signup/MemberInfo') },
     ]
 
 } )

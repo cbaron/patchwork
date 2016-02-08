@@ -16,11 +16,21 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         return { container: this.templateData.shares }
     },
 
+    postRender() {
+        List.prototype.postRender.call(this)
+        this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
+    },
+
     requiresLogin: false,
 
     selection: true,
 
     template: require('../../templates/signup/shares')( require('handlebars') ),
+
+    validate() {
+        if( Object.keys( this.selectedItems ).length !== 0 ) return true
+        this.templateData.container.addClass('has-error')
+    }
 
 } )
 
