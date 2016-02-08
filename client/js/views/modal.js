@@ -3,17 +3,10 @@ var MyView = require('./MyView'),
 
 MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
+    checkForEnter( e ) { if( e.keyCode === 13 ) this.emitConfirmation() },
+
     emitConfirmation: function() {
-
-        var data = { }, $ = this.$;
-
-        this.templateData.body.find('input,select,textarea').each(
-            function( i ) {
-                var el = $(this), id = el.attr('id')
-                if( id ) { data[ id ] = el.val() }
-            }
-        )
-
+        var data = this.getFormData()
         this.emit( 'submit', data )
     },
 
@@ -21,7 +14,8 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         'confirmBtn': { event: 'click', selector: '', method: 'emitConfirmation' }
     },
 
-    hide: function() {
+    hide: function( options ) {
+        this.templateData = this._.omit( this.templateData, [ "email", "password" ] )
 
         this.templateData.container.modal('hide')
 
@@ -37,12 +31,18 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
     },
 
     postRender: function() {
+        this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
+
         this.templateData.container.on( 'hidden.bs.modal', () => {
             this.hide( { reset: true } )
             this.emit( 'hidden' )
             this.removeAllListeners( 'submit' )
         } )
-        this.templateData.container.on( 'shown.bs.modal', () => { this.emit( 'shown' ) } )
+
+        this.templateData.container.on( 'shown.bs.modal', () => { 
+            this.emit( 'shown' )
+            this.$('.modal-body input:first').focus()
+        } )
 
         return this;
     },
@@ -58,9 +58,10 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
             this.templateData.header.show()
         } else { this.templateData.header.hide() }
 
-        if( options.body ) this.templateData.body.removeClass('hide').html( options.body )
-        else this.templateData.body.addClass('hide')
-
+        if( options.body ) {
+            this.templateData.body.removeClass('hide')
+            this.slurpTemplate( { template: options.body, insertion: { $el: this.templateData.body, method: 'append' } } )
+        } else { this.templateData.body.addClass('hide') }
 
         if( options.hideFooter ) this.templateData.footer.hide() 
 

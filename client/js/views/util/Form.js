@@ -69,6 +69,11 @@ _.extend( FormView.prototype, {
         
         return valid
 
+    },
+
+    validatePassword( val ) {
+        if( !val ) return false
+        else return val.length >= 6
     }
 
 } );

@@ -20,7 +20,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'About Us', name: 'about' },
             { label: 'CSA Program', name: 'csa' },
             { label: 'Markets', name: 'markets' },
-            //{ label: 'Sign Up', name: 'signup' },
+            { label: 'Sign Up', name: 'signup' },
             //{ label: 'Member Resources', name: 'members' },
             { label: 'Get Involved', name: 'get-involved' },
             { label: 'Contact Us', name: 'contact' }
