@@ -1,15 +1,39 @@
 .signup {
 
-    section h2 {
-        text-align: center;
-    }
-
     .intro {
         margin-bottom: 30px;
     }
 
-    .member-info-header {
-        display: inline;
+    .shares {
+        text-align: center;
+
+        .share {
+            border: 2px solid black;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "RalewayRegular";
+            padding: 10px;
+
+            &:hover {
+                background-color: rgba(201, 135, 2, .1)
+            }
+            
+            &.selected {
+                background-color: rgba(201, 135, 2, .2)
+            }
+
+            >div {
+                &:first-child {
+                    font-size: 1.25rem;
+                }
+
+                &:nth-child(2) {
+                    color: #155D75;
+                    font-size: .75rem;
+                }
+            }
+        }
     }
 
 }

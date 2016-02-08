@@ -49,6 +49,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     getTemplateOptions() { return { fields: this.fields } },
 
+    instances: { },
+
     loginFields: [
         { name: "email", label: 'Email', type: 'text', error: "Please enter a valid email address.", validate: function( val ) { return this.emailRegex.test(val) } },
         { name: "password", label: 'Password', type: 'password', error: "Passwords must be at least 6 characters long.", validate: function( val ) { return val.length >= 6 } }
@@ -78,9 +80,17 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     postRender() {
-        var self = this
+        var currentViewName
 
-        return;
+        if( ! this.currentIndex ) this.currentIndex = 0
+
+        currentViewName = this.views[ this.currentIndex ].name
+
+        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show()
+
+        this.instances[ currentViewName ] = new this.views[ this.currentIndex ].view( { container: this.templateData.walkthrough } )
+
+        return
 
         this.shares = new ( this.Collection.extend( { url: "/share" } ) )()
 
@@ -194,7 +204,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     templates: {
         deliveryOptions: require('../templates/deliveryOptions')( require('handlebars') ),
-        share: require('../templates/share')( require('handlebars') ),
         shareOptions: require('../templates/shareOptions')( require('handlebars') )
     },
 
@@ -220,7 +229,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     views: [
-    ],
+        { name: 'shares', view: require('./signup/Shares') }
+    ]
 
 } )
 

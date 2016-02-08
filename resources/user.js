@@ -4,9 +4,7 @@ var BaseResource = require('./__proto__'),
 Object.assign( User.prototype, BaseResource.prototype, {
 
     GET() {
-        return this.validate.GET.call(this)
-            .then( () => this.respond( { body: this.user } ) )
-            .catch( () => this.respond( { body: { } } ) )
+        return this.validate.GET.call(this).then( () => this.respond( { body: this.user } ) )
     }
 
 } )

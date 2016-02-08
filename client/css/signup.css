@@ -1,9 +1,27 @@
-.signup section h2 {
-  text-align: center;
-}
 .signup .intro {
   margin-bottom: 30px;
 }
-.signup .member-info-header {
-  display: inline;
+.signup .shares {
+  text-align: center;
+}
+.signup .shares .share {
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+}
+.signup .shares .share:hover {
+  background-color: rgba(201, 135, 2, 0.1);
+}
+.signup .shares .share.selected {
+  background-color: rgba(201, 135, 2, 0.2);
+}
+.signup .shares .share > div:first-child {
+  font-size: 1.25rem;
+}
+.signup .shares .share > div:nth-child(2) {
+  color: #155D75;
+  font-size: .75rem;
 }

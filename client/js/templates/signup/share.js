@@ -5,9 +5,13 @@ return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,
 
   return "<li class=\"share\" data-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" data-js=\"share\">"
+    + "\" data-js=\"container\"><div>"
     + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
-    + "</li>";
+    + "</div><div><span>"
+    + alias4(((helper = (helper = helpers.startdate || (depth0 != null ? depth0.startdate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"startdate","hash":{},"data":data}) : helper)))
+    + "</span><span>-</span><span>"
+    + alias4(((helper = (helper = helpers.enddate || (depth0 != null ? depth0.enddate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"enddate","hash":{},"data":data}) : helper)))
+    + "</span></div></li>";
 },"useData":true});
 
 };

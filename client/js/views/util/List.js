@@ -28,7 +28,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
     },
 
     fetchItems() {
-        this.items.fetch( { headers: this.fetch.headers, reset: true } )
+        this.items.fetch( { reset: true } )
         .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
 
         return this
@@ -139,7 +139,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
     selectItem: function( model ) {
         var selectedIds = Object.keys( this.selectedItems )
 
-        if( this.pressedKey === undefined ) selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
+        if( this.pressedKey === undefined && this.selection === 'multi' ) selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
        
         if( this.pressedKey === 'shift' && selectedIds.length ) { 
             let end = this.getClosestClickedIndex( model ),
