@@ -19,11 +19,12 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.zipRoute
             .fetch( { data: { zipcode: this.signupData.addressModel.postalCode } } )
-            .done( () => {
+            .done( () =>
                 this.deliveryRoute
                     .set( { id: this.zipRoute.get('routeid') } )
                     .fetch()
                     .done( () => this.showFeedback( this.feedback.home( this.deliveryRoute.attributes ) ) )
+            )
 
     },
 
@@ -52,7 +53,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
     showFeedback( html ) {
         this.templateData.feedback.html( html ).show()
-    }
+    },
 
     template: require('../../templates/signup/deliveryOptions')( require('handlebars') ),
 
