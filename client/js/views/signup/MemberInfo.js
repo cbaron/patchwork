@@ -54,7 +54,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.templateData.container.find('input')
         .on( 'blur', function() {
             var $el = self.$(this),
-                field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } ),
+                field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
                 
             this.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
                 if( valid ) {
@@ -62,7 +62,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
                     $el.siblings('.help-block').remove()
                 } else { self.showError( $el, field.error ) }
-            }
+            } )
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
     },
@@ -105,11 +105,11 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 accept: "application/json",
                 data: { address: address },
                 method: "GET",
-                url: "validate/address } ) )
+                url: "validate/address" } ) )
         .then( response => {
             console.log( response )
         } )
-        .fail( () => return false )
+        .fail( () => false )
 
     }
 
