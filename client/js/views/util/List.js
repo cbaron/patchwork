@@ -28,7 +28,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
     },
 
     fetchItems() {
-        this.items.fetch( { reset: true } )
+        this.items.fetch( Object.assign( {}, { reset: true }, this.fetch ) )
         .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
 
         return this
@@ -110,7 +110,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
         if( this.itemModels ) this.items.reset( ( typeof this.itemModels === "function" ) ? this.itemModels() : this.itemModels )
 
-        if( this.fetch )  this.fetchItems()
+        if( this.fetch ) this.fetchItems()
     },
 
     removeItem( item ) {
