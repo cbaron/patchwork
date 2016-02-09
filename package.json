@@ -19,6 +19,7 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
+    "address-validator": "^0.2.2",
     "babel": "^6.3.26",
     "babel-core": "^6.4.5",
     "babel-plugin-object-assign": "^1.2.1",

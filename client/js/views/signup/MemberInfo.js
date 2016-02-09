@@ -28,8 +28,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         name: 'address',
         label: 'Address',
         type: 'text',
-        error: "Please enter an address.",
-        validate: val => this.validateAddress( val )
+        error: "Please enter a valid address.",
+        validate: function(val) { return this.validateAddress( val ) }
     }, {
         name: 'password',
         label: 'Password',
@@ -56,7 +56,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
                 
-            this.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
+            self.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
                 if( valid ) {
                     $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
                     $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
@@ -100,16 +100,19 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
     
     validateAddress( address ) {
-        this.Q(
+        return this.Q(
             this.$.ajax( {
-                accept: "application/json",
+                headers: { accept: "application/json" },
                 data: { address: address },
                 method: "GET",
-                url: "validate/address" } ) )
+                url: "/validate-address" } ) )
         .then( response => {
-            console.log( response )
+            if( response.valid.length === 0 ) return false
+            this.templateData.address.val( response.valid[0].string ) 
+            this.signupData.addressModel = response.valid[0].model
+            return true
         } )
-        .fail( () => false )
+        .fail( e => { console.log( e.stack || e ); return false } )
 
     }
 
