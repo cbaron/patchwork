@@ -4,10 +4,28 @@ var List = require('../util/List'),
 Object.assign( DeliveryOptions.prototype, List.prototype, {
 
     ItemView: require('./DeliveryOption'),
+    
+    feedback: {
+        home: require('../../templates/signup/homeDeliveryFeedback')( require('handlebars') )
+    },
 
     getItemViewOptions() { return { container: this.templateData.options } },
 
     getTemplateOptions() { return this.model.attributes },
+
+    homeFeedback() {
+        this.zipRoute = new this.Model.extend( { urlRoot: "/zipcoderoute" } )()
+        this.deliveryRoute = new this.Model.extend( { urlRoot: "/deliveryRoute" } )()
+
+        this.zipRoute
+            .fetch( { data: { zipcode: this.signupData.addressModel.postalCode } } )
+            .done( () => {
+                this.deliveryRoute
+                    .set( { id: this.zipRoute.get('routeid') } )
+                    .fetch()
+                    .done( () => this.showFeedback( this.feedback.home( this.deliveryRoute.attributes ) ) )
+
+    },
 
     postRender() {
         var share = this.model
@@ -24,13 +42,19 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                     .fail( e => console.log( e.stack || e ) ) 
             }
         } )
+
+        this.on( 'itemSelected', model => this[ this.util.format('%sFeedback',this.model.get('name') ) ]() )
     },
 
     requiresLogin: false,
 
     selection: 'single',
 
-    template: require('../../templates/signup/deliveryOptions')( require('handlebars') )
+    showFeedback( html ) {
+        this.templateData.feedback.html( html ).show()
+    }
+
+    template: require('../../templates/signup/deliveryOptions')( require('handlebars') ),
 
 } )
 
