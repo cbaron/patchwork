@@ -19,12 +19,13 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.zipRoute
             .fetch( { data: { zipcode: this.signupData.addressModel.postalCode } } )
-            .done( () => {
+            .done( () =>
                 this.deliveryRoute
                     .set( { id: this.zipRoute.get('routeid') } )
                     .fetch()
                     .done( () => this.showFeedback( this.feedback.home( this.deliveryRoute.attributes ) ) )
-            } )
+            )
+
     },
 
     postRender() {
