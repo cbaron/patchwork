@@ -1,7 +1,11 @@
-var MyView = require('./MyView'),
-    Home = function() { return MyView.apply( this, arguments ) }
+var GetData = require('./util/GetData'),
+    Home = function() { return GetData.apply( this, arguments ) }
 
-Object.assign( Home.prototype, MyView.prototype, {
+Object.assign( Home.prototype, GetData.prototype, {
+
+    dataTables: [
+        { name: 'carouselimage', comparator: 'id'}
+    ],
 
     initialImage: { path: 'assortment.jpg', description: "Assorted vegetables" },
 

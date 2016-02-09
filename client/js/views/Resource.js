@@ -11,7 +11,6 @@ Object.assign( Resource.prototype, Table.prototype, {
         return {
             model: this.Instance,
             parse: response => {
-                console.log(response)
                 this.label = response.label;
                 this.recordDescriptor = response.recordDescriptor;
                 if( response.operation["@type"] === "Create" ) this.createProperties = response.operation.expects.supportedProperty
@@ -22,9 +21,10 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     create( data ) {
-
+        //console.log(this.binaryUploadString)
         this.createProperties.forEach( property => {
             if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
+            if( property.range === "File" ) data[ "imageUpload" ] = this.binaryUploadString
         } )
 
         this.$.ajax( {
@@ -32,7 +32,8 @@ Object.assign( Resource.prototype, Table.prototype, {
             contentType: 'application/json',
             data: JSON.stringify( data ),
             method: 'POST',
-            url: this.util.format( "/%s", this.resource )
+            url: this.util.format( "/%s", this.resource ),
+            //processData: ( this.createProperties.range === "File" ) ? false : true
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 ) this.setFields( response )
@@ -51,6 +52,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             url: this.util.format( "/%s/%s", this.resource, this.modelToDelete.id )
         } )
         .done( ( response, textStatus, jqXHR ) => {
+            console.log(response)
             this.items.remove( this.modelToDelete )
             this.modelToDelete = undefined
             this.modalView.hide()
@@ -108,16 +110,21 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.$( '#' + property.property ).datetimepicker( { format: "YYYY-MM-DD", minDate: this.moment() } )
     },
 
-    initFileUpload: function( e ) {
-        var reader = new FileReader();
+    initFileUpload( e ) {
+        var reader = new FileReader(),
+            file = this.modalView.templateData.imageUpload[0].files[0]
         
-        reader.onload = function( evt ) {
-            console.log( evt.target.result )
-            //new this.MessageImage( { container: this.templateData.imageList, src: evt.target.result } )
+        reader.onloadend = function( e ) {
+            var arrayBuffer = e.target.result
+            console.log( arrayBuffer )
+            console.log( arrayBuffer.byteLength )
+            var dataView = new DataView( arrayBuffer )
+            var decoder = new TextDecoder('utf-8')
+            this.binaryUploadString = decoder.decode( dataView )
         }.bind(this);
 
-        reader.readAsDataURL( this.$('input[type=file]').files[0] )
-        //reader.readAsDataURL( e.originalEvent.target.files[0] );  
+        if( file ) reader.readAsArrayBuffer( file )
+
     },
 
     initTypeahead( property ) {
@@ -209,13 +216,11 @@ Object.assign( Resource.prototype, Table.prototype, {
             title: this.util.format( 'Create %s', this.label )
         } )
         .on( 'shown', () => this.createProperties.forEach( property => {
-            console.log(this.$('input[type=file]') )
             if( property.fk ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
-            //else if( property.range === "File" ) this.initFileUpload()
+            else if( property.range === "File" ) this.modalView.templateData.imageUpload.on( 'change', this.initFileUpload.bind(this) )
         } ) )
         .on( 'submit', data => this.create(data) )
-        //.on( 'shown.bs.modal', () => console.log(this.modalView.templateData) )
 
     },
 

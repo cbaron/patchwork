@@ -8,7 +8,6 @@ Object.assign( GetData.prototype, MyView.prototype, {
     getData( table ) {        
         this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
         this.collections[ table.name ].fetch().then( () => this.collections[ table.name ].models.forEach( model => {
-            console.log(model)
             this.templateData[ table.name ].append( this.templates[ table.name ]( model.attributes ) )
         }
         ) )
