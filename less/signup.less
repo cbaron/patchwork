@@ -61,8 +61,34 @@
                 }
             }
         }
+    }
 
+    .member-info {
+
+        .help-block {
+            text-align: center;
+            font-size: .75rem;
+        }
+    }
+    
+    .delivery {
         
+        .delivery-option {
+            border: 2px solid black;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-block;
+            font-family: "RalewayRegular";
+            padding: 10px;
+
+            &:hover {
+                background-color: rgba(201, 135, 2, .1)
+            }
+            
+            &.selected {
+                background-color: rgba(201, 135, 2, .2)
+            }
+        }
     }
 }
 

@@ -7,48 +7,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
         'rightBtn': { method: 'validateView' },
     },
 
-    emailRegex: require('./util/Form').prototype.emailRegex,
-
-    fields: [ {
-        name: 'name',
-        label: 'Name',
-        type: 'text',
-        error: "Name is a required field.",
-        validate: function( val ) { return this.$.trim(val) !== '' }
-    }, {
-        name: 'email',
-        label: 'Email',
-        type: 'text',
-        error: "Please enter a valid email address.",
-        validate: function( val ) { return this.emailRegex.test(val) }
-    }, {
-        name: 'phonenumber',
-        label: 'Phone Number',
-        type: 'text',
-        error: "Please enter a valid phone number.",
-        validate: val => val.length > 8,
-    }, {
-        name: 'address',
-        label: 'Address',
-        type: 'text',
-        error: "Please enter an address.",
-        validate: val => val.length
-    }, {
-        name: 'password',
-        label: 'Password',
-        type: 'password',
-        error: "Password must be at least six characters.",
-        validate: val => val.length > 5
-    }, {
-        name: 'repeatpassword',
-        label: 'Repeat Password',
-        type: 'password',
-        error: "Passwords must match.",
-        validate: function( val ) { return val === this.templateData.password.val() }
-    } ],
-
-    getTemplateOptions() { return { fields: this.fields } },
-
     instances: { },
 
     loginFields: [
@@ -83,6 +41,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
         
         if( ! this.currentIndex ) this.currentIndex = 0
 
+        this.signupData = { }
+
         return this.showProperView()
 
         this.shares = new ( this.Collection.extend( { url: "/share" } ) )()
@@ -109,34 +69,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
                     template: this.templates.share( share.attributes )
                 } )
 
-                share.set( { shareoptionids: new ( this.Collection.extend( { url: "/shareoptionshare" } ) )() } )
-                share.get('shareoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
-                    share.set( { shareoptions: new ( this.Collection.extend( { url: "/shareoption" } ) )() } )
-                    if( share.get('shareoptionids') ) {
-                        share.get('shareoptions')
-                            .fetch( { data: { id: share.get('shareoptionids').map( shareoptionshare => shareoptionshare.get('shareoptionid') ).join(',') } } )
-                            .done( () => Promise.all( 
-                                share.get('shareoptions').map( shareoption => {
-                                    shareoption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
-                                    return new Promise( ( resolve, reject ) =>
-                                        shareoption.get('options')
-                                                   .fetch( { data: { shareoptionid: shareoption.id } } )
-                                                   .done( resolve )
-                                                   .fail( reject ) )
-                                } )
-                            ).then( () => this.renderShareOptions() ) )
-                    }
-                } )
-
-                share.set( { deliveryoptionids: new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )() } )
-                share.get('deliveryoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
-                    if( share.get('deliveryoptionids') ) {
-                        share.set( { deliveryoptions: new ( this.Collection.extend( { url: "/deliveryoption" } ) )() } )
-                        share.get('deliveryoptions')
-                            .fetch( { data: { id: share.get('deliveryoptionids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
-                            .done( () => this.renderDeliveryOptions() )
-                    }
-                } )
+                
             } ) )
     },
 
@@ -186,9 +119,12 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     showNext() {
+        this.instances[ this.views[ this.currentIndex ].name ].hide()
+
         this.currentIndex += 1
+
         this.showProperView()
-    }
+    },
 
     showProperNav() {
         var left = this.templateData.leftBtn, right = this.templateData.rightBtn
@@ -212,7 +148,11 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show()
 
-        this.instances[ currentViewName ] = new this.views[ this.currentIndex ].view( { container: this.templateData.walkthrough } )
+        this.instances[ currentViewName ] =
+            new this.views[ this.currentIndex ].view( {
+                container: this.templateData.walkthrough,
+                signupData: this.signupData 
+            } )
 
         return this
     },
@@ -259,7 +199,9 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     views: [
         { name: 'shares', view: require('./signup/Shares') },
-        { name: 'shares', view: require('./signup/MemberInfo') },
+        { name: 'memberInfo', view: require('./signup/MemberInfo') },
+        { name: 'shareOptions', view: require('./signup/ShareOptions') },
+        { name: 'delivery', view: require('./signup/Delivery') }
     ]
 
 } )

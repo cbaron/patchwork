@@ -28,7 +28,11 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     template: require('../../templates/signup/shares')( require('handlebars') ),
 
     validate() {
-        if( Object.keys( this.selectedItems ).length !== 0 ) return true
+        var selectedShares = Object.keys( this.selectedItems ).map( id => this.items.get(id) )
+        if( selectedShares.length !== 0 ) {
+            this.signupData.shares = selectedShares
+            return true
+        }
         this.templateData.container.addClass('has-error')
     }
 

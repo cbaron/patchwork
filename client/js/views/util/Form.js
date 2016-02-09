@@ -43,9 +43,11 @@ Object.assign( Form.prototype, MyView.prototype, {
     
     },
     
-    templates: { fieldError: require('../../templates/fieldError')( require('handlebars') ),
-                 invalidLoginError: require('../../templates/invalidLoginError')( require('handlebars') ),
-                 serverError: require('../../templates/serverError')(require('handlebars') ) },
+    templates: {
+        fieldError: require('../../templates/fieldError')( require('handlebars') ),
+        invalidLoginError: require('../../templates/invalidLoginError')( require('handlebars') ),
+        serverError: require('../../templates/serverError')(require('handlebars') )
+    },
 
     validateForm: function() {
         var valid = true

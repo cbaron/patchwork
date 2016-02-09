@@ -108,6 +108,8 @@ Object.assign( ListView.prototype, MyView.prototype, {
        
         this.createItems() 
 
+        if( this.itemModels ) this.items.reset( ( typeof this.itemModels === "function" ) ? this.itemModels() : this.itemModels )
+
         if( this.fetch )  this.fetchItems()
     },
 
@@ -139,7 +141,9 @@ Object.assign( ListView.prototype, MyView.prototype, {
     selectItem: function( model ) {
         var selectedIds = Object.keys( this.selectedItems )
 
-        if( this.pressedKey === undefined && this.selection === 'multi' ) selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
+        if( ( this.pressedKey === undefined && this.selection === 'multi' ) || this.selection === 'single' ) {
+            selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
+        }
        
         if( this.pressedKey === 'shift' && selectedIds.length ) { 
             let end = this.getClosestClickedIndex( model ),
