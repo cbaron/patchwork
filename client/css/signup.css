@@ -64,6 +64,20 @@
 .signup .delivery .delivery-option.selected {
   background-color: rgba(201, 135, 2, 0.2);
 }
+.signup .dropoff {
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+}
+.signup .dropoff:hover {
+  background-color: rgba(201, 135, 2, 0.1);
+}
+.signup .dropoff.selected {
+  background-color: rgba(201, 135, 2, 0.2);
+}
 .error {
   color: #a94442;
   display: none;

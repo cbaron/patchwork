@@ -9,7 +9,7 @@ Object.assign( Delivery.prototype, List.prototype, {
     },
 
     getItemViewOptions() {
-        return { container: this.templateData.options }
+        return { container: this.templateData.options, signupData: this.signupData }
     },
     
     itemModels() { return this.signupData.shares },
