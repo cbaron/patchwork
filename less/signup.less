@@ -1,13 +1,33 @@
-.signup {
+.signup-class {
+
+    hr {
+        margin: 1em;
+    }
 
     .header {
         margin-bottom: 30px;
         font-size: 2rem;
         line-height: 2rem;
+        text-align: center;
+        font-family: "Raleway-Regular";
+    }
+
+    .heading {
+        line-height: 1.2em;
+        padding: 20px 10px;
+        border-bottom: 1px solid;
+        margin-bottom: 30px;
+        font-family: "Raleway-Regular";
     }
 
     .intro {
-        margin-bottom: 30px;
+        color: #c98702;
+        font-size: 2rem;
+        font-weight: 400;
+        font-family: "Raleway-Regular";
+        text-align: center;
+        line-height: 2rem;
+        margin-bottom: 20px;
     }
 
     .nav {
@@ -26,7 +46,7 @@
     }
 
     .shares {
-        padding: 30px 30px 0px 30px;
+        padding: 30px 30px 0 30px;
         text-align: center;
 
         &.has-error {
@@ -35,19 +55,24 @@
         }
 
         .share {
-            border: 2px solid black;
+            width: 155px;
+            background-color: darken(white, 5%);
+            color: #c98702;
+            border: 1px solid #bbb;
             border-radius: 10px;
+            box-shadow: 1px 2px 5px #ccc;
             cursor: pointer;
             display: inline-block;
             font-family: "RalewayRegular";
             padding: 10px;
+            margin: 5px;
 
             &:hover {
-                background-color: rgba(201, 135, 2, .1)
+                background-color: rgba(201, 135, 2, .1);
             }
             
             &.selected {
-                background-color: rgba(201, 135, 2, .2)
+                background-color: rgba(201, 135, 2, .3);
             }
 
             >div {
@@ -64,6 +89,9 @@
     }
 
     .member-info {
+        border: 1px solid #666;
+        border-radius: 5px;
+        background-color: darken(white, 3%);
 
         .help-block {
             text-align: center;

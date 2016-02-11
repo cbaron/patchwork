@@ -1,56 +1,84 @@
-.signup .header {
+.signup-class hr {
+  margin: 1em;
+}
+.signup-class .header {
   margin-bottom: 30px;
   font-size: 2rem;
   line-height: 2rem;
+  text-align: center;
+  font-family: "Raleway-Regular";
 }
-.signup .intro {
+.signup-class .heading {
+  line-height: 1.2em;
+  padding: 20px 10px;
+  border-bottom: 1px solid;
   margin-bottom: 30px;
+  font-family: "Raleway-Regular";
 }
-.signup .nav {
+.signup-class .intro {
+  color: #c98702;
+  font-size: 2rem;
+  font-weight: 400;
+  font-family: "Raleway-Regular";
+  text-align: center;
+  line-height: 2rem;
+  margin-bottom: 20px;
+}
+.signup-class .nav {
   font-size: 2rem;
   margin-bottom: 30px;
   margin-top: 30px;
 }
-.signup .nav .glyphicon {
+.signup-class .nav .glyphicon {
   cursor: pointer;
 }
-.signup .nav .glyphicon:hover {
+.signup-class .nav .glyphicon:hover {
   color: #c98702;
 }
-.signup .shares {
-  padding: 30px 30px 0px 30px;
+.signup-class .shares {
+  padding: 30px 30px 0 30px;
   text-align: center;
 }
-.signup .shares.has-error {
+.signup-class .shares.has-error {
   border: 1px solid #a94442;
   border-radius: 15px;
 }
-.signup .shares .share {
-  border: 2px solid black;
+.signup-class .shares .share {
+  width: 155px;
+  background-color: #f2f2f2;
+  color: #c98702;
+  border: 1px solid #bbb;
   border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
+  margin: 5px;
 }
-.signup .shares .share:hover {
+.signup-class .shares .share:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
-.signup .shares .share.selected {
-  background-color: rgba(201, 135, 2, 0.2);
+.signup-class .shares .share.selected {
+  background-color: rgba(201, 135, 2, 0.3);
 }
-.signup .shares .share > div:first-child {
+.signup-class .shares .share > div:first-child {
   font-size: 1.25rem;
 }
-.signup .shares .share > div:nth-child(2) {
+.signup-class .shares .share > div:nth-child(2) {
   color: #155D75;
   font-size: .75rem;
 }
-.signup .member-info .help-block {
+.signup-class .member-info {
+  border: 1px solid #666;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+.signup-class .member-info .help-block {
   text-align: center;
   font-size: .75rem;
 }
-.signup .delivery .delivery-option {
+.signup-class .delivery .delivery-option {
   border: 2px solid black;
   border-radius: 10px;
   cursor: pointer;
@@ -58,10 +86,10 @@
   font-family: "RalewayRegular";
   padding: 10px;
 }
-.signup .delivery .delivery-option:hover {
+.signup-class .delivery .delivery-option:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
-.signup .delivery .delivery-option.selected {
+.signup-class .delivery .delivery-option.selected {
   background-color: rgba(201, 135, 2, 0.2);
 }
 .error {

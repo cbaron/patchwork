@@ -11,7 +11,9 @@ return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,
     + alias4(((helper = (helper = helpers.startdate || (depth0 != null ? depth0.startdate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"startdate","hash":{},"data":data}) : helper)))
     + "</span><span>-</span><span>"
     + alias4(((helper = (helper = helpers.enddate || (depth0 != null ? depth0.enddate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"enddate","hash":{},"data":data}) : helper)))
-    + "</span></div></li>";
+    + "</span></div></div>"
+    + alias4(((helper = (helper = helpers.duration || (depth0 != null ? depth0.duration : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"duration","hash":{},"data":data}) : helper)))
+    + " weeks</div></li>";
 },"useData":true});
 
 };

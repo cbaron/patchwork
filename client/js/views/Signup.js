@@ -60,9 +60,10 @@ Object.assign( Signup.prototype, MyView.prototype, {
                 $el.next().removeClass('hide').removeClass('glyphicon-ok').addClass('glyphicon-remove')
             }
         } )
-
+        
         this.shares.fetch()
             .done( () => this.shares.forEach( share => {
+
 
                 this.slurpTemplate( {
                     insertion: { $el: this.templateData.shares },

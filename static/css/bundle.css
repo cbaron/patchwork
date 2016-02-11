@@ -15,15 +15,6 @@
     width: 40%;
   }
 }
-table tbody tr:hover {
-  border-color: #ccc;
-  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  z-index: 3;
-}
 .admin-header {
   background-color: white;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
@@ -288,14 +279,6 @@ li {
     margin-top: 0;
   }
 }
-.employment-class li {
-  list-style-type: circle;
-}
-
-.employment-class h3 {
-  margin-top: 1em;
-  color: #c98702;
-}
 footer {
   background-color: #131313;
   color: #ccc;
@@ -339,21 +322,6 @@ footer .future-days {
   text-align: center;
   font-size: 15px;
   line-height: 1.5em;
-}
-.get-involved-class ul {
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-bottom: 15px;
-}
-
-.get-involved-class ul li {
-  list-style-type: circle;
-  color: #155D75;
-}
-
-.get-involved-class h3 {
-  margin-top: 1em;
-  color: #c98702;
 }
 .get-involved-class ul {
   margin-top: 10px;
@@ -671,56 +639,6 @@ footer .future-days {
     height: 650px;
   }
 }
-.locations-class {
-  margin: 25px 5% 75px 5%;
-}
-
-.locations-class h2 {
-  font-family: "Raleway";
-  font-size: 26px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  font-weight: 200;
-  font-style: normal;
-  text-transform: none;
-  color: #555;
-  margin: 0 0 .5em;
-}
-
-.locations-class p,
-.locations-class li {
-  font-family: "proxima-nova";
-  font-size: 15px;
-  line-height: 1.5em;
-  letter-spacing: 0px;
-  text-align: left;
-  font-weight: 400;
-  color: #666;
-}
-
-.locations-class p span,
-.locations-class li span {
-  font-family: "Raleway";
-  font-size: 16px;
-  line-height: 1.2em;
-  letter-spacing: 1px;
-  font-style: normal;
-  font-weight: 200;
-  color: #c98702;
-}
-
-.locations-class p.business,
-.locations-class li.business {
-  margin-top: 30px;
-}
-
-.locations-class ul {
-  margin-top: 20px;
-}
-
-.locations-class ul li {
-  margin: 5px 0;
-}
 .markets-class .business,
 .markets-class .restaurants span a {
   font-family: "RalewayRegular";
@@ -749,72 +667,103 @@ footer .future-days {
   padding: 3px;
   position: absolute;
 }
-.signup .header {
+.signup-class hr {
+  margin: 1em;
+}
+
+.signup-class .header {
   margin-bottom: 30px;
   font-size: 2rem;
   line-height: 2rem;
+  text-align: center;
+  font-family: "Raleway-Regular";
 }
 
-.signup .intro {
+.signup-class .heading {
+  line-height: 1.2em;
+  padding: 20px 10px;
+  border-bottom: 1px solid;
   margin-bottom: 30px;
+  font-family: "Raleway-Regular";
 }
 
-.signup .nav {
+.signup-class .intro {
+  color: #c98702;
+  font-size: 2rem;
+  font-weight: 400;
+  font-family: "Raleway-Regular";
+  text-align: center;
+  line-height: 2rem;
+  margin-bottom: 20px;
+}
+
+.signup-class .nav {
   font-size: 2rem;
   margin-bottom: 30px;
   margin-top: 30px;
 }
 
-.signup .nav .glyphicon {
+.signup-class .nav .glyphicon {
   cursor: pointer;
 }
 
-.signup .nav .glyphicon:hover {
+.signup-class .nav .glyphicon:hover {
   color: #c98702;
 }
 
-.signup .shares {
-  padding: 30px 30px 0px 30px;
+.signup-class .shares {
+  padding: 30px 30px 0 30px;
   text-align: center;
 }
 
-.signup .shares.has-error {
+.signup-class .shares.has-error {
   border: 1px solid #a94442;
   border-radius: 15px;
 }
 
-.signup .shares .share {
-  border: 2px solid black;
+.signup-class .shares .share {
+  width: 155px;
+  background-color: #f2f2f2;
+  color: #c98702;
+  border: 1px solid #bbb;
   border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
+  margin: 5px;
 }
 
-.signup .shares .share:hover {
+.signup-class .shares .share:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
 
-.signup .shares .share.selected {
-  background-color: rgba(201, 135, 2, 0.2);
+.signup-class .shares .share.selected {
+  background-color: rgba(201, 135, 2, 0.3);
 }
 
-.signup .shares .share > div:first-child {
+.signup-class .shares .share > div:first-child {
   font-size: 1.25rem;
 }
 
-.signup .shares .share > div:nth-child(2) {
+.signup-class .shares .share > div:nth-child(2) {
   color: #155D75;
   font-size: .75rem;
 }
 
-.signup .member-info .help-block {
+.signup-class .member-info {
+  border: 1px solid #666;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+
+.signup-class .member-info .help-block {
   text-align: center;
   font-size: .75rem;
 }
 
-.signup .delivery .delivery-option {
+.signup-class .delivery .delivery-option {
   border: 2px solid black;
   border-radius: 10px;
   cursor: pointer;
@@ -823,11 +772,11 @@ footer .future-days {
   padding: 10px;
 }
 
-.signup .delivery .delivery-option:hover {
+.signup-class .delivery .delivery-option:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
 
-.signup .delivery .delivery-option.selected {
+.signup-class .delivery .delivery-option.selected {
   background-color: rgba(201, 135, 2, 0.2);
 }
 
