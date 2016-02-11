@@ -77,7 +77,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
         { name: 'memberInfo', view: require('./signup/MemberInfo') },
         { name: 'shareOptions', view: require('./signup/ShareOptions') },
         { name: 'delivery', view: require('./signup/Delivery') },
-        { name: 'dateSelection', view: require('./signup/DateSelection') }
+        { name: 'dateSelection', view: require('./signup/DateSelection') },
+        { name: 'summary', view: require('./signup/Summary') }
     ]
 
 } )

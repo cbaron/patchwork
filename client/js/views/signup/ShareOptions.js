@@ -8,9 +8,7 @@ Object.assign( ShareOptions.prototype, List.prototype, {
     events: {
     },
 
-    getItemViewOptions() {
-        return { container: this.templateData.shares }
-    },
+    getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData } },
     
     itemModels() { return this.signupData.shares },
 
@@ -20,9 +18,7 @@ Object.assign( ShareOptions.prototype, List.prototype, {
 
     template: require('../../templates/signup/shareOptions')( require('handlebars') ),
 
-    validate() {
-        return true
-    }
+    validate() { return true }
 
 } )
 

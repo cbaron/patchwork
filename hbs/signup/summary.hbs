@@ -1,0 +1,37 @@
+<div class="summary col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
+    {{#each shares}}
+        <div class="row">{{label}}</div>
+        <div class="row text-center">
+            <span>{{humanStartDate}}</span>
+            <span>-</span>
+            <span>{{humanEndDate}}</span>
+        </div>
+        {{#each selectedOptions}}
+            <div class="row">
+                <span>{{shareoptionlabel}}</span>
+                <span>{{label}}</span>
+                <span>{{value}}</span>
+            </div>
+        {{/each}}
+        <div class="row">
+            <span>Delivery Method : </span>
+            <span>{{selectedDelivery.label}}</span>
+            <span>{{selectedDelivery.address}}</span>
+        </div>
+        <div class="row">
+            <span>Skipping Pickup</span>
+            {{#each skipWeeks}}
+                <span>{{month}}</span> 
+                <span>{{dayOfMonth}}</span> 
+            {{/each}} 
+        </div>
+        <div class="row">
+            <span>Total</span>
+            <span>{{total}}</span>
+        </div>
+    {{/each}}
+    <div class="row">
+        <span>Grand Total : </span>
+        <span>{{grandTotal}}</span>
+    </div>
+</div>

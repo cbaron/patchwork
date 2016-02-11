@@ -3,10 +3,7 @@ var List = require('../util/List'),
 
 Object.assign( DateSelection.prototype, List.prototype, {
 
-    //ItemView: require('./PickupDates'),
-
-    events: {
-    },
+    ItemView: require('./PickupDates'),
 
     getItemViewOptions() { return { container: this.templateData.shares } },
     
@@ -16,7 +13,9 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
     selection: true,
 
-    template: require('../../templates/signup/dateSelection')( require('handlebars') )
+    template: require('../../templates/signup/dateSelection')( require('handlebars') ),
+
+    validate() { return true }
 
 } )
 

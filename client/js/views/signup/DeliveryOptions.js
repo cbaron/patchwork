@@ -21,6 +21,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
             this.showFeedback( this.feedback.home( this.farmPickup.attributes ) ) 
+            this.model.set( 'selectedDelivery', this.farmPickup.attributes )
+            this.valid = true
         } )
     },
     
@@ -40,7 +42,12 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.dropoffIds.fetch( { data: { shareid: this.model.id } } ).done( () => {
             if( ! this.dropoffIds.length ) { this.valid = false; return }
             this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
-                this.dropoffView = new this.Views.Dropoffs( { itemModels: dropoffs.models, container: this.templateData.feedback } )
+                this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
+                .on( 'itemUnselected', () => this.valid = false )
+                .on( 'itemSelected', model => {
+                    this.model.set('selectedDelivery', model.attributes )
+                    this.valid = true
+                } )
             } )
         } )
     },
@@ -58,7 +65,11 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 }    
                 this.homeDeliveryRoute.set( { id: this.zipRoute.get('routeid') } )
                 .fetch()
-                .done( () => this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) ) )
+                .done( () => {
+                    this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
+                    this.model.set( 'selectedDelivery', this.homeDeliveryRoute.attributes )
+                    this.valid = true
+                } )
             } )
     },
 
@@ -67,6 +78,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
         this.dropoffs = new ( this.Collection.extend( { url: "/groupdropoff" } ) )()
+        
+        this.selection = 'single'
 
         List.prototype.postRender.call( this )
 
@@ -81,20 +94,21 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             }
         } )
 
+
         this.on( 'itemSelected', model => this[ this.util.format('%sFeedback',model.get('name') ) ]() )
-        this.on( 'itemUnselected', () => this.templateData.feedback.empty() )
+            .on( 'itemUnselected', () => {
+            this.valid = false
+            this.templateData.feedback.empty()
+        } )
     },
 
     requiresLogin: false,
-
-    selection: 'single',
 
     showFeedback( html ) {
         this.templateData.feedback.html( html ).show()
     },
 
-    template: require('../../templates/signup/deliveryOptions')( require('handlebars') ),
-
+    template: require('../../templates/signup/deliveryOptions')( require('handlebars') )
 } )
 
 module.exports = DeliveryOptions

@@ -5,28 +5,24 @@ Object.assign( Delivery.prototype, List.prototype, {
 
     ItemView: require('./DeliveryOptions'),
 
-    events: {
-    },
-
-    getItemViewOptions() {
-        return { container: this.templateData.options, signupData: this.signupData }
-    },
+    getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData } },
     
     itemModels() { return this.signupData.shares },
 
     requiresLogin: false,
 
-    selection: 'single',
-
     template: require('../../templates/signup/delivery')( require('handlebars') ),
 
     validate() {
-        var selectedShares = Object.keys( this.selectedItems ).map( id => this.items.get(id) )
-        if( selectedShares.length === 1 ) {
-            this.signupData.delivery = selectedShares[0]
-            return true
-        }
-        this.templateData.container.addClass('has-error')
+        var valid = true
+
+        Object.keys( this.itemViews ).forEach( id => {
+            if( ! this.itemViews[id].valid ) valid = false
+        } )
+
+        if( !valid ) this.templateData.container.addClass('has-error')
+
+        return true
     }
 
 } )
