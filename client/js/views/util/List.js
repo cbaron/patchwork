@@ -10,6 +10,8 @@ Object.assign( ListView.prototype, MyView.prototype, {
             .on( 'removed', () => delete this.itemViews[ model.id ] )
 
         if( this.selection ) this.itemViews[ model.id ].on( 'clicked', model => this.onItemClick( model ) )
+        if( this.selected ) this.onItemClick( model )
+
         this.emit( 'itemAdded', model )
     },
 
@@ -76,7 +78,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     onItemClick: function( model ) {
         var method = this.util.format( '%sselectItem',
-                ( this.itemViews[ model.id ].templateData.container.hasClass('selected') && Object.keys( this.selectedItems ).length === 1 ) ? 'un' : '' )
+                ( this.itemViews[ model.id ].templateData.container.hasClass('selected') && this.selection !== 'multiComplex' ) ? 'un' : '' )
 
         this[ method ]( model )
     },
@@ -93,7 +95,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     postRender() {
 
-        if( this.selection === 'multi' ) {
+        if( this.selection === 'multiComplex' ) {
 
             this.$(document)
                 .on( 'keydown', this.handleKeydown.bind(this) )
@@ -141,8 +143,8 @@ Object.assign( ListView.prototype, MyView.prototype, {
     selectItem: function( model ) {
         var selectedIds = Object.keys( this.selectedItems )
 
-        if( ( this.pressedKey === undefined && this.selection === 'multi' ) || this.selection === 'single' ) {
-            selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
+        if( ( this.pressedKey === undefined && this.selection === 'multiComplex' ) || this.selection === 'single' ) {
+            selectedIds.forEach( id => this.unselectItem( this.selectedItems[ id ] ) ) 
         }
        
         if( this.pressedKey === 'shift' && selectedIds.length ) { 

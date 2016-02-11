@@ -797,6 +797,36 @@ footer .future-days {
   background-color: rgba(201, 135, 2, 0.2);
 }
 
+.signup-class .pickup-date {
+  background-color: #f2f2f2;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
+  color: #c98702;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+
+.signup-class .pickup-date:hover {
+  background-color: rgba(201, 135, 2, 0.1);
+}
+
+.signup-class .pickup-date.selected {
+  background-color: rgba(201, 135, 2, 0.3);
+}
+
+.signup-class .pickup-date > div {
+  font-weight: bold;
+}
+
+.signup-class .pickup-date > div:first-child {
+  font-weight: normal;
+}
+
 .error {
   color: #a94442;
   display: none;

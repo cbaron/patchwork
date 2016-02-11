@@ -11,11 +11,11 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     parse( response ) {
-        response.dayOfWeek = this.dayOfWeekMap[ response.dayofweek ]
-        response.starttime = this.moment( [ this.moment().format('YYYY-MM-DD'), response.starttime ].join(' ') ).format('hA')
-        response.endtime = this.moment( [ this.moment().format('YYYY-MM-DD'), response.endtime ].join(' ') ).format('hA')
-        console.log( response )
-        return response
+        return Object.assign( response, {
+            dayOfWeek: this.dayOfWeekMap[ response.dayofweek ],
+            starttime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.starttime ].join(' ') ).format('hA'),
+            endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.endtime ].join(' ') ).format('hA')
+        } )
     },
 
     urlRoot: "/deliveryroute"

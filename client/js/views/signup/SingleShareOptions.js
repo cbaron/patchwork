@@ -5,7 +5,12 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
     ItemView: require('./ShareOption'),
 
-    getItemViewOptions() { return { container: this.templateData.row } },
+    getItemViewOptions() {
+        return {
+            container: this.templateData.row,
+            share: this._( this.signupData.shares ).find( share => share.id === this.model.id )
+        }
+    },
 
     getTemplateOptions() { return this.model.attributes },
 
