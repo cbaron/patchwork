@@ -88,15 +88,18 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         
         if( this.templateData.container.find('has-error').length ) return false
 
-        this.fields.forEach( field => {
-            if( ! field.validate.call( this, this.templateData[ field.name ].val() ) ) {
-                valid = false
-                this.showError( $el, field.error )
-            }
-            this.signupData.member[ field.name ] = this.templateData[ field.name ].val()
-        } )
-
-        return valid
+        return this.Q.all( this.fields.map( field => {
+            return this.Q.when( field.validate.call(this, this.templateData[ field.name ].val() ) )
+            .then( result => {
+                if( result === false ) {
+                    valid = false
+                    this.showError( $el, field.error )
+                }
+                this.signupData.member[ field.name ] = this.templateData[ field.name ].val()
+            } )
+        } ) )
+        .then( () => valid )
+        .fail( e => { console.log( e.stack || e ); return false } )
     },
     
     validateAddress( address ) {

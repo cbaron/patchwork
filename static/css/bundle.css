@@ -780,6 +780,23 @@ footer .future-days {
   background-color: rgba(201, 135, 2, 0.2);
 }
 
+.signup-class .dropoff {
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+}
+
+.signup-class .dropoff:hover {
+  background-color: rgba(201, 135, 2, 0.1);
+}
+
+.signup-class .dropoff.selected {
+  background-color: rgba(201, 135, 2, 0.2);
+}
+
 .error {
   color: #a94442;
   display: none;
