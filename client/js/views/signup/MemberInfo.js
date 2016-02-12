@@ -110,7 +110,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 method: "GET",
                 url: "/validate-address" } ) )
         .then( response => {
-            console.log(response)
             if( response.valid.length === 0 ) return false
             this.templateData.address.val( response.valid[0].string ) 
             this.signupData.addressModel = response.valid[0].model
