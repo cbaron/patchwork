@@ -4,7 +4,17 @@ var MyView = require('./MyView'),
 Object.assign( Signup.prototype, MyView.prototype, {
 
     events: {
+        'leftBtn': { method: 'goBack' },
         'rightBtn': { method: 'validateView' },
+    },
+    
+    goBack() {
+        this.instances[ this.views[ this.currentIndex ].name ].hide()
+        this.instances[ this.views[ this.currentIndex ].name ].templateData.container.removeClass('slide-in-left').removeClass('slide-in-right')
+
+        this.currentIndex -= 1
+
+        this.showProperView( true )
     },
 
     instances: { },
@@ -23,6 +33,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     showNext() {
         this.instances[ this.views[ this.currentIndex ].name ].hide()
+        this.instances[ this.views[ this.currentIndex ].name ].templateData.container.removeClass('slide-in-left').removeClass('slide-in-right')
 
         this.currentIndex += 1
 
@@ -44,18 +55,23 @@ Object.assign( Signup.prototype, MyView.prototype, {
         }
     },
 
-    showProperView() {
-        var currentViewName = this.views[ this.currentIndex ].name
+    showProperView( back ) {
+        var currentViewName = this.views[ this.currentIndex ].name,
+            klass = this.util.format('slide-in-%s', ( back ) ? 'left' : 'right' )
 
         this.showProperNav()
 
-        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show()
+        if( this.instances[ currentViewName ] ) {
+            return this.instances[ currentViewName ].show().templateData.container.addClass(klass)
+        }
 
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
                 container: this.templateData.walkthrough,
                 signupData: this.signupData 
             } )
+         
+        this.instances[ currentViewName ].templateData.container.addClass(klass)
 
         return this
     },
