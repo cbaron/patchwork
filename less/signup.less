@@ -43,6 +43,24 @@
                 color: rgba(201, 135, 2, 1);
             }
         }
+
+        .glyphicon-chevron-right:after {
+            content: "Next";
+            font-size: 22px;
+            font-weight: 500;
+            position: absolute;
+            top: 3px;
+            right: 40px;
+        }
+
+        .glyphicon-chevron-left:after {
+            content: "Back";
+            font-size: 22px;
+            font-weight: 500;
+            position: absolute;
+            top: 3px;
+            margin-left: 6px;
+        }
     }
 
     .shares {
@@ -91,12 +109,36 @@
     .member-info {
         border: 1px solid #666;
         border-radius: 5px;
-        background-color: darken(white, 3%);
+        background-color: #f7f7f7;
 
         .help-block {
             text-align: center;
             font-size: .75rem;
         }
+    }
+
+    .share-options {
+        border: 1px solid #666;
+        border-radius: 5px;
+        padding-top: 10px;
+        background-color: #f7f7f7;
+
+        .header {
+            border-bottom: 1px solid #666;
+            padding-bottom: 10px;
+        }
+
+        .share-label {
+            line-height: 78px;
+            color: #c98702;
+        }
+
+        .share-option {
+            div:first-child {
+                color: #155D75;
+            }
+        }
+
     }
     
     .delivery {
@@ -165,6 +207,40 @@
             }
         }
     }
+
+    @media only screen and (max-width: 400px) {
+
+        .nav {
+            .glyphicon-chevron-right:after {
+                font-size: 20px;
+                top: 5px;
+                right: 35px;
+            }
+
+            .glyphicon-chevron-left:after {
+                font-size: 20px;
+                top: 5px;
+                margin-left: 1px;
+            }
+        }
+
+    }
+
+    @media only screen and (max-width: 767px) {
+
+        .share-options {
+            .share-label {
+                line-height: 4rem;
+                text-align: center;
+            }
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+    }
+
 }
 
 .error {
@@ -176,4 +252,6 @@
         display: block;
     }
 }
+
+
 

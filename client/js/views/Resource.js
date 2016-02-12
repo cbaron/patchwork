@@ -21,10 +21,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     create( data ) {
-        console.log(data)
         this.createProperties.forEach( property => {
-            console.log(property)
-            console.log(this)
             if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
         } )
 

@@ -35,6 +35,22 @@
 .signup-class .nav .glyphicon:hover {
   color: #c98702;
 }
+.signup-class .nav .glyphicon-chevron-right:after {
+  content: "Next";
+  font-size: 22px;
+  font-weight: 500;
+  position: absolute;
+  top: 3px;
+  right: 40px;
+}
+.signup-class .nav .glyphicon-chevron-left:after {
+  content: "Back";
+  font-size: 22px;
+  font-weight: 500;
+  position: absolute;
+  top: 3px;
+  margin-left: 6px;
+}
 .signup-class .shares {
   padding: 30px 30px 0 30px;
   text-align: center;
@@ -77,6 +93,23 @@
 .signup-class .member-info .help-block {
   text-align: center;
   font-size: .75rem;
+}
+.signup-class .share-options {
+  border: 1px solid #666;
+  border-radius: 5px;
+  padding-top: 10px;
+  background-color: #f7f7f7;
+}
+.signup-class .share-options .header {
+  border-bottom: 1px solid #666;
+  padding-bottom: 10px;
+}
+.signup-class .share-options .share-label {
+  line-height: 78px;
+  color: #c98702;
+}
+.signup-class .share-options .share-option div:first-child {
+  color: #155D75;
 }
 .signup-class .delivery .delivery-option {
   border: 2px solid black;
@@ -130,6 +163,27 @@
 }
 .signup-class .pickup-date > div:first-child {
   font-weight: normal;
+}
+@media only screen and (max-width: 400px) {
+  .signup-class .nav .glyphicon-chevron-right:after {
+    font-size: 20px;
+    top: 5px;
+    right: 35px;
+  }
+  .signup-class .nav .glyphicon-chevron-left:after {
+    font-size: 20px;
+    top: 5px;
+    margin-left: 1px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .signup-class .share-options .share-label {
+    line-height: 4rem;
+    text-align: center;
+  }
+  .signup-class .form-control {
+    margin-bottom: 15px;
+  }
 }
 .error {
   color: #a94442;
