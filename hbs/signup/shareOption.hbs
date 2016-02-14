@@ -1,5 +1,5 @@
 <div data-js="container" class="share-option col-sm-3">
-    <div>{{label}}</div>
+    <div>{{label}} <span class="option-total" data-js="optionTotal"></span></div>
     <select data-js="input" class="form-control">
         {{#each options}}
             <option value="{{id}}">{{label}}:  {{price}} / week</option>

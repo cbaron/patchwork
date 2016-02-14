@@ -15,7 +15,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 
   return "<div data-js=\"container\" class=\"share-option col-sm-3\"><div>"
     + container.escapeExpression(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
-    + "</div><select data-js=\"input\" class=\"form-control\">        "
+    + " <span class=\"option-total\" data-js=\"optionTotal\"></span></div><select data-js=\"input\" class=\"form-control\">        "
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.options : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </select></div>";
 },"useData":true});

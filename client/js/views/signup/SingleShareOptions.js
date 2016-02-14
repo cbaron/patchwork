@@ -16,7 +16,6 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
     postRender() {
         var share = this.model
-        console.log(this.model)
 
         List.prototype.postRender.call( this )
 
