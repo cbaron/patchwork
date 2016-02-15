@@ -109,10 +109,10 @@
   text-align: center;
   font-family: "Raleway-Regular";
   font-size: 1.2rem;
-  padding-bottom: 25px;
+  padding-bottom: 35px;
 }
 .signup-class .share-options .single-share {
-  padding-top: 30px;
+  padding-top: 35px;
   padding-bottom: 15px;
   border-top: 1px solid;
 }
@@ -133,19 +133,47 @@
 .signup-class .share-options .share-option div:first-child {
   color: #155D75;
 }
-.signup-class .delivery .delivery-option {
-  border: 2px solid black;
+.signup-class .delivery {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+.signup-class .delivery .header {
+  margin: 15px 0;
+}
+.signup-class .delivery .delivery-options {
+  padding: 25px 0;
+  border-top: 1px solid;
+}
+.signup-class .delivery .delivery-options .share-label {
+  font-size: 1.1rem;
+  font-family: "Raleway-Regular";
+  color: #c98702;
+}
+.signup-class .delivery .delivery-options .share-label > div:nth-child(2) {
+  color: #155D75;
+}
+.signup-class .delivery .delivery-options .delivery-option {
+  background-color: #f0f0f0;
+  box-shadow: 1px 2px 5px #ccc;
   border-radius: 10px;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
+  margin: 5px;
 }
-.signup-class .delivery .delivery-option:hover {
+.signup-class .delivery .delivery-options .delivery-option > div:first-child {
+  color: #c98702;
+}
+.signup-class .delivery .delivery-options .delivery-option > div:nth-child(2) {
+  color: #155D75;
+}
+.signup-class .delivery .delivery-options .delivery-option:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
-.signup-class .delivery .delivery-option.selected {
-  background-color: rgba(201, 135, 2, 0.2);
+.signup-class .delivery .delivery-options .delivery-option.selected {
+  background-color: rgba(201, 135, 2, 0.3);
 }
 .signup-class .dropoff {
   border: 2px solid black;
@@ -159,9 +187,26 @@
   background-color: rgba(201, 135, 2, 0.1);
 }
 .signup-class .dropoff.selected {
-  background-color: rgba(201, 135, 2, 0.2);
+  background-color: rgba(201, 135, 2, 0.3);
 }
-.signup-class .pickup-date {
+.signup-class .date-selection {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+.signup-class .date-selection .header {
+  margin: 15px auto;
+}
+.signup-class .date-selection .share-dates {
+  border-top: 1px solid;
+  padding: 35px 0;
+}
+.signup-class .date-selection .share-dates .share-label {
+  font-size: 1.2rem;
+  font-family: "Raleway-Regular";
+  color: #c98702;
+}
+.signup-class .date-selection .share-dates .pickup-date {
   background-color: #f2f2f2;
   border: 1px solid #bbb;
   border-radius: 10px;
@@ -174,17 +219,32 @@
   margin: 5px;
   text-align: center;
 }
-.signup-class .pickup-date:hover {
+.signup-class .date-selection .share-dates .pickup-date:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
-.signup-class .pickup-date.selected {
+.signup-class .date-selection .share-dates .pickup-date.selected {
   background-color: rgba(201, 135, 2, 0.3);
 }
-.signup-class .pickup-date > div {
+.signup-class .date-selection .share-dates .pickup-date > div {
   font-weight: bold;
 }
-.signup-class .pickup-date > div:first-child {
+.signup-class .date-selection .share-dates .pickup-date > div:first-child {
   font-weight: normal;
+}
+.signup-class .summary .share-label {
+  font-family: "Raleway-Regular";
+  font-size: 1.2rem;
+  padding: 35px 0;
+  color: #c98702;
+}
+.signup-class .summary .share-label > div:nth-child(2) {
+  color: #155D75;
+}
+.signup-class .summary .grand-total {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 @media only screen and (max-width: 400px) {
   .signup-class .nav .glyphicon-chevron-right:after {
@@ -199,6 +259,9 @@
   }
 }
 @media only screen and (max-width: 767px) {
+  .signup-class .vcenter {
+    display: block;
+  }
   .signup-class .share-options {
     height: auto;
   }
@@ -207,11 +270,37 @@
     margin-bottom: 15px;
     margin-top: 10px;
   }
+  .signup-class .share-options .form-control {
+    margin-bottom: 15px;
+  }
   .signup-class .share-options .single-share {
     margin-top: 15px;
   }
-  .signup-class .form-control {
+  .signup-class .member-info .form-control {
     margin-bottom: 15px;
+  }
+  .signup-class .delivery .delivery-options .share-label {
+    text-align: center;
+    font-size: 1.2rem;
+    font-family: "Raleway-Regular";
+    margin: 10px 0 25px;
+  }
+  .signup-class .delivery .delivery-options .delivery-option {
+    display: block;
+    border: 1px solid #ccc;
+    width: 95%;
+    text-align: center;
+    margin: 10px auto;
+    background-color: rgba(201, 135, 2, 0.1);
+  }
+  .signup-class .date-selection .share-dates .share-label {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 10px 0 25px;
+  }
+  .signup-class .date-selection .share-dates .pickup-date {
+    padding: 0;
+    margin: 0;
   }
 }
 .error {

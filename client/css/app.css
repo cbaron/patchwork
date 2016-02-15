@@ -126,6 +126,11 @@ li {
   line-height: 3em;
   text-align: center;
 }
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
 .w10 {
   width: 10%;
 }

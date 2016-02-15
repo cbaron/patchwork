@@ -74,6 +74,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     },
 
     postRender() {
+        console.log(this.model)
         var share = this.model
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),

@@ -12,7 +12,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
         var weeklyTotal = optionPrices.reduce( ( a, b ) => a + b ),
             shareTotal = duration * weeklyTotal
 
-        this.share.set( 'total', shareTotal.toFixed(2) )
+        this.share.set( 'shareTotal', shareTotal.toFixed(2) )
         
         this.$( insertionClass ).text( "Share Total:  $" + shareTotal.toFixed(2) + " ( " + "$" + weeklyTotal.toFixed(2) + " per week )" )
 

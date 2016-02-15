@@ -1,10 +1,12 @@
 <div class="summary col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
     {{#each shares}}
-        <div class="row">{{label}}</div>
-        <div class="row text-center">
-            <span>{{humanStartDate}}</span>
-            <span>-</span>
-            <span>{{humanEndDate}}</span>
+        <div class="share-label">
+            <div class="row text-center">{{label}}</div>
+            <div class="row text-center">
+                <span>{{humanStartdate}}</span>
+                <span>-</span>
+                <span>{{humanEnddate}}</span>
+            </div>
         </div>
         {{#each selectedOptions}}
             <div class="row">
@@ -30,7 +32,7 @@
             <span>{{total}}</span>
         </div>
     {{/each}}
-    <div class="row">
+    <div class="grand-total text-center row">
         <span>Grand Total : </span>
         <span>{{grandTotal}}</span>
     </div>

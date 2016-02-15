@@ -133,11 +133,11 @@
             text-align: center;
             font-family: "Raleway-Regular";
             font-size: 1.2rem;
-            padding-bottom: 25px;
+            padding-bottom: 35px;
         }
 
         .single-share {
-            padding-top: 30px;
+            padding-top: 35px;
             padding-bottom: 15px;
             border-top: 1px solid;
         }
@@ -174,21 +174,55 @@
     }
     
     .delivery {
-        
-        .delivery-option {
-            border: 2px solid black;
-            border-radius: 10px;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "RalewayRegular";
-            padding: 10px;
+        border: 1px solid;
+        border-radius: 10px;
+        background-color: darken(white, 3%);
 
-            &:hover {
-                background-color: rgba(201, 135, 2, .1)
+        .header {
+            margin: 15px 0
+        }
+
+        .delivery-options {
+            padding: 25px 0;
+            border-top: 1px solid;
+
+
+            .share-label {
+                font-size: 1.1rem;
+                font-family: "Raleway-Regular";
+                color: #c98702;
+                >div:nth-child(2) {
+                    color: #155D75;
+                }
             }
             
-            &.selected {
-                background-color: rgba(201, 135, 2, .2)
+            .delivery-option {
+                background-color: darken(white, 6%);
+                box-shadow: 1px 2px 5px #ccc;
+                border-radius: 10px;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "RalewayRegular";
+                padding: 10px;
+                margin: 5px;
+                
+                >div {
+                    &:first-child {
+                        color: #c98702;
+                    }
+
+                    &:nth-child(2) {
+                        color: #155D75;
+                    }
+                }
+
+                &:hover {
+                    background-color: rgba(201, 135, 2, .1);
+                }
+                
+                &.selected {
+                    background-color: rgba(201, 135, 2, .3);
+                }
             }
         }
     }
@@ -202,41 +236,82 @@
         padding: 10px;
 
         &:hover {
-            background-color: rgba(201, 135, 2, .1)
-        }
-        
-        &.selected {
-            background-color: rgba(201, 135, 2, .2)
-        }
-    }
-
-    .pickup-date {
-        background-color: darken(white, 5%);
-        border: 1px solid #bbb;
-        border-radius: 10px;
-        box-shadow: 1px 2px 5px #ccc;
-        color: #c98702;
-        cursor: pointer;
-        display: inline-block;
-        font-family: "RalewayRegular";
-        padding: 10px;
-        margin: 5px;
-        text-align: center;
-
-        &:hover {
             background-color: rgba(201, 135, 2, .1);
         }
         
         &.selected {
             background-color: rgba(201, 135, 2, .3);
         }
+    }
 
-        >div {
-            font-weight: bold;
+    .date-selection {
+        border: 1px solid;
+        border-radius: 10px;
+        background-color: #f7f7f7;
 
-            &:first-child {
-                font-weight: normal;
+        .header {
+            margin: 15px auto;
+        }
+
+        .share-dates {
+            border-top: 1px solid;
+            padding: 35px 0;
+
+            .share-label {
+                font-size: 1.2rem;
+                font-family: "Raleway-Regular";
+                color: #c98702;   
             }
+
+            .pickup-date {
+                background-color: darken(white, 5%);
+                border: 1px solid #bbb;
+                border-radius: 10px;
+                box-shadow: 1px 2px 5px #ccc;
+                color: #c98702;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "RalewayRegular";
+                padding: 10px;
+                margin: 5px;
+                text-align: center;
+
+                &:hover {
+                    background-color: rgba(201, 135, 2, .1);
+                }
+                
+                &.selected {
+                    background-color: rgba(201, 135, 2, .3);
+                }
+
+                >div {
+                    font-weight: bold;
+
+                    &:first-child {
+                        font-weight: normal;
+                    }
+                }
+            }
+        }        
+    }
+
+    .summary {
+
+        .share-label {
+            font-family: "Raleway-Regular";
+            font-size: 1.2rem;
+            padding: 35px 0;
+            color: #c98702;
+            >div:nth-child(2) {
+                color: #155D75;
+            }
+        }
+
+        .grand-total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
     }
 
@@ -260,13 +335,20 @@
 
     @media only screen and (max-width: 767px) {
 
+        .vcenter {
+            display: block;
+        }
+
         .share-options {
             height: auto;
             .share-label {
                 text-align: center;
                 margin-bottom: 15px;
                 margin-top: 10px;
+            }
 
+            .form-control {
+                margin-bottom: 15px;
             }
 
             .single-share {
@@ -274,8 +356,50 @@
             }
         }
 
-        .form-control {
-            margin-bottom: 15px;
+        .member-info {
+            .form-control {
+                margin-bottom: 15px;
+            }
+        }
+
+        .delivery {
+
+            .delivery-options {
+
+                .share-label {
+                    text-align: center;
+                    font-size: 1.2rem;
+                    font-family: "Raleway-Regular";                   
+                    margin: 10px 0 25px;
+                }
+
+                .delivery-option {
+                    display: block;
+                    border: 1px solid #ccc;
+                    width: 95%;
+                    text-align: center;
+                    margin: 10px auto;
+                    background-color: rgba(201, 135, 2, .1);
+                }
+            }
+
+        }
+
+        .date-selection {
+
+            .share-dates {
+
+                .share-label {
+                    text-align: center;
+                    font-size: 1.2rem;                   
+                    margin: 10px 0 25px;                    
+                }
+
+                .pickup-date {
+                    padding: 0;
+                    margin: 0;
+                }
+            }
         }
 
     }
