@@ -41,7 +41,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {};
 
-  return "<div class=\"summary col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2\">    "
+  return "<div data-js=\"container\" class=\"summary col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2\">    "
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.shares : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    <div class=\"grand-total text-center row\"><span>Grand Total : </span><span>"
     + container.escapeExpression(((helper = (helper = helpers.grandTotal || (depth0 != null ? depth0.grandTotal : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"grandTotal","hash":{},"data":data}) : helper)))
