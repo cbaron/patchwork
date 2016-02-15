@@ -6,7 +6,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     ItemView: require('./DeliveryOption'),
 
     Models: {
-        DeliveryRoute: require('../../models/DeliveryRoute')
+        DeliveryRoute: require('../../models/DeliveryRoute'),
+        Dropoff: require('../../models/Dropoff')
     },
 
     Views: {
@@ -42,6 +43,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.dropoffIds.fetch( { data: { shareid: this.model.id } } ).done( () => {
             if( ! this.dropoffIds.length ) { this.valid = false; return }
             this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
+                this.dropoffs.forEach( model => model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } ) )
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => this.valid = false )
                 .on( 'itemSelected', model => {
@@ -78,7 +80,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         var share = this.model
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
-        this.dropoffs = new ( this.Collection.extend( { url: "/groupdropoff" } ) )()
+        this.dropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
         
         this.selection = 'single'
 
