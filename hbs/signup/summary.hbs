@@ -32,8 +32,42 @@
             <span>{{total}}</span>
         </div>
     {{/each}}
+    <div class="payment row">
+        <div class="heading">Select a method of payment</div>
+        <div class="col-sm-12" data-js="paymentOptions"></div>
+        <form class="hide form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Card Number</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" data-js="number">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                    <span>Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="expiration" class="col-sm-3 control-label">Expiration</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" data-js="exp_month" maxlength="2" size="3" placeholder="mm">
+                    <span>&nbsp;/&nbsp;</span>
+                    <input type="number" class="form-control" data-js="exp_year" maxlength="4" size="4" placeholder="yyyy">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">CVC</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" data-js="cvc" maxlength="3" size="4">
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <button data-js="signupBtn" class="btn text-center disabled">Become a Member!</button>
+        </div>
+    </div>
     <div class="grand-total text-center row">
         <span>Grand Total : </span>
         <span>{{grandTotal}}</span>
     </div>
 </div>
+
+
