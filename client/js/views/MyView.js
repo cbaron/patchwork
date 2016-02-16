@@ -79,7 +79,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     
     moment: require('moment'),
 
-    postRender: function() {return this},
+    postRender: function() {
+        this.renderSubviews()
+        return this
+    },
 
     Q: require('q'),
 

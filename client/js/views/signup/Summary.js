@@ -12,6 +12,12 @@ Object.assign( Summary.prototype, View.prototype, {
 
     requiresLogin: false,
 
+    subviews: {
+        paymentOptions: [
+            { name: 'paymentOptions', view: require('./PaymentOptions') },
+        ],
+    },
+
     template: require('../../templates/signup/summary')( require('handlebars') )
 
 } )
