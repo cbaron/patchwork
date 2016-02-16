@@ -242,16 +242,16 @@
 }
 .signup-class .date-selection .share-dates .pickup-date {
   background-color: #f2f2f2;
-  border: 1px solid #bbb;
-  border-radius: 10px;
+  border: 1px solid beige;
   box-shadow: 1px 2px 5px #ccc;
   color: #c98702;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
-  margin: 5px;
+  margin: 1px;
   text-align: center;
+  line-height: 1.2;
 }
 .signup-class .date-selection .share-dates .pickup-date:hover {
   background-color: rgba(201, 135, 2, 0.1);
@@ -356,7 +356,7 @@
     margin: 10px 0 25px;
   }
   .signup-class .date-selection .share-dates .pickup-date {
-    padding: 0;
+    padding: 8px;
     margin: 0;
   }
 }
