@@ -60,19 +60,19 @@ Object.assign( Signup.prototype, MyView.prototype, {
             klass = this.util.format('slide-in-%s', ( back ) ? 'left' : 'right' )
 
         this.showProperNav()
-
+        
         if( this.instances[ currentViewName ] ) {
             return this.instances[ currentViewName ].show().templateData.container.addClass(klass)
         }
-
+        
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
                 container: this.templateData.walkthrough,
                 signupData: this.signupData 
             } )
-         
+        
         this.instances[ currentViewName ].templateData.container.addClass(klass)
-
+        
         return this
     },
 

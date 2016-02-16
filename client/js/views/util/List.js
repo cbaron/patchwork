@@ -25,7 +25,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
             .on( 'remove', item => this.removeItem( item ) )
             .on( 'update', () => this.noItemCheck() )
             .on( 'sort', () => this.reOrderDOM() )
-
+           
         return this
     },
 
@@ -108,10 +108,10 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this.itemViews = []
         this.selectedItems = { }
        
-        this.createItems() 
+        this.createItems()
 
         if( this.itemModels ) this.items.reset( ( typeof this.itemModels === "function" ) ? this.itemModels() : this.itemModels )
-
+        
         if( this.fetch ) this.fetchItems()
     },
 

@@ -14,9 +14,6 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.selectedDelivery = { weeklyCost: weeklyCostFloat, totalCost: optionTotalCost }
         
-        this.model.set( 'selectedDelivery',
-            ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.selectedDelivery ) : [ this.selectedDelivery ] )
-
     },
 
     ItemView: require('./DeliveryOption'),
@@ -37,9 +34,11 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 this.valid = false
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
-            this.showFeedback( this.feedback.home( this.farmPickup.attributes ) ) 
-            this.model.set( 'selectedDelivery',
-                ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.farmPickup.attributes ) : [ this.farmPickup.attributes ] )
+            this.showFeedback( this.feedback.home( this.farmPickup.attributes ) )
+
+            Object.assign( this.selectedDelivery, this.farmPickup.attributes )
+            this.model.set( 'selectedDelivery', this.selectedDelivery )
+
             this.valid = true
         } )
     },
@@ -63,12 +62,15 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 this.dropoffs.forEach( model => model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } ) )
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
-                    this.model.get('selectedDelivery').pop()
+                    this.model.unset('selectedDelivery')
+                    this.selectedDelivery = { weeklyCost: "0.00", totalCost: "0.00" }
+
                     this.valid = false 
                 } )
                 .on( 'itemSelected', model => {
-                    this.model.set( 'selectedDelivery',
-                        ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( model.attributes ) : [ model.attributes ] )
+                    Object.assign( this.selectedDelivery, model.attributes )
+                    this.model.set( 'selectedDelivery', this.selectedDelivery )
+
                     this.valid = true
                 } )
             } )
@@ -91,9 +93,9 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
 
-                    this.model.set( 'selectedDelivery',
-                        ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.homeDeliveryRoute.attributes ) : [ this.homeDeliveryRoute.attributes ] )
-
+                    Object.assign( this.selectedDelivery, this.homeDeliveryRoute.attributes )
+                    this.model.set( 'selectedDelivery', this.selectedDelivery )
+                    
                     this.valid = true
                 } )
             } )
@@ -122,8 +124,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
 
         this.on( 'itemSelected', model => {
-            this[ this.util.format('%sFeedback', model.get('name') ) ]()
             this.calculateOptionCost( model )
+            this[ this.util.format('%sFeedback', model.get('name') ) ]()            
         } )
         .on( 'itemUnselected', () => {
             this.valid = false
