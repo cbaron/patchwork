@@ -1,13 +1,13 @@
-var fs = require('fs');
+var fs = require('fs'),
+    port = process.env.PORT || 1337
 
 require('node-env-file')( __dirname + '/.env' );
 
-if( process.env.HTTPS === "false" ) {
-    require('http')
-        .createServer( require('./router') )
-        .listen( process.env.PORT || 1337 )
-} else {
-    require('https')
-        .createServer( { key: fs.readFileSync( process.env.SSLKEY ), cert: fs.readFileSync( process.env.SSLCERT ) }, require('./router') )
-        .listen( process.env.PORT || 1337 )
-}
+require('http').createServer( ( request, response ) => {
+    response.writeHead( 301, { 'Location': require('util').format( 'https://%s%s', process.env.DOMAIN, request.url ) } )
+    response.end("")
+} ).listen( port )
+
+require('https')
+    .createServer( { key: fs.readFileSync( process.env.SSLKEY ), cert: fs.readFileSync( process.env.SSLCERT ) }, require('./router') )
+    .listen( 443 )

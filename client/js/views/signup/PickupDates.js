@@ -14,36 +14,31 @@ Object.assign( PickupDates.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     itemModels() {
-        console.log('this.model: ' + this.model)
-        var deliveryDay = this.model.get('selectedDelivery').dayofweek
-            console.log('deliveryDay: ' + deliveryDay)
-        var deliveryDate = this.moment( this.model.get('startdate') )
-            console.log('delivery date: ' + deliveryDate)
-        var endDate = this.moment( this.model.get('enddate') )
-            console.log( 'endDate: ' + endDate )
-        var startDay = this.moment( deliveryDate ).day()
-            console.log( 'startDay: ' + startDay)
-        var dates = [ ]
-        
+        var deliveryDay = this.model.get('selectedDelivery').dayofweek,
+            deliveryDate = this.moment( this.model.get('startdate') ),
+            endDate = this.moment( this.model.get('enddate') ),
+            startDay = this.moment( deliveryDate ).day()
+
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()
         }
 
-        dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
+        this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
 
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-            dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
+            this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
             deliveryDate.add( 7, 'days' )
         }
-        console.log(dates)
-        return dates
+
+        return this.dates
+
     },
 
     postRender() {
-        
-
+        this.dates = [ ]
         this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
+        this.valid = true
 
         List.prototype.postRender.call( this )
         
@@ -68,6 +63,8 @@ Object.assign( PickupDates.prototype, List.prototype, {
 
     updateShare() {
         this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
+
+        valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }
 } )
 

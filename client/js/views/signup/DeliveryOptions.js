@@ -27,16 +27,17 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         Dropoffs: require('./Dropoffs')
     },
 
-    farmFeedback() {
+    farmFeedback( model ) {
         this.farmPickup = new ( this.Models.DeliveryRoute.extend( { parse: response => this.Models.DeliveryRoute.prototype.parse( response[0] ) } ) )()
         this.farmPickup.fetch( { data: { label: 'farm' } } ).done( () => {
             if( Object.keys( this.farmPickup.attributes ).length === 0 ) {
                 this.valid = false
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
+
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
-            Object.assign( this.selectedDelivery, this.farmPickup.attributes )
+            Object.assign( this.selectedDelivery, { deliveroptionid: model.id }, this.farmPickup.attributes )
             this.model.set( 'selectedDelivery', this.selectedDelivery )
 
             this.valid = true
@@ -56,7 +57,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
     getTemplateOptions() { return this.model.attributes },
 
-    groupFeedback() {
+    groupFeedback( deliveryOption ) {
         this.dropoffIds.fetch( { data: { shareid: this.model.id } } ).done( () => {
             if( ! this.dropoffIds.length ) { this.valid = false; return }
             this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
@@ -69,7 +70,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                     this.valid = false 
                 } )
                 .on( 'itemSelected', model => {
-                    Object.assign( this.selectedDelivery, model.attributes )
+                    Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id }, model.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
 
                     this.valid = true
@@ -78,7 +79,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
     },
 
-    homeFeedback() {
+    homeFeedback( deliveryOption ) {
         this.zipRoute = new ( this.Model.extend( { parse: response => response[0], urlRoot: "/zipcoderoute" } ) )()
         this.homeDeliveryRoute = new this.Models.DeliveryRoute()
 
@@ -94,7 +95,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
 
-                    Object.assign( this.selectedDelivery, this.homeDeliveryRoute.attributes )
+                    Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
                     
                     this.valid = true
@@ -127,7 +128,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
             this.calculateOptionCost( model )
-            this[ this.util.format('%sFeedback', model.get('name') ) ]()            
+            this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
         } )
         .on( 'itemUnselected', () => {
             this.valid = false
