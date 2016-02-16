@@ -17,27 +17,28 @@ Object.assign( PickupDates.prototype, List.prototype, {
         var deliveryDay = this.model.get('selectedDelivery').dayofweek,
             deliveryDate = this.moment( this.model.get('startdate') ),
             endDate = this.moment( this.model.get('enddate') ),
-            startDay = this.moment( deliveryDate ).day(),
-            dates = [ ]
+            startDay = this.moment( deliveryDate ).day()
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()
         }
 
-        dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
+        this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
 
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-            dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
+            this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
             deliveryDate.add( 7, 'days' )
         }
 
-        return dates
+        return this.dates
     },
 
     postRender() {
 
+        this.dates = [ ]
         this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
+        this.valid = true
 
         List.prototype.postRender.call( this )
 
@@ -61,6 +62,8 @@ Object.assign( PickupDates.prototype, List.prototype, {
 
     updateShare() {
         this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
+
+        valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }
 } )
 

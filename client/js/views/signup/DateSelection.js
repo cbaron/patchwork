@@ -15,7 +15,17 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
     template: require('../../templates/signup/dateSelection')( require('handlebars') ),
 
-    validate() { return true }
+    validate() {
+        var valid = true
+
+        Object.keys( this.itemViews ).forEach( id => {
+            if( ! this.itemViews[id].valid ) valid = false
+        } )
+
+        if( !valid ) this.templateData.container.addClass('has-error')
+
+        return valid
+    }
 
 } )
 

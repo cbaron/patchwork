@@ -35,28 +35,30 @@
     <div class="payment row">
         <div class="heading">Select a method of payment</div>
         <div class="col-sm-12" data-js="paymentOptions"></div>
-        <form class="hide form-horizontal">
+        <form data-js="paymentForm" class="hide form-horizontal">
             <div class="form-group">
                 <label class="col-sm-3 control-label">Card Number</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" data-js="number">
+                    <input type="text" class="form-control" data-js="number" id="number">
                     <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
                     <span>Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="expiration" class="col-sm-3 control-label">Expiration</label>
-                <div class="col-sm-9">
-                    <input type="number" class="form-control" data-js="exp_month" maxlength="2" size="3" placeholder="mm">
+                <label class="col-sm-3 control-label">Expiration</label>
+                <div class="col-sm-9 expiration">
+                    <input type="number" class="form-control" data-js="exp_month" maxlength="2" size="3" placeholder="mm" id="exp_month">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
                     <span>&nbsp;/&nbsp;</span>
-                    <input type="number" class="form-control" data-js="exp_year" maxlength="4" size="4" placeholder="yyyy">
+                    <input type="number" class="form-control" data-js="exp_year" maxlength="4" size="4" placeholder="yyyy" id="exp_year">
                     <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">CVC</label>
-                <div class="col-sm-9">
-                    <input type="number" class="form-control" data-js="cvc" maxlength="3" size="4">
+                <div class="col-sm-9 cvc">
+                    <input type="number" class="form-control" data-js="cvc" maxlength="3" size="4" id="cvc">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
                 </div>
             </div>
         </form>

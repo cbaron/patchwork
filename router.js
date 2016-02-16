@@ -162,6 +162,7 @@ router = new Router( {
         REST: {
             'auth': true,
             'validate-address': true,
+            'signup': true,
             'user': true
         }
     },
