@@ -179,13 +179,30 @@
         border-radius: 10px;
         background-color: darken(white, 3%);
 
+        .has-error {
+            .error {
+                text-align: center;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        }
+
         .header {
             margin: 15px 0
+        }
+
+        .subheader {
+            text-align: center;
+            margin-bottom: 5px;
         }
 
         .delivery-options {
             padding: 25px 0;
             border-top: 1px solid;
+
+            .feedback-message {
+                font-weight: 600;
+            }
 
             .share-label {
                 font-size: 1.1rem;

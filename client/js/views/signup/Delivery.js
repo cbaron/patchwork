@@ -17,10 +17,13 @@ Object.assign( Delivery.prototype, List.prototype, {
         var valid = true
         
         Object.keys( this.itemViews ).forEach( id => {
-            if( ! this.itemViews[id].valid ) valid = false
+            if( ! this.itemViews[id].valid ) {
+                valid = false
+                this.itemViews[id].templateData.container.addClass('has-error')
+            }
         } )
 
-        if( !valid ) this.templateData.container.addClass('has-error')
+        //if( !valid ) this.templateData.container.addClass('has-error')
 
         return valid
 

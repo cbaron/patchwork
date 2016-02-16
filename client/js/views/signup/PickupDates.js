@@ -14,13 +14,16 @@ Object.assign( PickupDates.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     itemModels() {
-        console.log(this.model)
-        return
-        var deliveryDay = this.model.get('selectedDelivery').dayofweek,
-            deliveryDate = this.moment( this.model.get('startdate') ),
-            endDate = this.moment( this.model.get('enddate') ),
-            startDay = this.moment( deliveryDate ).day(),
-            dates = [ ]
+        console.log('this.model: ' + this.model)
+        var deliveryDay = this.model.get('selectedDelivery').dayofweek
+            console.log('deliveryDay: ' + deliveryDay)
+        var deliveryDate = this.moment( this.model.get('startdate') )
+            console.log('delivery date: ' + deliveryDate)
+        var endDate = this.moment( this.model.get('enddate') )
+            console.log( 'endDate: ' + endDate )
+        var startDay = this.moment( deliveryDate ).day()
+            console.log( 'startDay: ' + startDay)
+        var dates = [ ]
         
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
@@ -33,7 +36,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
             dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
             deliveryDate.add( 7, 'days' )
         }
-
+        console.log(dates)
         return dates
     },
 
@@ -52,7 +55,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
             this.skipWeeks.add(model)
             this.updateShare()
         } )
-        console.log(this.items)
+        console.log('items: ' + this.items)
     },
 
     requiresLogin: false,

@@ -34,7 +34,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 this.valid = false
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
-            this.showFeedback( this.feedback.home( this.farmPickup.attributes ) )
+            this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
             Object.assign( this.selectedDelivery, this.farmPickup.attributes )
             this.model.set( 'selectedDelivery', this.selectedDelivery )
@@ -45,6 +45,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     
     feedback: {
         home: require('../../templates/signup/homeDeliveryFeedback')( require('handlebars') ),
+        farm: require('../../templates/signup/farmPickupFeedback')( require('handlebars') ),
         invalidZip: function( zipcode ) {
             return this.util.format( 'Postal Code of %s is not in our delivery area.  Please contact us to discuss options', zipcode )
         },
@@ -124,6 +125,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
 
         this.on( 'itemSelected', model => {
+            this.templateData.container.removeClass('has-error')
             this.calculateOptionCost( model )
             this[ this.util.format('%sFeedback', model.get('name') ) ]()            
         } )
