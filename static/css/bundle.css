@@ -854,7 +854,10 @@ footer .future-days {
   text-align: center;
   font-family: "Raleway-Regular";
   font-size: 1.2rem;
-  padding-bottom: 35px;
+}
+
+.signup-class .share-options .price:last-child {
+  padding-bottom: 30px;
 }
 
 .signup-class .share-options .single-share {
@@ -878,7 +881,6 @@ footer .future-days {
 
 .signup-class .share-options .share-option .option-total {
   color: #666;
-  margin-left: 5px;
 }
 
 .signup-class .share-options .share-option div:first-child {
@@ -910,6 +912,14 @@ footer .future-days {
   color: #155D75;
 }
 
+.signup-class .delivery .delivery-options .share-label > div:nth-child(3) {
+  color: #666;
+}
+
+.signup-class .delivery .delivery-options .share-label .option-total {
+  color: black;
+}
+
 .signup-class .delivery .delivery-options .delivery-option {
   background-color: #f0f0f0;
   box-shadow: 1px 2px 5px #ccc;
@@ -938,12 +948,23 @@ footer .future-days {
 }
 
 .signup-class .dropoff {
-  border: 2px solid black;
+  background-color: #f0f0f0;
+  box-shadow: 1px 2px 5px #ccc;
+  border: 1px solid;
   border-radius: 10px;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
+  margin: 5px;
+}
+
+.signup-class .dropoff > div:first-child {
+  color: #c98702;
+}
+
+.signup-class .dropoff > div:nth-child(2) {
+  color: #155D75;
 }
 
 .signup-class .dropoff:hover {
@@ -973,6 +994,14 @@ footer .future-days {
   font-size: 1.2rem;
   font-family: "Raleway-Regular";
   color: #c98702;
+}
+
+.signup-class .date-selection .share-dates .share-label > div:nth-child(2) {
+  color: #155D75;
+}
+
+.signup-class .date-selection .share-dates .share-label > div:last-child {
+  color: #666;
 }
 
 .signup-class .date-selection .share-dates .pickup-date {

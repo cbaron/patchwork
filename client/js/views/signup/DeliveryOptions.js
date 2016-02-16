@@ -3,6 +3,22 @@ var List = require('../util/List'),
 
 Object.assign( DeliveryOptions.prototype, List.prototype, {
 
+    calculateOptionCost( model ) {
+        var duration = this.model.get('duration'),
+            weeklyCost = model.get('price'),
+            weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ).toFixed(2) : parseFloat( weeklyCost.slice(1) ).toFixed(2),
+            optionTotalCost = ( weeklyCostFloat * duration ).toFixed(2)
+        
+        if( model.get('name') === "farm" ) this.templateData.optionTotal.text( 'Option Total: Save $' + duration.toFixed(2) )
+        else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost )
+
+        this.selectedDelivery = { weeklyCost: weeklyCostFloat, totalCost: optionTotalCost }
+        
+        this.model.set( 'selectedDelivery',
+            ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.selectedDelivery ) : [ this.selectedDelivery ] )
+
+    },
+
     ItemView: require('./DeliveryOption'),
 
     Models: {
@@ -22,7 +38,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
             this.showFeedback( this.feedback.home( this.farmPickup.attributes ) ) 
-            this.model.set( 'selectedDelivery', this.farmPickup.attributes )
+            this.model.set( 'selectedDelivery',
+                ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.farmPickup.attributes ) : [ this.farmPickup.attributes ] )
             this.valid = true
         } )
     },
@@ -45,9 +62,13 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
                 this.dropoffs.forEach( model => model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } ) )
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
-                .on( 'itemUnselected', () => this.valid = false )
+                .on( 'itemUnselected', () => {
+                    this.model.get('selectedDelivery').pop()
+                    this.valid = false 
+                } )
                 .on( 'itemSelected', model => {
-                    this.model.set('selectedDelivery', model.attributes )
+                    this.model.set( 'selectedDelivery',
+                        ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( model.attributes ) : [ model.attributes ] )
                     this.valid = true
                 } )
             } )
@@ -69,14 +90,17 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .fetch()
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
-                    this.model.set( 'selectedDelivery', this.homeDeliveryRoute.attributes )
+
+                    this.model.set( 'selectedDelivery',
+                        ( this.model.has('selectedDelivery') ) ? this.model.get('selectedDelivery').concat( this.homeDeliveryRoute.attributes ) : [ this.homeDeliveryRoute.attributes ] )
+
                     this.valid = true
                 } )
             } )
     },
 
     postRender() {
-        console.log(this.model)
+        
         var share = this.model
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
@@ -97,12 +121,17 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             }
         } )
 
-
-        this.on( 'itemSelected', model => this[ this.util.format('%sFeedback',model.get('name') ) ]() )
-            .on( 'itemUnselected', () => {
+        this.on( 'itemSelected', model => {
+            this[ this.util.format('%sFeedback', model.get('name') ) ]()
+            this.calculateOptionCost( model )
+        } )
+        .on( 'itemUnselected', () => {
             this.valid = false
             this.templateData.feedback.empty()
+            this.templateData.optionTotal.text('')
+            if( this.model.has('selectedDelivery') ) this.model.unset('selectedDelivery')
         } )
+
     },
 
     requiresLogin: false,

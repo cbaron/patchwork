@@ -2,8 +2,14 @@
     <div data-js="row" class="single-share row">
         <div class="share-label col-sm-3">
             <div>{{label}}</div>
+            <div>
+                <span>{{humanStartdate}}</span>
+                <span>-</span>
+                <span>{{humanEnddate}}</span>
+            </div>
             <div>{{duration}} weeks</div>
         </div>
     </div>
     <div class="price share-total-{{id}}"></div>
+    <div class="price weekly-share-total-{{id}}"></div>
 </li>

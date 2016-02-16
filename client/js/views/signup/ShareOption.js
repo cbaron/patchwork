@@ -5,16 +5,16 @@ Object.assign( ShareOption.prototype, View.prototype, {
 
     calculateShareTotal( duration ) {           
         var optionPrices = [ ],
-            insertionClass = '.share-total-' + this.share.get('id')
+            shareTotalClass = '.share-total-' + this.share.get('id'),
+            weeklyTotalClass = '.weekly-share-total-' + this.share.get('id')
 
         this.share.get('selectedOptions').forEach( ( option, i ) => optionPrices[ i ] = parseFloat( option.price.slice(1) ) )
         
-        var weeklyTotal = optionPrices.reduce( ( a, b ) => a + b ),
-            shareTotal = duration * weeklyTotal
-
-        this.share.set( 'shareTotal', shareTotal.toFixed(2) )
+        var weeklyShareTotal = optionPrices.reduce( ( a, b ) => a + b ),
+            shareTotal = duration * weeklyShareTotal
         
-        this.$( insertionClass ).text( "Share Total:  $" + shareTotal.toFixed(2) + " ( " + "$" + weeklyTotal.toFixed(2) + " per week )" )
+        this.$( shareTotalClass ).text( "Share Total:  $" + shareTotal.toFixed(2) )
+        this.$( weeklyTotalClass ).text( "( " + "$" + weeklyShareTotal.toFixed(2) + " per week )" )
 
     },
   
@@ -44,11 +44,18 @@ Object.assign( ShareOption.prototype, View.prototype, {
             options = this.model.attributes.options.models,
             price = options[ index ].get('price'),
             duration = this.share.get('duration'),
-            optionTotal = parseFloat( price.slice(1) * duration )
+            priceFloat = parseFloat( price.slice(1) ),
+            optionTotal = parseFloat( priceFloat * duration )
 
         this.templateData.optionTotal.text( "$" + optionTotal.toFixed(2) )
 
-        Object.assign( this.selectedOption, { value: $input.val(), price: price, label: $input.get(0).options[$input.get(0).selectedIndex].text } )
+        Object.assign( this.selectedOption, { 
+            value: $input.val(),
+            price: price,
+            weeklyCost: priceFloat.toFixed(2),
+            totalCost: optionTotal.toFixed(2),
+            label: $input.get(0).options[$input.get(0).selectedIndex].text
+        } )
         
         this.calculateShareTotal( duration )
 

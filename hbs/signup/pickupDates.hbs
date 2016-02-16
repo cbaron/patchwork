@@ -1,7 +1,15 @@
 <li data-js="container" class="share-dates col-xs-12">
     <div class="row">
-        <div class="share-label vcenter col-sm-3">{{label}}</div>
-        <div class="col-sm-9 vcenter col-xs-12">
+        <div class="share-label vcenter col-sm-3">
+            <div>{{label}}</div>
+            <div>
+                <span>{{humanStartdate}}</span>
+                <span>-</span>
+                <span>{{humanEnddate}}</span>
+            </div>
+            <div>{{duration}} weeks
+        </div><!--
+     --><div class="col-sm-9 vcenter col-xs-12">
             <div class="row" data-js="dates"></div>
         </div>
     </div>
