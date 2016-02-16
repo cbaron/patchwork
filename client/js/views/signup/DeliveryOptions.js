@@ -72,6 +72,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .on( 'itemSelected', model => {
                     Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id }, model.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
+                    
 
                     this.valid = true
                 } )

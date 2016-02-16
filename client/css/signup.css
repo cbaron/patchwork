@@ -225,6 +225,9 @@
 .signup-class .date-selection .header {
   margin: 15px auto;
 }
+.signup-class .date-selection .subheader {
+  text-align: center;
+}
 .signup-class .date-selection .share-dates {
   border-top: 1px solid;
   padding: 35px 0;
