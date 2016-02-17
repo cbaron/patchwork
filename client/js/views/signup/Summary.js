@@ -16,8 +16,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     buildShares() {
-        this.signupData.shares.map( share => console.log( share.attributes ) )
-
         return this.signupData.shares.map( share => ( {
             id: share.id,
             label: share.label,
