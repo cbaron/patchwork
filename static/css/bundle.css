@@ -1057,64 +1057,86 @@ footer .future-days {
   font-weight: normal;
 }
 
-.signup-class .summary {
+.signup-class .summary .share-summary {
   border: 1px solid;
   border-radius: 10px;
   background-color: #f7f7f7;
+  margin-bottom: 5px;
+  padding: 0 20px;
 }
 
-.signup-class .summary .header {
-  margin: 15px auto;
+.signup-class .summary .share-summary .header {
+  margin: 0;
+  padding: 15px 0;
 }
 
-.signup-class .summary .share-label {
+.signup-class .summary .share-summary .share-label {
   font-family: "Raleway-Regular";
   font-size: 1.2rem;
   border-top: 1px solid #666;
-  padding: 35px 0;
+  padding: 35px 0 5px;
 }
 
-.signup-class .summary .share-label > div:first-child {
+.signup-class .summary .share-summary .share-label > div:first-child {
   color: #c98702;
 }
 
-.signup-class .summary .share-label > div:nth-child(2) {
+.signup-class .summary .share-summary .share-label > div:nth-child(2) {
   color: #155D75;
 }
 
-.signup-class .summary .section-title {
+.signup-class .summary .share-summary .section-title {
   color: #c98702;
   font-size: 1.1rem;
-  margin-top: 25px;
+  margin-top: 30px;
   margin-bottom: 5px;
 }
 
-.signup-class .summary .selected-options {
-  margin-bottom: 10px;
+.signup-class .summary .share-summary .selected-options {
+  margin-bottom: 15px;
 }
 
-.signup-class .summary .item-label {
+.signup-class .summary .share-summary .item-label {
   color: #155D75;
 }
 
-.signup-class .summary .total {
+.signup-class .summary .share-summary .total {
   color: black;
+  margin-top: 10px;
 }
 
-.signup-class .summary .share-total {
+.signup-class .summary .share-summary .share-total {
   font-size: 1.2rem;
   color: black;
-  margin: 35px auto 25px;
+  padding: 35px 0 25px;
 }
 
 .signup-class .summary .grand-total {
   font-size: 1.3rem;
   font-weight: 600;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin: 25px auto;
+  color: black;
 }
 
-.signup-class .summary .payment-option {
+.signup-class .summary .payment {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+  padding: 0 20px;
+}
+
+.signup-class .summary .payment .header {
+  border: none;
+  padding: 25px 0;
+  margin: 0;
+}
+
+.signup-class .summary .payment .payment-options {
+  margin: 0 auto 10px;
+  text-align: center;
+}
+
+.signup-class .summary .payment .payment-options .payment-option {
   background-color: #f2f2f2;
   color: #c98702;
   border: 1px solid #bbb;
@@ -1126,47 +1148,54 @@ footer .future-days {
   padding: 10px;
   margin: 5px;
   text-align: center;
+  width: 40%;
 }
 
-.signup-class .summary .payment-option:hover {
+.signup-class .summary .payment .payment-options .payment-option:hover {
   background-color: rgba(201, 135, 2, 0.1);
 }
 
-.signup-class .summary .payment-option.selected {
+.signup-class .summary .payment .payment-options .payment-option.selected {
   background-color: rgba(201, 135, 2, 0.3);
 }
 
-.signup-class .summary .payment-option > div:nth-child(2) {
+.signup-class .summary .payment .payment-options .payment-option > div:nth-child(2) {
   color: black;
   font-size: .75rem;
 }
 
-.signup-class .summary form #number {
-  width: 300px;
+.signup-class .summary .payment form .credit-card-info {
+  margin-top: 25px;
 }
 
-.signup-class .summary form #number .form-control-feedback {
+.signup-class .summary .payment form #number {
+  width: 300px;
+  margin-bottom: 3px;
+}
+
+.signup-class .summary .payment form #number .form-control-feedback {
   left: 275px;
 }
 
-.signup-class .summary form .cvc input,
-.signup-class .summary form .expiration input {
+.signup-class .summary .payment form .cvc input,
+.signup-class .summary .payment form .expiration input {
   display: inline-block;
   width: 100px;
 }
 
-.signup-class .summary form .cvc .form-control-feedback:nth-child(2),
-.signup-class .summary form .expiration .form-control-feedback:nth-child(2) {
+.signup-class .summary .payment form .cvc .form-control-feedback:nth-child(2),
+.signup-class .summary .payment form .expiration .form-control-feedback:nth-child(2) {
   left: 75px;
 }
 
-.signup-class .summary form .cvc .form-control-feedback:nth-child(5),
-.signup-class .summary form .expiration .form-control-feedback:nth-child(5) {
+.signup-class .summary .payment form .cvc .form-control-feedback:nth-child(5),
+.signup-class .summary .payment form .expiration .form-control-feedback:nth-child(5) {
   left: 190px;
 }
 
-.signup-class .summary button {
+.signup-class .summary .payment button {
   position: relative;
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 400px) {
@@ -1235,6 +1264,16 @@ footer .future-days {
   .signup-class .date-selection .share-dates .pickup-date {
     padding: 8px;
     margin: 0;
+  }
+
+  .signup-class .summary .payment .payment-options .payment-option {
+    display: block;
+    width: 95%;
+    margin-bottom: 15px;
+  }
+
+  .signup-class .summary .payment form #number {
+    width: 95%;
   }
 }
 

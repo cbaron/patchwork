@@ -100,8 +100,10 @@ Object.assign( Summary.prototype, View.prototype, {
 
     getTemplateOptions() {
         console.log( this.signupData.shares.map( share => share.attributes ) )
+        console.log( this.signupData.member )
         return {
-            shares: this.signupData.shares.map( share => share.attributes )
+            shares: this.signupData.shares.map( share => share.attributes ),
+            member: this.signupData.member
         }
     },
 

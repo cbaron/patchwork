@@ -356,121 +356,155 @@
     }
 
     .summary {
-        border: 1px solid;
-        border-radius: 10px;
-        background-color: #f7f7f7;
 
-        .header {
-            margin: 15px auto;
-        }
+        .share-summary {
+            border: 1px solid;
+            border-radius: 10px;
+            background-color: #f7f7f7;
+            margin-bottom: 5px;
+            padding: 0 20px;
 
-        .share-label {
-            font-family: "Raleway-Regular";
-            font-size: 1.2rem;
-            border-top: 1px solid #666;
-            padding: 35px 0;            
-            >div {
-                &:first-child {
-                    color: #c98702;
-                }
-                &:nth-child(2) {
-                    color: #155D75;
+            .header {
+                margin: 0;
+                padding: 15px 0;
+            }
+
+            .share-label {
+                font-family: "Raleway-Regular";
+                font-size: 1.2rem;
+                border-top: 1px solid #666;
+                padding: 35px 0 5px;            
+                >div {
+                    &:first-child {
+                        color: #c98702;
+                    }
+                    &:nth-child(2) {
+                        color: #155D75;
+                    }
                 }
             }
-        }
 
-        .section-title {
-            color: #c98702;
-            font-size: 1.1rem;
-            margin-top: 25px;
-            margin-bottom: 5px;
-        }
+            .section-title {
+                color: #c98702;
+                font-size: 1.1rem;
+                margin-top: 30px;
+                margin-bottom: 5px;
+            }
 
-        .selected-options {
-            margin-bottom: 10px;
-        }
+            .selected-options {
+                margin-bottom: 15px;
+            }
 
-        .item-label {
-            color: #155D75;
-        }
+            .item-label {
+                color: #155D75;
+            }
 
-        .total {
-            color: black;
-        }
+            .total {
+                color: black;
+                margin-top: 10px;
+            }
 
-        .share-total {
-            font-size: 1.2rem;
-            color: black;
-            margin: 35px auto 25px;
+            .share-total {
+                font-size: 1.2rem;
+                color: black;
+                padding: 35px 0 25px;
+            }
+
         }
 
         .grand-total {
             font-size: 1.3rem;
             font-weight: 600;
-            margin-top: 30px;
-            margin-bottom: 30px;
+            margin: 25px auto;
+            color: black;
         }
 
-        .payment-option {
-            background-color: darken(white, 5%);
-            color: #c98702;
-            border: 1px solid #bbb;
+        .payment {
+            border: 1px solid;
             border-radius: 10px;
-            box-shadow: 1px 2px 5px #ccc;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "RalewayRegular";
-            padding: 10px;
-            margin: 5px;
-            text-align: center;
+            background-color: #f7f7f7;
+            padding: 0 20px;
 
-            &:hover {
-                background-color: rgba(201, 135, 2, .1);
+            .header {
+                border: none;
+                padding: 25px 0;
+                margin: 0;
             }
+
+            .payment-options {
+                margin: 0 auto 10px;
+                text-align: center;
             
-            &.selected {
-                background-color: rgba(201, 135, 2, .3);
-            }
-
-            >div:nth-child(2) {
-                color: black;
-                font-size: .75rem;
-            }
-        }
-
-        form {
-
-            #number {
-                width: 300px;
-                
-                .form-control-feedback {
-                    left: 275px;
-                }
-            }
-
-            .cvc,
-            .expiration {
-
-                input {
+                .payment-option {
+                    background-color: darken(white, 5%);
+                    color: #c98702;
+                    border: 1px solid #bbb;
+                    border-radius: 10px;
+                    box-shadow: 1px 2px 5px #ccc;
+                    cursor: pointer;
                     display: inline-block;
-                    width: 100px;
-                }
+                    font-family: "RalewayRegular";
+                    padding: 10px;
+                    margin: 5px;
+                    text-align: center;
+                    width: 40%;
 
-                .form-control-feedback {
-                    
-                    &:nth-child(2) {
-                        left: 75px;
+                    &:hover {
+                        background-color: rgba(201, 135, 2, .1);
                     }
                     
-                    &:nth-child(5) {
-                        left: 190px;
+                    &.selected {
+                        background-color: rgba(201, 135, 2, .3);
+                    }
+
+                    >div:nth-child(2) {
+                        color: black;
+                        font-size: .75rem;
                     }
                 }
             }
-        }
 
-        button {
-            position: relative;
+            form {
+
+                .credit-card-info {
+                    margin-top: 25px;
+                }
+
+                #number {
+                    width: 300px;
+                    margin-bottom: 3px;
+                    
+                    .form-control-feedback {
+                        left: 275px;
+                    }
+                }
+
+                .cvc,
+                .expiration {
+
+                    input {
+                        display: inline-block;
+                        width: 100px;
+                    }
+
+                    .form-control-feedback {
+                        
+                        &:nth-child(2) {
+                            left: 75px;
+                        }
+                        
+                        &:nth-child(5) {
+                            left: 190px;
+                        }
+                    }
+                }
+            }
+
+            button {
+                position: relative;
+                margin-bottom: 20px;
+            }
+
         }
 
 
@@ -559,6 +593,29 @@
                 .pickup-date {
                     padding: 8px;
                     margin: 0;
+                }
+            }
+        }
+
+        .summary {
+
+            .payment {
+
+                .payment-options {
+
+                    .payment-option {
+                        display: block;
+                        width: 95%;
+                        margin-bottom: 15px;
+                    }
+
+                }
+
+                form {
+                    #number {
+                        width: 95%;
+                    }
+
                 }
             }
         }
