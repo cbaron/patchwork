@@ -102,7 +102,7 @@ Object.assign( Summary.prototype, View.prototype, {
         View.prototype.postRender.call(this)
 
         this.spinner = new this.Spinner()
-
+        console.log(this.signupData)
         this.paymentOptions
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )

@@ -1053,10 +1053,24 @@ footer .future-days {
   font-weight: normal;
 }
 
+.signup-class .summary {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+
+.signup-class .summary .header {
+  margin: 15px auto;
+}
+
 .signup-class .summary .share-label {
   font-family: "Raleway-Regular";
   font-size: 1.2rem;
+  border-top: 1px solid #666;
   padding: 35px 0;
+}
+
+.signup-class .summary .share-label > div:first-child {
   color: #c98702;
 }
 
@@ -1064,8 +1078,33 @@ footer .future-days {
   color: #155D75;
 }
 
-.signup-class .summary .grand-total {
+.signup-class .summary .section-title {
+  color: #c98702;
+  font-size: 1.1rem;
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+
+.signup-class .summary .selected-options {
+  margin-bottom: 10px;
+}
+
+.signup-class .summary .item-label {
+  color: #155D75;
+}
+
+.signup-class .summary .total {
+  color: black;
+}
+
+.signup-class .summary .share-total {
   font-size: 1.2rem;
+  color: black;
+  margin: 35px auto 25px;
+}
+
+.signup-class .summary .grand-total {
+  font-size: 1.3rem;
   font-weight: 600;
   margin-top: 30px;
   margin-bottom: 30px;

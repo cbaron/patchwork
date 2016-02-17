@@ -1,39 +1,52 @@
 <div data-js="container" class="summary col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
+    <div class="header">Summary of Shares</div>
     {{#each shares}}
         <div class="share-label">
-            <div class="row text-center">{{label}}</div>
-            <div class="row text-center">
+            <div class="text-center">{{label}}</div>
+            <div class="text-center">
                 <span>{{humanStartdate}}</span>
                 <span>-</span>
                 <span>{{humanEnddate}}</span>
             </div>
+            <div class="text-center">{{duration}} weeks</div>
         </div>
+        
+        <div class="section-title">Share Options:</div>
         {{#each selectedOptions}}
-            <div class="row">
-                <span>{{shareoptionlabel}}</span>
-                <span>{{label}}</span>
-                <span>{{value}}</span>
+            <div class="selected-options">
+                <span class="item-label">{{shareoptionlabel}} :  </span>
+                <span>{{optionName}}</span>
+                <div class="price">Price :  ${{totalOptionCostString}} at {{price}} / week</div>
             </div>
         {{/each}}
-        <div class="row">
-            <span>Delivery Method : </span>
-            <span>{{selectedDelivery.label}}</span>
+        <div class="total">Total :  ${{shareOptionsTotalString}}</div>
+
+        <div class="">
+            <div class="section-title">Delivery:</div>
+            <span class="item-label">Method: </span>
+            <span>{{selectedDelivery.name}}</span>
             <span>{{selectedDelivery.address}}</span>
+            <div class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
         </div>
-        <div class="row">
-            <span>Skipping Pickup</span>
-            {{#each skipWeeks}}
+
+        <div class="">
+            <div class="section-title">Dates Unavailable for Share:</div>
+            <div class="skip-weeks item-label">
+            {{#each skipWeeks}}                
                 <span>{{month}}</span> 
-                <span>{{dayOfMonth}}</span> 
-            {{/each}} 
+                <span>{{dayOfMonth}}</span>
+            {{/each}}
+            </div>
+            <div class="total">Price Reduction:  $</div> 
         </div>
-        <div class="row">
-            <span>Total</span>
+
+        <div class="share-total text-center">
+            <span>Share Total :  </span>
             <span>{{total}}</span>
         </div>
     {{/each}}
     <div class="payment row">
-        <div class="heading">Select a method of payment</div>
+        <div class="header">Select a method of payment</div>
         <div class="col-sm-12" data-js="paymentOptions"></div>
         <form data-js="paymentForm" class="hide form-horizontal">
             <div class="form-group">

@@ -50,7 +50,6 @@ Object.assign( PickupDates.prototype, List.prototype, {
             this.skipWeeks.add(model)
             this.updateShare()
         } )
-        console.log('items: ' + this.items)
     },
 
     requiresLogin: false,

@@ -352,19 +352,56 @@
     }
 
     .summary {
+        border: 1px solid;
+        border-radius: 10px;
+        background-color: #f7f7f7;
+
+        .header {
+            margin: 15px auto;
+        }
 
         .share-label {
             font-family: "Raleway-Regular";
             font-size: 1.2rem;
-            padding: 35px 0;
-            color: #c98702;
-            >div:nth-child(2) {
-                color: #155D75;
+            border-top: 1px solid #666;
+            padding: 35px 0;            
+            >div {
+                &:first-child {
+                    color: #c98702;
+                }
+                &:nth-child(2) {
+                    color: #155D75;
+                }
             }
         }
 
-        .grand-total {
+        .section-title {
+            color: #c98702;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            margin-bottom: 5px;
+        }
+
+        .selected-options {
+            margin-bottom: 10px;
+        }
+
+        .item-label {
+            color: #155D75;
+        }
+
+        .total {
+            color: black;
+        }
+
+        .share-total {
             font-size: 1.2rem;
+            color: black;
+            margin: 35px auto 25px;
+        }
+
+        .grand-total {
+            font-size: 1.3rem;
             font-weight: 600;
             margin-top: 30px;
             margin-bottom: 30px;

@@ -23,8 +23,6 @@ Object.assign( Delivery.prototype, List.prototype, {
             }
         } )
 
-        //if( !valid ) this.templateData.container.addClass('has-error')
-
         return valid
 
     }

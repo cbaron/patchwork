@@ -12,6 +12,13 @@ Object.assign( ShareOption.prototype, View.prototype, {
         
         var weeklyShareTotal = optionPrices.reduce( ( a, b ) => a + b ),
             shareTotal = duration * weeklyShareTotal
+
+        Object.assign( this.share.attributes, { 
+            weeklyShareOptionsTotal: weeklyShareTotal,
+            weeklyShareOptionsTotalString: weeklyShareTotal.toFixed(2),
+            shareOptionsTotal: shareTotal,
+            shareOptionsTotalString: shareTotal.toFixed(2) 
+        } )
         
         this.$( shareTotalClass ).text( "Share Total:  $" + shareTotal.toFixed(2) )
         this.$( weeklyTotalClass ).text( "( " + "$" + weeklyShareTotal.toFixed(2) + " per week )" )
@@ -42,19 +49,23 @@ Object.assign( ShareOption.prototype, View.prototype, {
         var $input = this.templateData.input,
             index = $input.get(0).selectedIndex,
             options = this.model.attributes.options.models,
+            label = $input.get(0).options[ index ].text,
+            optionName = label.slice( 0, label.indexOf(":") ),
             price = options[ index ].get('price'),
             duration = this.share.get('duration'),
             priceFloat = parseFloat( price.slice(1) ),
-            optionTotal = parseFloat( priceFloat * duration )
+            optionTotal = priceFloat * duration
 
         this.templateData.optionTotal.text( "$" + optionTotal.toFixed(2) )
 
         Object.assign( this.selectedOption, { 
             value: $input.val(),
             price: price,
-            weeklyCost: priceFloat.toFixed(2),
-            totalCost: optionTotal.toFixed(2),
-            label: $input.get(0).options[$input.get(0).selectedIndex].text
+            weeklyOptionCost: priceFloat,
+            totalOptionCost: optionTotal,
+            totalOptionCostString: optionTotal.toFixed(2),
+            label: $input.get(0).options[$input.get(0).selectedIndex].text,
+            optionName: optionName
         } )
         
         this.calculateShareTotal( duration )
