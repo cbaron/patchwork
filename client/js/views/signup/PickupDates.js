@@ -39,6 +39,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.dates = [ ]
         this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
         this.valid = true
+        this.model.set( 'skipWeeks', [ ] )
 
         List.prototype.postRender.call( this )
         

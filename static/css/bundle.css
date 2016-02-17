@@ -753,6 +753,10 @@ footer .future-days {
   margin-bottom: 20px;
 }
 
+.signup-class .walkthrough-container {
+  min-height: 500px;
+}
+
 .signup-class .nav {
   font-size: 2rem;
   margin-bottom: 30px;

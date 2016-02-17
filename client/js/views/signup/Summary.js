@@ -10,11 +10,14 @@ Object.assign( Summary.prototype, View.prototype, {
         return JSON.stringify( {
             member: this.signupData.member,
             payment: this.getFormData(),
-            shares: this.buildShares()
+            shares: this.buildShares(),
+            total: 525.00
         } )
     },
 
     buildShares() {
+        this.signupData.shares.map( share => console.log( share.attributes ) )
+
         return this.signupData.shares.map( share => ( {
             id: share.id,
             label: share.label,
@@ -71,7 +74,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
-        console.log( this.signupData.shares.map( share => share.attributes ) )
         return {
             shares: this.signupData.shares.map( share => share.attributes )
         }
@@ -102,7 +104,6 @@ Object.assign( Summary.prototype, View.prototype, {
         View.prototype.postRender.call(this)
 
         this.spinner = new this.Spinner()
-        console.log(this.signupData)
         this.paymentOptions
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )
@@ -129,11 +130,11 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     signup() {
-        return
         this.templateData.signupBtn.off('click').text('').append( this.spinner.spin().el )
 
         this.$.ajax( {
             data: this.buildRequest(),
+            headers: { 'Content-Type': 'application/json' },
             method: "POST",
             url: "/signup" } )
         .done( () => {

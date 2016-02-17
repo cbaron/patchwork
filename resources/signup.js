@@ -11,7 +11,7 @@ Object.assign( Signup.prototype, Base.prototype, {
         POST() {
             return this.executeUserQueries()
             .then( memberid => this.Q.all( this.body.shares.map( share => this.executeShareQueries( share, memberid ) ) ) )
-            .then( memberid => if( Object.keys( this.body.payment ) ) return this.executePayment( memberid ) )
+            .then( memberid => { if( Object.keys( this.body.payment ) ) return this.executePayment( memberid ) } )
         }
     } ),
     
@@ -73,28 +73,28 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     insertMember( personid ) {
         return this.dbQuery( {
-            query: 'INSERT INTO member ( phonenumber, address, balance, personid ) VALUES ( $1, $2, $3 ) RETURNING id',
+            query: "INSERT INTO member ( phonenumber, address, balance, personid ) VALUES ( '$1', '$2', $3 ) RETURNING id",
             values: [ this.body.member.phonenumber, this.body.member.address, this.body.total * -1, personid ]
         } ).then( result => result.rows[0].id )
     },
 
     newPersonQueries() {
         return this.dbQuery( {
-            query: 'INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id',
+            query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, '$3' ) RETURNING id",
             values: [ this.body.member.email, this.body.member.password, this.body.member.name ] } )
         .then( result => this.insertMember( result.rows[0].id ) )
     },
 
     updatePersonQueries( personid ) {
         return this.dbQuery( {
-            query: "UPDATE person SET ( password = $1, name = $2 ) WHERE id = $3",
+            query: "UPDATE person SET ( password = $1, name = '$2' ) WHERE id = $3",
             values: [ this.body.member.password, this.body.member.name, personid ] } )
         .then( () => this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } ) )
         .then( result => {
             var row = ( result.rows.length ) ? result.rows[0] : undefined
             if( row ) {
                 return this.dbQuery( {
-                     query: "UPDATE member SET phonenumber = $1, address = $2, balance = $3 WHERE id = $4",
+                     query: "UPDATE member SET phonenumber = '$1', address = '$2', balance = $3 WHERE id = $4",
                      values: [ this.body.member.phonenumber, this.body.member.address, row.balance - ( this.body.total * -1 ), row.id ]
                 } ).then( () => row.id )
             } else { return this.insertMember( personid ) }

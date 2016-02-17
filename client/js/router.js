@@ -19,7 +19,7 @@ module.exports = new (
         },
 
         handler( resource ) {
-            
+
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
             this.footer = require('./views/Footer')
     
@@ -49,6 +49,7 @@ module.exports = new (
         Q: require('q'),
 
         resourceHandler( resource ) {
+
             this.header = require('./views/AdminHeader')
 
             if( this.footer ) this.footer.hide()
