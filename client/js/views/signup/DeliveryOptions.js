@@ -6,13 +6,18 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     calculateOptionCost( model ) {
         var duration = this.model.get('duration'),
             weeklyCost = model.get('price'),
-            weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ).toFixed(2) : parseFloat( weeklyCost.slice(1) ).toFixed(2),
-            optionTotalCost = ( weeklyCostFloat * duration ).toFixed(2)
+            weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ) : parseFloat( weeklyCost.slice(1) ),
+            optionTotalCost = ( weeklyCostFloat * duration )
         
         if( model.get('name') === "farm" ) this.templateData.optionTotal.text( 'Option Total: Save $' + duration.toFixed(2) )
-        else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost )
+        else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost.toFixed(2) )
 
-        this.selectedDelivery = { weeklyCost: weeklyCostFloat, totalCost: optionTotalCost }
+        Object.assign( this.selectedDelivery, {
+            weeklyCost: weeklyCostFloat,
+            weeklyCostString: weeklyCostFloat.toFixed(2),
+            totalCost: optionTotalCost,
+            totalCostString: optionTotalCost.toFixed(2)
+        } )
         
     },
 
@@ -37,7 +42,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
-            Object.assign( this.selectedDelivery, { deliveroptionid: model.id }, this.farmPickup.attributes )
+            Object.assign( this.selectedDelivery, { deliveryoptionid: model.id }, this.farmPickup.attributes )
             this.model.set( 'selectedDelivery', this.selectedDelivery )
 
             this.valid = true
@@ -48,9 +53,9 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         home: require('../../templates/signup/homeDeliveryFeedback')( require('handlebars') ),
         farm: require('../../templates/signup/farmPickupFeedback')( require('handlebars') ),
         invalidZip: function( zipcode ) {
-            return this.util.format( 'Postal Code of %s is not in our delivery area.  Please contact us to discuss options', zipcode )
+            return this.util.format( 'Postal Code of %s is not in our delivery area.  Please contact us to discuss options.', zipcode )
         },
-        noFarmRoute: function() { return "There is currently an error with On-Farm Pickup selection" }
+        noFarmRoute: function() { return "There is currently an error with On-Farm Pickup selection." }
     },
 
     getItemViewOptions() { return { container: this.templateData.options } },
@@ -65,7 +70,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
                     this.model.unset('selectedDelivery')
-                    this.selectedDelivery = { weeklyCost: "0.00", totalCost: "0.00" }
+                    this.selectedDelivery = { weeklyCost: 0, totalCost: 0 }
 
                     this.valid = false 
                 } )
@@ -108,6 +113,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         
         var share = this.model
 
+        this.selectedDelivery = { }
+
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
         this.dropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
         
@@ -128,6 +135,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
+            Object.assign( this.selectedDelivery, { name: model.get('label') } )
             this.calculateOptionCost( model )
             this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
         } )

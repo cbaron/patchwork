@@ -50,7 +50,6 @@ Object.assign( PickupDates.prototype, List.prototype, {
             this.skipWeeks.add(model)
             this.updateShare()
         } )
-        console.log('items: ' + this.items)
     },
 
     requiresLogin: false,
@@ -62,9 +61,13 @@ Object.assign( PickupDates.prototype, List.prototype, {
     template: require('../../templates/signup/pickupDates')( require('handlebars') ),
 
     updateShare() {
-        this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
-
-        valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
+        this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ), { number: this.skipWeeks.length } )
+        
+        this.valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
+        console.log(this.skipWeeks)
+        console.log(this.skipWeeks.length)
+        console.log(this.dates)
+        console.log(this.valid)
     }
 } )
 
