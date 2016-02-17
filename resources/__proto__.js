@@ -208,7 +208,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
                     if( ! verified ) reject( 'Invalid Signature' )
                     this.user = obj.payload
                     resolve()
-                } ).on( 'error', reject )
+                } ).on( 'error', e => { this.user = { }; return resolve() } )
             } )
         }
     }

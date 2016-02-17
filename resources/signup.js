@@ -9,9 +9,14 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     db: Object.assign( {}, Base.prototype.db, {
         POST() {
+            var memberid
+
             return this.executeUserQueries()
-            .then( memberid => this.Q.all( this.body.shares.map( share => this.executeShareQueries( share, memberid ) ) ) )
-            .then( memberid => { if( Object.keys( this.body.payment ) ) return this.executePayment( memberid ) } )
+            .then( memberid => {
+                memberid = memberid
+                return this.Q.all( this.body.shares.map( share => this.executeShareQueries( share, memberid ) ) )
+            } )
+            .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( memberid ) } )
         }
     } ),
     
@@ -25,8 +30,9 @@ Object.assign( Signup.prototype, Base.prototype, {
     } ),
 
     executePayment( memberid ) {
+
         return this.Q(
-            Stripe.charge( {
+            this.Stripe.charge( {
                 amount: this.body.totalCents,
                 description: this.format( 'Purchase of CSA share(s) %s', this.body.shares.map( share => share.label ).join(', ') ),
                 metadata: { memberid: memberid },
@@ -36,7 +42,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             } )
         ).then( charge => this.Q.all( [
             this.dbQuery( {
-                query: 'UPDATE member SET balance = balance + $1 WHERE memberid = $2',
+                query: 'UPDATE member SET balance = balance + $1 WHERE id = $2',
                 values: [ this.body.total, memberid ] } ),
             this.dbQuery( {
                 query: 'INSERT INTO transaction ( description, memberid, origin, amount ) VALUES ( $1, $2, $3, $4 )',
@@ -46,21 +52,24 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     executeShareQueries( share, memberid ) {
-        return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 )', values: [ memberid, share.id ] } )
-        .then( () =>
-            this.Q.all( share.options.map( option =>
+        var membershareid
+
+        return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 ) RETURNING id', values: [ memberid, share.id ] } )
+        .then( result => {
+            membershareid = result.rows[0].id
+            return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
-                    query: "INSERT INTO membershareoption ( memberid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 )",
-                    values: [ memberid, option.shareoptionid, option.shareoptionoption.id ] } ) ) ) )
+                    query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 )",
+                    values: [ result.rows[0].id, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
+        } )
         .then( () => 
             this.dbQuery( {
-                query: "INSERT INTO membersharedelivery ( memberid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 )",
-                values: [ memberid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } ) )
+                query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING membershareid",
+                values: [ membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } ) )
         .then( () =>
-            this.Q.all( share.skipWeeks.map( skipWeek =>
-                this.dbQuery( { query: "INSERT INTO memberskipweek ( memberid, share.id, date ) VALUES ( $1, $2, $3 )",
-                                values: [ memberid, share.id, skipWeek.date ] } ) ) ) )
-        .then( () => memberid )
+            this.Q.all( share.skipWeeks.map( membershareskipweek =>
+                this.dbQuery( { query: "INSERT INTO memberskipweek ( membershareid, date ) VALUES ( $1, $2, $3 )",
+                                values: [ membershareid, share.id, skipWeek.date ] } ) ) ) )
     },
 
     executeUserQueries() {
@@ -73,34 +82,38 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     insertMember( personid ) {
         return this.dbQuery( {
-            query: "INSERT INTO member ( phonenumber, address, balance, personid ) VALUES ( '$1', '$2', $3 ) RETURNING id",
+            query: "INSERT INTO member ( phonenumber, address, balance, personid ) VALUES ( $1, $2, $3, $4 ) RETURNING id",
             values: [ this.body.member.phonenumber, this.body.member.address, this.body.total * -1, personid ]
         } ).then( result => result.rows[0].id )
     },
 
     newPersonQueries() {
         return this.dbQuery( {
-            query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, '$3' ) RETURNING id",
+            query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
             values: [ this.body.member.email, this.body.member.password, this.body.member.name ] } )
         .then( result => this.insertMember( result.rows[0].id ) )
     },
 
+    responses: Object.assign( { }, Base.prototype.responses, {
+        POST() { this.respond( { body: { } } ) }
+    } ),
+
     updatePersonQueries( personid ) {
         return this.dbQuery( {
-            query: "UPDATE person SET ( password = $1, name = '$2' ) WHERE id = $3",
+            query: "UPDATE person SET password = $1, name = $2 WHERE id = $3",
             values: [ this.body.member.password, this.body.member.name, personid ] } )
         .then( () => this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } ) )
         .then( result => {
             var row = ( result.rows.length ) ? result.rows[0] : undefined
             if( row ) {
+                row.balance = parseFloat( row.balance.replace( /\$|,/g,'' ) )
                 return this.dbQuery( {
-                     query: "UPDATE member SET phonenumber = '$1', address = '$2', balance = $3 WHERE id = $4",
-                     values: [ this.body.member.phonenumber, this.body.member.address, row.balance - ( this.body.total * -1 ), row.id ]
+                     query: "UPDATE member SET phonenumber = $1, address = $2, balance = $3 WHERE id = $4",
+                     values: [ this.body.member.phonenumber, this.body.member.address, row.balance + ( this.body.total * -1 ), row.id ]
                 } ).then( () => row.id )
             } else { return this.insertMember( personid ) }
         } )
     }
-
     
 } )
 

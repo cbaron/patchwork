@@ -25,8 +25,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     },
 
     delete: function() {
-        this.templateData.container.remove()
-        this.emit("removed")
+        if( this.templateData && this.templateData.container ) {
+            this.templateData.container.remove()
+            this.emit("removed")
+        }
     },
 
     format: {
@@ -60,15 +62,24 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         this.modalView = require('./modal')
 
+        this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
+
         if( this.requiresLogin && ! this.user.id ) {
             require('./Login').show().once( "success", e => {
-                this.render()
                 this.router.header.onUser( this.user )
+
+                if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
+                    return alert('You do not have access')
+                }
+
+                this.render()
             } )
             return this
+        } else if( this.user.id && this.requiresRole ) {
+            if( ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
+                return alert('You do not have access')
+            }
         }
-
-        this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         return this.render()
     },

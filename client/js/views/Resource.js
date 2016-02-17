@@ -178,6 +178,8 @@ Object.assign( Resource.prototype, Table.prototype, {
         el.typeahead( 'val', this.modelToEdit.get( property.fk.recorddescriptor ).value )
     },
 
+    requiresRole: 'admin',
+
     showCreateDialog() {
 
         this.modalView.show( {
