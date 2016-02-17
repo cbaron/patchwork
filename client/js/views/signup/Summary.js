@@ -28,6 +28,31 @@ Object.assign( Summary.prototype, View.prototype, {
         } ) )
     },
 
+    calculateTotals() {
+        var shareTotals = [ ]
+
+        this.signupData.shares.forEach( share  => {
+            var skipWeeks = share.get('skipWeeks').length,
+                shareDuration = share.get('duration'),
+                weeklyShareOptionsTotal = share.get('weeklyShareOptionsTotal'),
+                weeklyDeliveryTotal = share.get('selectedDelivery')[ 'weeklyCost' ],
+                priceReduction = skipWeeks * ( weeklyShareOptionsTotal + weeklyDeliveryTotal ),
+                shareTotal = ( share.get('shareOptionsTotal') + share.get('selectedDelivery')[ 'totalCost' ] ) - priceReduction
+
+            if( weeklyDeliveryTotal < 0 ) priceReduction = skipWeeks * weeklyShareOptionsTotal
+
+            console.log(skipWeeks)
+            shareTotals.push( shareTotal )
+
+            this.templateData[ this.util.format( 'priceReduction-%s', share.get('id' ) ) ].text( 'Price Reduction :  ' + '$' + priceReduction.toFixed(2) )
+            this.templateData[ this.util.format( 'shareTotal-%s', share.get('id' ) ) ].text( 'Share Total :  ' + '$' + shareTotal.toFixed(2) )
+        } )
+
+        var grandTotal = shareTotals.reduce( ( a, b ) => a + b )
+
+        this.templateData.grandTotal.text( 'Grand Total :  ' + '$' + grandTotal.toFixed(2) )
+    },
+
     cardPaymentSelected() {
         this.signupHandler = () => { if( this.validateCardInfo() ) this.signup() }
 
@@ -74,6 +99,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
+        console.log( this.signupData.shares.map( share => share.attributes ) )
         return {
             shares: this.signupData.shares.map( share => share.attributes )
         }
@@ -101,12 +127,15 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     postRender() {
+        console.log( this.signupData )
         View.prototype.postRender.call(this)
 
         this.spinner = new this.Spinner()
         this.paymentOptions
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )
+
+        this.calculateTotals()
     },
 
     requiresLogin: false,

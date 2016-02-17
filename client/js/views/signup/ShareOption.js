@@ -30,6 +30,8 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     postRender() {
+        console.log(this.share)
+        console.log(this.model)
 
         this.selectedOption = { shareoptionid: this.model.id, shareoptionlabel: this.model.get('label') }
 
@@ -47,25 +49,25 @@ Object.assign( ShareOption.prototype, View.prototype, {
 
     updateShare() {
         var $input = this.templateData.input,
-            index = $input.get(0).selectedIndex,
+            selectedOptionIndex = $input.get(0).selectedIndex,
             options = this.model.attributes.options.models,
-            label = $input.get(0).options[ index ].text,
-            optionName = label.slice( 0, label.indexOf(":") ),
-            price = options[ index ].get('price'),
+            selectedOptionLabel = $input.get(0).options[ selectedOptionIndex ].text,
+            selectedOptionName = options[ selectedOptionIndex ].get('label'),
+            selectedOptionPrice = options[ selectedOptionIndex ].get('price'),
             duration = this.share.get('duration'),
-            priceFloat = parseFloat( price.slice(1) ),
+            priceFloat = parseFloat( selectedOptionPrice.slice(1) ),
             optionTotal = priceFloat * duration
 
         this.templateData.optionTotal.text( "$" + optionTotal.toFixed(2) )
 
         Object.assign( this.selectedOption, { 
             value: $input.val(),
-            price: price,
+            price: selectedOptionPrice,
             weeklyOptionCost: priceFloat,
             totalOptionCost: optionTotal,
             totalOptionCostString: optionTotal.toFixed(2),
-            label: $input.get(0).options[$input.get(0).selectedIndex].text,
-            optionName: optionName
+            label: selectedOptionLabel,
+            name: selectedOptionName
         } )
         
         this.calculateShareTotal( duration )

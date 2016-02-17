@@ -15,7 +15,7 @@
         {{#each selectedOptions}}
             <div class="selected-options">
                 <span class="item-label">{{shareoptionlabel}} :  </span>
-                <span>{{optionName}}</span>
+                <span>{{name}}</span>
                 <div class="price">Price :  ${{totalOptionCostString}} at {{price}} / week</div>
             </div>
         {{/each}}
@@ -23,7 +23,7 @@
 
         <div class="">
             <div class="section-title">Delivery:</div>
-            <span class="item-label">Method: </span>
+            <span class="item-label">Method :  </span>
             <span>{{selectedDelivery.name}}</span>
             <span>{{selectedDelivery.address}}</span>
             <div class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
@@ -37,13 +37,11 @@
                 <span>{{dayOfMonth}}</span>
             {{/each}}
             </div>
-            <div class="total">Price Reduction:  $</div> 
+            <div data-js="priceReduction-{{id}}" class="total"></div> 
         </div>
 
-        <div class="share-total text-center">
-            <span>Share Total :  </span>
-            <span>{{total}}</span>
-        </div>
+        <div data-js="shareTotal-{{id}}" class="share-total text-center"></div>
+
     {{/each}}
     <div class="payment row">
         <div class="header">Select a method of payment</div>
@@ -79,10 +77,7 @@
             <button data-js="signupBtn" class="btn text-center disabled">Become a Member!</button>
         </div>
     </div>
-    <div class="grand-total text-center row">
-        <span>Grand Total : </span>
-        <span>{{grandTotal}}</span>
-    </div>
+    <div data-js="grandTotal" class="grand-total text-center row"></div>
 </div>
 
 
