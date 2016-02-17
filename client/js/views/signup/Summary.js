@@ -17,6 +17,7 @@ Object.assign( Summary.prototype, View.prototype, {
     buildShares() {
         return this.signupData.shares.map( share => ( {
             id: share.id,
+            label: share.label,
             options: share.get('selectedOptions')
                           .map( selectedOption => ( { shareoptionid: selectedOption.shareoptionid, shareoptionoptionid: selectedOption.value } ) ),
             delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid' ] ),
@@ -128,6 +129,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     signup() {
+        return
         this.templateData.signupBtn.off('click').text('').append( this.spinner.spin().el )
 
         this.$.ajax( {
@@ -140,7 +142,7 @@ Object.assign( Summary.prototype, View.prototype, {
         } )
         .fail( () => {
             this.showErrorModal()
-            this.templateData.signupBtn.on( 'click', this.signupHandler )
+            this.templateData.signupBtn.on( 'click', this.signupHandler ).text('Become a Member!')
         } )
         .always( () => this.spinner.stop() )
     },

@@ -16,7 +16,9 @@
     "node-static": "^0.7.7",
     "pg": "^4.4.4",
     "pg-native": "^1.10.0",
-    "q": "^1.4.1"
+    "pg-transaction": "^1.0.4",
+    "q": "^1.4.1",
+    "stripe": "^4.4.0"
   },
   "devDependencies": {
     "address-validator": "^0.2.2",

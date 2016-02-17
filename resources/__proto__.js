@@ -88,7 +88,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.PATCH.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
-    POST: function() {
+    POST() {
         return [
             this.slurpBody.bind(this),
             this.context.POST.bind(this),

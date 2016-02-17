@@ -64,7 +64,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
     updateShare() {
         this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
 
-        valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
+        this.valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }
 } )
 
