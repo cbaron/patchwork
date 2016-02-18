@@ -369,25 +369,36 @@
 .signup-class .summary .payment form .credit-card-info {
   margin-top: 25px;
 }
-.signup-class .summary .payment form #number {
-  width: 300px;
+.signup-class .summary .payment form .number {
   margin-bottom: 3px;
 }
-.signup-class .summary .payment form #number .form-control-feedback {
+.signup-class .summary .payment form .number input {
+  width: 300px;
+}
+.signup-class .summary .payment form .number .form-control-feedback {
   left: 275px;
 }
-.signup-class .summary .payment form .cvc input,
 .signup-class .summary .payment form .expiration input {
   display: inline-block;
+}
+.signup-class .summary .payment form .expiration #exp_month {
   width: 90px;
 }
-.signup-class .summary .payment form .cvc .form-control-feedback:nth-child(2),
-.signup-class .summary .payment form .expiration .form-control-feedback:nth-child(2) {
-  left: 75px;
+.signup-class .summary .payment form .expiration #exp_year {
+  width: 125px;
 }
-.signup-class .summary .payment form .cvc .form-control-feedback:nth-child(5),
+.signup-class .summary .payment form .expiration .form-control-feedback:nth-child(2) {
+  left: 65px;
+}
 .signup-class .summary .payment form .expiration .form-control-feedback:nth-child(5) {
   left: 190px;
+}
+.signup-class .summary .payment form .cvc input {
+  width: 110px;
+  display: inline-block;
+}
+.signup-class .summary .payment form .cvc .form-control-feedback:nth-child(2) {
+  left: 85px;
 }
 .signup-class .summary .payment button {
   position: relative;

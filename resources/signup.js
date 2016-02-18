@@ -68,8 +68,8 @@ Object.assign( Signup.prototype, Base.prototype, {
                 values: [ membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } ) )
         .then( () =>
             this.Q.all( share.skipWeeks.map( membershareskipweek =>
-                this.dbQuery( { query: "INSERT INTO memberskipweek ( membershareid, date ) VALUES ( $1, $2, $3 )",
-                                values: [ membershareid, share.id, skipWeek.date ] } ) ) ) )
+                this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 )",
+                                values: [ membershareid, membershareskipweek.date ] } ) ) ) )
     },
 
     executeUserQueries() {
@@ -82,8 +82,8 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     insertMember( personid ) {
         return this.dbQuery( {
-            query: "INSERT INTO member ( phonenumber, address, balance, personid ) VALUES ( $1, $2, $3, $4 ) RETURNING id",
-            values: [ this.body.member.phonenumber, this.body.member.address, this.body.total * -1, personid ]
+            query: "INSERT INTO member ( phonenumber, address, extraaddress, balance, personid ) VALUES ( $1, $2, $3, $4, $5 ) RETURNING id",
+            values: [ this.body.member.phonenumber, this.body.member.address, this.body.member.extraaddress, this.body.total * -1, personid ]
         } ).then( result => result.rows[0].id )
     },
 
@@ -108,8 +108,8 @@ Object.assign( Signup.prototype, Base.prototype, {
             if( row ) {
                 row.balance = parseFloat( row.balance.replace( /\$|,/g,'' ) )
                 return this.dbQuery( {
-                     query: "UPDATE member SET phonenumber = $1, address = $2, balance = $3 WHERE id = $4",
-                     values: [ this.body.member.phonenumber, this.body.member.address, row.balance + ( this.body.total * -1 ), row.id ]
+                     query: "UPDATE member SET phonenumber = $1, address = $2, extraaddress = $3, balance = $4 WHERE id = $5",
+                     values: [ this.body.member.phonenumber, this.body.member.address, this.body.member.extraaddress, row.balance + ( this.body.total * -1 ), row.id ]
                 } ).then( () => row.id )
             } else { return this.insertMember( personid ) }
         } )

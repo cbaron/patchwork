@@ -16,3 +16,5 @@ ALTER TABLE membershareskipweek DROP COLUMN memberid;
 ALTER TABLE membershareskipweek DROP COLUMN shareid;
 
 ALTER TABLE membershareskipweek ADD COLUMN membershareid INTEGER REFERENCES membershare (id);
+
+ALTER TABLE member ADD COLUMN extraaddress TEXT;

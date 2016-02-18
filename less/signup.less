@@ -478,31 +478,54 @@
                     margin-top: 25px;
                 }
 
-                #number {
-                    width: 300px;
+                .number {
                     margin-bottom: 3px;
+
+                    input {
+                        width: 300px;
+                    }
                     
                     .form-control-feedback {
                         left: 275px;
                     }
                 }
 
-                .cvc,
                 .expiration {
 
                     input {
                         display: inline-block;
+                    }
+
+                    #exp_month {
                         width: 90px;
+                    }
+
+                    #exp_year {
+                        width: 125px;
                     }
 
                     .form-control-feedback {
                         
                         &:nth-child(2) {
-                            left: 75px;
+                            left: 65px;
                         }
                         
                         &:nth-child(5) {
                             left: 190px;
+                        }
+                    }
+                }
+
+                .cvc {
+                        
+                    input {
+                        width: 110px;
+                        display: inline-block;
+                    }
+
+                    .form-control-feedback {
+                        &:nth-child(2) {
+                            left: 85px;
                         }
                     }
                 }

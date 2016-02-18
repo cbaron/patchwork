@@ -58,7 +58,8 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
             this.templateData.header.show()
         } else { this.templateData.header.hide() }
 
-        if( !options.body && this.templateData.body.children().length === 0 ) this.templateData.body.addClass('hide')
+        if( options.body ) { this.templateData.body.html( options.body ) }
+        else if( !options.body && this.templateData.body.children().length === 0 ) { this.templateData.body.addClass('hide') }
 
         if( options.hideFooter ) this.templateData.footer.hide() 
 

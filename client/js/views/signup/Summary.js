@@ -126,7 +126,12 @@ Object.assign( Summary.prototype, View.prototype, {
         
         View.prototype.postRender.call(this)
 
-        this.spinner = new this.Spinner()
+        this.spinner = new this.Spinner( {
+            lines: 9,
+            length: 2,
+            radius: 22
+        } )
+
         this.paymentOptions
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )
@@ -162,13 +167,27 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     showErrorModal() {
+        this.modalView.show( {
+            title: 'Hmmm',
+            body: 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience',
+            hideCancelBtn: true,
+            confirmText: 'Okay' } ).on( 'submit', () => this.modalView.hide() )
     },
     
     showSuccessModal() {
+        this.modalView.show( {
+            title: 'Great Success',
+            body: this.util.format( 'Thanks for signing up.  We look forward to sharing the season with you. %s',
+                ( Object.keys( this.getFormData() ).length ) ?  'You should find a receipt in your email inbox' : '' ),
+            hideCancelBtn: true,
+            confirmText: 'Okay' } ).on( 'submit', () => this.modalView.hide() )
     },
 
     signup() {
-        this.templateData.signupBtn.off('click').text('').append( this.spinner.spin().el )
+        this.templateData.signupBtn
+            .off('click')
+            .text('')
+            .append( this.spinner.spin().el )
 
         this.$.ajax( {
             data: this.buildRequest(),
@@ -181,9 +200,13 @@ Object.assign( Summary.prototype, View.prototype, {
         } )
         .fail( () => {
             this.showErrorModal()
-            this.templateData.signupBtn.on( 'click', this.signupHandler ).text('Become a Member!')
+            this.templateData.signupBtn
+                .on( 'click', this.signupHandler )
+                .text('Become a Member!')
         } )
-        .always( () => this.spinner.stop() )
+        .always( () => {
+            this.spinner.stop()
+       } )
     },
 
     subviews: {
