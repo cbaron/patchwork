@@ -140,7 +140,7 @@ Object.assign( Summary.prototype, View.prototype, {
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( this.signupData.member.address )
             if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( "9057 W. Third St., Dayton, OH 45417" )
-                this.templateData[ this.util.format( 'deliveryTotal-%s', share.get('id') ) ].text( 'Save $13.00 at $1.00 / week' )
+                this.templateData[ this.util.format( 'deliveryTotal-%s', share.get('id') ) ].text( this.util.format( 'Save $%s at $1.00 / week', share.get('duration').toFixed(2) ) )
             }
   
         } )
