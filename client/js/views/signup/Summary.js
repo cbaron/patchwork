@@ -41,7 +41,6 @@ Object.assign( Summary.prototype, View.prototype, {
 
             if( weeklyDeliveryTotal < 0 ) priceReduction = skipWeeks * weeklyShareOptionsTotal
 
-            console.log(skipWeeks)
             shareTotals.push( shareTotal )
 
             this.templateData[ this.util.format( 'priceReduction-%s', share.get('id' ) ) ].text( 'Price Reduction :  ' + '$' + priceReduction.toFixed(2) )
@@ -103,7 +102,6 @@ Object.assign( Summary.prototype, View.prototype, {
         console.log( this.signupData.member )
         return {
             shares: this.signupData.shares.map( share => share.attributes ),
-            member: this.signupData.member
         }
     },
 
@@ -138,6 +136,21 @@ Object.assign( Summary.prototype, View.prototype, {
             .on( 'itemUnselected', model => this.paymentUnselected() )
 
         this.calculateTotals()
+
+        this.signupData.shares.forEach( share => {
+            if( share.get('skipWeeks').length === 0 )
+                this.templateData[ this.util.format( 'skipWeeks-%s', share.get('id') ) ].hide()
+            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" )
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( this.signupData.member.address )
+            if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( "9057 W. Third St., Dayton, OH 45417" )
+                this.templateData[ this.util.format( 'deliveryTotal-%s', share.get('id') ) ].text( 'Save $13.00 at $1.00 / week' )
+            }
+            
+            console.log( share.get('selectedDelivery')['deliveryType'] )
+            console.log( this.signupData.member.address )  
+        } )
+
     },
 
     requiresLogin: false,

@@ -135,7 +135,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            Object.assign( this.selectedDelivery, { name: model.get('label') } )
+            Object.assign( this.selectedDelivery, { deliveryType: model.get('label') } )
             this.calculateOptionCost( model )
             this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
         } )

@@ -11,21 +11,25 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias4(((helper = (helper = helpers.humanEnddate || (depth0 != null ? depth0.humanEnddate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"humanEnddate","hash":{},"data":data}) : helper)))
     + "</span></div><div class=\"text-center\">"
     + alias4(((helper = (helper = helpers.duration || (depth0 != null ? depth0.duration : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"duration","hash":{},"data":data}) : helper)))
-    + " weeks</div></div><div class=\"section-title\">Share Options:</div>            "
+    + " weeks</div></div><div class=\"share-options-summary\"><div class=\"section-title\">Share Options:</div>                "
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.selectedOptions : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "            <div class=\"total\">Total :  $"
+    + "                <div class=\"total\">Total :  $"
     + alias4(((helper = (helper = helpers.shareOptionsTotalString || (depth0 != null ? depth0.shareOptionsTotalString : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"shareOptionsTotalString","hash":{},"data":data}) : helper)))
-    + "</div><div class=\"\"><div class=\"section-title\">Delivery:</div><span class=\"item-label\">Method :  </span><span>"
-    + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.name : stack1), depth0))
-    + "</span><span>"
-    + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.address : stack1), depth0))
-    + "</span><div class=\"total\">Total :  $"
+    + "</div></div><div class=\"delivery-summary\"><div class=\"section-title\">Delivery:</div><div><span class=\"item-label\">Method :  </span><span>"
+    + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.deliveryType : stack1), depth0))
+    + "</span></div>                "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.groupdropoffid : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.program(6, data, 0),"data":data})) != null ? stack1 : "")
+    + "                <div data-js=\"deliveryTotal-"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\" class=\"total\">Total :  $"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.totalCostString : stack1), depth0))
     + " at $"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.weeklyCostString : stack1), depth0))
-    + " / week</div></div><div class=\"\"><div class=\"section-title\">Dates Unavailable for Share:</div><div class=\"skip-weeks item-label\">                "
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.skipWeeks : depth0),{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "                </div><div data-js=\"priceReduction-"
+    + " / week</div></div><div data-js=\"skipWeeks-"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\" class=\"skip-weeks-summary\"><div class=\"section-title\">Dates Unavailable for Share:</div><div class=\"item-label\">                "
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.skipWeeks : depth0),{"name":"each","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "                </div><div class=\"price-reduction\" data-js=\"priceReduction-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\"></div></div><div data-js=\"shareTotal-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
@@ -33,7 +37,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"2":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "                <div class=\"selected-options\"><span class=\"item-label\">"
+  return "                    <div class=\"selected-options\"><span class=\"item-label\">"
     + alias4(((helper = (helper = helpers.shareoptionlabel || (depth0 != null ? depth0.shareoptionlabel : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"shareoptionlabel","hash":{},"data":data}) : helper)))
     + " :  </span><span>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
@@ -41,13 +45,27 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias4(((helper = (helper = helpers.totalOptionCostString || (depth0 != null ? depth0.totalOptionCostString : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"totalOptionCostString","hash":{},"data":data}) : helper)))
     + " at "
     + alias4(((helper = (helper = helpers.price || (depth0 != null ? depth0.price : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"price","hash":{},"data":data}) : helper)))
-    + " / week</div></div>            ";
+    + " / week</div></div>                ";
 },"4":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "                <div><span class=\"item-label\">Dropoff :  </span><span>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.label : stack1), depth0))
+    + "</span></div><div><span class=\"item-label\">Address :  </span><span>"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.address : stack1), depth0))
+    + "</span></div>                ";
+},"6":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "                <div data-js=\"deliveryAddress-"
+    + container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"id","hash":{},"data":data}) : helper)))
+    + "\"><span class=\"item-label\">Address :  </div>                ";
+},"8":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "                                    <span>"
+  return "                                   <span>"
     + alias4(((helper = (helper = helpers.month || (depth0 != null ? depth0.month : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"month","hash":{},"data":data}) : helper)))
-    + "</span><span>"
+    + "</span><span class=\"skip-date\">"
     + alias4(((helper = (helper = helpers.dayOfMonth || (depth0 != null ? depth0.dayOfMonth : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dayOfMonth","hash":{},"data":data}) : helper)))
     + "</span>                ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {

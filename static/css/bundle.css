@@ -410,7 +410,7 @@ footer .future-days {
 }
 
 .signup .header-class {
-  background-image: url("/static/img/cherry-tomatoes-sm.jpg");
+  background-image: url("/static/img/headers/cherry-tomatoes-sm.jpg");
 }
 
 .about .header-class {
@@ -1100,6 +1100,14 @@ footer .future-days {
   color: #155D75;
 }
 
+.signup-class .summary .share-summary .skip-date {
+  margin-right: 3px;
+}
+
+.signup-class .summary .share-summary .price-reduction {
+  color: black;
+}
+
 .signup-class .summary .share-summary .total {
   color: black;
   margin-top: 10px;
@@ -1180,7 +1188,7 @@ footer .future-days {
 .signup-class .summary .payment form .cvc input,
 .signup-class .summary .payment form .expiration input {
   display: inline-block;
-  width: 100px;
+  width: 90px;
 }
 
 .signup-class .summary .payment form .cvc .form-control-feedback:nth-child(2),

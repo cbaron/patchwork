@@ -2,6 +2,7 @@
     <div class="share-summary">
         <div class="header">Summary of Shares</div>
         {{#each shares}}
+
             <div class="share-label">
                 <div class="text-center">{{label}}</div>
                 <div class="text-center">
@@ -11,34 +12,49 @@
                 </div>
                 <div class="text-center">{{duration}} weeks</div>
             </div>
-            
-            <div class="section-title">Share Options:</div>
-            {{#each selectedOptions}}
-                <div class="selected-options">
-                    <span class="item-label">{{shareoptionlabel}} :  </span>
-                    <span>{{name}}</span>
-                    <div class="price">Price :  ${{totalOptionCostString}} at {{price}} / week</div>
-                </div>
-            {{/each}}
-            <div class="total">Total :  ${{shareOptionsTotalString}}</div>
 
-            <div class="">
-                <div class="section-title">Delivery:</div>
-                <span class="item-label">Method :  </span>
-                <span>{{selectedDelivery.name}}</span>
-                <span>{{selectedDelivery.address}}</span>
-                <div class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
+            <div class="share-options-summary">
+                <div class="section-title">Share Options:</div>
+                {{#each selectedOptions}}
+                    <div class="selected-options">
+                        <span class="item-label">{{shareoptionlabel}} :  </span>
+                        <span>{{name}}</span>
+                        <div class="price">Price :  ${{totalOptionCostString}} at {{price}} / week</div>
+                    </div>
+                {{/each}}
+                <div class="total">Total :  ${{shareOptionsTotalString}}</div>
             </div>
 
-            <div class="">
+            <div class="delivery-summary">
+                <div class="section-title">Delivery:</div>
+                <div>
+                    <span class="item-label">Method :  </span>
+                    <span>{{selectedDelivery.deliveryType}}</span>
+                </div>
+                {{#if selectedDelivery.groupdropoffid}}
+                <div>
+                    <span class="item-label">Dropoff :  </span>
+                    <span>{{selectedDelivery.label}}</span>
+                </div>
+                <div>
+                    <span class="item-label">Address :  </span>
+                    <span>{{selectedDelivery.address}}</span>
+                </div>
+                {{else}}
+                <div data-js="deliveryAddress-{{id}}"><span class="item-label">Address :  </div>
+                {{/if}}
+                <div data-js="deliveryTotal-{{id}}" class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
+            </div>
+
+            <div data-js="skipWeeks-{{id}}" class="skip-weeks-summary">
                 <div class="section-title">Dates Unavailable for Share:</div>
-                <div class="skip-weeks item-label">
-                {{#each skipWeeks}}                
+                <div class="item-label">
+                {{#each skipWeeks}}               
                     <span>{{month}}</span> 
-                    <span>{{dayOfMonth}}</span>
+                    <span class="skip-date">{{dayOfMonth}}</span>
                 {{/each}}
                 </div>
-                <div data-js="priceReduction-{{id}}"></div> 
+                <div class="price-reduction" data-js="priceReduction-{{id}}"></div> 
             </div>
 
             <div data-js="shareTotal-{{id}}" class="share-total text-center"></div>

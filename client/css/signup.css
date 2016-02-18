@@ -306,6 +306,12 @@
 .signup-class .summary .share-summary .item-label {
   color: #155D75;
 }
+.signup-class .summary .share-summary .skip-date {
+  margin-right: 3px;
+}
+.signup-class .summary .share-summary .price-reduction {
+  color: black;
+}
 .signup-class .summary .share-summary .total {
   color: black;
   margin-top: 10px;
@@ -373,7 +379,7 @@
 .signup-class .summary .payment form .cvc input,
 .signup-class .summary .payment form .expiration input {
   display: inline-block;
-  width: 100px;
+  width: 90px;
 }
 .signup-class .summary .payment form .cvc .form-control-feedback:nth-child(2),
 .signup-class .summary .payment form .expiration .form-control-feedback:nth-child(2) {
