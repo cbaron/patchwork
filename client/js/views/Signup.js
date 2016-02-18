@@ -24,6 +24,13 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     instances: { },
 
+    noShares() {
+        this.templateData.leftBtn.hide()
+        this.templateData.rightBtn.hide()
+
+        this.instances.shares.templateData.header.text('There are no shares available at this time')
+    },
+
     postRender() {
         
         if( ! this.currentIndex ) this.currentIndex = 0
@@ -97,7 +104,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     views: [
-        { name: 'shares', view: require('./signup/Shares') },
+        { name: 'shares', view: require('./signup/Shares'), on: [ { event: 'noShares', method: 'noShares' } ] },
         { name: 'memberInfo', view: require('./signup/MemberInfo') },
         { name: 'shareOptions', view: require('./signup/ShareOptions') },
         { name: 'delivery', view: require('./signup/Delivery') },

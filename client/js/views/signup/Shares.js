@@ -10,7 +10,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     events: {
     },
 
-    fetch: true,
+    fetch: { data: { display: true } },
 
     getItemViewOptions() {
         return { container: this.templateData.shares }
@@ -20,6 +20,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         List.prototype.postRender.call(this)
         this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
         this.signupData.shares = new this.Collection()
+        this.items.on( 'reset', () => { if( this.items.length === 0 ) this.emit('noShares') } )
     },
 
     requiresLogin: false,
