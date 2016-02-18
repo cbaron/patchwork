@@ -97,7 +97,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     Q: require('q'),
 
-    render: function() {
+    render() {
         this.slurpTemplate( {
             template: this.template( this.getTemplateOptions() ),
             insertion: { $el: this.insertionEl || this.container, method: this.insertionMethod } } )

@@ -1,6 +1,15 @@
 var View = require('../MyView'),
     Form = require('../util/Form').prototype,
-    Summary = function() { return View.apply( this, arguments ) }
+    Summary = function() { 
+        
+        this.spinner = new this.Spinner( {
+            lines: 9,
+            length: 2,
+            radius: 22
+        } ) 
+
+        return View.apply( this, arguments )
+    }
 
 Object.assign( Summary.prototype, View.prototype, {
 
@@ -31,7 +40,7 @@ Object.assign( Summary.prototype, View.prototype, {
 
         this.signupData.shares.forEach( share  => {
             var skipWeeks = share.get('skipWeeks').length,
-                shareDuration = share.get('duration'),
+                shareDuration = share.get('availableShareDates'),
                 weeklyShareOptionsTotal = share.get('weeklyShareOptionsTotal'),
                 weeklyDeliveryTotal = share.get('selectedDelivery')[ 'weeklyCost' ],
                 priceReduction = skipWeeks * ( weeklyShareOptionsTotal + weeklyDeliveryTotal ),
@@ -126,30 +135,26 @@ Object.assign( Summary.prototype, View.prototype, {
         
         View.prototype.postRender.call(this)
 
-        this.spinner = new this.Spinner( {
-            lines: 9,
-            length: 2,
-            radius: 22
-        } )
-
         this.paymentOptions
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )
 
         this.calculateTotals()
+        this.updateSummaryInfo()
+    },
 
+    updateSummaryInfo() {
         this.signupData.shares.forEach( share => {
-            if( share.get('skipWeeks').length === 0 )
-                this.templateData[ this.util.format( 'skipWeeks-%s', share.get('id') ) ].hide()
-            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" )
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( this.signupData.member.address )
-            if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( "9057 W. Third St., Dayton, OH 45417" )
-                this.templateData[ this.util.format( 'deliveryTotal-%s', share.get('id') ) ].text( this.util.format( 'Save $%s at $1.00 / week', share.get('duration').toFixed(2) ) )
-            }
-  
-        } )
+            this.templateData[ this.util.format( 'skipWeeks-%s', share.get('id') ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
 
+            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].append( this.signupData.member.address )
+            } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
+                this.templateData[ this.util.format( 'deliveryTotal-%s', share.id ) ].text(
+                    this.util.format( 'Save $%s at $1.00 / week', share.get('availableShareDates').toFixed(2) ) )
+            }
+        } )
     },
 
     requiresLogin: false,
@@ -158,6 +163,12 @@ Object.assign( Summary.prototype, View.prototype, {
         if( $el.siblings('.help-block').length === 1 ) $el.parent().parent().removeClass('has-error')
         $el.next().removeClass('hide').removeClass('glyphicon-remove')
         $el.siblings( this.util.format( '.help-block.%s', $el.attr('id') ) ).remove()
+    },
+
+    show() {
+        this.templateData.container.empty().remove()
+        this.render()
+        return this
     },
 
     showError( $el, error ) {

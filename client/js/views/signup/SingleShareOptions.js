@@ -8,7 +8,7 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
     getItemViewOptions() {
         return {
             container: this.templateData.row,
-            share: this._( this.signupData.shares ).find( share => share.id === this.model.id )
+            share: this.model
         }
     },
 

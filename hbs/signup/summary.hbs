@@ -10,7 +10,7 @@
                     <span>-</span>
                     <span>{{humanEnddate}}</span>
                 </div>
-                <div class="text-center">{{duration}} weeks</div>
+                <div class="text-center">{{availableShareDates}} weeks</div>
             </div>
 
             <div class="share-options-summary">
@@ -31,18 +31,14 @@
                     <span class="item-label">Method :  </span>
                     <span>{{selectedDelivery.deliveryType}}</span>
                 </div>
-                {{#if selectedDelivery.groupdropoffid}}
                 <div>
                     <span class="item-label">Dropoff :  </span>
                     <span>{{selectedDelivery.label}}</span>
                 </div>
                 <div>
                     <span class="item-label">Address :  </span>
-                    <span>{{selectedDelivery.address}}</span>
+                    <span data-js="deliveryAddress-{{id}}">{{selectedDelivery.address}}</span>
                 </div>
-                {{else}}
-                <div data-js="deliveryAddress-{{id}}"><span class="item-label">Address :  </div>
-                {{/if}}
                 <div data-js="deliveryTotal-{{id}}" class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
             </div>
 

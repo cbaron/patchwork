@@ -14,32 +14,34 @@ Object.assign( PickupDates.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     itemModels() {
-        var deliveryDay = this.model.get('selectedDelivery').dayofweek,
+        var deliveryDay = this.model.get('selectedDeliveryDayOfWeek'),
             deliveryDate = this.moment( this.model.get('startdate') ),
             endDate = this.moment( this.model.get('enddate') ),
             startDay = this.moment( deliveryDate ).day()
+        
+        this.dates = [ ]
+        this.model.set( 'skipWeeks', [ ] )
+        this.skipWeeks.reset([])
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()
         }
 
-        this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
-
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
             this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
             deliveryDate.add( 7, 'days' )
         }
+
+        this.model.set( 'availableShareDates', this.dates.length )
 
         return this.dates
 
     },
 
     postRender() {
-        this.dates = [ ]
         this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
         this.valid = true
-        this.model.set( 'skipWeeks', [ ] )
 
         List.prototype.postRender.call( this )
         
@@ -50,6 +52,10 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.on( 'itemUnselected', model => {
             this.skipWeeks.add(model)
             this.updateShare()
+        } )
+
+        this.model.on( 'change:selectedDeliveryDayOfWeek', () => {
+            this.items.reset( this.itemModels() )
         } )
     },
 

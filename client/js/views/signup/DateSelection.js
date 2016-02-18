@@ -7,7 +7,14 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
     getItemViewOptions() { return { container: this.templateData.shares } },
     
-    itemModels() { return this.signupData.shares },
+    itemModels() { return this.signupData.shares.models },
+
+    postRender() {
+        List.prototype.postRender.call(this)
+
+        this.signupData.shares.on( 'add', share => this.items.add( share ) )
+                              .on( 'remove', share => this.items.remove( share ) )
+    },
 
     requiresLogin: false,
 
