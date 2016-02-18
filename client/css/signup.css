@@ -466,3 +466,32 @@
 .has-error .error {
   display: block;
 }
+.addresses > div:first-child {
+  color: #c98702;
+  font-family: RalewayRegular;
+}
+.addresses .list-container {
+  border: 1px solid black;
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.addresses .address {
+  color: #155D75;
+  cursor: pointer;
+  padding: 10px;
+}
+.addresses .address:hover {
+  border-color: #ccc;
+  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+.addresses .address.selected {
+  background-color: rgba(201, 135, 2, 0.3);
+}
+.addresses .address + .address {
+  border-top: 1px solid black;
+}

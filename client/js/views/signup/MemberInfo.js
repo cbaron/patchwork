@@ -81,6 +81,40 @@ Object.assign( MemberInfo.prototype, View.prototype, {
            .after( Form.templates.fieldError( { error: error } ) )
     },
 
+    suggestAddresses( suggestions ) {
+
+        suggestions.forEach( ( suggestion, idx ) => suggestion.id = idx )
+
+        this.addressSuggestions =
+            new this.Views.Addresses( {
+                container: this.modalView.templateData.body,
+                itemModels: suggestions
+            } )
+
+        this.modalView.show( {
+            title: "Address Suggestions",
+            confirmText: "Choose Address"
+        } ).on( 'submit', () => {
+            var selectedIds = Object.keys( this.addressSuggestions.selectedItems ),
+                suggestion
+
+            if( selectedIds.length !== 1 ) return
+
+            suggestion = suggestions[ selectedIds[0] ]
+
+            this.templateData.address.val(
+                this.util.format( '%s %s %s %s %s',
+                    suggestion.streetNumber,
+                    suggestion.street,
+                    suggestion.city,
+                    suggestion.stateAbbr,
+                    suggestion.postalCode )
+            ).focus()
+
+            this.modalView.hide()
+        } )
+    },
+
     template: require('../../templates/signup/memberInfo')( require('handlebars') ),
 
     validate() {
@@ -110,13 +144,20 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 method: "GET",
                 url: "/validate-address" } ) )
         .then( response => {
-            if( response.valid.length === 0 ) return false
+            if( response.valid.length === 0 ) {
+                 if( response.inexact.length === 0 ) return false
+                 this.suggestAddresses( response.inexact ); return false
+            }
+
             this.templateData.address.val( response.valid[0].string ) 
             this.signupData.addressModel = response.valid[0].model
             return true
         } )
         .fail( e => { console.log( e.stack || e ); return false } )
+    },
 
+    Views: {
+        Addresses: require('./Addresses')
     }
 
 } )

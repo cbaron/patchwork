@@ -16,8 +16,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     buildShares() {
-        this.signupData.shares.map( share => console.log( share.attributes ) )
-
         return this.signupData.shares.map( share => ( {
             id: share.id,
             label: share.label,
@@ -98,8 +96,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
-        console.log( this.signupData.shares.map( share => share.attributes ) )
-        console.log( this.signupData.member )
         return {
             shares: this.signupData.shares.map( share => share.attributes ),
         }
@@ -127,7 +123,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     postRender() {
-        console.log( this.signupData )
+        
         View.prototype.postRender.call(this)
 
         this.spinner = new this.Spinner()
@@ -146,9 +142,7 @@ Object.assign( Summary.prototype, View.prototype, {
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.get('id') ) ].append( "9057 W. Third St., Dayton, OH 45417" )
                 this.templateData[ this.util.format( 'deliveryTotal-%s', share.get('id') ) ].text( 'Save $13.00 at $1.00 / week' )
             }
-            
-            console.log( share.get('selectedDelivery')['deliveryType'] )
-            console.log( this.signupData.member.address )  
+  
         } )
 
     },
