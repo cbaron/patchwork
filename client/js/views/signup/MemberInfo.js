@@ -88,14 +88,14 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
     suggestAddresses( suggestions ) {
 
-        suggestions.forEach( ( suggestion, idx ) => suggestion.id = idx )
+        if( this.modalView.templateData.container.is(":visible") ) return
 
         this.addressSuggestions =
             new this.Views.Addresses( {
                 container: this.modalView.templateData.body,
-                itemModels: suggestions
+                itemModels: suggestions.map( ( suggestion, idx ) => ( { id: idx, string: suggestion.string } ) )
             } )
-
+        
         this.modalView.show( {
             title: "Address Suggestions",
             confirmText: "Choose Address"
@@ -107,17 +107,11 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
             suggestion = suggestions[ selectedIds[0] ]
 
-            this.templateData.address.val(
-                this.util.format( '%s %s %s %s %s',
-                    suggestion.streetNumber,
-                    suggestion.street,
-                    suggestion.city,
-                    suggestion.stateAbbr,
-                    suggestion.postalCode )
-            ).focus()
+            this.templateData.address.val( suggestion.string ).focus()
 
             this.modalView.hide()
-        } )
+
+        } ).on( 'hidden', () => this.addressSuggestions.delete() )
     },
 
     template: require('../../templates/signup/memberInfo')( require('handlebars') ),
@@ -151,7 +145,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .then( response => {
             if( response.valid.length === 0 ) {
                  if( response.inexact.length === 0 ) return false
-                 this.suggestAddresses( response.inexact ); return false
+                 else if( response.inexact.length === 1 ) {
+                    this.templateData.address.val( response.inexact[0].string ) 
+                    this.signupData.addressModel = response.inexact[0].model
+                    return true
+                 } else {
+                     this.suggestAddresses( response.inexact ); return false
+                 }
             }
 
             this.templateData.address.val( response.valid[0].string ) 

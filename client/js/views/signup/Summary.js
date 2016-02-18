@@ -2,10 +2,12 @@ var View = require('../MyView'),
     Form = require('../util/Form').prototype,
     Summary = function() { 
         
-        this.spinner = new this.Spinner( {
-            lines: 9,
+        window.spinner = this.spinner = new this.Spinner( {
+            color: '#fff',
+            lines: 7,
             length: 2,
-            radius: 22
+            radius: 14,
+            scale: 0.5
         } ) 
 
         return View.apply( this, arguments )
@@ -197,7 +199,7 @@ Object.assign( Summary.prototype, View.prototype, {
     signup() {
         this.templateData.signupBtn
             .off('click')
-            .text('')
+            .addClass('has-spinner')
             .append( this.spinner.spin().el )
 
         this.$.ajax( {
@@ -206,7 +208,9 @@ Object.assign( Summary.prototype, View.prototype, {
             method: "POST",
             url: "/signup" } )
         .done( () => {
-            this.templateData.signupBtn.text('Thank you')
+            this.emit('done')
+            this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
+            //this.templateData.signupBtn.text('Thank you')
             this.showSuccessModal()
         } )
         .fail( () => {
@@ -216,7 +220,8 @@ Object.assign( Summary.prototype, View.prototype, {
                 .text('Become a Member!')
         } )
         .always( () => {
-            this.spinner.stop()
+            //this.spinner.stop()
+            //this.templateData.signupBtn.removeClass('has-spinner')
        } )
     },
 

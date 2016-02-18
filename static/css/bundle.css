@@ -74,6 +74,7 @@
 
 .modal-backdrop {
   bottom: 0;
+  position: fixed;
 }
 
 html {
@@ -1220,6 +1221,15 @@ footer .future-days {
 .signup-class .summary .payment button {
   position: relative;
   margin-bottom: 20px;
+}
+
+.signup-class .summary .payment button.has-spinner {
+  color: #5cb85c;
+}
+
+.signup-class .summary .payment button.has-spinner:focus,
+.signup-class .summary .payment button.has-spinner:hover {
+  color: #449d44;
 }
 
 @media only screen and (max-width: 400px) {

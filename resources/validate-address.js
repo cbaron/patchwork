@@ -18,7 +18,7 @@ Object.assign( ValidateAddress.prototype, BaseResource.prototype, {
                 if( err ) return reject( err )
                 this.respond( { body: {
                     valid: validAddresses.map( address => ( { string: address.toString(), model: address } ) ),
-                    inexact: inexactMatches
+                    inexact: inexactMatches.map( address => ( { string: address.toString(), model: address } ) )
                 } } )
                 resolve()
             } )

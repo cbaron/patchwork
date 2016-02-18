@@ -3,6 +3,11 @@ var MyView = require('./MyView'),
 
 Object.assign( Signup.prototype, MyView.prototype, {
 
+    done() {
+        this.templateData.leftBtn.hide()
+        this.templateData.rightBtn.hide()
+    },
+
     events: {
         'leftBtn': { method: 'goBack' },
         'rightBtn': { method: 'validateView' },
@@ -61,9 +66,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.showProperNav()
         
-        if( this.instances[ currentViewName ] ) {
-            return this.instances[ currentViewName ].show().templateData.container.addClass(klass)
-        }
+        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show().templateData.container.addClass(klass)
         
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
@@ -72,6 +75,11 @@ Object.assign( Signup.prototype, MyView.prototype, {
             } )
         
         this.instances[ currentViewName ].templateData.container.addClass(klass)
+
+        if( this.views[ this.currentIndex ].on ) {
+            this.views[ this.currentIndex ].on.forEach( eventData =>
+                this.instances[ currentViewName ].on( eventData.event, () => this[ eventData.method ]() ) )
+        }
         
         return this
     },
@@ -94,7 +102,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         { name: 'shareOptions', view: require('./signup/ShareOptions') },
         { name: 'delivery', view: require('./signup/Delivery') },
         { name: 'dateSelection', view: require('./signup/DateSelection') },
-        { name: 'summary', view: require('./signup/Summary') }
+        { name: 'summary', view: require('./signup/Summary'), on: [ { event: 'done', method: 'done' } ] }
     ]
 
 } )
