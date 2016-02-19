@@ -22,7 +22,7 @@ Object.assign( Delivery.prototype, List.prototype, {
 
     validate() {
         var valid = true
-        
+       
         Object.keys( this.itemViews ).forEach( id => {
             if( ! this.itemViews[id].valid ) {
                 valid = false
@@ -30,9 +30,11 @@ Object.assign( Delivery.prototype, List.prototype, {
             }
         } )
 
+        if( ! valid ) return
+
         this.signupData.shares.forEach( share => share.set( 'selectedDeliveryDayOfWeek', share.get('selectedDelivery').dayofweek ) )
 
-        return valid
+        return true
 
     }
 

@@ -124,12 +124,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         share.set( { deliveryoptionids: new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )() } )
         share.get('deliveryoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
-            if( share.get('deliveryoptionids') ) {
+            if( share.get('deliveryoptionids').length ) {
                 share.set( { deliveryoptions: new ( this.Collection.extend( { url: "/deliveryoption" } ) )() } )
                 share.get('deliveryoptions')
                     .fetch( { data: { id: share.get('deliveryoptionids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
                     .done( () => this.items.reset( share.get('deliveryoptions').models ) )
                     .fail( e => console.log( e.stack || e ) ) 
+            } else {
+                this.templateData.options.text('This share does not have delivery options associated with it.  Please contact Patchwork and sign up for this particular share at  a later date.')
             }
         } )
 

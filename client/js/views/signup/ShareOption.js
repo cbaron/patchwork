@@ -30,7 +30,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     postRender() {
-
         this.selectedOption = { shareoptionid: this.model.id, shareoptionlabel: this.model.get('label') }
 
         this.share.set( 'selectedOptions',

@@ -117,7 +117,8 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     removeItem( item ) {
         if( this.itemViews[ item.id ].templateData.container.hasClass('selected') ) this.unselectItem( item )
-        this.itemViews[ item.id ].templateData.container.remove()
+        this.itemViews[ item.id ].delete()
+        delete this.itemViews[ item.id ]
     },
 
     reOrderDOM: function() {

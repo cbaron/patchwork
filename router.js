@@ -104,13 +104,13 @@ Object.assign( Router.prototype, MyObject.prototype, {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
         if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
-            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, true ) )
+            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
                    ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
-            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, true ) )
+            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
             if( path[1] === "" ) path[1] === "index"
-            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, true ) )
+            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, 500, true ) )
         }
 
         return this.handleFailure( response, new Error("Not Found"), 404, false )
