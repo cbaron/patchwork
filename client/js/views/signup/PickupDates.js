@@ -23,11 +23,13 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.model.set( 'skipWeeks', [ ] )
         this.skipWeeks.reset([])
 
+        if( ! this.model.has('selectedDeliveryDayOfWeek') ) return 
+
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()
         }
-
+        
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
             this.dates.push( new this.Models.DeliveryDate( deliveryDate, { parse: true } ) )
             deliveryDate.add( 7, 'days' )

@@ -12,8 +12,10 @@ Object.assign( Delivery.prototype, List.prototype, {
     postRender() {
         List.prototype.postRender.call(this)
 
-        this.signupData.shares.on( 'add', share => this.items.add( share ) )
-                              .on( 'remove', share => this.items.remove( share ) )
+        this.signupData.shares
+            .on( 'add', share => this.items.add( share ) )
+            .on( 'remove', share => this.items.remove( share ) )
+
     },
 
     requiresLogin: false,

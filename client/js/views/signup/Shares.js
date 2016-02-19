@@ -35,9 +35,6 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
         if( selectedShareIds.length === 0 ) { this.templateData.container.addClass('has-error'); return false }
         
-        console.log( prevShareIds )
-        console.log( selectedShareIds )
-
         this._( prevShareIds ).difference( selectedShareIds ).forEach( id => {
             var share = this.items.get(id)
             share.unset('selectedOptions')
@@ -47,7 +44,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             this.signupData.shares.remove( share )
         } )
 
-        this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) ) )
+        this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) )  )
         
         return true
     }

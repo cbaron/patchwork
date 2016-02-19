@@ -126,7 +126,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             .then( result => {
                 if( result === false ) {
                     valid = false
-                    this.showError( $el, field.error )
+                    this.showError( this.templateData[ field.name ], field.error )
                 }
                 this.signupData.member[ field.name ] = this.templateData[ field.name ].val()
             } )
