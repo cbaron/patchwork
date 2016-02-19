@@ -1205,6 +1205,10 @@ footer .future-days {
   font-size: .75rem;
 }
 
+.signup-class .summary .payment .payment-options .payment-option .method-total {
+  font-weight: bold;
+}
+
 .signup-class .summary .payment form .credit-card-info {
   margin-top: 25px;
 }

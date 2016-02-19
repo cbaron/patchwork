@@ -236,8 +236,8 @@ Object.assign( Summary.prototype, View.prototype, {
         var total = ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
         this.templateData.grandTotal.text( 'Grand Total :  ' + '$' + total.toFixed(2) )
 
-        this.$('.payment-option:first-child .method-total').text( 'Grand Total :  ' + this.grandTotal.toFixed(2) )
-        this.$('.payment-option:last-child .method-total').text( 'Grand Total :  ' + this.grandTotalPlusFee.toFixed(2) )
+        this.$('.payment-option:first-child .method-total').text( 'Grand Total :  ' + '$' + this.grandTotal.toFixed(2) )
+        this.$('.payment-option:last-child .method-total').text( 'Grand Total :  ' + '$' + this.grandTotalPlusFee.toFixed(2) )
     },
 
     updateSummaryInfo() {
