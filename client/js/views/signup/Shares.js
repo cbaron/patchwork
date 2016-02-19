@@ -30,18 +30,24 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     template: require('../../templates/signup/shares')( require('handlebars') ),
 
     validate() {
-        var prevShares = this.signupData.shares,
-            prevShareIds = ( prevShares ) ? prevShares.map( share => share.id ) : [ ],
-            selectedShareIds = Object.keys( this.selectedItems )
+        var prevShareIds = this.signupData.shares.map( share => share.id ),
+            selectedShareIds = Object.keys( this.selectedItems ).map( id => parseInt(id) )
 
         if( selectedShareIds.length === 0 ) { this.templateData.container.addClass('has-error'); return false }
-                
-        if( prevShares === undefined ) { 
-            selectedShareIds.forEach( id => this.signupData.shares.add( this.items.get(id) ) )
-        } else {
-            this._( prevShareIds ).difference( selectedShareIds ).forEach( id => this.signupData.shares.remove( this.items.get(id) ) )
-            this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) ) )
-        }
+        
+        console.log( prevShareIds )
+        console.log( selectedShareIds )
+
+        this._( prevShareIds ).difference( selectedShareIds ).forEach( id => {
+            var share = this.items.get(id)
+            share.unset('selectedOptions')
+            share.unset('selectedDelivery')
+            share.unset('selectedDeliveryDayOfWeek')
+            share.unset('skipWeeks')
+            this.signupData.shares.remove( share )
+        } )
+
+        this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) ) )
         
         return true
     }

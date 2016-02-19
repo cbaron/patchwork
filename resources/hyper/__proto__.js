@@ -22,6 +22,9 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     "supportedProperty": this._( this.tables[ this.path[1] ].columns )
                         .filter( column => column.name !== 'id' && column.name !== 'created' && column.name !== 'updated' )
                         .map( column => ( {
+                            columnName: ( column.fk && this.tables[ column.fk.table ].meta )
+                                ? [ column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ].join('.')
+                                : undefined,
                             descriptor: ( column.fk && this.tables[ column.fk.table ].meta ) ? this.getDescriptor( column.fk.table, [ ] ) : undefined,
                             fk: column.fk,
                             property: column.name,
@@ -39,12 +42,10 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 this._( this.tables[ this.path[1] ].columns )
                     .filter( column => column.fk )
                     .forEach( column => {
-                        var fkDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor,
-                            columnName = [ column.fk.table, fkDescriptor ].join('.')
-                        row[ this.tables[ column.fk.table ].meta.label ] =
-                            { table: column.fk.table, id: row[ column.name ], value: row[ [ column.fk.table, fkDescriptor ].join('.') ] }
+                        var columnName = [ column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ].join('.')
+
+                        row[ columnName ] = { table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
                         delete row[ column.name ]
-                        delete row[ columnName ]
                     } )
                 return row
             } )

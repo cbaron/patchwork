@@ -175,6 +175,9 @@ Object.assign( Resource.prototype, Table.prototype, {
         
         this.initTypeahead( property ) 
 
+        console.log( property )
+        console.log( this.modelToEdit.attributes )
+
         el.typeahead( 'val', this.modelToEdit.get( property.fk.recorddescriptor ).value )
     },
 
