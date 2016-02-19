@@ -298,6 +298,10 @@ li {
   color: #c98702;
 }
 
+.csa-class h3 {
+  text-align: center;
+}
+
 .csa-class figure {
   margin: 0 auto;
   padding: 20px 0;
@@ -666,6 +670,10 @@ footer .future-days {
   font-style: italic;
   text-align: center;
   margin: 15px auto;
+}
+
+.home-class h3 {
+  text-align: center;
 }
 
 .home-class .carousel {

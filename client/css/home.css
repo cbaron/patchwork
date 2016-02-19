@@ -5,6 +5,9 @@
   text-align: center;
   margin: 15px auto;
 }
+.home-class h3 {
+  text-align: center;
+}
 .home-class .carousel {
   margin: 45px auto;
   width: 85%;
