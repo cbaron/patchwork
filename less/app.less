@@ -42,6 +42,13 @@
        url('/static/fonts/Raleway-Regular-webfont.svg') format('svg');
 }
 
+@font-face {
+  font-family: 'RalewayRegular';
+  font-weight: 700;
+  src: url('/static/fonts/Raleway-Bold-webfont.woff') format('woff'),
+       url('/static/fonts/Raleway-Bold-webfont.ttf') format('truetype');
+}
+
 .modal-backdrop {
     bottom: 0;
     position: fixed;
@@ -93,6 +100,10 @@ h2 {
 
 h3 {
     font-size: 20px;
+
+    a {
+        font-size: 2rem;
+    }
 }
 
 img {
@@ -101,7 +112,18 @@ img {
 }
 
 a {
+    color: #398439;
     cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2rem;
+
+    &:hover {
+        color: #398439;
+    }
+}
+
+a[href^="mailto:"] {
+    font-size: 1rem;
 }
 
 div.btn-row {
