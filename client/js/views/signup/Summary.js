@@ -22,7 +22,7 @@ Object.assign( Summary.prototype, View.prototype, {
             member: this.signupData.member,
             payment: this.getFormData(),
             shares: this.buildShares(),
-            total: 525.00
+            total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
         } )
     },
 
@@ -52,17 +52,22 @@ Object.assign( Summary.prototype, View.prototype, {
 
             shareTotals.push( shareTotal )
 
-            this.templateData[ this.util.format( 'priceReduction-%s', share.get('id' ) ) ].text( 'Price Reduction :  ' + '$' + priceReduction.toFixed(2) )
-            this.templateData[ this.util.format( 'shareTotal-%s', share.get('id' ) ) ].text( 'Share Total :  ' + '$' + shareTotal.toFixed(2) )
+            this.templateData[ this.util.format( 'priceReduction-%s', share.id ) ].text( 'Price Reduction :  ' + '$' + priceReduction.toFixed(2) )
+            this.templateData[ this.util.format( 'shareTotal-%s', share.id ) ].text( 'Share Total :  ' + '$' + shareTotal.toFixed(2) )
         } )
 
-        var grandTotal = shareTotals.reduce( ( a, b ) => a + b )
+        this.grandTotal = shareTotals.reduce( ( a, b ) => a + b )
+        this.grandTotalPlusFee = this.grandTotal + this.grandTotal * .03
 
-        this.templateData.grandTotal.text( 'Grand Total :  ' + '$' + grandTotal.toFixed(2) )
+        this.updateGrandTotal()
+
     },
 
     cardPaymentSelected() {
         this.signupHandler = () => { if( this.validateCardInfo() ) this.signup() }
+
+        this.fee = true
+        this.updateGrandTotal()
 
         this.templateData.paymentForm.removeClass('hide')
         this.templateData.signupBtn
@@ -73,6 +78,8 @@ Object.assign( Summary.prototype, View.prototype, {
 
     cashPaymentSelected() {
         this.signupHandler = () => this.signup()
+
+        this.fee = false
 
         this.templateData.signupBtn
             .removeClass('disabled')
@@ -129,11 +136,17 @@ Object.assign( Summary.prototype, View.prototype, {
     onInputFocus( e ) { this.removeError( this.$( e.currentTarget ) ) },
 
     paymentUnselected() {
+
+        this.fee = false
+        this.updateGrandTotal()
+
         this.templateData.signupBtn.addClass('disabled').removeClass('btn-success').off( 'click' )
         this.templateData.paymentForm.addClass('hide')
     },
 
     postRender() {
+        
+        this.fee = false
         
         View.prototype.postRender.call(this)
 
@@ -143,20 +156,6 @@ Object.assign( Summary.prototype, View.prototype, {
 
         this.calculateTotals()
         this.updateSummaryInfo()
-    },
-
-    updateSummaryInfo() {
-        this.signupData.shares.forEach( share => {
-            this.templateData[ this.util.format( 'skipWeeks-%s', share.get('id') ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
-
-            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].append( this.signupData.member.address )
-            } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
-                this.templateData[ this.util.format( 'deliveryTotal-%s', share.id ) ].text(
-                    this.util.format( 'Save $%s at $1.00 / week', share.get('availableShareDates').toFixed(2) ) )
-            }
-        } )
     },
 
     requiresLogin: false,
@@ -232,6 +231,28 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     template: require('../../templates/signup/summary')( require('handlebars') ),
+
+    updateGrandTotal() {
+        var total = ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
+        this.templateData.grandTotal.text( 'Grand Total :  ' + '$' + total.toFixed(2) )
+
+        this.$('.payment-option:first-child .method-total').text( 'Grand Total :  ' + this.grandTotal.toFixed(2) )
+        this.$('.payment-option:last-child .method-total').text( 'Grand Total :  ' + this.grandTotalPlusFee.toFixed(2) )
+    },
+
+    updateSummaryInfo() {
+        this.signupData.shares.forEach( share => {
+            this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
+
+            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].append( this.signupData.member.address )
+            } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
+                this.templateData[ this.util.format( 'deliveryTotal-%s', share.id ) ].text(
+                    this.util.format( 'Save $%s at $1.00 / week', share.get('availableShareDates').toFixed(2) ) )
+            }
+        } )
+    },
 
     validateCardInfo() {
         var valid = true

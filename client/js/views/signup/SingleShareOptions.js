@@ -15,8 +15,9 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     postRender() {
+        
         var share = this.model
-
+        
         List.prototype.postRender.call( this )
 
         share.set( { shareoptionids: new ( this.Collection.extend( { url: "/shareoptionshare" } ) )() } )

@@ -3,10 +3,10 @@ var View = require('../MyView'),
 
 Object.assign( ShareOption.prototype, View.prototype, {
 
-    calculateShareTotal( duration ) {           
+    calculateShareTotal( duration ) {         
         var optionPrices = [ ],
-            shareTotalClass = '.share-total-' + this.share.get('id'),
-            weeklyTotalClass = '.weekly-share-total-' + this.share.get('id')
+            shareTotalClass = '.share-total-' + this.share.id,
+            weeklyTotalClass = '.weekly-share-total-' + this.share.id
 
         this.share.get('selectedOptions').forEach( ( option, i ) => optionPrices[ i ] = parseFloat( option.price.slice(1) ) )
         
@@ -39,6 +39,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
         this.templateData.input.on( 'change', () => this.updateShare() )
 
         this.updateShare()
+    
     },
 
     requiresLogin: false,
