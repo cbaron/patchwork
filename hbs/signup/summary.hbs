@@ -2,7 +2,6 @@
     <div class="share-summary">
         <div class="header">Summary of Shares</div>
         {{#each shares}}
-
             <div class="share-label">
                 <div class="text-center">{{label}}</div>
                 <div class="text-center">
@@ -12,7 +11,6 @@
                 </div>
                 <div class="text-center">{{availableShareDates}} weeks</div>
             </div>
-
             <div class="share-options-summary">
                 <div class="section-title">Share Options:</div>
                 {{#each selectedOptions}}
@@ -24,7 +22,6 @@
                 {{/each}}
                 <div class="total">Total :  ${{shareOptionsTotalString}}</div>
             </div>
-
             <div class="delivery-summary">
                 <div class="section-title">Delivery:</div>
                 <div>
@@ -39,9 +36,13 @@
                     <span class="item-label">Address :  </span>
                     <span data-js="deliveryAddress-{{id}}">{{selectedDelivery.address}}</span>
                 </div>
+                <div>
+                    <span class="item-label">Hours :  </span>
+                    <span>{{selectedDelivery.dayOfWeek}} </span>
+                    <span>{{selectedDelivery.starttime}}-{{selectedDelivery.endtime}}</span>
+                </div>
                 <div data-js="deliveryTotal-{{id}}" class="total">Total :  ${{selectedDelivery.totalCostString}} at ${{selectedDelivery.weeklyCostString}} / week</div>
             </div>
-
             <div data-js="skipWeeks-{{id}}" class="skip-weeks-summary">
                 <div class="section-title">Dates Unavailable for Share:</div>
                 <div class="item-label">
@@ -52,13 +53,10 @@
                 </div>
                 <div class="price-reduction" data-js="priceReduction-{{id}}"></div> 
             </div>
-
             <div data-js="shareTotal-{{id}}" class="share-total text-center"></div>
         {{/each}}
     </div>
-
     <div data-js="grandTotal" class="grand-total text-center row"></div>
-
     <div class="payment">    
         <div class="header">Select a method of payment</div>
         <div data-js="paymentOptions"></div>

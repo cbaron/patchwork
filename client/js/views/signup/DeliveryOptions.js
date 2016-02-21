@@ -39,7 +39,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 this.valid = false
                 return this.showFeedback( this.feedback.noFarmRoute() )
             }
-
+            
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
             Object.assign( this.selectedDelivery, { deliveryoptionid: model.id }, this.farmPickup.attributes )
@@ -66,7 +66,16 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.dropoffIds.fetch( { data: { shareid: this.model.id } } ).done( () => {
             if( ! this.dropoffIds.length ) { this.valid = false; return }
             this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
-                this.dropoffs.forEach( model => model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } ) )
+                this.dropoffs.forEach( model => { 
+                    model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } )
+                    
+                    var starttime = this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('starttime')
+                    model.set( { starttime: this.moment( [ this.moment().format('YYYY-MM-DD'), starttime ].join(' ') ).format('hA') } )
+
+                    var endtime = this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('endtime')
+                    model.set( { endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), endtime ].join(' ') ).format('hA') } )
+                    
+                } )
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
                     this.model.unset('selectedDelivery')
@@ -78,7 +87,6 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                     Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id }, model.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
                     
-
                     this.valid = true
                 } )
             } )
@@ -100,7 +108,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .fetch()
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
-
+                    
                     Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
                     
@@ -146,6 +154,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             this.templateData.feedback.empty()
             this.templateData.optionTotal.text('')
             if( this.model.has('selectedDelivery') ) this.model.unset('selectedDelivery')
+            this.selectedDelivery = { }
         } )
 
     },

@@ -114,6 +114,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
+        console.log( this.signupData.shares.map( share => share.attributes ) )
         return {
             shares: this.signupData.shares.map( share => share.attributes ),
         }
