@@ -17,7 +17,9 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias4(((helper = (helper = helpers.shareOptionsTotalString || (depth0 != null ? depth0.shareOptionsTotalString : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"shareOptionsTotalString","hash":{},"data":data}) : helper)))
     + "</div></div><div class=\"delivery-summary\"><div class=\"section-title\">Delivery:</div><div><span class=\"item-label\">Method :  </span><span>"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.deliveryType : stack1), depth0))
-    + "</span></div><div><span class=\"item-label\">Dropoff :  </span><span>"
+    + "</span></div><div data-js=\"dropoff-"
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\"><span class=\"item-label\">Dropoff :  </span><span>"
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.label : stack1), depth0))
     + "</span></div><div><span class=\"item-label\">Address :  </span><span data-js=\"deliveryAddress-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))

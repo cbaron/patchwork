@@ -114,7 +114,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
-        console.log( this.signupData.shares.map( share => share.attributes ) )
         return {
             shares: this.signupData.shares.map( share => share.attributes ),
         }
@@ -246,8 +245,10 @@ Object.assign( Summary.prototype, View.prototype, {
             this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
 
             if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
+                this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].append( this.signupData.member.address )
             } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
+                this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
                 this.templateData[ this.util.format( 'deliveryTotal-%s', share.id ) ].text(
                     this.util.format( 'Save $%s at $1.00 / week', share.get('availableShareDates').toFixed(2) ) )
