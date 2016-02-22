@@ -55,7 +55,7 @@
   margin-left: 6px;
 }
 .signup-class .shares {
-  padding: 5px 30px 0 30px;
+  padding: 5px 15px 0 20px;
   text-align: center;
 }
 .signup-class .shares.has-error {
@@ -71,7 +71,7 @@
   margin-top: 45px;
 }
 .signup-class .shares .share {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 .signup-class .shares .share .share-label {
   width: 155px;
@@ -84,7 +84,6 @@
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
-  margin: 5px;
 }
 .signup-class .shares .share .share-label:hover {
   background-color: rgba(201, 135, 2, 0.1);
@@ -440,6 +439,10 @@
 @media only screen and (max-width: 767px) {
   .signup-class .vcenter {
     display: block;
+  }
+  .signup-class .shares .share .share-label {
+    margin: 25px 0 15px;
+    width: 95%;
   }
   .signup-class .share-options {
     height: auto;
