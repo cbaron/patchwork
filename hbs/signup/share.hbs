@@ -1,9 +1,14 @@
 <li class="share" data-id="{{id}}" data-js="container">
-    <div>{{label}}</div>
-    <div>
-        <span>{{humanStartdate}}</span>
-        <span>-</span>
-        <span>{{humanEnddate}}</span>
+    <div class="row">
+        <div class="share-label vcenter col-sm-3">
+            <div>{{label}}</div>
+            <div>
+                <span>{{humanStartdate}}</span>
+                <span>-</span>
+                <span>{{humanEnddate}}</span>
+            </div>
+            <div>{{duration}} weeks</div>
+        </div>
+        <div class="share-description vcenter col-sm-9">{{description}}</div>
     </div>
-    </div>{{duration}} weeks</div>
 </li>

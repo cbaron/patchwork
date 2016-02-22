@@ -68,7 +68,7 @@
     }
 
     .shares {
-        padding: 30px 30px 0 30px;
+        padding: 5px 30px 0 30px;
         text-align: center;
 
         &.has-error {
@@ -76,35 +76,49 @@
             border-radius: 15px;
         }
 
+        .share-intro {
+            font-weight: bold;
+            color: #155D75;
+            font-size: 1.1rem;
+        }
+
+        .header {
+            margin-top: 45px;
+        }
+
         .share {
-            width: 155px;
-            background-color: darken(white, 5%);
-            color: #c98702;
-            border: 1px solid #bbb;
-            border-radius: 10px;
-            box-shadow: 1px 2px 5px #ccc;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "RalewayRegular";
-            padding: 10px;
-            margin: 5px;
+            margin-bottom: 15px;
 
-            &:hover {
-                background-color: rgba(201, 135, 2, .1);
-            }
-            
-            &.selected {
-                background-color: rgba(201, 135, 2, .3);
-            }
+            .share-label {
+                width: 155px;
+                background-color: darken(white, 5%);
+                color: #c98702;
+                border: 1px solid #bbb;
+                border-radius: 10px;
+                box-shadow: 1px 2px 5px #ccc;
+                cursor: pointer;
+                display: inline-block;
+                font-family: "RalewayRegular";
+                padding: 10px;
+                margin: 5px;
 
-            >div {
-                &:first-child {
-                    font-size: 1.25rem;
+                &:hover {
+                    background-color: rgba(201, 135, 2, .1);
+                }
+                
+                &.selected {
+                    background-color: rgba(201, 135, 2, .3);
                 }
 
-                &:nth-child(2) {
-                    color: #155D75;
-                    font-size: .75rem;
+                >div {
+                    &:first-child {
+                        font-size: 1.25rem;
+                    }
+
+                    &:nth-child(2) {
+                        color: #155D75;
+                        font-size: .75rem;
+                    }
                 }
             }
         }
