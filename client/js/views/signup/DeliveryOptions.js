@@ -16,8 +16,11 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             weeklyCost: weeklyCostFloat,
             weeklyCostString: weeklyCostFloat.toFixed(2),
             totalCost: optionTotalCost,
-            totalCostString: optionTotalCost.toFixed(2)
+            totalCostString: optionTotalCost.toFixed(2) 
         } )
+
+        var sharePlusDelivery = this.model.get('weeklyShareOptionsTotal') + weeklyCostFloat
+        this.model.set( 'shareOptionsPlusDelivery', sharePlusDelivery.toFixed(2) )
         
     },
 

@@ -22,6 +22,8 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.dates = [ ]
         this.model.set( 'skipWeeks', [ ] )
         this.skipWeeks.reset([])
+        this.model.set( 'datesSelected', [ ] )
+        this.datesSelected.reset([])
 
         if( ! this.model.has('selectedDeliveryDayOfWeek') ) return 
 
@@ -37,28 +39,35 @@ Object.assign( PickupDates.prototype, List.prototype, {
 
         this.model.set( 'availableShareDates', this.dates.length )
 
+        this.dates.forEach( model => this.datesSelected.add(model) )
+        this.model.set( 'datesSelected', this.datesSelected.map( model => model.attributes ) )
+        
         return this.dates
 
     },
 
     postRender() {
         this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
+        this.datesSelected = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
         this.valid = true
 
         List.prototype.postRender.call( this )
         
         this.on( 'itemSelected', model => {
             this.skipWeeks.remove(model)
+            this.datesSelected.add(model)
             this.updateShare()
         } )
         this.on( 'itemUnselected', model => {
             this.skipWeeks.add(model)
+            this.datesSelected.remove(model)
             this.updateShare()
         } )
 
         this.model.on( 'change:selectedDeliveryDayOfWeek', () => {
             this.items.reset( this.itemModels() )
         } )
+
     },
 
     requiresLogin: false,
@@ -71,6 +80,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
 
     updateShare() {
         this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
+        this.model.set( 'datesSelected', this.datesSelected.map( model => model.attributes ) )
 
         this.valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }

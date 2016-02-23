@@ -382,17 +382,35 @@
                 padding: 15px 0;
             }
 
-            .share-label {
-                font-family: "Raleway-Regular";
-                font-size: 1.2rem;
+            .share-label-wrapper {
+                margin: 0 auto;
+                text-align: center;
                 border-top: 1px solid #666;
-                padding: 35px 0 5px;            
-                >div {
-                    &:first-child {
-                        color: #c98702;
-                    }
-                    &:nth-child(2) {
-                        color: #155D75;
+                padding-top: 20px;
+            
+                .share-label {
+                    width: 155px;
+                    background-color: darken(white, 5%);
+                    color: #c98702;
+                    border: 1px solid #bbb;
+                    border-radius: 10px;
+                    box-shadow: 1px 2px 5px #ccc;
+                    cursor: pointer;
+                    display: inline-block;
+                    font-family: "RalewayRegular";
+                    padding: 10px;
+                    margin: 20px auto;
+                    text-align: center;
+
+                    >div {
+                        &:first-child {
+                            font-size: 1.25rem;
+                        }
+
+                        &:nth-child(2) {
+                            color: #155D75;
+                            font-size: .75rem;
+                        }
                     }
                 }
             }
@@ -401,34 +419,28 @@
                 color: #c98702;
                 font-size: 1.1rem;
                 margin-top: 30px;
-                margin-bottom: 5px;
-            }
-
-            .selected-options {
-                margin-bottom: 15px;
+                margin-bottom: 10px;
             }
 
             .item-label {
                 color: #155D75;
+                margin-bottom: 5px;
             }
 
-            .skip-date {
+            .date {
+                color: #155D75;
                 margin-right: 3px;
-            }
-
-            .price-reduction {
-                color: black;
+                display: inline-block;            
             }
 
             .total {
                 color: black;
-                margin-top: 10px;
+                margin-top: 15px;
+                font-weight: bold;
             }
 
             .share-total {
-                font-size: 1.2rem;
-                color: black;
-                padding: 35px 0 25px;
+                margin: 20px 0 35px;
             }
 
         }
@@ -666,6 +678,29 @@
         }
 
         .summary {
+
+            .share-summary {
+
+                span {
+                    padding-right: 0;
+                }
+
+                .text-center {
+                    text-align: left;
+                }
+
+                .item-label {
+                    margin: 0;
+                }
+
+                .price, .dropoff-location, .dropoff-address {
+                    margin-bottom: 5px;
+                }
+
+                .share-total {
+                    text-align: center;
+                }
+            }
 
             .payment {
 

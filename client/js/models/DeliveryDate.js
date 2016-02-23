@@ -8,6 +8,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             dayOfMonth: moment.format('D'),
             epoch: moment.unix(),
             month: moment.format('MMM'),
+            monthNum: moment.format('M')
         }
     }
 
