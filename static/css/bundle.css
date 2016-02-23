@@ -1408,6 +1408,10 @@ footer .future-days {
   .signup-class .summary .payment form #number {
     width: 95%;
   }
+
+  .signup-class .summary .payment form #exp_month {
+    margin-bottom: 5px;
+  }
 }
 
 .error {
