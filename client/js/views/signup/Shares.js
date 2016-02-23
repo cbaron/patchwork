@@ -8,6 +8,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     collection: { model: require('../../models/Share'), url: "/share" },
 
     events: {
+        csaInfoBtn: { method: 'showCSAInfoPageInNewTab' }
     },
 
     fetch: { data: { display: true } },
@@ -26,6 +27,8 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     requiresLogin: false,
 
     selection: true,
+
+    showCSAInfoPageInNewTab() { window.open('/csa#how-do-i-know') },
 
     template: require('../../templates/signup/shares')( require('handlebars') ),
 

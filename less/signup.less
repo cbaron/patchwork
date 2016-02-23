@@ -6,10 +6,10 @@
 
     .header {
         margin-bottom: 30px;
-        font-size: 2rem;
+        font-size: 1.75rem;
         line-height: 2rem;
         text-align: center;
-        font-family: "Raleway-Regular";
+        font-family: "RalewayRegular";
     }
 
     .heading {
@@ -17,14 +17,14 @@
         padding: 20px 10px;
         border-bottom: 1px solid;
         margin-bottom: 30px;
-        font-family: "Raleway-Regular";
+        font-family: "RalewayRegular";
     }
 
     .intro {
         color: #c98702;
         font-size: 2rem;
         font-weight: 400;
-        font-family: "Raleway-Regular";
+        font-family: "RalewayRegular";
         text-align: center;
         line-height: 2rem;
         margin-bottom: 20px;
@@ -80,6 +80,22 @@
             font-weight: bold;
             color: #155D75;
             font-size: 1.1rem;
+
+            .btn-link {
+                color: #31b0d5;
+                cursor: pointer;
+                font-size: 1.5rem;
+                padding: 0px 5px;
+
+                &:focus,
+                &:hover {
+                    color: #31b0d5;
+                }
+            }
+        }
+
+        .share-intro+.share-intro {
+            margin-top: 10px;
         }
 
         .header {
@@ -87,38 +103,18 @@
         }
 
         .share {
+            cursor: pointer;
             margin-bottom: 30px;
+            padding: 10px;
+            border: 1px solid transparent;
+            border-radius: 10px;
 
-            .share-label {
-                width: 155px;
-                background-color: darken(white, 5%);
-                color: #c98702;
-                border: 1px solid #bbb;
-                border-radius: 10px;
-                box-shadow: 1px 2px 5px #ccc;
-                cursor: pointer;
-                display: inline-block;
-                font-family: "RalewayRegular";
-                padding: 10px;
-
-                &:hover {
-                    background-color: rgba(201, 135, 2, .1);
-                }
-                
-                &.selected {
-                    background-color: rgba(201, 135, 2, .3);
-                }
-
-                >div {
-                    &:first-child {
-                        font-size: 1.25rem;
-                    }
-
-                    &:nth-child(2) {
-                        color: #155D75;
-                        font-size: .75rem;
-                    }
-                }
+            &:hover {
+                border-color: rgba(201, 135, 2, .7);
+            }
+            
+            &.selected {
+                background-color: rgba(201, 135, 2, .1);
             }
         }
     }
@@ -148,7 +144,7 @@
         .price {
             color: black;
             text-align: center;
-            font-family: "Raleway-Regular";
+            font-family: "RalewayRegular";
             font-size: 1.2rem;
             &:last-child {
                 padding-bottom: 30px;
@@ -161,22 +157,12 @@
             border-top: 1px solid;
         }
 
-        .share-label {
-            font-family: "Raleway-Regular";
-            font-size: 1.1rem;
-            
-            >div {
-                &:first-child {
-                    color: #c98702;
-                }
-
-                &:nth-child(2) {
-                    color: #155D75;
-                }
-            }
-        }
-
         .share-option {
+            line-height: 34px;
+
+            select {
+                width: initial;
+            }
 
             .option-total {
                 color: #666;
@@ -185,10 +171,16 @@
             div:first-child {
                 color: #155D75;
             }
+
+            .total {
+                font-size: .75rem;
+                text-align: right;
+            }
         }
 
-
-
+        .share-option+.share-option {
+            margin-top: 10px;
+        }
     }
     
     .delivery {
@@ -222,24 +214,9 @@
             }
 
             .share-label {
-                font-size: 1.1rem;
-                font-family: "Raleway-Regular";
-                color: #c98702;
-                >div {
-                    &:nth-child(2) {
-                        color: #155D75;
-                    }
-
-                    &:nth-child(3) {
-                        color: #666;
-                    }
-                }
-
                 .option-total {
                     color: black;
                 }
-
-
             }
             
             .delivery-option {
@@ -320,22 +297,6 @@
             border-top: 1px solid;
             padding: 35px 0;
 
-            .share-label {
-                font-size: 1.2rem;
-                font-family: "Raleway-Regular";
-                color: #c98702;
-                >div {
-                    &:nth-child(2) {
-                        color: #155D75;
-                    }
-
-                    &:last-child {
-                        color: #666;
-                    }
-                }
-
-            }
-
             .pickup-date {
                 background-color: darken(white, 5%);
                 border: 1px solid beige;
@@ -380,21 +341,6 @@
             .header {
                 margin: 0;
                 padding: 15px 0;
-            }
-
-            .share-label {
-                font-family: "Raleway-Regular";
-                font-size: 1.2rem;
-                border-top: 1px solid #666;
-                padding: 35px 0 5px;            
-                >div {
-                    &:first-child {
-                        color: #c98702;
-                    }
-                    &:nth-child(2) {
-                        color: #155D75;
-                    }
-                }
             }
 
             .section-title {
@@ -632,7 +578,6 @@
                 .share-label {
                     text-align: center;
                     font-size: 1.2rem;
-                    font-family: "Raleway-Regular";                   
                     margin: 10px 0 25px;
                 }
 

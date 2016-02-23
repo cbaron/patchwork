@@ -14,12 +14,16 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
     
     goBack() {
+        this.templateData.leftBtn.off()
+
         this.instances[ this.views[ this.currentIndex ].name ].hide()
         this.instances[ this.views[ this.currentIndex ].name ].templateData.container.removeClass('slide-in-left').removeClass('slide-in-right')
 
         this.currentIndex -= 1
 
         this.showProperView( true )
+
+        window.setTimeout( () => this.delegateEvents( 'leftBtn', this.templateData.leftBtn ), 1000 )
     },
 
     instances: { },
@@ -54,6 +58,9 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     showProperNav() {
         var left = this.templateData.leftBtn, right = this.templateData.rightBtn
+
+        if( this.currentIndex > 0 ) this.templateData.intro.text('Continue your CSA sign-up')
+
         if( this.currentIndex === 0 ) {
             left.hide()
             if( right.is(':hidden') ) right.show()
@@ -95,12 +102,12 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     validateView() {
         var view = this.instances[ this.views[ this.currentIndex ].name ]
+        
+        this.templateData.rightBtn.off()
 
-        this.Q.when( view.validate() ).then( result => {
-            if( result ) this.showNext()
-        } )
+        this.Q.when( view.validate() ).then( result => { if( result ) this.showNext() } )
         .fail( e => new this.Error(e) )
-        .done()
+        .done( () => window.setTimeout( () => this.delegateEvents( 'rightBtn', this.templateData.rightBtn ), 1000 ) )
     },
 
     views: [

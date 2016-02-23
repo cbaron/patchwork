@@ -3,23 +3,23 @@
 }
 .signup-class .header {
   margin-bottom: 30px;
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 2rem;
   text-align: center;
-  font-family: "Raleway-Regular";
+  font-family: "RalewayRegular";
 }
 .signup-class .heading {
   line-height: 1.2em;
   padding: 20px 10px;
   border-bottom: 1px solid;
   margin-bottom: 30px;
-  font-family: "Raleway-Regular";
+  font-family: "RalewayRegular";
 }
 .signup-class .intro {
   color: #c98702;
   font-size: 2rem;
   font-weight: 400;
-  font-family: "Raleway-Regular";
+  font-family: "RalewayRegular";
   text-align: center;
   line-height: 2rem;
   margin-bottom: 20px;
@@ -67,36 +67,34 @@
   color: #155D75;
   font-size: 1.1rem;
 }
+.signup-class .shares .share-intro .btn-link {
+  color: #31b0d5;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0px 5px;
+}
+.signup-class .shares .share-intro .btn-link:focus,
+.signup-class .shares .share-intro .btn-link:hover {
+  color: #31b0d5;
+}
+.signup-class .shares .share-intro + .share-intro {
+  margin-top: 10px;
+}
 .signup-class .shares .header {
   margin-top: 45px;
 }
 .signup-class .shares .share {
-  margin-bottom: 30px;
-}
-.signup-class .shares .share .share-label {
-  width: 155px;
-  background-color: #f2f2f2;
-  color: #c98702;
-  border: 1px solid #bbb;
-  border-radius: 10px;
-  box-shadow: 1px 2px 5px #ccc;
   cursor: pointer;
-  display: inline-block;
-  font-family: "RalewayRegular";
+  margin-bottom: 30px;
   padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
 }
-.signup-class .shares .share .share-label:hover {
+.signup-class .shares .share:hover {
+  border-color: rgba(201, 135, 2, 0.7);
+}
+.signup-class .shares .share.selected {
   background-color: rgba(201, 135, 2, 0.1);
-}
-.signup-class .shares .share .share-label.selected {
-  background-color: rgba(201, 135, 2, 0.3);
-}
-.signup-class .shares .share .share-label > div:first-child {
-  font-size: 1.25rem;
-}
-.signup-class .shares .share .share-label > div:nth-child(2) {
-  color: #155D75;
-  font-size: .75rem;
 }
 .signup-class .member-info {
   border: 1px solid #666;
@@ -120,7 +118,7 @@
 .signup-class .share-options .price {
   color: black;
   text-align: center;
-  font-family: "Raleway-Regular";
+  font-family: "RalewayRegular";
   font-size: 1.2rem;
 }
 .signup-class .share-options .price:last-child {
@@ -131,21 +129,24 @@
   padding-bottom: 15px;
   border-top: 1px solid;
 }
-.signup-class .share-options .share-label {
-  font-family: "Raleway-Regular";
-  font-size: 1.1rem;
+.signup-class .share-options .share-option {
+  line-height: 34px;
 }
-.signup-class .share-options .share-label > div:first-child {
-  color: #c98702;
-}
-.signup-class .share-options .share-label > div:nth-child(2) {
-  color: #155D75;
+.signup-class .share-options .share-option select {
+  width: initial;
 }
 .signup-class .share-options .share-option .option-total {
   color: #666;
 }
 .signup-class .share-options .share-option div:first-child {
   color: #155D75;
+}
+.signup-class .share-options .share-option .total {
+  font-size: .75rem;
+  text-align: right;
+}
+.signup-class .share-options .share-option + .share-option {
+  margin-top: 10px;
 }
 .signup-class .delivery {
   border: 1px solid;
@@ -170,17 +171,6 @@
 }
 .signup-class .delivery .delivery-options .feedback-message {
   font-weight: 600;
-}
-.signup-class .delivery .delivery-options .share-label {
-  font-size: 1.1rem;
-  font-family: "Raleway-Regular";
-  color: #c98702;
-}
-.signup-class .delivery .delivery-options .share-label > div:nth-child(2) {
-  color: #155D75;
-}
-.signup-class .delivery .delivery-options .share-label > div:nth-child(3) {
-  color: #666;
 }
 .signup-class .delivery .delivery-options .share-label .option-total {
   color: black;
@@ -245,17 +235,6 @@
   border-top: 1px solid;
   padding: 35px 0;
 }
-.signup-class .date-selection .share-dates .share-label {
-  font-size: 1.2rem;
-  font-family: "Raleway-Regular";
-  color: #c98702;
-}
-.signup-class .date-selection .share-dates .share-label > div:nth-child(2) {
-  color: #155D75;
-}
-.signup-class .date-selection .share-dates .share-label > div:last-child {
-  color: #666;
-}
 .signup-class .date-selection .share-dates .pickup-date {
   background-color: #f2f2f2;
   border: 1px solid beige;
@@ -291,18 +270,6 @@
 .signup-class .summary .share-summary .header {
   margin: 0;
   padding: 15px 0;
-}
-.signup-class .summary .share-summary .share-label {
-  font-family: "Raleway-Regular";
-  font-size: 1.2rem;
-  border-top: 1px solid #666;
-  padding: 35px 0 5px;
-}
-.signup-class .summary .share-summary .share-label > div:first-child {
-  color: #c98702;
-}
-.signup-class .summary .share-summary .share-label > div:nth-child(2) {
-  color: #155D75;
 }
 .signup-class .summary .share-summary .section-title {
   color: #c98702;
@@ -464,7 +431,6 @@
   .signup-class .delivery .delivery-options .share-label {
     text-align: center;
     font-size: 1.2rem;
-    font-family: "Raleway-Regular";
     margin: 10px 0 25px;
   }
   .signup-class .delivery .delivery-options .delivery-option {

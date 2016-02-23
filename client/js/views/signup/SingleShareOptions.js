@@ -5,9 +5,13 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
     ItemView: require('./ShareOption'),
 
+    Views: {
+        ShareBox: require('./ShareBox')
+    },
+
     getItemViewOptions() {
         return {
-            container: this.templateData.row,
+            container: this.templateData.options,
             share: this.model
         }
     },
@@ -19,6 +23,8 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
         var share = this.model
         
         List.prototype.postRender.call( this )
+
+        new this.Views.ShareBox( { container: this.templateData.shareBox, insertionMethod: 'prepend', model: share } )
 
         share.set( { shareoptionids: new ( this.Collection.extend( { url: "/shareoptionshare" } ) )() } )
 

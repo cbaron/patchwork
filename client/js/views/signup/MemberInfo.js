@@ -4,6 +4,10 @@ var View = require('../MyView'),
 
 Object.assign( MemberInfo.prototype, View.prototype, {
 
+    Views: {
+        Addresses: require('./Addresses')
+    },
+
     emailRegex: Form.emailRegex,
 
     fields: [ {
@@ -81,7 +85,11 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     requiresLogin: false,
 
     showError( $el, error ) {
-        $el.parent().parent().removeClass('has-success').addClass('has-feedback has-error')
+        var formGroup = $el.parent().parent()
+
+        if( formGroup.hasClass( 'has-error' ) ) return
+
+        formGroup.removeClass('has-success').addClass('has-feedback has-error')
         $el.next().removeClass('hide').removeClass('glyphicon-ok').addClass('glyphicon-remove')
            .after( Form.templates.fieldError( { error: error } ) )
     },
@@ -159,11 +167,9 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             return true
         } )
         .fail( e => { console.log( e.stack || e ); return false } )
-    },
-
-    Views: {
-        Addresses: require('./Addresses')
     }
+
+    
 
 } )
 
