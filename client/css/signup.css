@@ -322,7 +322,7 @@
 .signup-class .summary .share-summary .section-title {
   color: #c98702;
   font-size: 1.1rem;
-  margin-top: 30px;
+  margin-top: 35px;
   margin-bottom: 10px;
 }
 .signup-class .summary .share-summary .item-label {
@@ -496,7 +496,8 @@
     margin: 0;
   }
   .signup-class .summary .share-summary span {
-    padding-right: 0;
+    padding-left: 0;
+    padding-right: 4px;
   }
   .signup-class .summary .share-summary .text-center {
     text-align: left;
@@ -504,10 +505,20 @@
   .signup-class .summary .share-summary .item-label {
     margin: 0;
   }
+  .signup-class .summary .share-summary .date {
+    margin-right: 0;
+  }
   .signup-class .summary .share-summary .price,
   .signup-class .summary .share-summary .dropoff-location,
   .signup-class .summary .share-summary .dropoff-address {
     margin-bottom: 5px;
+  }
+  .signup-class .summary .share-summary .shareoptionlabel,
+  .signup-class .summary .share-summary .price,
+  .signup-class .summary .share-summary .delivery-method,
+  .signup-class .summary .share-summary .dropoff-location,
+  .signup-class .summary .share-summary .weeks-selected {
+    padding-left: 15px;
   }
   .signup-class .summary .share-summary .share-total {
     text-align: center;

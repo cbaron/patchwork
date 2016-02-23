@@ -31,7 +31,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.starttime : stack1), depth0))
     + " - "
     + alias4(alias5(((stack1 = (depth0 != null ? depth0.selectedDelivery : depth0)) != null ? stack1.endtime : stack1), depth0))
-    + "</span></div></div></div></div><div class=\"total\"><div class=\"row\"><div class=\"weekly-price\"><span class=\"col-sm-8\">Weekly Price :  </span><span class=\"col-sm-2\">$"
+    + "</span></div></div></div></div><div class=\"total\"><div class=\"row\"><div class=\"price\"><span class=\"col-sm-8\">Weekly Price :  </span><span class=\"col-sm-2\">$"
     + alias4(((helper = (helper = helpers.shareOptionsPlusDelivery || (depth0 != null ? depth0.shareOptionsPlusDelivery : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"shareOptionsPlusDelivery","hash":{},"data":data}) : helper)))
     + "</span><span class=\"col-sm-2\">per week</span></div></div></div><div data-js=\"datesSelected-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
@@ -39,11 +39,11 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.datesSelected : depth0),{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </div><div class=\"total row\"><div class=\"col-sm-8\">Number of weeks selected :  </div><span data-js=\"datesSelectedNumber-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" class=\"col-sm-2\"></span><span class=\"col-sm-2\">weeks</span></div><div data-js=\"skipWeeks-"
+    + "\" class=\"weeks-selected col-sm-2\"></span><span class=\"col-sm-2\">weeks</span></div><div data-js=\"skipWeeks-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" class=\"absent-dates\"><div class=\"section-title\">Dates Absent :</div>                    "
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.skipWeeks : depth0),{"name":"each","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "            </div><div class=\"total share-total row\"><span class=\"col-sm-offset-4 col-sm-4\">Share Total :</span><span data-js=\"shareTotal-"
+    + "            </div><div class=\"total share-total row\"><span class=\"col-sm-offset-4 col-sm-4\">Share Total :  </span><span data-js=\"shareTotal-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" class=\"col-sm-2\"></span></div>        ";
 },"2":function(container,depth0,helpers,partials,data) {
@@ -69,13 +69,13 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 
   return "                            <div class=\"date\"><span>"
     + alias4(((helper = (helper = helpers.dayOfMonth || (depth0 != null ? depth0.dayOfMonth : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dayOfMonth","hash":{},"data":data}) : helper)))
-    + "-</span><span>"
+    + "-"
     + alias4(((helper = (helper = helpers.month || (depth0 != null ? depth0.month : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"month","hash":{},"data":data}) : helper)))
     + ",</span></div>                    ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div data-js=\"container\" class=\"summary col-xs-12 col-sm-10 col-sm-offset-1\"><div class=\"share-summary\"><div class=\"header\">Summary of Shares</div>        "
+  return "<div data-js=\"container\" class=\"summary col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1\"><div class=\"share-summary\"><div class=\"header\">Summary of Shares</div>        "
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.shares : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </div><div data-js=\"grandTotal\" class=\"grand-total text-center row\"></div><div class=\"payment\"><div class=\"header\">Select a method of payment</div><div data-js=\"paymentOptions\"></div><form data-js=\"paymentForm\" class=\"hide form-horizontal\"><div class=\"credit-card-info form-group\"><label class=\"col-sm-3 control-label number\">Card Number</label><div class=\"col-sm-9\"><input type=\"text\" class=\"form-control\" data-js=\"number\" id=\"number\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span><span class=\"accepted-cards\">Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span></div></div><div class=\"form-group\"><label class=\"col-sm-3 control-label\">Expiration</label><div class=\"col-sm-9 expiration\"><input type=\"number\" class=\"form-control\" data-js=\"exp_month\" maxlength=\"2\" size=\"3\" placeholder=\"mm\" id=\"exp_month\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span><span>&nbsp;/&nbsp;</span><input type=\"number\" class=\"form-control\" data-js=\"exp_year\" maxlength=\"4\" size=\"4\" placeholder=\"yyyy\" id=\"exp_year\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span></div></div><div class=\"form-group\"><label class=\"col-sm-3 control-label\">CVC</label><div class=\"col-sm-9 cvc\"><input type=\"number\" class=\"form-control\" data-js=\"cvc\" maxlength=\"3\" size=\"4\" id=\"cvc\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span></div></div></form><div class=\"text-center\"><button data-js=\"signupBtn\" class=\"btn text-center disabled\">Become a Member!</button></div></div></div>";
 },"useData":true});
