@@ -271,32 +271,55 @@
   margin: 0;
   padding: 15px 0;
 }
+.signup-class .summary .share-summary .share-label-wrapper {
+  margin: 0 auto;
+  text-align: center;
+  border-top: 1px solid #666;
+  padding-top: 20px;
+}
+.signup-class .summary .share-summary .share-label-wrapper .share-label {
+  width: 155px;
+  background-color: #f2f2f2;
+  color: #c98702;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 20px auto;
+  text-align: center;
+}
+.signup-class .summary .share-summary .share-label-wrapper .share-label > div:first-child {
+  font-size: 1.25rem;
+}
+.signup-class .summary .share-summary .share-label-wrapper .share-label > div:nth-child(2) {
+  color: #155D75;
+  font-size: .75rem;
+}
 .signup-class .summary .share-summary .section-title {
   color: #c98702;
   font-size: 1.1rem;
-  margin-top: 30px;
-  margin-bottom: 5px;
-}
-.signup-class .summary .share-summary .selected-options {
-  margin-bottom: 15px;
+  margin-top: 35px;
+  margin-bottom: 10px;
 }
 .signup-class .summary .share-summary .item-label {
   color: #155D75;
+  margin-bottom: 5px;
 }
-.signup-class .summary .share-summary .skip-date {
+.signup-class .summary .share-summary .date {
+  color: #155D75;
   margin-right: 3px;
-}
-.signup-class .summary .share-summary .price-reduction {
-  color: black;
+  display: inline-block;
 }
 .signup-class .summary .share-summary .total {
   color: black;
-  margin-top: 10px;
+  margin-top: 15px;
+  font-weight: bold;
 }
 .signup-class .summary .share-summary .share-total {
-  font-size: 1.2rem;
-  color: black;
-  padding: 35px 0 25px;
+  margin: 20px 0 35px;
 }
 .signup-class .summary .grand-total {
   font-size: 1.3rem;
@@ -450,6 +473,34 @@
     padding: 8px;
     margin: 0;
   }
+  .signup-class .summary .share-summary span {
+    padding-left: 0;
+    padding-right: 4px;
+  }
+  .signup-class .summary .share-summary .text-center {
+    text-align: left;
+  }
+  .signup-class .summary .share-summary .item-label {
+    margin: 0;
+  }
+  .signup-class .summary .share-summary .date {
+    margin-right: 0;
+  }
+  .signup-class .summary .share-summary .price,
+  .signup-class .summary .share-summary .dropoff-location,
+  .signup-class .summary .share-summary .dropoff-address {
+    margin-bottom: 5px;
+  }
+  .signup-class .summary .share-summary .shareoptionlabel,
+  .signup-class .summary .share-summary .price,
+  .signup-class .summary .share-summary .delivery-method,
+  .signup-class .summary .share-summary .dropoff-location,
+  .signup-class .summary .share-summary .weeks-selected {
+    padding-left: 15px;
+  }
+  .signup-class .summary .share-summary .share-total {
+    text-align: center;
+  }
   .signup-class .summary .payment .payment-options .payment-option {
     display: block;
     width: 95%;
@@ -457,6 +508,9 @@
   }
   .signup-class .summary .payment form #number {
     width: 95%;
+  }
+  .signup-class .summary .payment form #exp_month {
+    margin-bottom: 5px;
   }
 }
 .error {

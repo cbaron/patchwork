@@ -42,6 +42,7 @@ Object.assign( Summary.prototype, View.prototype, {
 
         this.signupData.shares.forEach( share  => {
             var skipWeeks = share.get('skipWeeks').length,
+                datesSelected = share.get('datesSelected').length,
                 shareDuration = share.get('availableShareDates'),
                 weeklyShareOptionsTotal = share.get('weeklyShareOptionsTotal'),
                 weeklyDeliveryTotal = share.get('selectedDelivery')[ 'weeklyCost' ],
@@ -52,8 +53,8 @@ Object.assign( Summary.prototype, View.prototype, {
 
             shareTotals.push( shareTotal )
 
-            this.templateData[ this.util.format( 'priceReduction-%s', share.id ) ].text( 'Price Reduction :  ' + '$' + priceReduction.toFixed(2) )
-            this.templateData[ this.util.format( 'shareTotal-%s', share.id ) ].text( 'Share Total :  ' + '$' + shareTotal.toFixed(2) )
+            this.templateData[ this.util.format( 'datesSelectedNumber-%s', share.id ) ].text( datesSelected )        
+            this.templateData[ this.util.format( 'shareTotal-%s', share.id ) ].text( '$' + shareTotal.toFixed(2) )
         } )
 
         this.grandTotal = shareTotals.reduce( ( a, b ) => a + b )
@@ -243,15 +244,22 @@ Object.assign( Summary.prototype, View.prototype, {
     updateSummaryInfo() {
         this.signupData.shares.forEach( share => {
             this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
+            
+            if( this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ] ) {
+               var lastSkipDate = this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ].children('.date').last().text()
+               this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ].children('.date').last().text( lastSkipDate.slice(0,-1) )
+            }
+
+            var lastSelectedDate = this.templateData[ this.util.format( 'datesSelected-%s', share.id ) ].children('.date').last().text()
+            this.templateData[ this.util.format( 'datesSelected-%s', share.id ) ].children('.date').last().text( lastSelectedDate.slice(0,-1) )
 
             if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
                 this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].append( this.signupData.member.address )
+                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( this.signupData.member.address )
             } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
                 this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
                 this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
-                this.templateData[ this.util.format( 'deliveryTotal-%s', share.id ) ].text(
-                    this.util.format( 'Save $%s at $1.00 / week', share.get('availableShareDates').toFixed(2) ) )
+
             }
         } )
     },
