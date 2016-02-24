@@ -3,8 +3,10 @@ var MyView = function( data ) { return Object.assign( this, data ).initialize() 
 Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     Collection: require('backbone').Collection,
-
+    
     Error: require('../MyError'),
+
+    Model: require('backbone').Model,
 
     _: require('underscore'),
 
@@ -47,7 +49,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     getTemplateOptions: () => ({}),
 
-    hide: function() {
+    hide() {
         return this.Q.Promise( ( resolve, reject ) => {
             this.templateData.container.hide()
             resolve()
@@ -86,7 +88,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
 
-    Model: require('backbone').Model,
     
     moment: require('moment'),
 

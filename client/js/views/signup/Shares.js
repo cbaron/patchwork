@@ -20,8 +20,20 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     postRender() {
         List.prototype.postRender.call(this)
         this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
+
         this.signupData.shares = new this.Collection()
-        this.items.on( 'reset', () => { if( this.items.length === 0 ) this.emit('noShares') } )
+        this.items.on( 'reset', () => { if( this.items.length === 0 ) return this.emit('noShares') } )
+
+        if( this.sessionShares ) {
+            var sessionShareIds = this.sessionShares.map( share => share.id )
+            this.on( 'itemAdded', model => {
+                if( this._( sessionShareIds ).contains( model.id ) ) {
+                    this.selectItem( model )
+                    this.signupData.shares.add( model )
+                }
+                if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
+            } )
+        }
     },
 
     requiresLogin: false,
@@ -47,7 +59,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             this.signupData.shares.remove( share )
         } )
 
-        this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) )  )
+        this._( selectedShareIds ).difference( prevShareIds ).forEach( id => this.signupData.shares.add( this.items.get(id) ) )
         
         return true
     }

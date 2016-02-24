@@ -1,1 +1,4 @@
-module.exports = new ( require('backbone').Model.extend( { urlRoot: "/user" } ) )()
+module.exports = new ( require('backbone').Model.extend( {
+    defaults: { state: '{}' },
+    urlRoot: "/user"
+} ) )()
