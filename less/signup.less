@@ -213,7 +213,8 @@
         }
 
         .delivery-options {
-            padding: 25px 0;
+            padding-top: 25px;
+            padding-bottom: 25px;
             border-top: 1px solid;
 
             .feedback-message {
@@ -235,6 +236,7 @@
                 font-family: "RalewayRegular";
                 padding: 10px;
                 margin: 5px;
+                text-align: center;
                 
                 >div {
                     &:first-child {
@@ -568,6 +570,13 @@
 
     }
 
+    @media only screen and (max-width: 800px) {
+
+        .delivery .delivery-options .share-label {
+            width: 148px;
+        }
+    }
+
     @media only screen and (max-width: 767px) {
 
         .vcenter {
@@ -597,13 +606,10 @@
                 margin-top: 15px;
             }
 
-            .option-title {
-                margin-left: 7px;
-            }
-
             .share-option {
                 .total {
                     text-align: left;
+                    margin-bottom: 10px;
                 }
 
                 select {

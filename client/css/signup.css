@@ -171,7 +171,8 @@
   margin-bottom: 5px;
 }
 .signup-class .delivery .delivery-options {
-  padding: 25px 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
   border-top: 1px solid;
 }
 .signup-class .delivery .delivery-options .feedback-message {
@@ -189,6 +190,7 @@
   font-family: "RalewayRegular";
   padding: 10px;
   margin: 5px;
+  text-align: center;
 }
 .signup-class .delivery .delivery-options .delivery-option > div:first-child {
   color: #c98702;
@@ -434,6 +436,11 @@
     margin-left: 1px;
   }
 }
+@media only screen and (max-width: 800px) {
+  .signup-class .delivery .delivery-options .share-label {
+    width: 148px;
+  }
+}
 @media only screen and (max-width: 767px) {
   .signup-class .vcenter {
     display: block;
@@ -453,11 +460,9 @@
   .signup-class .share-options .single-share {
     margin-top: 15px;
   }
-  .signup-class .share-options .option-title {
-    margin-left: 7px;
-  }
   .signup-class .share-options .share-option .total {
     text-align: left;
+    margin-bottom: 10px;
   }
   .signup-class .share-options .share-option select {
     width: 100%;

@@ -988,7 +988,8 @@ footer .future-days {
 }
 
 .signup-class .delivery .delivery-options {
-  padding: 25px 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
   border-top: 1px solid;
 }
 
@@ -1009,6 +1010,7 @@ footer .future-days {
   font-family: "RalewayRegular";
   padding: 10px;
   margin: 5px;
+  text-align: center;
 }
 
 .signup-class .delivery .delivery-options .delivery-option > div:first-child {
@@ -1309,6 +1311,12 @@ footer .future-days {
   }
 }
 
+@media only screen and (max-width: 800px) {
+  .signup-class .delivery .delivery-options .share-label {
+    width: 148px;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .signup-class .vcenter {
     display: block;
@@ -1333,12 +1341,9 @@ footer .future-days {
     margin-top: 15px;
   }
 
-  .signup-class .share-options .option-title {
-    margin-left: 7px;
-  }
-
   .signup-class .share-options .share-option .total {
     text-align: left;
+    margin-bottom: 10px;
   }
 
   .signup-class .share-options .share-option select {
