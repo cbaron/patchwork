@@ -5,16 +5,6 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
 
     User: require('./util/User'),
 
-    createToken() {
-        return new Promise( ( resolve, reject ) => {
-            this.jws.createSign( {
-                header: { "alg": "HS256", "typ": "JWT" },
-                payload: JSON.stringify( this.user ),
-                privateKey: process.env.JWS_SECRET,
-            } ).on( 'done', signature => resolve( signature ) )
-        } )
-    },
-
     bcrypt: require('bcrypt-nodejs'),
 
     handleQueryResult: function( result ) {
@@ -25,11 +15,10 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
 
         this.user = this._.omit( result.rows[0], [ 'password' ] )
 
-        return this.User.attachUserRoles.call(this).then( () => this.createToken() )
-        .then( token => this.respond( { body: this.user, headers: { 'Set-Cookie': this.format( 'patchworkjwt=%s;', token ) } } ) )
+        return this.User.attachUserRoles.call(this)
+        .then( () => this.User.createToken() )
+        .then( token => this.User.respondSetCookie.call( this, token, this.user ) )
     },
-
-    jws: require('jws'),
 
     POST() {
         return this.slurpBody().then( () => this.queryMemberTable() ).then( result => this.handleQueryResult( result ) )

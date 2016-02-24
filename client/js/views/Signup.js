@@ -21,6 +21,9 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.currentIndex -= 1
 
+        this.state.signup.index = this.currentIndex
+        this.saveState()
+
         this.showProperView( true )
 
         window.setTimeout( () => this.delegateEvents( 'leftBtn', this.templateData.leftBtn ), 1000 )
@@ -36,22 +39,38 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     postRender() {
-        
-        if( ! this.currentIndex ) this.currentIndex = 0
 
         this.signupData = { }
 
-        return this.showProperView()
+        this.state = JSON.parse( this.user.get('state') )
 
+        if( this.state.signup ) return this.updateState( this.state.signup )
+
+        if( ! this.currentIndex ) this.currentIndex = 0
+        this.state.signup = { index: this.currentIndex, shares: [ ] }
+        this.showProperView()
     },
 
     requiresLogin: false,
+
+    saveState() {
+        this.$.ajax( {
+            data: JSON.stringify( { state: JSON.stringify( this.state ) } ),
+            method: "PATCH",
+            url: "/user" } )
+        .done()
+        .fail( e => new this.Error(e) )
+    },
 
     showNext() {
         this.instances[ this.views[ this.currentIndex ].name ].hide()
         this.instances[ this.views[ this.currentIndex ].name ].templateData.container.removeClass('slide-in-left').removeClass('slide-in-right')
 
         this.currentIndex += 1
+        
+        this.state.signup.index = this.currentIndex
+        this.state.signup.shares = this.signupData.shares.toJSON()
+        this.saveState()
 
         this.showProperView()
     },
@@ -85,7 +104,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
                 container: this.templateData.walkthrough,
-                signupData: this.signupData 
+                signupData: this.signupData
             } )
         
         this.instances[ currentViewName ].templateData.container.addClass(klass)
@@ -99,6 +118,18 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     template: require('../templates/signup')( require('handlebars') ),
+
+    updateState( data ) {
+        this.currentIndex = data.index
+
+        this.instances.shares = new this.views[0].view( {
+            container: this.templateData.walkthrough,
+            sessionShares: data.shares,
+            signupData: this.signupData
+        } ).on( 'initialized', () => this.showProperView() )
+        
+        this.instances.shares.hide()
+    },
 
     validateView() {
         var view = this.instances[ this.views[ this.currentIndex ].name ]
