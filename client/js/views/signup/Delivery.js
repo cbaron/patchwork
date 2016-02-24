@@ -23,18 +23,30 @@ Object.assign( Delivery.prototype, List.prototype, {
     template: require('../../templates/signup/delivery')( require('handlebars') ),
 
     validate() {
-        var valid = true
+        var valid = true,
+            errorViews = [ ],
+            targetErrorView = null
        
         Object.keys( this.itemViews ).forEach( id => {
             if( ! this.itemViews[id].valid ) {
                 valid = false
-                return this.itemViews[id].templateData.container.addClass('has-error')
+                errorViews.push( this.itemViews[id].templateData.container )
+                this.itemViews[id].templateData.container.addClass('has-error')
             }
         } )
            
         if( ! valid ) return false 
 
         Object.keys( this.itemViews ).forEach( id => this.items.get( id ).set( 'selectedDelivery', this.itemViews[id].selectedDelivery ) )
+        
+        if( errorViews.length ) {
+            targetErrorView = errorViews.slice(-1)[0]
+            this.$('html, body').animate( {
+                scrollTop: targetErrorView.offset().top
+            }, 500 )
+        }
+
+        if( ! valid ) return
 
         return true
     }

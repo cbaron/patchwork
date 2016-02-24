@@ -23,13 +23,24 @@ Object.assign( DateSelection.prototype, List.prototype, {
     template: require('../../templates/signup/dateSelection')( require('handlebars') ),
 
     validate() {
-        var valid = true
+        var valid = true,
+            errorViews = [ ],
+            targetErrorView = null
 
         Object.keys( this.itemViews ).forEach( id => {
-            if( ! this.itemViews[id].valid ) valid = false
+            if( ! this.itemViews[id].valid ) {
+                valid = false
+                errorViews.push( this.itemViews[id].templateData.container )
+                this.itemViews[id].templateData.container.addClass('has-error')
+            }
         } )
-
-        if( !valid ) this.templateData.container.addClass('has-error')
+        
+        if( errorViews.length ) {
+            targetErrorView = errorViews.slice(-1)[0]
+            this.$('html, body').animate( {
+                scrollTop: targetErrorView.offset().top
+            }, 500 )
+        }
 
         if( valid ) {
             this.items.forEach( item => {

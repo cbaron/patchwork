@@ -11,7 +11,7 @@ return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,
     + alias4(((helper = (helper = helpers.humanEnddate || (depth0 != null ? depth0.humanEnddate : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"humanEnddate","hash":{},"data":data}) : helper)))
     + "</span></div><div>"
     + alias4(((helper = (helper = helpers.duration || (depth0 != null ? depth0.duration : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"duration","hash":{},"data":data}) : helper)))
-    + " weeks</div></div><div class=\"vcenter col-sm-7 col-sm-offset-1 col-xs-10 col-xs-offset-1\"><div class=\"row\" data-js=\"dates\"></div></div></div></li>";
+    + " weeks</div></div><div class=\"vcenter col-sm-7 col-sm-offset-1 col-xs-10 col-xs-offset-1\"><div class=\"row\" data-js=\"dates\"></div></div></div><div class=\"error\">Please select at least one date to receive a share.</div></li>";
 },"useData":true});
 
 };

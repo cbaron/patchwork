@@ -46,6 +46,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
 
     showOptionInfo() {
         this.modalView.show( {
+            title: this.model.get('label'),
             body: this.model.get('description'),
             hideFooter: true
         } )

@@ -87,6 +87,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         var left = this.templateData.leftBtn, right = this.templateData.rightBtn
 
         if( this.currentIndex > 0 ) this.templateData.intro.text('Continue your CSA sign-up')
+        if( this.currentIndex === 5 ) this.templateData.intro.text('Review your order and check out')
 
         if( this.currentIndex === 0 ) {
             left.hide()

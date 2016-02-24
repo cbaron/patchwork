@@ -51,6 +51,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.valid = true
 
         this.on( 'itemSelected', model => {
+            this.templateData.container.removeClass('has-error')
             this.skipWeeks.remove(model)
             this.datesSelected.add(model)
             this.updateShare()
@@ -89,6 +90,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
     updateShare() {
         this.valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }
+
 } )
 
 module.exports = PickupDates
