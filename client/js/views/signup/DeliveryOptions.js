@@ -81,12 +81,21 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 } )
                 this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
+                    this.dropoffView.itemViews.forEach( view => {
+                        if( view.templateData.container.is(':hidden') ) view.templateData.container.show()
+                    })
+
                     this.model.unset('selectedDelivery')
                     this.selectedDelivery = { weeklyCost: 0, totalCost: 0 }
 
                     this.valid = false 
                 } )
                 .on( 'itemSelected', model => {
+                    var selectedId = model.id
+                    this.dropoffs.models.forEach( model => {
+                        if( model.id !== selectedId ) this.dropoffView.itemViews[ model.id ].templateData.container.hide()
+                    } )
+
                     Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id }, model.attributes )
                     this.model.set( 'selectedDelivery', this.selectedDelivery )
                     
