@@ -28,18 +28,16 @@ Object.assign( Delivery.prototype, List.prototype, {
         Object.keys( this.itemViews ).forEach( id => {
             if( ! this.itemViews[id].valid ) {
                 valid = false
-                this.itemViews[id].templateData.container.addClass('has-error')
+                return this.itemViews[id].templateData.container.addClass('has-error')
             }
         } )
+           
+        if( ! valid ) return false 
 
-        if( ! valid ) return
-
-        this.signupData.shares.forEach( share => share.set( 'selectedDeliveryDayOfWeek', share.get('selectedDelivery').dayofweek ) )
+        Object.keys( this.itemViews ).forEach( id => this.items.get( id ).set( 'selectedDelivery', this.itemViews[id].selectedDelivery ) )
 
         return true
-
     }
-
 } )
 
 module.exports = Delivery

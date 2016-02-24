@@ -31,6 +31,13 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
         if( !valid ) this.templateData.container.addClass('has-error')
 
+        if( valid ) {
+            this.items.forEach( item => {
+                item.set( 'skipWeeks', this.itemViews[item.id].skipWeeks.map( model => model.attributes ) )
+                item.set( 'datesSelected', this.itemViews[item.id].datesSelected.map( model => model.attributes ) )
+            } )
+        }
+
         return valid
     }
 

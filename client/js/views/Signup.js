@@ -42,7 +42,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.signupData = { }
 
-        this.state = JSON.parse( this.user.get('state') )
+        this.state = this.user.get('state')
 
         if( this.state.signup ) return this.updateState( this.state.signup )
 
@@ -55,7 +55,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
     saveState() {
         this.$.ajax( {
-            data: JSON.stringify( { state: JSON.stringify( this.state ) } ),
+            data: JSON.stringify( { state: this.state } ),
             method: "PATCH",
             url: "/user" } )
         .fail( e => new this.Error(e) )
@@ -64,7 +64,9 @@ Object.assign( Signup.prototype, MyView.prototype, {
     serializeShare( share ) {
         return {
             id: share.id,
-            selectedOptions: share.get('selectedOptions')
+            selectedDelivery: share.get('selectedDelivery'),
+            selectedOptions: share.get('selectedOptions'),
+            skipWeeks: ( share.has('skipWeeks') ) ? share.get('skipWeeks').map( week => week.date ) : [ ]
         }
     },
 

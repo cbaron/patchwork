@@ -39,7 +39,8 @@ Object.assign( Summary.prototype, View.prototype, {
 
     calculateTotals() {
         var shareTotals = [ ]
-
+        
+        return
         this.signupData.shares.forEach( share  => {
             var skipWeeks = share.get('skipWeeks').length,
                 datesSelected = share.get('datesSelected').length,

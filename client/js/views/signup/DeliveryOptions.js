@@ -9,15 +9,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ) : parseFloat( weeklyCost.slice(1) ),
             optionTotalCost = ( weeklyCostFloat * duration )
         
-        //if( model.get('name') === "farm" ) this.templateData.optionTotal.text( 'Option Total: Save $' + duration.toFixed(2) )
-        //else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost.toFixed(2) )
-
+        /*
         Object.assign( this.selectedDelivery, {
             weeklyCost: weeklyCostFloat,
             weeklyCostString: weeklyCostFloat.toFixed(2),
             totalCost: optionTotalCost,
             totalCostString: optionTotalCost.toFixed(2) 
         } )
+        */
 
         var sharePlusDelivery = this.model.get('weeklyShareOptionsTotal') + weeklyCostFloat
         this.model.set( 'shareOptionsPlusDelivery', sharePlusDelivery.toFixed(2) )
@@ -45,8 +44,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
-            Object.assign( this.selectedDelivery, { deliveryoptionid: model.id }, this.farmPickup.attributes )
-            this.model.set( 'selectedDelivery', this.selectedDelivery )
+            //Object.assign( this.selectedDelivery, { deliveryoptionid: model.id }, this.farmPickup.attributes )
+            this.selectedDelivery = { deliveryoptionid: model.id, dayofweek: this.farmPickup.get('dayofweek') }
 
             this.valid = true
         } )
@@ -79,14 +78,12 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                     model.set( { endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), endtime ].join(' ') ).format('hA') } )
                     
                 } )
-                this.dropoffView = new this.Views.Dropoffs( { itemModels: this.dropoffs.models, container: this.templateData.feedback } )
+
+                this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
                     this.dropoffView.itemViews.forEach( view => {
                         if( view.templateData.container.is(':hidden') ) view.templateData.container.show()
                     })
-
-                    this.model.unset('selectedDelivery')
-                    this.selectedDelivery = { weeklyCost: 0, totalCost: 0 }
 
                     this.valid = false 
                 } )
@@ -96,33 +93,45 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                         if( model.id !== selectedId ) this.dropoffView.itemViews[ model.id ].templateData.container.hide()
                     } )
 
-                    Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id }, model.attributes )
-                    this.model.set( 'selectedDelivery', this.selectedDelivery )
+                    this.selectedDelivery = { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id, dayofweek: model.get('dayofweek') }
                     
                     this.valid = true
                 } )
+                .on( 'itemAdded', model => {
+                    var selectedDelivery = this.model.get('selectedDelivery')
+                    if( selectedDelivery &&
+                        Object.keys( this.dropoffView.itemViews ).length == this.dropoffView.items.length &&
+                        this.dropoffView.itemViews[ selectedDelivery.groupdropoffid ] ) {
+                        
+                        this.dropoffView.selectItem( this.dropoffView.items.get( selectedDelivery.groupdropoffid ) )
+                    }
+                } )
+
+                this.dropoffView.items.reset( this.dropoffs.models )
             } )
         } )
     },
 
     homeFeedback( deliveryOption ) {
+
+        var userPostalCode = this.user.get('addressModel').postalCode
+
         this.zipRoute = new ( this.Model.extend( { parse: response => response[0], urlRoot: "/zipcoderoute" } ) )()
         this.homeDeliveryRoute = new this.Models.DeliveryRoute()
 
         this.zipRoute
-            .fetch( { data: { zipcode: this.signupData.addressModel.postalCode } } )
+            .fetch( { data: { zipcode: userPostalCode } } )
             .done( () => {
                 if( Object.keys( this.zipRoute.attributes ).length === 0 ) {
                     this.valid = false
-                    return this.showFeedback( this.feedback.invalidZip.call( this, this.signupData.addressModel.postalCode ) )
+                    return this.showFeedback( this.feedback.invalidZip.call( this, userPostalCode ) )
                 }    
                 this.homeDeliveryRoute.set( { id: this.zipRoute.get('routeid') } )
                 .fetch()
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
-                    Object.assign( this.selectedDelivery, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.attributes )
-                    this.model.set( 'selectedDelivery', this.selectedDelivery )
+                    this.selectedDelivery = { deliveryoptionid: deliveryOption.id, dayofweek: this.homeDeliveryRoute.get('dayofweek') }
                     
                     this.valid = true
                 } )
@@ -132,8 +141,6 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     postRender() {
         
         var share = this.model
-
-        this.selectedDelivery = { }
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
         this.dropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
@@ -156,22 +163,23 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
 
         this.on( 'itemAdded', model => {
-            if( model.get('name') === "group" ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "No charge" )
-            else if( model.get('name') === "farm" ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "Save $1 per week" )
+            var price = parseFloat( model.get('price').replace(/\$|,/g, "") ),
+                selectedDelivery = this.model.get('selectedDelivery')
+            
+            if( price == 0 ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "No charge" )
+            else if( price < 0 ) this.itemViews[ model.id ].templateData.deliveryPrice.text( this.util.format('Save %s per week', model.get('price').replace('-','') ) )
+
+            if( selectedDelivery && selectedDelivery.deliveryoptionid == model.id ) this.selectItem( model )
         } )
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            Object.assign( this.selectedDelivery, { deliveryType: model.get('label') } )
             this.calculateOptionCost( model )
             this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
         } )
         .on( 'itemUnselected', () => {
             this.valid = false
             this.templateData.feedback.empty()
-            //this.templateData.optionTotal.text('')
-            if( this.model.has('selectedDelivery') ) this.model.unset('selectedDelivery')
-            this.selectedDelivery = { }
         } )
 
     },

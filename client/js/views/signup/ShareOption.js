@@ -34,13 +34,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     postRender() {
-        /*
-        this.selectedOption = { shareoptionid: this.model.id, shareoptionlabel: this.model.get('label') }
-
-        this.share.set( 'selectedOptions',
-            ( this.share.has('selectedOptions') ) ? this.share.get('selectedOptions').concat( this.selectedOption ) : [ this.selectedOption ] )
-        */
-
         this.updateTotal()
 
         this.templateData.input.on( 'change', () => {

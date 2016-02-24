@@ -141,7 +141,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     },
 
-    selectItem: function( model ) {
+    selectItem( model ) {
         var selectedIds = Object.keys( this.selectedItems )
 
         if( ( this.pressedKey === undefined && this.selection === 'multiComplex' ) || this.selection === 'single' ) {

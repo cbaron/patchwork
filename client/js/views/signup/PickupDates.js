@@ -14,18 +14,17 @@ Object.assign( PickupDates.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     itemModels() {
-        var deliveryDay = this.model.get('selectedDeliveryDayOfWeek'),
+        var deliveryDay = this.model.get('selectedDelivery').dayofweek,
             deliveryDate = this.moment( this.model.get('startdate') ),
             endDate = this.moment( this.model.get('enddate') ),
             startDay = this.moment( deliveryDate ).day()
         
         this.dates = [ ]
-        this.model.set( 'skipWeeks', [ ] )
         this.skipWeeks.reset([])
         this.model.set( 'datesSelected', [ ] )
         this.datesSelected.reset([])
 
-        if( ! this.model.has('selectedDeliveryDayOfWeek') ) return 
+        if( ! deliveryDay ) return 
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
@@ -51,23 +50,32 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.datesSelected = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
         this.valid = true
 
-        List.prototype.postRender.call( this )
-        
         this.on( 'itemSelected', model => {
             this.skipWeeks.remove(model)
             this.datesSelected.add(model)
             this.updateShare()
         } )
+
         this.on( 'itemUnselected', model => {
             this.skipWeeks.add(model)
             this.datesSelected.remove(model)
             this.updateShare()
         } )
 
-        this.model.on( 'change:selectedDeliveryDayOfWeek', () => {
-            this.items.reset( this.itemModels() )
-        } )
+        this.on( 'itemAdded', () => {
+            if( this.model.has('skipWeeks') &&
+                this.model.get('skipWeeks').length &&
+                Object.keys( this.itemViews ).length == this.items.length ) {
 
+                this.model.get('skipWeeks').forEach( skipWeek => {
+                    if( this.items.get( skipWeek.id ) ) this.unselectItem( this.items.get( skipWeek.id ) )
+                } )
+            }
+        } )
+        
+        List.prototype.postRender.call( this )
+
+        this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
     },
 
     requiresLogin: false,
@@ -79,9 +87,6 @@ Object.assign( PickupDates.prototype, List.prototype, {
     template: require('../../templates/signup/pickupDates')( require('handlebars') ),
 
     updateShare() {
-        this.model.set( 'skipWeeks', this.skipWeeks.map( model => model.attributes ) )
-        this.model.set( 'datesSelected', this.datesSelected.map( model => model.attributes ) )
-
         this.valid = ( this.skipWeeks.length === this.dates.length ) ? false : true
     }
 } )

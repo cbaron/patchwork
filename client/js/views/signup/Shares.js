@@ -5,6 +5,10 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     ItemView: require('./Share'),
 
+    Models: {
+        DeliveryDate: require('../../models/DeliveryDate')
+    },
+
     collection: { model: require('../../models/Share'), url: "/share" },
 
     events: {
@@ -32,6 +36,11 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                     this.selectItem( model )
                     this.signupData.shares.add( model )
                     if( sessionShare.selectedOptions ) model.set( 'selectedOptions', sessionShare.selectedOptions ) 
+                    if( sessionShare.selectedDelivery ) model.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
+                    if( sessionShare.skipWeeks ) {
+                        model.set( 'skipWeeks', sessionShare.skipWeeks.map( skipWeek =>
+                            new this.Models.DeliveryDate( this.moment( skipWeek ), { parse: true } ).attributes ) )
+                    }
                 }
                 if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
             } )
@@ -56,7 +65,6 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             var share = this.items.get(id)
             share.unset('selectedOptions')
             share.unset('selectedDelivery')
-            share.unset('selectedDeliveryDayOfWeek')
             share.unset('skipWeeks')
             this.signupData.shares.remove( share )
         } )
