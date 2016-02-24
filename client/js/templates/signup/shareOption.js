@@ -11,11 +11,11 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {};
 
-  return "<div data-js=\"container\" class=\"share-option row\"><div class=\"col-sm-7\">"
+  return "<div data-js=\"container\" class=\"share-option row\"><div class=\"option-title col-sm-5\">"
     + container.escapeExpression(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
-    + "</div><div class=\"col-sm-2\"><select data-js=\"input\" class=\"form-control\">            "
+    + "<span data-js=\"optionIcon\" class=\"glyphicon glyphicon-info-sign\" aria-hidden=\"true\"></span></div><div class=\"col-sm-3\"><select data-js=\"input\" class=\"form-control\">            "
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.options : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </select></div><div data-js=\"total\" class=\"col-sm-3 total\"></div></div>";
+    + "        </select></div><div data-js=\"total\" class=\"col-sm-4 total\"></div></div>";
 },"useData":true});
 
 };

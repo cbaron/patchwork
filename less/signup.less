@@ -142,19 +142,20 @@
         }
 
         .price {
-            color: black;
-            text-align: center;
+            font-size: .75rem;
+            text-align: right;
             font-family: "RalewayRegular";
-            font-size: 1.2rem;
-            &:last-child {
-                padding-bottom: 30px;
-            }
+            padding-bottom: 30px;
         }
 
         .single-share {
             padding-top: 35px;
             padding-bottom: 15px;
             border-top: 1px solid;
+
+            .share-label {
+                width: 100%;
+            }
         }
 
         .share-option {
@@ -175,6 +176,12 @@
             .total {
                 font-size: .75rem;
                 text-align: right;
+            }
+
+            .glyphicon {
+                top: 2px;
+                left: 5px;
+                cursor: pointer;
             }
         }
 
@@ -206,7 +213,8 @@
         }
 
         .delivery-options {
-            padding: 25px 0;
+            padding-top: 25px;
+            padding-bottom: 25px;
             border-top: 1px solid;
 
             .feedback-message {
@@ -228,6 +236,7 @@
                 font-family: "RalewayRegular";
                 padding: 10px;
                 margin: 5px;
+                text-align: center;
                 
                 >div {
                     &:first-child {
@@ -295,13 +304,14 @@
 
         .share-dates {
             border-top: 1px solid;
-            padding: 35px 0;
+            padding: 35px 0 35px 15px;
 
             .pickup-date {
-                background-color: darken(white, 5%);
+                background-color: #555;
                 border: 1px solid beige;
                 box-shadow: 1px 2px 5px #ccc;
-                color: #c98702;
+                color: darken(#c98702, 5%);
+                opacity: .7;
                 cursor: pointer;
                 display: inline-block;
                 font-family: "RalewayRegular";
@@ -311,11 +321,13 @@
                 line-height: 1.2;
 
                 &:hover {
-                    background-color: rgba(201, 135, 2, .1);
+                    background-color: lighten(#555, 5%);
                 }
                 
                 &.selected {
                     background-color: rgba(201, 135, 2, .3);
+                    color: #c98702;
+                    opacity: 1;
                 }
 
                 >div {
@@ -558,6 +570,13 @@
 
     }
 
+    @media only screen and (max-width: 800px) {
+
+        .delivery .delivery-options .share-label {
+            width: 148px;
+        }
+    }
+
     @media only screen and (max-width: 767px) {
 
         .vcenter {
@@ -579,16 +598,29 @@
             height: auto;
             .share-label {
                 text-align: center;
-                margin-bottom: 15px;
-                margin-top: 10px;
-            }
-
-            .form-control {
-                margin-bottom: 15px;
+                margin-bottom: 20px;
+                width: auto;
             }
 
             .single-share {
                 margin-top: 15px;
+            }
+
+            .share-option {
+                .total {
+                    text-align: left;
+                    margin-bottom: 10px;
+                }
+
+                select {
+                    width: 100%;
+                }
+            }
+
+            .price {
+                text-align: center;
+                padding-bottom: 10px;
+                font-weight: bold;
             }
         }
 
@@ -623,11 +655,12 @@
         .date-selection {
 
             .share-dates {
+                padding: 0 0 35px;
 
                 .share-label {
                     text-align: center;
                     font-size: 1.2rem;                   
-                    margin: 10px 0 25px;                    
+                    margin: 35px auto;                    
                 }
 
                 .pickup-date {

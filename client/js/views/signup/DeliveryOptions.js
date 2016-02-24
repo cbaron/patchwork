@@ -9,8 +9,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ) : parseFloat( weeklyCost.slice(1) ),
             optionTotalCost = ( weeklyCostFloat * duration )
         
-        if( model.get('name') === "farm" ) this.templateData.optionTotal.text( 'Option Total: Save $' + duration.toFixed(2) )
-        else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost.toFixed(2) )
+        //if( model.get('name') === "farm" ) this.templateData.optionTotal.text( 'Option Total: Save $' + duration.toFixed(2) )
+        //else this.templateData.optionTotal.text( 'Option Total: $' + optionTotalCost.toFixed(2) )
 
         Object.assign( this.selectedDelivery, {
             weeklyCost: weeklyCostFloat,
@@ -146,6 +146,11 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             }
         } )
 
+        this.on( 'itemAdded', model => {
+            if( model.get('name') === "group" ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "No charge" )
+            else if( model.get('name') === "farm" ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "Save $1 per week" )
+        } )
+
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
             Object.assign( this.selectedDelivery, { deliveryType: model.get('label') } )
@@ -155,7 +160,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         .on( 'itemUnselected', () => {
             this.valid = false
             this.templateData.feedback.empty()
-            this.templateData.optionTotal.text('')
+            //this.templateData.optionTotal.text('')
             if( this.model.has('selectedDelivery') ) this.model.unset('selectedDelivery')
             this.selectedDelivery = { }
         } )

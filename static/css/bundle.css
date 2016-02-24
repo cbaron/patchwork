@@ -919,13 +919,9 @@ footer .future-days {
 }
 
 .signup-class .share-options .price {
-  color: black;
-  text-align: center;
+  font-size: .75rem;
+  text-align: right;
   font-family: "RalewayRegular";
-  font-size: 1.2rem;
-}
-
-.signup-class .share-options .price:last-child {
   padding-bottom: 30px;
 }
 
@@ -933,6 +929,10 @@ footer .future-days {
   padding-top: 35px;
   padding-bottom: 15px;
   border-top: 1px solid;
+}
+
+.signup-class .share-options .single-share .share-label {
+  width: 100%;
 }
 
 .signup-class .share-options .share-option {
@@ -954,6 +954,12 @@ footer .future-days {
 .signup-class .share-options .share-option .total {
   font-size: .75rem;
   text-align: right;
+}
+
+.signup-class .share-options .share-option .glyphicon {
+  top: 2px;
+  left: 5px;
+  cursor: pointer;
 }
 
 .signup-class .share-options .share-option + .share-option {
@@ -982,7 +988,8 @@ footer .future-days {
 }
 
 .signup-class .delivery .delivery-options {
-  padding: 25px 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
   border-top: 1px solid;
 }
 
@@ -1003,6 +1010,7 @@ footer .future-days {
   font-family: "RalewayRegular";
   padding: 10px;
   margin: 5px;
+  text-align: center;
 }
 
 .signup-class .delivery .delivery-options .delivery-option > div:first-child {
@@ -1065,14 +1073,15 @@ footer .future-days {
 
 .signup-class .date-selection .share-dates {
   border-top: 1px solid;
-  padding: 35px 0;
+  padding: 35px 0 35px 15px;
 }
 
 .signup-class .date-selection .share-dates .pickup-date {
-  background-color: #f2f2f2;
+  background-color: #555;
   border: 1px solid beige;
   box-shadow: 1px 2px 5px #ccc;
-  color: #c98702;
+  color: #b07602;
+  opacity: .7;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
@@ -1083,11 +1092,13 @@ footer .future-days {
 }
 
 .signup-class .date-selection .share-dates .pickup-date:hover {
-  background-color: rgba(201, 135, 2, 0.1);
+  background-color: #626262;
 }
 
 .signup-class .date-selection .share-dates .pickup-date.selected {
   background-color: rgba(201, 135, 2, 0.3);
+  color: #c98702;
+  opacity: 1;
 }
 
 .signup-class .date-selection .share-dates .pickup-date > div {
@@ -1300,6 +1311,12 @@ footer .future-days {
   }
 }
 
+@media only screen and (max-width: 800px) {
+  .signup-class .delivery .delivery-options .share-label {
+    width: 148px;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .signup-class .vcenter {
     display: block;
@@ -1316,16 +1333,27 @@ footer .future-days {
 
   .signup-class .share-options .share-label {
     text-align: center;
-    margin-bottom: 15px;
-    margin-top: 10px;
-  }
-
-  .signup-class .share-options .form-control {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    width: auto;
   }
 
   .signup-class .share-options .single-share {
     margin-top: 15px;
+  }
+
+  .signup-class .share-options .share-option .total {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .signup-class .share-options .share-option select {
+    width: 100%;
+  }
+
+  .signup-class .share-options .price {
+    text-align: center;
+    padding-bottom: 10px;
+    font-weight: bold;
   }
 
   .signup-class .member-info .form-control {
@@ -1347,10 +1375,14 @@ footer .future-days {
     background-color: rgba(201, 135, 2, 0.1);
   }
 
+  .signup-class .date-selection .share-dates {
+    padding: 0 0 35px;
+  }
+
   .signup-class .date-selection .share-dates .share-label {
     text-align: center;
     font-size: 1.2rem;
-    margin: 10px 0 25px;
+    margin: 35px auto;
   }
 
   .signup-class .date-selection .share-dates .pickup-date {

@@ -24,6 +24,10 @@ Object.assign( ShareOption.prototype, View.prototype, {
         this.$( weeklyTotalClass ).text( "( " + "$" + weeklyShareTotal.toFixed(2) + " per week )" )
 
     },
+
+    events: {
+        'optionIcon': { method: 'showOptionInfo' }
+    },
   
     getTemplateOptions() {
         return Object.assign( { }, this.model.attributes, { options: this.model.get('options').map( model => model.attributes ) } )
@@ -42,6 +46,13 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     requiresLogin: false,
+
+    showOptionInfo() {
+        this.modalView.show( {
+            body: this.model.get('description'),
+            hideFooter: true
+        } )
+    },
 
     template: require('../../templates/signup/shareOption')( require('handlebars') ),
 
