@@ -58,8 +58,14 @@ Object.assign( Signup.prototype, MyView.prototype, {
             data: JSON.stringify( { state: JSON.stringify( this.state ) } ),
             method: "PATCH",
             url: "/user" } )
-        .done()
         .fail( e => new this.Error(e) )
+    },
+
+    serializeShare( share ) {
+        return {
+            id: share.id,
+            selectedOptions: share.get('selectedOptions')
+        }
     },
 
     showNext() {
@@ -69,7 +75,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.currentIndex += 1
         
         this.state.signup.index = this.currentIndex
-        this.state.signup.shares = this.signupData.shares.toJSON()
+        this.state.signup.shares = this.signupData.shares.map( share => this.serializeShare( share ) )
         this.saveState()
 
         this.showProperView()

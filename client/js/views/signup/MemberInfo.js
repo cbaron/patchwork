@@ -58,7 +58,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     postRender() {
         var self = this
 
-        this.signupData.member = { }
+        this.fields.forEach( field => { if( this.user.has( field.name ) ) this.templateData[ field.name ].val( this.user.get( field.name ) ) } )
 
         this.templateData.container.find('input')
         .on( 'blur', function() {
@@ -136,9 +136,17 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     valid = false
                     this.showError( this.templateData[ field.name ], field.error )
                 }
-                this.signupData.member[ field.name ] = this.templateData[ field.name ].val()
+                this.user.set( field.name,  this.templateData[ field.name ].val() )
             } )
         } ) )
+        .then( () => {
+            if( valid ) {
+                return this.Q( this.$.ajax( {
+                    data: JSON.stringify( this.user.attributes ),
+                    method: "PATCH",
+                    url: "/user" } ) )
+            }
+        } )
         .then( () => valid )
         .fail( e => { console.log( e.stack || e ); return false } )
     },
@@ -155,7 +163,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                  if( response.inexact.length === 0 ) return false
                  else if( response.inexact.length === 1 ) {
                     this.templateData.address.val( response.inexact[0].string ) 
-                    this.signupData.addressModel = response.inexact[0].model
+                    this.user.set( { addressModel: response.inexact[0].model } )
                     return true
                  } else {
                      this.suggestAddresses( response.inexact ); return false
@@ -163,7 +171,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             }
 
             this.templateData.address.val( response.valid[0].string ) 
-            this.signupData.addressModel = response.valid[0].model
+            this.user.set( { addressModel: response.valid[0].model } )
             return true
         } )
         .fail( e => { console.log( e.stack || e ); return false } )

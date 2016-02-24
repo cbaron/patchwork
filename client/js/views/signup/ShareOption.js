@@ -34,15 +34,19 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     postRender() {
+        /*
         this.selectedOption = { shareoptionid: this.model.id, shareoptionlabel: this.model.get('label') }
 
         this.share.set( 'selectedOptions',
             ( this.share.has('selectedOptions') ) ? this.share.get('selectedOptions').concat( this.selectedOption ) : [ this.selectedOption ] )
+        */
 
-        this.templateData.input.on( 'change', () => this.updateShare() )
+        this.updateTotal()
 
-        this.updateShare()
-    
+        this.templateData.input.on( 'change', () => {
+            this.updateTotal()
+            this.emit( 'changed', this.templateData.input.val() )
+        } )
     },
 
     requiresLogin: false,
@@ -55,6 +59,12 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
 
     template: require('../../templates/signup/shareOption')( require('handlebars') ),
+
+    updateTotal() {
+        this.templateData.total.text(
+            this.util.format( '$%s per week',
+                parseFloat( this.model.get('options').at( this.templateData.input.get(0).selectedIndex ).get('price').replace(/\$|,/g, "") ).toFixed(2) ) )
+    },
 
     updateShare() {
         var $input = this.templateData.input,

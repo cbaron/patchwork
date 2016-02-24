@@ -27,9 +27,11 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         if( this.sessionShares ) {
             var sessionShareIds = this.sessionShares.map( share => share.id )
             this.on( 'itemAdded', model => {
-                if( this._( sessionShareIds ).contains( model.id ) ) {
+                var sessionShare = this._( this.sessionShares ).find( share => share.id == model.id )
+                if( sessionShare ) {
                     this.selectItem( model )
                     this.signupData.shares.add( model )
+                    if( sessionShare.selectedOptions ) model.set( 'selectedOptions', sessionShare.selectedOptions ) 
                 }
                 if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
             } )

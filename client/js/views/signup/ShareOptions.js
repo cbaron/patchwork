@@ -25,7 +25,17 @@ Object.assign( ShareOptions.prototype, List.prototype, {
 
     template: require('../../templates/signup/shareOptions')( require('handlebars') ),
 
-    validate() { return true }
+    validate() {
+
+        this.signupData.shares.forEach( share => {
+            share.set( 'selectedOptions', share.get( 'shareoptions' ).map( shareOption => ( {
+                shareoptionid: shareOption.id,
+                shareoptionoptionid: this.itemViews[ share.id ].itemViews[ shareOption.id ].templateData.input.val()
+            } ) ) )
+        } )
+
+        return true
+    }
 
 } )
 
