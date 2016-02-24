@@ -1,6 +1,6 @@
 <div data-js="container" class="share-option row">
-    <div class="option-title col-sm-5">{{label}}<span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></div>
-    <div class="col-sm-3">
+    <div class="option-title col-sm-6 col-md-7">{{label}}{{#if description}}<span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>{{/if}}</div>
+    <div class="col-sm-2 col-md-1">
         <select data-js="input" class="form-control">
             {{#each options}}
                 <option value="{{id}}">{{label}}</option>
