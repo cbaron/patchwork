@@ -125,7 +125,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     template: require('../../templates/signup/memberInfo')( require('handlebars') ),
 
     validate() {
-        var valid = true
+        /*var valid = true
         
         if( this.templateData.container.find('has-error').length ) return false
 
@@ -140,7 +140,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } ) )
         .then( () => valid )
-        .fail( e => { console.log( e.stack || e ); return false } )
+        .fail( e => { console.log( e.stack || e ); return false } )*/return true
     },
     
     validateAddress( address ) {
