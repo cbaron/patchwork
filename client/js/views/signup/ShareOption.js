@@ -25,7 +25,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
 
     },
 
-
     events: {
         'optionIcon': { method: 'showOptionInfo' }
     },
@@ -43,7 +42,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
         this.templateData.input.on( 'change', () => this.updateShare() )
 
         this.updateShare()
-        console.log(this.share)
     
     },
 
@@ -59,7 +57,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
     template: require('../../templates/signup/shareOption')( require('handlebars') ),
 
     updateShare() {
-        console.log(this.model.attributes)
         var $input = this.templateData.input,
             selectedOptionIndex = $input.get(0).selectedIndex,
             options = this.model.attributes.options.models,

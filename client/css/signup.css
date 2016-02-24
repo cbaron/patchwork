@@ -126,6 +126,9 @@
   padding-bottom: 15px;
   border-top: 1px solid;
 }
+.signup-class .share-options .single-share .share-label {
+  width: 100%;
+}
 .signup-class .share-options .share-option {
   line-height: 34px;
 }
@@ -144,7 +147,7 @@
 }
 .signup-class .share-options .share-option .glyphicon {
   top: 2px;
-  right: 5px;
+  left: 5px;
   cursor: pointer;
 }
 .signup-class .share-options .share-option + .share-option {
@@ -235,13 +238,14 @@
 }
 .signup-class .date-selection .share-dates {
   border-top: 1px solid;
-  padding: 35px 0;
+  padding: 35px 0 35px 15px;
 }
 .signup-class .date-selection .share-dates .pickup-date {
-  background-color: #f2f2f2;
+  background-color: #555;
   border: 1px solid beige;
   box-shadow: 1px 2px 5px #ccc;
-  color: #c98702;
+  color: #b07602;
+  opacity: .7;
   cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
@@ -251,10 +255,12 @@
   line-height: 1.2;
 }
 .signup-class .date-selection .share-dates .pickup-date:hover {
-  background-color: rgba(201, 135, 2, 0.1);
+  background-color: #626262;
 }
 .signup-class .date-selection .share-dates .pickup-date.selected {
   background-color: rgba(201, 135, 2, 0.3);
+  color: #c98702;
+  opacity: 1;
 }
 .signup-class .date-selection .share-dates .pickup-date > div {
   font-weight: bold;
@@ -477,10 +483,13 @@
     margin: 10px auto;
     background-color: rgba(201, 135, 2, 0.1);
   }
+  .signup-class .date-selection .share-dates {
+    padding: 0 0 35px;
+  }
   .signup-class .date-selection .share-dates .share-label {
     text-align: center;
     font-size: 1.2rem;
-    margin: 10px 0 25px;
+    margin: 35px auto;
   }
   .signup-class .date-selection .share-dates .pickup-date {
     padding: 8px;

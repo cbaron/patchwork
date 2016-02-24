@@ -152,6 +152,10 @@
             padding-top: 35px;
             padding-bottom: 15px;
             border-top: 1px solid;
+
+            .share-label {
+                width: 100%;
+            }
         }
 
         .share-option {
@@ -176,7 +180,7 @@
 
             .glyphicon {
                 top: 2px;
-                right: 5px;
+                left: 5px;
                 cursor: pointer;
             }
         }
@@ -298,13 +302,14 @@
 
         .share-dates {
             border-top: 1px solid;
-            padding: 35px 0;
+            padding: 35px 0 35px 15px;
 
             .pickup-date {
-                background-color: darken(white, 5%);
+                background-color: #555;
                 border: 1px solid beige;
                 box-shadow: 1px 2px 5px #ccc;
-                color: #c98702;
+                color: darken(#c98702, 5%);
+                opacity: .7;
                 cursor: pointer;
                 display: inline-block;
                 font-family: "RalewayRegular";
@@ -314,11 +319,13 @@
                 line-height: 1.2;
 
                 &:hover {
-                    background-color: rgba(201, 135, 2, .1);
+                    background-color: lighten(#555, 5%);
                 }
                 
                 &.selected {
                     background-color: rgba(201, 135, 2, .3);
+                    color: #c98702;
+                    opacity: 1;
                 }
 
                 >div {
@@ -642,11 +649,12 @@
         .date-selection {
 
             .share-dates {
+                padding: 0 0 35px;
 
                 .share-label {
                     text-align: center;
                     font-size: 1.2rem;                   
-                    margin: 10px 0 25px;                    
+                    margin: 35px auto;                    
                 }
 
                 .pickup-date {
