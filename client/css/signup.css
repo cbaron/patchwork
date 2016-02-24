@@ -181,6 +181,10 @@
 .signup-class .delivery .delivery-options .share-label .option-total {
   color: black;
 }
+.signup-class .delivery .delivery-options .options {
+  margin: 0 auto;
+  text-align: center;
+}
 .signup-class .delivery .delivery-options .delivery-option {
   background-color: #f0f0f0;
   box-shadow: 1px 2px 5px #ccc;
@@ -203,6 +207,17 @@
 }
 .signup-class .delivery .delivery-options .delivery-option.selected {
   background-color: rgba(201, 135, 2, 0.3);
+}
+.signup-class .delivery .delivery-options .feedback-messages {
+  text-align: center;
+  font-weight: bold;
+}
+.signup-class .delivery .delivery-options .feedback-messages .message {
+  margin-left: 16%;
+  text-align: left;
+}
+.signup-class .delivery .delivery-options .feedback-messages .dropoff-message {
+  text-align: left;
 }
 .signup-class .dropoff {
   background-color: #f0f0f0;
@@ -478,7 +493,8 @@
   .signup-class .delivery .delivery-options .share-label {
     text-align: center;
     font-size: 1.2rem;
-    margin: 10px 0 25px;
+    margin: 0 auto 30px;
+    width: 100%;
   }
   .signup-class .delivery .delivery-options .delivery-option {
     display: block;
@@ -487,6 +503,18 @@
     text-align: center;
     margin: 10px auto;
     background-color: rgba(201, 135, 2, 0.1);
+  }
+  .signup-class .delivery .delivery-options .feedback-messages .message {
+    margin-left: 0;
+    text-align: center;
+  }
+  .signup-class .delivery .delivery-options .feedback-messages .dropoff-message {
+    text-align: center;
+    margin: 15px auto 5px;
+  }
+  .signup-class .delivery .dropoff {
+    margin: 5px auto;
+    width: 90%;
   }
   .signup-class .date-selection .share-dates {
     padding: 0 0 35px;
