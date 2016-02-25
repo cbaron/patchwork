@@ -23,8 +23,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             deliveryDate.add( 7, 'days' )
         }
         
-        share.set( { deliveryDates: new this.Collection( dates ) } )
-        return share.get('deliveryDates')
+        this.set( { deliveryDates: new this.Collection( dates ) } )
+        return this.get('deliveryDates')
     },
 
     getDeliveryOptions() {
@@ -70,6 +70,10 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         } )
     },
 
+    getSelectedDates() {
+        this.set( { selectedDates: this.get('deliveryDates').reject( deliveryDay => this._(this.get('skipDays')).contains( deliveryDay.id ) ) } )
+    },
+
     getShareOptions() {
        
         this.Q( new ( this.Collection.extend( { url: "/shareoptionshare" } ) )().fetch() )
@@ -78,22 +82,24 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
             if( mappings.length === 0 ) return
             
-            shareOptions = new ( this.Collection.extend( { comparator: this.shareOptionComparator, url: "/shareoption" } ) )()
+            shareOptions = new ( this.Collection.extend( { url: "/shareoption" } ) )()
             this.set( { shareoptions: shareOptions } )
 
             return this.Q( shareOptions.fetch( { data: { id: mappings.map( record => record.shareoptionid ).join(',') } } ) )
         } )
         .then( () =>
             this.Q.all( this.get('shareoptions').map( shareOption => {
-                shareOption.set( { options: new ( this.Collection.extend( { url: "/shareoptionoption" } ) )() } )
-                return this.Q( shareOption.get('options').fetch( { data: { shareoptionid: shareoption.id } } ) )
+                shareOption.set( { options: new ( this.Collection.extend( { comparator: this.shareOptionOptionComparator, url: "/shareoptionoption" } ) )() } )
+                return this.Q( shareOption.get('options').fetch( { data: { shareoptionid: shareOption.id } } ) )
             } ) )
         )
+        .then( () => {
+            this.get('shareoptions').comparator = this.shareOptionComparator
+            this.get('shareoptions').sort()
+        } )
         .fail( e => console.log( "Getting Share Options : " + e.stack || e ) )
         .done() 
     },
-
-    moneyToFloat( money ) { return money.replace(/\$|,/g, "") },
 
     parse( response ) {
         return Object.assign( response, {
@@ -104,8 +110,21 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     shareOptionComparator( a, b ) {
-        var aVal = this.moneyToFloat( a.get('price') ),
-            bVal = this.moneyToFloat( b.get('price') )
+        var moneyToFloat = ( money ) => money.replace(/\$|,/g, ""),
+            aVal = moneyToFloat( a.get('options').at( a.get('options').length - 1 ).get('price') ),
+            bVal = moneyToFloat( b.get('options').at( b.get('options').length - 1 ).get('price') )
+
+        return ( a > b )
+            ? -1
+            : ( b > a )
+                ? 1
+                : 0
+    },
+
+    shareOptionOptionComparator( a, b ) {
+        var moneyToFloat = ( money ) => money.replace(/\$|,/g, ""),
+            aVal = moneyToFloat( a.get('price') ),
+            bVal = moneyToFloat( b.get('price') )
 
         return ( a > b )
             ? -1

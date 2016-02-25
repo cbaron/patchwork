@@ -43,10 +43,10 @@ Object.assign( DateSelection.prototype, List.prototype, {
         }
 
         if( valid ) {
-            this.items.forEach( item => {
-                item.set( 'skipWeeks', this.itemViews[item.id].skipWeeks.map( model => model.attributes ) )
-                item.set( 'datesSelected', this.itemViews[item.id].datesSelected.map( model => model.attributes ) )
-            } )
+            this.items.forEach( item => item.set( 'skipDays',
+                item.get('deliveryDays').filter( deliveryDay => ( this.itemViews[ item.id ].selectedItems[ deliveryDay.id ] ) ? true : false )
+                                        .map( deliveryDay => deliveryDay.id )
+            ) )
         }
 
         return valid

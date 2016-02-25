@@ -10,7 +10,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         Share: require('../../models/Share')
     },
 
-    collection: { model: this.models.Share, url: "/share" },
+    collection: { model: require('../../models/Share'), url: "/share" },
 
     events: {
         csaInfoBtn: { method: 'showCSAInfoPageInNewTab' }
@@ -26,7 +26,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         List.prototype.postRender.call(this)
         this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
 
-        this.signupData.shares = new this.Collection( { model: this.Models.Share } )
+        this.signupData.shares = new this.Collection()
         this.items.on( 'reset', () => { if( this.items.length === 0 ) return this.emit('noShares') } )
 
         if( this.sessionShares ) {
@@ -38,10 +38,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                     this.signupData.shares.add( model )
                     if( sessionShare.selectedOptions ) model.set( 'selectedOptions', sessionShare.selectedOptions ) 
                     if( sessionShare.selectedDelivery ) model.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
-                    if( sessionShare.skipWeeks ) {
-                        model.set( 'skipWeeks', sessionShare.skipWeeks.map( skipWeek =>
-                            new this.Models.DeliveryDate( this.moment( skipWeek ), { parse: true } ).attributes ) )
-                    }
+                    if( sessionShare.skipDates ) { model.set( 'skipDays', sessionShare.skipDays ) }
                 }
                 if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
             } )
@@ -66,7 +63,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             var share = this.items.get(id)
             share.unset('selectedOptions')
             share.unset('selectedDelivery')
-            share.unset('skipWeeks')
+            share.unset('skipDays')
             this.signupData.shares.remove( share )
         } )
 

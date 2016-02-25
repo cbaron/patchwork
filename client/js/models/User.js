@@ -1,4 +1,4 @@
 module.exports = new ( require('backbone').Model.extend( {
-    defaults: { state: '{}' },
+    defaults: { state: {} },
     url() { return "/user" }
 } ) )()

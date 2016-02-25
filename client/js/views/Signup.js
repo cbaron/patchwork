@@ -66,7 +66,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
             id: share.id,
             selectedDelivery: share.get('selectedDelivery'),
             selectedOptions: share.get('selectedOptions'),
-            skipWeeks: ( share.has('skipWeeks') ) ? share.get('skipWeeks').map( week => week.date ) : [ ]
+            skipDays: share.get('skipDays')
         }
     },
 
@@ -113,10 +113,11 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
                 container: this.templateData.walkthrough,
-                signupData: this.signupData
+                containerClass: klass,
+                signupData: this.signupData,
             } )
         
-        this.instances[ currentViewName ].templateData.container.addClass(klass)
+        if( this.instances[ currentViewName ].templateData ) this.instances[ currentViewName ].templateData.container.addClass(klass)
 
         if( this.views[ this.currentIndex ].on ) {
             this.views[ this.currentIndex ].on.forEach( eventData =>

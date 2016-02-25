@@ -199,7 +199,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         User() {
             return new Promise( ( resolve, reject ) => {
-                if( this.token === undefined ) { this.user = { }; return resolve() }
+                if( ! this.token ) { this.user = { }; return resolve() }
                 this.jws.createVerify( {
                     algorithm: "HS256",
                     key: process.env.JWS_SECRET,

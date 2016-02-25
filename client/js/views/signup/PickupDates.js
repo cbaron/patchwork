@@ -14,8 +14,6 @@ Object.assign( PickupDates.prototype, List.prototype, {
     },
 
     postRender() {
-        this.skipWeeks = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
-        this.datesSelected = new ( this.Collection.extend( { comparator: 'epoch' } ) )()
         this.valid = true
 
         this.on( 'itemSelected', model => {
@@ -26,12 +24,15 @@ Object.assign( PickupDates.prototype, List.prototype, {
         this.on( 'itemUnselected', model => this.updateShare() )
 
         this.on( 'itemAdded', () => {
-            if( this.model.has('skipWeeks') &&
-                this.model.get('skipWeeks').length &&
+            if( this.model.has('skipDays') &&
+                this.model.get('skipDays').length &&
                 Object.keys( this.itemViews ).length == this.items.length ) {
 
-                this.model.get('skipWeeks').forEach( skipWeek => {
-                    if( this.items.get( skipWeek.id ) ) this.unselectItem( this.items.get( skipWeek.id ) )
+                this.models.set( { skipDays:
+                    this.model.get('skipDays').filter( skipDayId => {
+                        if( this.items.get( skipDayId ) ) { this.unselectItem( this.items.get( skipWeek.id ) ); return true }
+                        return false;
+                    } )
                 } )
             }
         } )

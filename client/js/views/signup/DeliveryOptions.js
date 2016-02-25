@@ -109,11 +109,6 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         
         var share = this.model
 
-        this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
-        this.dropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
-
-        share.set( 'groupdropoffs', this.dropoffs )
-        
         this.selection = 'single'
 
         List.prototype.postRender.call( this )
