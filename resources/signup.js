@@ -5,6 +5,8 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     Stripe: require('../lib/stripe'),
 
+    User: require('./util/User'),
+
     bcrypt: require('bcrypt-nodejs'),
 
     db: Object.assign( {}, Base.prototype.db, {
@@ -17,6 +19,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 return this.Q.all( this.body.shares.map( share => this.executeShareQueries( share, memberid ) ) )
             } )
             .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( memberid ) } )
+            
         }
     } ),
     
@@ -67,9 +70,9 @@ Object.assign( Signup.prototype, Base.prototype, {
                 query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING membershareid",
                 values: [ membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } ) )
         .then( () =>
-            this.Q.all( share.skipWeeks.map( membershareskipweek =>
+            this.Q.all( share.skipDays.map( date =>
                 this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 )",
-                                values: [ membershareid, membershareskipweek.date ] } ) ) ) )
+                                values: [ membershareid, date ] } ) ) ) )
     },
 
     executeUserQueries() {
@@ -95,7 +98,11 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     responses: Object.assign( { }, Base.prototype.responses, {
-        POST() { this.respond( { body: { } } ) }
+        POST() {
+            this.user.state.signup = { }
+            return this.Q( this.User.createToken.call(this) )
+                    .then( token => this.User.respondSetCookie.call( this, token, { } ) )
+        }
     } ),
 
     updatePersonQueries( personid ) {

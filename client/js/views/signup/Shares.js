@@ -38,7 +38,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                     this.signupData.shares.add( model )
                     if( sessionShare.selectedOptions ) model.set( 'selectedOptions', sessionShare.selectedOptions ) 
                     if( sessionShare.selectedDelivery ) model.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
-                    if( sessionShare.skipDates ) { model.set( 'skipDays', sessionShare.skipDays ) }
+                    if( sessionShare.skipDays ) { model.set( 'skipDays', sessionShare.skipDays ) }
                 }
                 if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
             } )

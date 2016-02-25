@@ -15,13 +15,13 @@ var View = require('../MyView'),
 
 Object.assign( Summary.prototype, View.prototype, {
 
-    DayOfWeekMap: require('../../models/DeliveryRoute').dayOfWeekMap,
+    DayOfWeekMap: require('../../models/DeliveryRoute').prototype.dayOfWeekMap,
 
     Spinner: require('../../plugins/spinner.js'),
 
     buildRequest() {
         return JSON.stringify( {
-            member: this.signupData.member,
+            member: this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress' ] ),
             payment: this.getFormData(),
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
@@ -32,39 +32,10 @@ Object.assign( Summary.prototype, View.prototype, {
         return this.signupData.shares.map( share => ( {
             id: share.id,
             label: share.label,
-            options: share.get('selectedOptions')
-                          .map( selectedOption => ( { shareoptionid: selectedOption.shareoptionid, shareoptionoptionid: selectedOption.value } ) ),
+            options: share.get('selectedOptions'),
             delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid' ] ),
-            skipWeeks: share.get('skipWeeks').map( skipWeek => ( { date: skipWeek.date } ) )
+            skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
         } ) )
-    },
-
-    calculateTotals() {
-        var shareTotals = [ ]
-        
-        return
-        this.signupData.shares.forEach( share  => {
-            var skipWeeks = share.get('skipWeeks').length,
-                datesSelected = share.get('datesSelected').length,
-                shareDuration = share.get('availableShareDates'),
-                weeklyShareOptionsTotal = share.get('weeklyShareOptionsTotal'),
-                weeklyDeliveryTotal = share.get('selectedDelivery')[ 'weeklyCost' ],
-                priceReduction = skipWeeks * ( weeklyShareOptionsTotal + weeklyDeliveryTotal ),
-                shareTotal = ( share.get('shareOptionsTotal') + share.get('selectedDelivery')[ 'totalCost' ] ) - priceReduction
-
-            if( weeklyDeliveryTotal < 0 ) priceReduction = skipWeeks * weeklyShareOptionsTotal
-
-            shareTotals.push( shareTotal )
-
-            this.templateData[ this.util.format( 'datesSelectedNumber-%s', share.id ) ].text( datesSelected )        
-            this.templateData[ this.util.format( 'shareTotal-%s', share.id ) ].text( '$' + shareTotal.toFixed(2) )
-        } )
-
-        this.grandTotal = shareTotals.reduce( ( a, b ) => a + b )
-        this.grandTotalPlusFee = this.grandTotal + this.grandTotal * .03
-
-        this.updateGrandTotal()
-
     },
 
     cardPaymentSelected() {
@@ -129,14 +100,21 @@ Object.assign( Summary.prototype, View.prototype, {
                     ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
                     : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
                 shareOptionWeeklyTotal = share.get('selectedOptions')
-                    .map( selectedOption => share.get('shareOptions').get( selectedOption.shareoptionid ).get('price').replace(/\$|,/g, "") )
+                    .map( selectedOption =>
+                        parseFloat( share.get('shareoptions')
+                             .get( selectedOption.shareoptionid )
+                             .get( 'options' )
+                             .get( selectedOption.shareoptionoptionid )
+                             .get('price').replace(/\$|,/g, "") ) )
                     .reduce( ( a, b ) => a + b ),
                 weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") )
+
+                share.set( { total: weeklyTotal * share.get('selectedDates').length } )
 
                 return {
                     shareBox: this.templates.ShareBox( share.attributes ),
                     selectedOptions: share.get('selectedOptions').map( selectedOption => {
-                        var shareOption = share.get('shareOptions').get( selectedOption.shareoptionid ),
+                        var shareOption = share.get('shareoptions').get( selectedOption.shareoptionid ),
                             shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
 
                         return {
@@ -160,10 +138,10 @@ Object.assign( Summary.prototype, View.prototype, {
                         endtime: times.endtime
                     },
                     weeklyPrice: this.util.format( '$%s', weeklyTotal.toFixed(2) ),
-                    selectedDates: share.get('selectedDates'),
+                    selectedDates: share.get('selectedDates').map( date => date.attributes ),
                     weeksSelected: share.get('selectedDates').length,
-                    skipDays: ( share.get('skipDays').length ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDays').get(skipDayId) ) : undefined,
-                    total: ( weeklyTotal * share.get('selectedDates').length ).toFixed(2)
+                    skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).attributes ) : undefined,
+                    total: this.util.format( '$%s', share.get('total').toFixed(2) )
                 }
             } ) 
         }
@@ -204,8 +182,10 @@ Object.assign( Summary.prototype, View.prototype, {
             .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
             .on( 'itemUnselected', model => this.paymentUnselected() )
 
-        this.calculateTotals()
-        this.updateSummaryInfo()
+        this.grandTotal = this.signupData.shares.map( share => share.get('total') ).reduce( ( a, b ) => a + b )
+        this.grandTotalPlusFee = ( this.grandTotal + this.grandTotal * .03 )
+
+        this.updateGrandTotal()
     },
 
     requiresLogin: false,
@@ -308,29 +288,6 @@ Object.assign( Summary.prototype, View.prototype, {
 
         this.$('.payment-option:first-child .method-total').text( 'Grand Total :  ' + '$' + this.grandTotal.toFixed(2) )
         this.$('.payment-option:last-child .method-total').text( 'Grand Total :  ' + '$' + this.grandTotalPlusFee.toFixed(2) )
-    },
-
-    updateSummaryInfo() {
-        this.signupData.shares.forEach( share => {
-            this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ][ ( share.get('skipWeeks').length ) ? 'show' : 'hide' ]()
-            
-            if( this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ] ) {
-               var lastSkipDate = this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ].children('.date').last().text()
-               this.templateData[ this.util.format( 'skipWeeks-%s', share.id ) ].children('.date').last().text( lastSkipDate.slice(0,-1) )
-            }
-
-            var lastSelectedDate = this.templateData[ this.util.format( 'datesSelected-%s', share.id ) ].children('.date').last().text()
-            this.templateData[ this.util.format( 'datesSelected-%s', share.id ) ].children('.date').last().text( lastSelectedDate.slice(0,-1) )
-
-            if( share.get('selectedDelivery')[ 'deliveryType' ] === "Home Delivery" ) {
-                this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( this.signupData.member.address )
-            } else if( share.get('selectedDelivery')[ 'deliveryType' ] === "On-farm Pickup" ) {
-                this.templateData[ this.util.format( 'dropoff-%s', share.id ) ].hide()
-                this.templateData[ this.util.format( 'deliveryAddress-%s', share.id ) ].text( "9057 W. Third St., Dayton, OH 45417" )
-
-            }
-        } )
     },
 
     validateCardInfo() {

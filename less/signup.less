@@ -394,7 +394,6 @@
                     border: 1px solid #bbb;
                     border-radius: 10px;
                     box-shadow: 1px 2px 5px #ccc;
-                    cursor: pointer;
                     display: inline-block;
                     font-family: "RalewayRegular";
                     padding: 10px;
@@ -428,8 +427,11 @@
 
             .date {
                 color: #155D75;
-                margin-right: 3px;
-                display: inline-block;            
+                display: inline-block;
+
+                &:not(:last-child):after {
+                    content: ", ";
+                }
             }
 
             .total {

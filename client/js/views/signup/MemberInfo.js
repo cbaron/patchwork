@@ -35,7 +35,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         error: "Please enter a valid address.",
         validate: function(val) { return this.validateAddress( val ) }
     }, {
-        name: 'addressextra',
+        name: 'extraaddress',
         label: 'Further Address Info ( Apt, Suite )',
         type: 'text',
         validate: () => true,

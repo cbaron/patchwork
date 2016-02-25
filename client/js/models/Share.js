@@ -4,6 +4,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     DeliveryDate: require('./DeliveryDate'),
 
+    Dropoff: require('./Dropoff'),
+
     getDeliveryDates() {
         var dates = [ ],
             deliveryDay = this.get('selectedDelivery').dayofweek,
@@ -29,7 +31,9 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     getDeliveryOptions() {
 
-        this.Q( new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )().fetch() )
+        if( this.has('deliveryoptions') ) return this.get('deliveryoptions')
+
+        return this.Q( new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )().fetch() )
         .then( mappings => {
             var deliveryOptions
 
@@ -40,34 +44,40 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
             return this.Q( deliveryOptions.fetch( { data: { id: mappings.map( record => record.deliveryoptionid ).join(',') } } ) )
         } )
+        .fail( e => console.log( "Getting Delivery Options : " + e.stack || e ) )
     },
 
     getGroupDropoffs() {
         var mappings = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )()
 
-        this.Q( mappings.fetch() )
+        if( this.has('groupdropoffs') ) return this.Q( this.get('groupdropoffs') )
+
+        return this.Q( mappings.fetch( { data: { shareid: this.id } } ) )
         .then( () => {
             var groupDropoffs
 
             if( mappings.length === 0 ) return
 
-            groupDropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
+            groupDropoffs = new ( this.Collection.extend( { model: this.Dropoff, url: "/groupdropoff" } ) )()
             this.set( { groupdropoffs: groupDropoffs } )
 
             return this.Q( groupDropoffs.fetch( { data: { id: mappings.map( record => record.get('groupdropoffid') ).join(',') } } ) )
         } )
         .then( () => {
-         
+            
+            if( mappings.length === 0 ) return this.set( 'groupdropoffs', [] )
+              
             this.get('groupdropoffs').forEach( dropoff => { 
                 var mapping = mappings.find( model => model.get('groupdropoffid') == dropoff.id )
 
-                model.set( {
+                dropoff.set( {
                     dayofweek: mapping.get('dayofweek'),
                     starttime: this.timeToHumanTime( mapping.get('starttime') ),
                     endtime: this.timeToHumanTime( mapping.get('starttime') )
                 } )
             } ) 
         } )
+        .fail( e => console.log( "Getting Group Dropoffs : " + e.stack || e ) )
     },
 
     getSelectedDates() {
@@ -75,8 +85,10 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     getShareOptions() {
-       
-        this.Q( new ( this.Collection.extend( { url: "/shareoptionshare" } ) )().fetch() )
+        
+        if( this.has('shareoptions') ) return this.get('shareoptions')
+                
+        return this.Q( new ( this.Collection.extend( { url: "/shareoptionshare" } ) )().fetch( { data: { shareid: this.id } } ) )
         .then( mappings => {
             var shareOptions
 
@@ -98,7 +110,6 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             this.get('shareoptions').sort()
         } )
         .fail( e => console.log( "Getting Share Options : " + e.stack || e ) )
-        .done() 
     },
 
     parse( response ) {

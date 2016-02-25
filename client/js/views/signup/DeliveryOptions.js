@@ -7,7 +7,6 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
     Models: {
         DeliveryRoute: require('../../models/DeliveryRoute'),
-        Dropoff: require('../../models/Dropoff')
     },
 
     Views: {
@@ -57,7 +56,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 } )
                 .on( 'itemSelected', model => {
                     var selectedId = model.id
-                    this.dropoffs.models.forEach( model => {
+                    
+                    this.model.get('groupdropoffs').forEach( model => {
                         if( model.id !== selectedId ) this.dropoffView.itemViews[ model.id ].templateData.container.hide()
                     } )
 
@@ -76,6 +76,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 } )
 
             this.dropoffView.items.reset( this.model.get('groupdropoffs').models )
+
+            if( this.model.get('groupdropoffs').length === 0 ) {
+                this.dropoffView.templateData.message.text("No available group dropoff locations, please select another option") }
+
         } )
     },
 

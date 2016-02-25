@@ -1159,7 +1159,6 @@ footer .future-days {
   border: 1px solid #bbb;
   border-radius: 10px;
   box-shadow: 1px 2px 5px #ccc;
-  cursor: pointer;
   display: inline-block;
   font-family: "RalewayRegular";
   padding: 10px;
@@ -1190,8 +1189,11 @@ footer .future-days {
 
 .signup-class .summary .share-summary .date {
   color: #155D75;
-  margin-right: 3px;
   display: inline-block;
+}
+
+.signup-class .summary .share-summary .date:not(:last-child):after {
+  content: ", ";
 }
 
 .signup-class .summary .share-summary .total {
