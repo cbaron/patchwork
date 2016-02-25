@@ -44,7 +44,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.state = this.user.get('state')
 
-        if( Object.keys( this.state.signup ).length ) return this.updateState( this.state.signup )
+        if( this.state.signup && Object.keys( this.state.signup ).length ) return this.updateState( this.state.signup )
 
         if( ! this.currentIndex ) this.currentIndex = 0
         this.state.signup = { index: this.currentIndex, shares: [ ] }
