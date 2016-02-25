@@ -15,6 +15,8 @@ var View = require('../MyView'),
 
 Object.assign( Summary.prototype, View.prototype, {
 
+    DayOfWeekMap: require('../../models/DeliveryRoute').dayOfWeekMap,
+
     Spinner: require('../../plugins/spinner.js'),
 
     buildRequest() {
@@ -116,8 +118,51 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
+        var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
+            groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
+                ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
+                : undefined,
+            times = ( groupDropoff )
+                ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
+                : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
+            shareOptionWeeklyTotal = share.get('selectedOptions')
+                .map( selectedOption => share.get('shareOptions').get( selectedOption.shareoptionid ).get('price').replace(/\$|,/g, "") )
+                .reduce( ( a, b ) => a + b ),
+            weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") )
+            
         return {
-            shares: this.signupData.shares.map( share => share.attributes ),
+            shares: this.signupData.shares.map( share => ( {
+                shareBox: this.templates.ShareBox( share.attributes ),
+                selectedOptions: share.get('selectedOptions').map( selectedOption => {
+                    var shareOption = share.get('shareOptions').get( selectedOption.shareoptionid ),
+                        shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
+
+                    return {
+                        optionName: shareOption.get('name'),
+                        price: shareOptionOption.get('price'),
+                        selectedOptionLabel: shareOptionOption.get('label'),
+                        unit: shareOptionOption.get('unit')
+                    }
+                } ),
+                selectedDelivery: {
+                    deliveryType: selectedDelivery.get('label'),
+                    weeklyCost: selectedDelivery.get('price'),
+                    groupdropoff: ( groupDropoff ) ? groupDropoff.get('label') : undefined,
+                    address: ( groupDropoff )
+                        ? groupDropoff.get('address')
+                        : ( selectedDelivery.get('name') === 'farm' )
+                            ? "9057 W. Third St., Dayton, OH 45417"
+                            : this.user.get('address'),
+                    dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery') ],
+                    starttime: times.starttime,
+                    endtime: times.endtime
+                },
+                weeklyPrice: this.util.format( '$%s', weeklyTotal.toFixed(2) ),
+                datesSelected: share.get('datesSelected'),
+                weeksSelected: share.get('datesSelected').length,
+                skipWeeks: ( share.get('skipWeeks').length ) ? share.get('skipWeeks') : undefined,
+                total: ( weeklyTotal * share.get('datesSelected').length ).toFixed(2)
+            } ) ),
         }
     },
 
@@ -211,7 +256,7 @@ Object.assign( Summary.prototype, View.prototype, {
         .done( () => {
             this.emit('done')
             this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
-            //this.templateData.signupBtn.text('Thank you')
+            this.templateData.signupBtn.text('Thank you')
             this.showSuccessModal()
         } )
         .fail( () => {
@@ -221,8 +266,8 @@ Object.assign( Summary.prototype, View.prototype, {
                 .text('Become a Member!')
         } )
         .always( () => {
-            //this.spinner.stop()
-            //this.templateData.signupBtn.removeClass('has-spinner')
+            this.spinner.stop()
+            this.templateData.signupBtn.removeClass('has-spinner')
        } )
     },
 
@@ -233,6 +278,10 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     template: require('../../templates/signup/summary')( require('handlebars') ),
+
+    templates: {
+        ShareBox: require('../../templates/signup/shareBox')( require('handlebars') )
+    },
 
     updateGrandTotal() {
         var total = ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal

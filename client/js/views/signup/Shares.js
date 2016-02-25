@@ -6,10 +6,11 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     ItemView: require('./Share'),
 
     Models: {
-        DeliveryDate: require('../../models/DeliveryDate')
+        DeliveryDate: require('../../models/DeliveryDate'),
+        Share: require('../../models/Share')
     },
 
-    collection: { model: require('../../models/Share'), url: "/share" },
+    collection: { model: this.models.Share, url: "/share" },
 
     events: {
         csaInfoBtn: { method: 'showCSAInfoPageInNewTab' }
@@ -25,7 +26,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         List.prototype.postRender.call(this)
         this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
 
-        this.signupData.shares = new this.Collection()
+        this.signupData.shares = new this.Collection( { model: this.Models.Share } )
         this.items.on( 'reset', () => { if( this.items.length === 0 ) return this.emit('noShares') } )
 
         if( this.sessionShares ) {

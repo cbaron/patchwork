@@ -40,7 +40,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
         var clickedIndex = this.items.indexOf( model ),
             closest = undefined,
             maxDistance = 0,
-            selectedIndexes = Object.keys( this.selectedItems ).map( memberId => this.items.indexOf( this.items.get(memberId) ) ).sort()
+            selectedIndexes = Object.keys( this.selectedItems ).map( id => this.items.indexOf( this.items.get(id) ) ).sort()
 
         selectedIndexes.forEach( index => {
             var distance = Math.abs( index - clickedIndex )

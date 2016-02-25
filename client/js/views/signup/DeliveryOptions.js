@@ -3,26 +3,6 @@ var List = require('../util/List'),
 
 Object.assign( DeliveryOptions.prototype, List.prototype, {
 
-    calculateOptionCost( model ) {
-        var duration = this.model.get('duration'),
-            weeklyCost = model.get('price'),
-            weeklyCostFloat = ( model.get('price').charAt(0) === "-" ) ? parseFloat( "-" + weeklyCost.slice(2) ) : parseFloat( weeklyCost.slice(1) ),
-            optionTotalCost = ( weeklyCostFloat * duration )
-        
-        /*
-        Object.assign( this.selectedDelivery, {
-            weeklyCost: weeklyCostFloat,
-            weeklyCostString: weeklyCostFloat.toFixed(2),
-            totalCost: optionTotalCost,
-            totalCostString: optionTotalCost.toFixed(2) 
-        } )
-        */
-
-        var sharePlusDelivery = this.model.get('weeklyShareOptionsTotal') + weeklyCostFloat
-        this.model.set( 'shareOptionsPlusDelivery', sharePlusDelivery.toFixed(2) )
-        
-    },
-
     ItemView: require('./DeliveryOption'),
 
     Models: {
@@ -44,8 +24,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
-            //Object.assign( this.selectedDelivery, { deliveryoptionid: model.id }, this.farmPickup.attributes )
-            this.selectedDelivery = { deliveryoptionid: model.id, dayofweek: this.farmPickup.get('dayofweek') }
+            this.selectedDelivery = Object.assign( {}, { deliveryoptionid: model.id }, this.farmPickup.pick( [ 'dayofweek', 'startime', 'endtime' ] ) )
 
             this.valid = true
         } )
@@ -65,21 +44,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     groupFeedback( deliveryOption ) {
-        this.dropoffIds.fetch( { data: { shareid: this.model.id } } ).done( () => {
-            if( ! this.dropoffIds.length ) { this.valid = false; return }
-            this.dropoffs.fetch( { data: { id: this.dropoffIds.map( model => model.get('groupdropoffid') ).join(',') } } ).done( () => {
-                this.dropoffs.forEach( model => { 
-                    model.set( { dayofweek: this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('dayofweek') } )
-                    
-                    var starttime = this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('starttime')
-                    model.set( { starttime: this.moment( [ this.moment().format('YYYY-MM-DD'), starttime ].join(' ') ).format('hA') } )
 
-                    var endtime = this.dropoffIds.find( dropoff => dropoff.get('groupdropoffid') == model.id ).get('endtime')
-                    model.set( { endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), endtime ].join(' ') ).format('hA') } )
-                    
-                } )
+        this.groupDropoffPromise.then( () => {
 
-                this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.feedback } )
+            this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.feedback } )
                 .on( 'itemUnselected', () => {
                     this.dropoffView.itemViews.forEach( view => {
                         if( view.templateData.container.is(':hidden') ) view.templateData.container.show()
@@ -107,8 +75,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                     }
                 } )
 
-                this.dropoffView.items.reset( this.dropoffs.models )
-            } )
+            this.dropoffView.items.reset( this.model.get('groupdropoffs').models )
         } )
     },
 
@@ -131,7 +98,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
-                    this.selectedDelivery = { deliveryoptionid: deliveryOption.id, dayofweek: this.homeDeliveryRoute.get('dayofweek') }
+                    this.selectedDelivery = Object.assign( {}, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.pick( [ 'dayofweek', 'startime', 'endtime' ] ) )
                     
                     this.valid = true
                 } )
@@ -144,23 +111,12 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.dropoffIds = new ( this.Collection.extend( { url: "/sharegroupdropoff" } ) )(),
         this.dropoffs = new ( this.Collection.extend( { model: this.Models.Dropoff, url: "/groupdropoff" } ) )()
+
+        share.set( 'groupdropoffs', this.dropoffs )
         
         this.selection = 'single'
 
         List.prototype.postRender.call( this )
-
-        share.set( { deliveryoptionids: new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )() } )
-        share.get('deliveryoptionids').fetch( { data: { shareid: share.id } } ).done( () => {
-            if( share.get('deliveryoptionids').length ) {
-                share.set( { deliveryoptions: new ( this.Collection.extend( { url: "/deliveryoption" } ) )() } )
-                share.get('deliveryoptions')
-                    .fetch( { data: { id: share.get('deliveryoptionids').map( sharedeliveryoption => sharedeliveryoption.get('deliveryoptionid') ).join(',') } } )
-                    .done( () => this.items.reset( share.get('deliveryoptions').models ) )
-                    .fail( e => console.log( e.stack || e ) ) 
-            } else {
-                this.templateData.options.text('This share does not have delivery options associated with it.  Please contact Patchwork and sign up for this particular share at  a later date.')
-            }
-        } )
 
         this.on( 'itemAdded', model => {
             var price = parseFloat( model.get('price').replace(/\$|,/g, "") ),
@@ -172,9 +128,19 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             if( selectedDelivery && selectedDelivery.deliveryoptionid == model.id ) this.selectItem( model )
         } )
 
+        share.getDeliveryOptions()
+        .then( () => {
+            var deliveryOptions = share.get('deliveryoptions')
+
+            this.items.reset( deliveryOptions.models )
+            if( deliveryOptions.length === 0 ) this.templateData.options.text('This share does not have delivery options associated with it.  Please contact Patchwork and sign up for this particular share at  a later date.')
+
+        } )
+        .fail( e => console.log( e.stack || e ) )
+        .done()
+
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            this.calculateOptionCost( model )
             this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
         } )
         .on( 'itemUnselected', () => {
@@ -182,6 +148,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             this.templateData.feedback.empty()
         } )
 
+        this.groupDropoffPromise = share.getGroupDropoffs()
     },
 
     requiresLogin: false,

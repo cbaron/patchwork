@@ -2,25 +2,20 @@
     <div class="share-summary">
         <div class="header">Summary of Shares</div>
         {{#each shares}}
-            <ul class="share-label-wrapper">
-                <div class="share-label">
-                    <div>{{label}}</div>
-                    <div>
-                        <span>{{humanStartdate}}</span>
-                        <span>-</span>
-                        <span>{{humanEnddate}}</span>
-                    </div>
-                    <div>{{availableShareDates}} weeks</div>
-                </div>
-            </ul>
+            <div class="share-label-wrapper">{{{shareBox}}}</div>
             <div class="share-options-summary">
                 <div class="section-title">Share Options :</div>
                 {{#each selectedOptions}}
                         <div class="row">
                             <div class="selected-options">
                                 <div class="shareoptionlabel">
-                                    <span class="col-sm-3 item-label">{{shareoptionlabel}} :  </span>
-                                    <span class="col-sm-5 text-center">{{name}}</span>
+                                    <span class="col-sm-3 item-label">{{optionName}} :  </span>
+                                    <span class="col-sm-5 text-center">
+                                        <span>{{selectedOptionLabel}}</span>
+                                    {{#if unit}}
+                                        <span>{{unit}}</span>
+                                    {{/if}}
+                                    </span>
                                 </div>
                                 <div class="price">
                                     <span class="col-sm-2">{{price}}</span>
@@ -38,20 +33,22 @@
                         <span class="col-sm-5 text-center">{{selectedDelivery.deliveryType}}</span>
                     </div>
                     <div class="price">
-                        <span class="col-sm-2">${{selectedDelivery.weeklyCostString}}</span>
+                        <span class="col-sm-2">${{selectedDelivery.weeklyCost}}</span>
                         <span class="col-sm-2">per week</span>
                     </div>  
                 </div>
-                <div class="row">                          
-                    <div class="dropoff-location" data-js="dropoff-{{id}}">
-                        <span class="col-sm-3 item-label">Drop-off Location :  </span>
-                        <span class="col-sm-5 text-center">{{selectedDelivery.label}}</span>
+                {{#if selectedDelivery.groupdropoff}}
+                    <div class="row">
+                        <div class="dropoff-location">
+                            <span class="col-sm-3 item-label">Drop-off Location :  </span>
+                            <span class="col-sm-5 text-center">{{selectedDelivery.groupdropoff}}</span>
+                        </div>
                     </div>
-                </div>
+                {{/if}}
                 <div class="row">
                     <div class="dropoff-address">
                         <div class="col-sm-3 item-label">Address :  </div>
-                        <div class="delivery-address col-sm-5 text-center" data-js="deliveryAddress-{{id}}">{{selectedDelivery.address}}</div>
+                        <div class="delivery-address col-sm-5 text-center">{{selectedDelivery.address}}</div>
                     </div>
                 </div>
                 <div class="row">
@@ -68,7 +65,7 @@
                 <div class="row">
                     <div class="price">
                         <span class="col-sm-8">Weekly Price :  </span>
-                        <span class="col-sm-2">${{shareOptionsPlusDelivery}}</span>
+                        <span class="col-sm-2">${{weeklyPrice}}</span>
                         <span class="col-sm-2">per week</span>
                     </div>
                 </div>
@@ -84,20 +81,23 @@
             </div>
             <div class="total row">
                 <div class="col-sm-8">Number of weeks selected :  </div>
-                <span data-js="datesSelectedNumber-{{id}}" class="weeks-selected col-sm-2"></span>
+                <span class="weeks-selected col-sm-2">{{weeksSelected}}</span>
                 <span class="col-sm-2">weeks</span>
             </div>
-            <div data-js="skipWeeks-{{id}}" class="absent-dates">
-                <div class="section-title">Dates Absent :</div>
-                    {{#each skipWeeks}}
+            {{#if skipWeeks}}
+                <div class="absent-dates">
+                    <div class="section-title">Dates Absent :</div>
+                        {{#each skipWeeks}}
                             <div class="date">               
                                 <span>{{dayOfMonth}}-{{month}},</span> 
                             </div>
-                    {{/each}}
-            </div>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/if}}
             <div class="total share-total row">
                 <span class="col-sm-offset-4 col-sm-4">Share Total :  </span>
-                <span data-js="shareTotal-{{id}}" class="col-sm-2"></span>
+                <span class="col-sm-2">{{total}}</span>
             </div>
         {{/each}}
     </div>
