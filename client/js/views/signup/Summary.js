@@ -240,7 +240,9 @@ Object.assign( Summary.prototype, View.prototype, {
             body: this.util.format( 'Thanks for signing up.  We look forward to sharing the season with you. %s',
                 ( Object.keys( this.getFormData() ).length ) ?  'You should find a receipt in your email inbox' : '' ),
             hideCancelBtn: true,
-            confirmText: 'Okay' } ).on( 'submit', () => this.modalView.hide() )
+            confirmText: 'Okay' } )
+        .on( 'submit', () => window.location = '/' )
+        .on( 'hidden', () => window.location = '/' )
     },
 
     signup() {
