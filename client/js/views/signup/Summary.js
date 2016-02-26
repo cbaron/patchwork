@@ -204,10 +204,12 @@ Object.assign( Summary.prototype, View.prototype, {
             if( ! share.has('deliveryoptions') ) dataPromises.push( share.getDeliveryOptions() )
             if( ! share.has('groupdropoffs') ) dataPromises.push( share.getGroupDropoffs() )
             if( ! share.has('deliveryDates') ) dataPromises.push( share.getDeliveryDates() )
-            if( ! share.has('selectedDates') ) dataPromises.push( share.getSelectedDates() )
          } )
 
-        this.Q.all( dataPromises ).then( () => View.prototype.render.call(this) )
+        this.Q.all( dataPromises ).then( () => {
+            this.signupData.shares.forEach( share => share.getSelectedDates() )
+            View.prototype.render.call(this)
+        } )
         .fail( e => new this.Error(e) )
         .done()
     },

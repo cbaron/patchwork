@@ -23,7 +23,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             
             this.showFeedback( this.feedback.farm( this.farmPickup.attributes ) )
 
-            this.selectedDelivery = Object.assign( {}, { deliveryoptionid: model.id }, this.farmPickup.pick( [ 'dayofweek', 'startime', 'endtime' ] ) )
+            this.selectedDelivery = Object.assign( {}, { deliveryoptionid: model.id }, this.farmPickup.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
 
             this.valid = true
         } )
@@ -61,7 +61,9 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                         if( model.id !== selectedId ) this.dropoffView.itemViews[ model.id ].templateData.container.hide()
                     } )
 
-                    this.selectedDelivery = { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id, dayofweek: model.get('dayofweek') }
+                    this.selectedDelivery = Object.assign( {},
+                        { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id },
+                        model.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
                     
                     this.valid = true
                 } )
@@ -102,7 +104,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
-                    this.selectedDelivery = Object.assign( {}, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.pick( [ 'dayofweek', 'startime', 'endtime' ] ) )
+                    this.selectedDelivery = Object.assign( {}, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
                     
                     this.valid = true
                 } )

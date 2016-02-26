@@ -31,7 +31,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     getDeliveryOptions() {
 
-        if( this.has('deliveryoptions') ) return this.get('deliveryoptions')
+        if( this.has('deliveryoptions') ) return this.Q( this.get('deliveryoptions') )
 
         return this.Q( new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )().fetch() )
         .then( mappings => {
@@ -73,7 +73,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
                 dropoff.set( {
                     dayofweek: mapping.get('dayofweek'),
                     starttime: this.timeToHumanTime( mapping.get('starttime') ),
-                    endtime: this.timeToHumanTime( mapping.get('starttime') )
+                    endtime: this.timeToHumanTime( mapping.get('endtime') )
                 } )
             } ) 
         } )
@@ -86,7 +86,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     getShareOptions() {
         
-        if( this.has('shareoptions') ) return this.get('shareoptions')
+        if( this.has('shareoptions') ) return this.Q( this.get('shareoptions') )
                 
         return this.Q( new ( this.Collection.extend( { url: "/shareoptionshare" } ) )().fetch( { data: { shareid: this.id } } ) )
         .then( mappings => {
@@ -112,6 +112,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         .fail( e => console.log( "Getting Share Options : " + e.stack || e ) )
     },
 
+    moneyToFloat( money ) { return parseFloat( money.replace(/\$|,/g, "") ) },
+
     parse( response ) {
         return Object.assign( response, {
             duration: Math.ceil( this.moment( response.enddate ).diff( this.moment( response.startdate ), 'days' ) / 7 ),
@@ -121,26 +123,26 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     shareOptionComparator( a, b ) {
-        var moneyToFloat = ( money ) => money.replace(/\$|,/g, ""),
+        var moneyToFloat = ( money ) => parseFloat( money.replace(/\$|,/g, "") ),
             aVal = moneyToFloat( a.get('options').at( a.get('options').length - 1 ).get('price') ),
             bVal = moneyToFloat( b.get('options').at( b.get('options').length - 1 ).get('price') )
-
-        return ( a > b )
+        
+        return ( aVal > bVal )
             ? -1
-            : ( b > a )
+            : ( bVal > aVal )
                 ? 1
                 : 0
     },
 
     shareOptionOptionComparator( a, b ) {
-        var moneyToFloat = ( money ) => money.replace(/\$|,/g, ""),
+        var moneyToFloat = ( money ) => parseFloat( money.replace(/\$|,/g, "") ),
             aVal = moneyToFloat( a.get('price') ),
             bVal = moneyToFloat( b.get('price') )
-
-        return ( a > b )
-            ? -1
-            : ( b > a )
-                ? 1
+        
+        return ( aVal > bVal )
+            ? 1
+            : ( bVal > aVal )
+                ? -1
                 : 0
     },
 
