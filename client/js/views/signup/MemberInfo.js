@@ -38,7 +38,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         name: 'extraaddress',
         label: 'Further Address Info ( Apt, Suite )',
         type: 'text',
-        validate: () => true,
+        validate: () => true
     }, {
         name: 'password',
         label: 'Password',
@@ -51,6 +51,11 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         type: 'password',
         error: "Passwords must match.",
         validate: function( val ) { return val === this.templateData.password.val() }
+    }, {
+        name: 'heard',
+        label: 'How you heard about us',
+        type: 'text',
+        validate: () => true
     } ],
 
     getTemplateOptions() { return { fields: this.fields } },
