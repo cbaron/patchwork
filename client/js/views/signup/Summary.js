@@ -45,10 +45,8 @@ Object.assign( Summary.prototype, View.prototype, {
         this.updateGrandTotal()
 
         this.templateData.paymentForm.removeClass('hide')
-        this.templateData.signupBtn
-            .removeClass('disabled')
-            .addClass('btn-success')
-            .on( 'click' , this.signupHandler )
+
+        this.enableSignupBtn()
     },
 
     cashPaymentSelected() {
@@ -56,10 +54,21 @@ Object.assign( Summary.prototype, View.prototype, {
 
         this.fee = false
 
+        this.enableSignupBtn()
+    },
+
+    disableSignupBtn() {
+        this.templateData.signupBtn
+            .addClass('disabled')
+            .removeClass('btn-success')
+            .off( 'click' )
+    },
+
+    enableSignupBtn() {
         this.templateData.signupBtn
             .removeClass('disabled')
             .addClass('btn-success')
-            .on( 'click' , this.signupHandler )
+            .on( 'click', this.signupHandler )
     },
 
     events: {
@@ -158,10 +167,17 @@ Object.assign( Summary.prototype, View.prototype, {
             $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
             $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
             $el.siblings('.help-block').remove()
-        } else { this.showError( $el, field.error ) }
+        } else {
+            this.showError( $el, field.error )
+            this.disableSignupBtn()
+        }
     },
 
-    onInputFocus( e ) { this.removeError( this.$( e.currentTarget ) ) },
+    onInputFocus( e ) {
+        var $el = this.$( e.currentTarget )
+        if( $el.next().hasClass('glyphicon-remove') ) this.removeError( this.$( e.currentTarget ) )
+        if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
+    },
 
     paymentUnselected() {
 
@@ -221,7 +237,11 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     showError( $el, error ) {
-        $el.parent().parent().removeClass('has-success').addClass('has-feedback has-error')
+        var formGroup = $el.parent().parent()
+
+        if( $el.next().hasClass( 'glyphicon-remove' ) ) return
+        
+        formGroup.removeClass('has-success').addClass('has-feedback has-error')
         $el.next().removeClass('hide').removeClass('glyphicon-ok').addClass('glyphicon-remove')
            .parent().append( Form.templates.fieldError( { error: error, name: $el.attr('id') } ) )
     },
@@ -305,6 +325,8 @@ Object.assign( Summary.prototype, View.prototype, {
                 valid = false
             }
         } )
+
+        if( ! valid ) this.disableSignupBtn()
 
         return valid
     }

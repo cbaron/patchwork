@@ -1,5 +1,10 @@
 <div data-js="container" class="share-option row">
-    <div class="option-title col-sm-6 col-md-7">{{label}}{{#if description}}<span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>{{/if}}</div>
+    <div class="option-title col-sm-6 col-md-8">
+        <div>
+            <span>{{label}}</span>
+            {{#if description}}<span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>{{/if}}
+       </div>
+    </div>
     <div class="col-sm-3 col-md-2">
         <select data-js="input" class="form-control">
             {{#each options}}
@@ -7,5 +12,7 @@
             {{/each}}
         </select>    
     </div>
-    <div data-js="total" class="col-sm-3 total"></div>
+    <div class="col-sm-3 col-md-2 total">
+        <div data-js="total"></div>
+    </div>
 </div>

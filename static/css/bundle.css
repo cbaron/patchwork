@@ -936,22 +936,33 @@ footer .future-days {
 }
 
 .signup-class .share-options .share-option {
-  line-height: 34px;
+  height: 44px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .signup-class .share-options .share-option select {
   width: initial;
 }
 
-.signup-class .share-options .share-option .option-total {
-  color: #666;
+.signup-class .share-options .share-option .total,
+.signup-class .share-options .share-option .option-title {
+  height: 100%;
+  display: table;
 }
 
-.signup-class .share-options .share-option div:first-child {
+.signup-class .share-options .share-option .total > div,
+.signup-class .share-options .share-option .option-title > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.signup-class .share-options .share-option .option-title {
   color: #155D75;
 }
 
-.signup-class .share-options .share-option .total {
+.signup-class .share-options .share-option .total > div {
+  color: #666;
   font-size: .75rem;
   text-align: right;
 }
@@ -963,7 +974,7 @@ footer .future-days {
 }
 
 .signup-class .share-options .share-option + .share-option {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .signup-class .delivery {
@@ -1267,16 +1278,16 @@ footer .future-days {
   margin-top: 25px;
 }
 
-.signup-class .summary .payment form .number {
-  margin-bottom: 3px;
-}
-
-.signup-class .summary .payment form .number input {
+.signup-class .summary .payment form .credit-card-info input {
   width: 300px;
 }
 
-.signup-class .summary .payment form .number .form-control-feedback {
+.signup-class .summary .payment form .credit-card-info .form-control-feedback {
   left: 275px;
+}
+
+.signup-class .summary .payment form .number {
+  margin-bottom: 3px;
 }
 
 .signup-class .summary .payment form .expiration input {
@@ -1284,7 +1295,7 @@ footer .future-days {
 }
 
 .signup-class .summary .payment form .expiration #exp_month {
-  width: 90px;
+  width: 100px;
 }
 
 .signup-class .summary .payment form .expiration #exp_year {
@@ -1292,11 +1303,11 @@ footer .future-days {
 }
 
 .signup-class .summary .payment form .expiration .form-control-feedback:nth-child(2) {
-  left: 65px;
+  left: 75px;
 }
 
 .signup-class .summary .payment form .expiration .form-control-feedback:nth-child(5) {
-  left: 190px;
+  left: 200px;
 }
 
 .signup-class .summary .payment form .cvc input {
@@ -1364,6 +1375,10 @@ footer .future-days {
 
   .signup-class .share-options .single-share {
     margin-top: 15px;
+  }
+
+  .signup-class .share-options .share-option {
+    height: auto;
   }
 
   .signup-class .share-options .share-option .total {
