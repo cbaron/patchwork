@@ -22,7 +22,7 @@ Object.assign( Summary.prototype, View.prototype, {
     buildRequest() {
         return JSON.stringify( {
             member: this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard' ] ),
-            payment: this.getFormData(),
+            payment: ( this.fee ) ? this.getFormData() : {},
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
         } )

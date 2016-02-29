@@ -75,26 +75,30 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     executeShareQueries( share ) {
         return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 ) RETURNING id', values: [ this.memberid, share.id ] } )
-        .then( result => {
+        .then( function( result ) {
             this.membershareid = result.rows[0].id
             return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
                     query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 ) RETURNING id",
                     values: [ result.rows[0].id, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
-        } )
-        .spread( () => {
-            this.membershareoptionids = Array.prototype.slice.call(arguments, 0).map( result => { console.log( result ); return result.rows[0].id } )
+        }.bind(this) )
+        .spread( function() {
+            var args = (arguments.length === 1?[arguments[0]]:Array.apply(null, arguments))
+            this.membershareoptionids = args.map( result => result.rows[0].id )
             return this.dbQuery( {
                 query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING id",
                 values: [ this.membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } )
-        } )
-        .then( result => {
+        }.bind(this) )
+        .then( function( result ) {
             this.membersharedeliveryid = result.rows[0].id
             return this.Q.all( share.skipDays.map( date =>
                 this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 ) RETURNING id",
                                 values: [ this.membershareid, date ] } ) ) ) 
-        } )
-        .spread( () => this.membershareskipweekids = Array.prototype.slice.call(arguments, 0).map( result => result.rows[0].id ) )
+        }.bind(this) )
+        .spread( function() {
+            var args = (arguments.length === 1?[arguments[0]]:Array.apply(null, arguments))
+            this.membershareskipweekids = args.map( result => result.rows[0].id )
+        }.bind(this) )
     },
 
     executeUserQueries() {
@@ -135,11 +139,28 @@ Object.assign( Signup.prototype, Base.prototype, {
         }
     } ),
 
+    rollbackDelivery() {
+        return this.dbQuery( { query: "DELETE from membersharedelivery WHERE id = " + this.membersharedeliveryid } )
+    },
+
+    rollbackShareOptions() {
+        return this.dbQuery( { query: this.format("DELETE from membershareoption WHERE id IN ( %s )", this.membershareoptionids.join(', ') ) } )
+    },
+
+    rollbackMemberShare() {
+        return this.dbQuery( { query: "DELETE from membershare WHERE id = " + this.membershareid } )
+    },
+
     rollbackShareQueries() {
+        var promises = [ this.rollbackDelivery.bind(this), this.rollbackShareOptions.bind(this), this.rollbackMemberShare.bind(this) ]
+
+        if( this.membershareskipweekids.length ) promises.unshift( this.rollbackSkipWeeks() )
+
+        return promises.reduce( this.Q.when, this.Q() )
+    },
+
+    rollbackSkipWeeks() {
         return this.dbQuery( { query: this.format("DELETE from membershareskipweek WHERE id IN ( %s )", this.membershareskipweekids.join(', ') ) } )
-        .then( () => this.dbQuery( { query: "DELETE from membersharedelivery WHERE id = " + this.membersharedeliveryid } ) )
-        .then( () => this.dbQuery( { query: this.format("DELETE from membershareoption WHERE id IN ( %s )", this.membershareoptionids.join(', ') ) } ) )
-        .then( () => this.dbQuery( { query: "DELETE from membershare WHERE id = " + this.membershareid } ) )
     },
 
 
