@@ -9,10 +9,12 @@ Object.assign( ListView.prototype, MyView.prototype, {
                 Object.assign( { container: this.templateData.container, model: model, selection: this.selection }, this.getItemViewOptions() ) )
             .on( 'removed', () => delete this.itemViews[ model.id ] )
 
+        this.emit( 'itemAdded', model )
+        
+        if( model.get('unselectable') ) return
+
         if( this.selection ) this.itemViews[ model.id ].on( 'clicked', model => this.onItemClick( model ) )
         if( this.selected ) this.onItemClick( model )
-
-        this.emit( 'itemAdded', model )
     },
 
     collection: { },

@@ -5,6 +5,8 @@ Object.assign( Delivery.prototype, List.prototype, {
 
     ItemView: require('./DeliveryOptions'),
 
+    collection: { comparator: 'startEpoch' },
+
     getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData } },
     
     itemModels() { return this.signupData.shares.models },

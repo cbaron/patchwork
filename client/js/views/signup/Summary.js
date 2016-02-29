@@ -68,6 +68,7 @@ Object.assign( Summary.prototype, View.prototype, {
         this.templateData.signupBtn
             .removeClass('disabled')
             .addClass('btn-success')
+            .off( 'click' )
             .on( 'click', this.signupHandler )
     },
 
@@ -246,12 +247,15 @@ Object.assign( Summary.prototype, View.prototype, {
            .parent().append( Form.templates.fieldError( { error: error, name: $el.attr('id') } ) )
     },
 
-    showErrorModal() {
+    showErrorModal( opts ) {
         this.modalView.show( {
             title: 'Hmmm',
-            body: 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience',
+            body: ( opts && opts.error )
+                ? opts.error
+                : 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience',
             hideCancelBtn: true,
-            confirmText: 'Okay' } ).on( 'submit', () => this.modalView.hide() )
+            confirmText: 'Okay' } )
+        .on( 'submit', () => this.modalView.hide() )
     },
     
     showSuccessModal() {
@@ -276,7 +280,14 @@ Object.assign( Summary.prototype, View.prototype, {
             headers: { 'Content-Type': 'application/json' },
             method: "POST",
             url: "/signup" } )
-        .done( () => {
+        .done( response => {
+            if( response.error ) {
+                this.showErrorModal( { error: response.error } )
+                this.templateData.signupBtn
+                    .on( 'click', this.signupHandler )
+                    .text('Become a Member!')   
+                return
+            }
             this.emit('done')
             this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
             this.templateData.signupBtn.text('Thank you')

@@ -10,13 +10,17 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         Share: require('../../models/Share')
     },
 
-    collection: { model: require('../../models/Share'), url: "/share" },
+    collection: { comparator: 'startEpoch', model: require('../../models/Share'), url: "/share" },
 
     events: {
         csaInfoBtn: { method: 'showCSAInfoPageInNewTab' }
     },
 
-    fetch: { data: { display: true } },
+    fetch: { data: {
+        display: true,
+        enddate: JSON.stringify( { operation: '>', value: require('moment')().add( 2, 'weeks' ).format('YYYY-MM-DD') } ),
+        signupcutoff: JSON.stringify( { operation: '>', value: require('moment')().format('YYYY-MM-DD') } )
+    } },
 
     getItemViewOptions() {
         return { container: this.templateData.shares }

@@ -8,6 +8,12 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function() {
             this.query = require('querystring').parse( require('url').parse( this.request.url ).query )
+            Object.keys( this.query ).forEach( attr => {
+                if( this.query[ attr ].charAt(0) === '{' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                    if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
+                }
+            } )
         },
 
         PATCH: function() {

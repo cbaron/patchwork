@@ -5,6 +5,8 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
     ItemView: require('./PickupDates'),
 
+    collection: { comparator: 'startEpoch' },
+
     getItemViewOptions() { return { container: this.templateData.shares } },
     
     itemModels() { return this.signupData.shares.models },
@@ -44,8 +46,10 @@ Object.assign( DateSelection.prototype, List.prototype, {
 
         if( valid ) {
             this.items.forEach( item => item.set( 'skipDays',
-                item.get('deliveryDates').reject( deliveryDay => ( this.itemViews[ item.id ].selectedItems[ deliveryDay.id ] ) ? true : false )
-                                        .map( deliveryDay => deliveryDay.id )
+                this._( item.get('deliveryDates')
+                    .reject( deliveryDay => deliveryDay.get('unselectable') ) )
+                    .reject( deliveryDay => ( this.itemViews[ item.id ].selectedItems[ deliveryDay.id ] ) ? true : false )
+                    .map( deliveryDay => deliveryDay.id )
             ) )
         }
 

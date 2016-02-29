@@ -11,15 +11,12 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     db: Object.assign( {}, Base.prototype.db, {
         POST() {
-            var memberid
-
             return this.executeUserQueries()
             .then( memberid => {
-                memberid = memberid
-                return this.Q.all( this.body.shares.map( share => this.executeShareQueries( share, memberid ) ) )
+                this.memberid = memberid
+                return this.Q.all( this.body.shares.map( share => this.executeShareQueries( share ) ) )
             } )
-            .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( memberid ) } )
-            
+            .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( ) } )
         }
     } ),
     
@@ -32,47 +29,72 @@ Object.assign( Signup.prototype, Base.prototype, {
         }
     } ),
 
-    executePayment( memberid ) {
+    creditMember() {
+        return this.dbQuery( {
+            query: 'UPDATE member SET balance = balance + $1 WHERE id = $2',
+            values: [ this.body.total, this.memberid ] } )
+    },
+
+    executePayment() {
 
         return this.Q(
             this.Stripe.charge( {
                 amount: this.body.totalCents,
                 description: this.format( 'Purchase of CSA share(s) %s', this.body.shares.map( share => share.label ).join(', ') ),
-                metadata: { memberid: memberid },
+                metadata: { memberid: this.memberid },
                 receipt_email: this.body.member.email,
                 source: Object.assign( { object: 'card' }, this.body.payment ),
                 statement_descriptor: 'Patchwork Gardens CSA'
             } )
-        ).then( charge => this.Q.all( [
-            this.dbQuery( {
-                query: 'UPDATE member SET balance = balance + $1 WHERE id = $2',
-                values: [ this.body.total, memberid ] } ),
-            this.dbQuery( {
-                query: 'INSERT INTO transaction ( description, memberid, origin, amount ) VALUES ( $1, $2, $3, $4 )',
-                values: [ "Full CSA Payment", memberid, 'Stripe', this.body.total ]
+        )
+        .fail( failedPayment => {
+            return this.creditMember()
+            .then( () => this.rollbackShareQueries() )
+            .fail( e => {
+                console.log( this.format( '%s Error rolling back after failed payment : %s -- body -- %s', new Date(), e.stack || e, JSON.stringify(this.body) ) )
+                this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
             } )
-        ] ) )
+            .then( () => {
+                console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
+                this.error = "Failed payment.  Please try again."
+            } ) 
+        } )
+        .then( charge => {
+            if( this.error ) return
+            return this.Q.all( [ this.creditMember(),
+                this.dbQuery( {
+                    query: 'INSERT INTO transaction ( description, memberid, origin, amount ) VALUES ( $1, $2, $3, $4 )',
+                    values: [ "Full CSA Payment", this.memberid, 'Stripe', this.body.total ]
+                } )
+            ] )
+        } )
+        .fail( e => {
+            console.log( this.format( '%s Failed to credit member or create transaction : %s -- body -- %s', new Date(), e.stack || e, JSON.stringify(this.body) ) )
+        } )
     },
 
-    executeShareQueries( share, memberid ) {
-        var membershareid
-
-        return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 ) RETURNING id', values: [ memberid, share.id ] } )
+    executeShareQueries( share ) {
+        return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 ) RETURNING id', values: [ this.memberid, share.id ] } )
         .then( result => {
-            membershareid = result.rows[0].id
+            this.membershareid = result.rows[0].id
             return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
-                    query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 )",
+                    query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 ) RETURNING id",
                     values: [ result.rows[0].id, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
         } )
-        .then( () => 
-            this.dbQuery( {
-                query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING membershareid",
-                values: [ membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } ) )
-        .then( () =>
-            this.Q.all( share.skipDays.map( date =>
-                this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 )",
-                                values: [ membershareid, date ] } ) ) ) )
+        .spread( () => {
+            this.membershareoptionids = Array.prototype.slice.call(arguments, 0).map( result => { console.log( result ); return result.rows[0].id } )
+            return this.dbQuery( {
+                query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING id",
+                values: [ this.membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } )
+        } )
+        .then( result => {
+            this.membersharedeliveryid = result.rows[0].id
+            return this.Q.all( share.skipDays.map( date =>
+                this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 ) RETURNING id",
+                                values: [ this.membershareid, date ] } ) ) ) 
+        } )
+        .spread( () => this.membershareskipweekids = Array.prototype.slice.call(arguments, 0).map( result => result.rows[0].id ) )
     },
 
     executeUserQueries() {
@@ -106,11 +128,20 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     responses: Object.assign( { }, Base.prototype.responses, {
         POST() {
+            if( this.error ) return this.respond( { body: { error: this.error } } )
             this.user.state.signup = { }
             return this.Q( this.User.createToken.call(this) )
                     .then( token => this.User.respondSetCookie.call( this, token, { } ) )
         }
     } ),
+
+    rollbackShareQueries() {
+        return this.dbQuery( { query: this.format("DELETE from membershareskipweek WHERE id IN ( %s )", this.membershareskipweekids.join(', ') ) } )
+        .then( () => this.dbQuery( { query: "DELETE from membersharedelivery WHERE id = " + this.membersharedeliveryid } ) )
+        .then( () => this.dbQuery( { query: this.format("DELETE from membershareoption WHERE id IN ( %s )", this.membershareoptionids.join(', ') ) } ) )
+        .then( () => this.dbQuery( { query: "DELETE from membershare WHERE id = " + this.membershareid } ) )
+    },
+
 
     updatePersonQueries( personid ) {
         return this.dbQuery( {

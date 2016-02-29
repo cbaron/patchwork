@@ -5,6 +5,8 @@ Object.assign( ShareOptions.prototype, List.prototype, {
 
     ItemView: require('./SingleShareOptions'),
 
+    collection: { comparator: 'startEpoch' },
+
     events: {
     },
 

@@ -11,9 +11,13 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             deliveryDay = this.get('selectedDelivery').dayofweek,
             deliveryDate = this.moment( this.get('startdate') ),
             endDate = this.moment( this.get('enddate') ),
-            startDay = this.moment( deliveryDate ).day()
+            nextWeek = this.moment().add( 7, 'days' ),
+            startDay = startDay = deliveryDate.day()
         
         if( ! deliveryDay ) throw Error("No delivery Day")
+
+        
+        
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
@@ -21,7 +25,9 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         }
         
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-            dates.push( new this.DeliveryDate( deliveryDate, { parse: true } ) )
+            var model = new this.DeliveryDate( deliveryDate, { parse: true } )
+            if( deliveryDate.diff( nextWeek ) < 0 ) model.set( { unselectable: true } )
+            dates.push( model )
             deliveryDate.add( 7, 'days' )
         }
         
@@ -81,7 +87,11 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     getSelectedDates() {
-        this.set( { selectedDates: this.get('deliveryDates').reject( deliveryDay => this._(this.get('skipDays')).contains( deliveryDay.id ) ) } )
+        this.set( { selectedDates:
+            this._( this.get('deliveryDates')
+                .reject( deliveryDay => deliveryDay.get('unselectable') ) )
+                .reject( deliveryDay => this._(this.get('skipDays')).contains( deliveryDay.id ) )
+        } )
     },
 
     getShareOptions() {
@@ -115,10 +125,14 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     moneyToFloat( money ) { return parseFloat( money.replace(/\$|,/g, "") ) },
 
     parse( response ) {
+        var startDate = this.moment( response.startdate ),
+            endDate = this.moment( response.enddate )
+
         return Object.assign( response, {
-            duration: Math.ceil( this.moment( response.enddate ).diff( this.moment( response.startdate ), 'days' ) / 7 ),
-            humanEnddate: this.moment( response.enddate ).format("MMM D"),
-            humanStartdate: this.moment( response.startdate ).format("MMM D"),
+            duration: Math.ceil( endDate.diff( startDate, 'days' ) / 7 ),
+            humanEnddate: endDate.format("MMM D"),
+            humanStartdate: startDate.format("MMM D"),
+            startEpoch: startDate.unix()
         } )
     },
 
