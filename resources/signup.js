@@ -42,7 +42,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.Stripe.charge( {
                 amount: this.body.totalCents,
                 description: this.format( 'Purchase of CSA share(s) %s', this.body.shares.map( share => share.label ).join(', ') ),
-                metadata: { memberid: this.memberid },
+                metadata: { memberid: this.memberid, name: this.body.member.name, email: this.body.member.email },
                 receipt_email: this.body.member.email,
                 source: Object.assign( { object: 'card' }, this.body.payment ),
                 statement_descriptor: 'Patchwork Gardens CSA'
