@@ -21,7 +21,9 @@ Object.assign( Summary.prototype, View.prototype, {
 
     buildRequest() {
         return JSON.stringify( {
-            member: this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard' ] ),
+            member: Object.assign(
+                this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard' ] ),
+                { zipcode: this.user.get('addressModel').postalCode } ),
             payment: ( this.fee ) ? this.getFormData() : {},
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
