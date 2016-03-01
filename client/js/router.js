@@ -85,7 +85,7 @@ module.exports = new (
             csa: { view: require('./views/CSA'), options: { } },
             about: { view: require('./views/About'), options: { } },
             markets: { view: require('./views/Markets'), options: { } },
-            signup: { view: require('./views/Signup'), options: { } },
+            "sign-up": { view: require('./views/Signup'), options: { } },
             members: { view: require('./views/Members'), options: { } },
             "get-involved": { view: require('./views/GetInvolved'), options: { } },
             contact: { view: require('./views/Contact'), options: { } }

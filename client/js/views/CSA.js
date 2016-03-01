@@ -3,11 +3,13 @@ var MyView = require('./MyView'),
 
 Object.assign( CSA.prototype, MyView.prototype, {
 
-    hashToElement: {
-        'how-do-i-know': 'howDoIKnow'
+    events: {
+        signupBtn: { method: 'routeToSignup' }
     },
 
-    requiresLogin: false,
+    hashToElement: {
+        'how-do-i-know': 'howDoIKnow',
+    },
 
     postRender() {
         if( window.location.hash ) {
@@ -15,6 +17,10 @@ Object.assign( CSA.prototype, MyView.prototype, {
                 scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top + this.$(window).height() }, 1000 )
         }
     },
+
+    requiresLogin: false,
+
+    routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
     template: require('../templates/csa')( require('handlebars') ),
 

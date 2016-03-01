@@ -10,7 +10,7 @@
 .home .header-class {
   background-image: url('/static/img/headers/crop-fields-sm.jpg');
 }
-.signup .header-class {
+.sign-up .header-class {
   background-image: url('/static/img/headers/cherry-tomatoes-sm.jpg');
 }
 .about .header-class {
@@ -80,7 +80,7 @@
 .csa .header-class .header-title {
   color: white;
 }
-.signup .header-class .header-title {
+.sign-up .header-class .header-title {
   color: white;
 }
 .get-involved .header-class .header-title {
@@ -115,7 +115,7 @@
   .markets .header-class {
     background-image: url('/static/img/headers/greens-xs.jpg');
   }
-  .signup .header-class {
+  .sign-up .header-class {
     background-image: url('/static/img/headers/cherry-tomatoes-xs.jpg');
   }
   .get-involved .header-class {
@@ -171,10 +171,10 @@
   .markets .header-class .navbar-collapse .navbar-nav li:hover {
     color: #e6e6e6;
   }
-  .signup .header-class .navbar-collapse .navbar-nav li {
+  .sign-up .header-class .navbar-collapse .navbar-nav li {
     color: white;
   }
-  .signup .header-class .navbar-collapse .navbar-nav li:hover {
+  .sign-up .header-class .navbar-collapse .navbar-nav li:hover {
     color: #e6e6e6;
   }
   .get-involved .header-class .navbar-collapse .navbar-nav li {

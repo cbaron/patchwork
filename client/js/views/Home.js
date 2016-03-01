@@ -3,6 +3,10 @@ var MyView = require('./MyView'),
 
 Object.assign( Home.prototype, MyView.prototype, {
 
+    events: {
+        signupBtn: { method: 'routeToSignup' }
+    },
+
     initialImage: { path: 'assortment.jpg', description: "Assorted vegetables" },
 
     getTemplateOptions() {
@@ -54,6 +58,8 @@ Object.assign( Home.prototype, MyView.prototype, {
     },
 
     requiresLogin: false,
+
+    routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
     template: require('../templates/home')( require('handlebars') ),
 

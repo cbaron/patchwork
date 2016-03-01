@@ -323,6 +323,12 @@ li {
   text-align: center;
 }
 
+.csa-class h3 .signup-btn {
+  color: #398439;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
 .csa-class figure {
   margin: 0 auto;
   padding: 20px 0;
@@ -435,7 +441,7 @@ footer .future-days {
   background-image: url("/static/img/headers/crop-fields-sm.jpg");
 }
 
-.signup .header-class {
+.sign-up .header-class {
   background-image: url("/static/img/headers/cherry-tomatoes-sm.jpg");
 }
 
@@ -521,7 +527,7 @@ footer .future-days {
   color: white;
 }
 
-.signup .header-class .header-title {
+.sign-up .header-class .header-title {
   color: white;
 }
 
@@ -566,7 +572,7 @@ footer .future-days {
     background-image: url("/static/img/headers/greens-xs.jpg");
   }
 
-  .signup .header-class {
+  .sign-up .header-class {
     background-image: url("/static/img/headers/cherry-tomatoes-xs.jpg");
   }
 
@@ -636,11 +642,11 @@ footer .future-days {
     color: #e6e6e6;
   }
 
-  .signup .header-class .navbar-collapse .navbar-nav li {
+  .sign-up .header-class .navbar-collapse .navbar-nav li {
     color: white;
   }
 
-  .signup .header-class .navbar-collapse .navbar-nav li:hover {
+  .sign-up .header-class .navbar-collapse .navbar-nav li:hover {
     color: #e6e6e6;
   }
 
@@ -698,6 +704,12 @@ footer .future-days {
 
 .home-class h3 {
   text-align: center;
+}
+
+.home-class h3 .signup-btn {
+  color: #398439;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .home-class .carousel {

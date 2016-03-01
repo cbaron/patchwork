@@ -10,7 +10,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
         'about': { event: 'click', selector: '', method: 'navigate' },
         'csa': { event: 'click', selector: '', method: 'navigate' },
         'markets': { event: 'click', selector: '', method: 'navigate' },
-        'signup': { event: 'click', selector: '', method: 'navigate' },
+        'sign-up': { event: 'click', selector: '', method: 'navigate' },
         'members': { event: 'click', selector: '', method: 'navigate' },
         'get-involved': { event: 'click', selector: '', method: 'navigate' },
         'contact': { event: 'click', selector: '', method: 'navigate' }
@@ -20,7 +20,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'About Us', name: 'about' },
             { label: 'CSA Program', name: 'csa' },
             { label: 'Markets', name: 'markets' },
-            //{ label: 'Sign Up', name: 'signup' },
+            { label: 'Sign-Up', name: 'sign-up' },
             //{ label: 'Member Resources', name: 'members' },
             { label: 'Get Involved', name: 'get-involved' },
             { label: 'Contact Us', name: 'contact' }
@@ -34,7 +34,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
 
     navigate( e ) {
         var id = this.$( e.currentTarget ).attr( 'data-id' )        
-        this.router.navigate( id, { trigger: true } )     
+        this.router.navigate( id, { trigger: true } )
     },
 
     toggleLogo() { this.$('.header-title').toggle() }
