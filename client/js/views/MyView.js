@@ -2,9 +2,11 @@ var MyView = function( data ) { return Object.assign( this, data ).initialize() 
 
 Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
-    Collection: require('backbone').Collection.extend( { parse: function(response) { return response[ this.url.slice(1) ] } } ),   
-
+    Collection: require('backbone').Collection,
+    
     Error: require('../MyError'),
+
+    Model: require('backbone').Model,
 
     _: require('underscore'),
 
@@ -25,8 +27,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     },
 
     delete: function() {
-        this.templateData.container.remove()
-        this.emit("removed")
+        if( this.templateData && this.templateData.container ) {
+            this.templateData.container.remove()
+            this.emit("removed")
+        }
     },
 
     format: {
@@ -45,14 +49,14 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     getTemplateOptions: () => ({}),
 
-    hide: function() {
-        return this.Q.Promise( function( resolve, reject ) {
-            this.templateData.container.hide();
-            resolve();
-        }.bind(this) );
+    hide() {
+        return this.Q.Promise( ( resolve, reject ) => {
+            this.templateData.container.hide()
+            resolve()
+        } )
     },
 
-    initialize: function() {
+    initialize() {
 
         if( ! this.container ) this.container = this.$('#content')
         
@@ -60,30 +64,41 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         this.modalView = require('./modal')
 
+        this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
+
         if( this.requiresLogin && ! this.user.id ) {
             require('./Login').show().once( "success", e => {
-                this.render()
                 this.router.header.onUser( this.user )
+
+                if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
+                    return alert('You do not have access')
+                }
+
+                this.render()
             } )
             return this
+        } else if( this.user.id && this.requiresRole ) {
+            if( ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
+                return alert('You do not have access')
+            }
         }
-
-        this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         return this.render()
     },
 
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
 
-    Model: require('backbone').Model,
     
     moment: require('moment'),
 
-    postRender: function() {return this},
+    postRender: function() {
+        this.renderSubviews()
+        return this
+    },
 
     Q: require('q'),
 
-    render: function() {
+    render() {
         this.slurpTemplate( {
             template: this.template( this.getTemplateOptions() ),
             insertion: { $el: this.insertionEl || this.container, method: this.insertionMethod } } )

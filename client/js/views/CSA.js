@@ -10,6 +10,10 @@ Object.assign( CSA.prototype, GetData.prototype, {
         { name: 'largeshareexamplecolumntwo', comparator: 'id'}
     ],
 
+    hashToElement: {
+        'how-do-i-know': 'howDoIKnow'
+    },
+
     requiresLogin: false,
 
     template: require('../templates/csa')( require('handlebars') ),
@@ -19,6 +23,13 @@ Object.assign( CSA.prototype, GetData.prototype, {
         csastatements: require('../templates/listItem')( require('handlebars') ),
         largeshareexamplecolumnone: require('../templates/listItem')( require('handlebars') ),
         largeshareexamplecolumntwo: require('../templates/listItem')( require('handlebars') )
+    },
+    
+    postRender() {
+        if( window.location.hash ) {
+            this.$('body').animate( {
+                scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top + this.$(window).height() }, 1000 )
+        }
     }
 
 } )

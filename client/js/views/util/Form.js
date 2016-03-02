@@ -1,7 +1,7 @@
-var _ = require('underscore'),
-    FormView = function() { return this }
+var MyView = require('../MyView'),
+    Form = function() { return MyView.apply( this, arguments ) }
 
-_.extend( FormView.prototype, {
+Object.assign( Form.prototype, MyView.prototype, {
 
     emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
@@ -43,9 +43,11 @@ _.extend( FormView.prototype, {
     
     },
     
-    templates: { fieldError: require('../../templates/fieldError')( require('handlebars') ),
-                 invalidLoginError: require('../../templates/invalidLoginError')( require('handlebars') ),
-                 serverError: require('../../templates/serverError')(require('handlebars') ) },
+    templates: {
+        fieldError: require('../../templates/fieldError')( require('handlebars') ),
+        invalidLoginError: require('../../templates/invalidLoginError')( require('handlebars') ),
+        serverError: require('../../templates/serverError')(require('handlebars') )
+    },
 
     validateForm: function() {
         var valid = true
@@ -76,6 +78,6 @@ _.extend( FormView.prototype, {
         else return val.length >= 6
     }
 
-} );
+} )
 
-module.exports = FormView
+module.exports = Form

@@ -19,9 +19,11 @@ module.exports = new (
         },
 
         handler( resource ) {
-            
+
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
             this.footer = require('./views/Footer')
+    
+            this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
@@ -39,6 +41,7 @@ module.exports = new (
                 if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
                 this.header.$('.navbar-collapse').removeClass( 'in' )
                 this.$(window).scrollTop(0)
+                this.footer.size()
 
             } ).catch( err => new this.Error(err) )
         },
@@ -46,7 +49,10 @@ module.exports = new (
         Q: require('q'),
 
         resourceHandler( resource ) {
+
             this.header = require('./views/AdminHeader')
+
+            if( this.footer ) this.footer.hide()
 
             this.userPromise.then( () => {
 

@@ -7,7 +7,7 @@
     "babel-polyfill": "^6.3.14",
     "backbone": "^1.2.3",
     "bcrypt-nodejs": "0.0.3",
-    "bootstrap": "^3.3.6",
+    "bootstrap": "3.3.5",
     "handlebars": "^4.0.5",
     "jquery": "^2.1.4",
     "jws": "3.1.1",
@@ -16,9 +16,12 @@
     "node-static": "^0.7.7",
     "pg": "^4.4.4",
     "pg-native": "^1.10.0",
-    "q": "^1.4.1"
+    "pg-transaction": "^1.0.4",
+    "q": "^1.4.1",
+    "stripe": "^4.4.0"
   },
   "devDependencies": {
+    "address-validator": "^0.2.2",
     "babel": "^6.3.26",
     "babel-core": "^6.4.5",
     "babel-plugin-object-assign": "^1.2.1",

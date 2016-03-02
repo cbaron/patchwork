@@ -1,0 +1,1 @@
+ALTER TABLE share ADD COLUMN earlybird DATE;

@@ -1,0 +1,138 @@
+<div data-js="container" class="summary col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 {{containerClass}}">
+    <div class="share-summary">
+        <div class="header">Summary of Shares</div>
+        {{#each shares}}
+            <div class="share-label-wrapper">{{{shareBox}}}</div>
+            <div class="share-options-summary">
+                <div class="section-title">Share Options :</div>
+                {{#each selectedOptions}}
+                    <div class="row">
+                        <div class="selected-options">
+                            <div class="shareoptionlabel">
+                                <span class="col-sm-3 item-label">{{optionName}} :  </span>
+                                <span class="col-sm-5 text-center">
+                                    <span>{{selectedOptionLabel}}</span>
+                                {{#if unit}}
+                                    <span>{{unit}}</span>
+                                {{/if}}
+                                </span>
+                            </div>
+                            <div class="price">
+                                <span class="col-sm-2">{{price}}</span>
+                                <span class="col-sm-2">per week</span>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="delivery-summary">
+                <div class="section-title">Delivery :</div>
+                <div class="row">
+                    <div class="delivery-method">
+                        <span class="col-sm-3 item-label">Method :  </span>
+                        <span class="col-sm-5 text-center">{{selectedDelivery.deliveryType}}</span>
+                    </div>
+                    <div class="price">
+                        <span class="col-sm-2">{{selectedDelivery.weeklyCost}}</span>
+                        <span class="col-sm-2">per week</span>
+                    </div>  
+                </div>
+                {{#if selectedDelivery.groupdropoff}}
+                    <div class="row">
+                        <div class="dropoff-location">
+                            <span class="col-sm-3 item-label">Drop-off Location :  </span>
+                            <span class="col-sm-5 text-center">{{selectedDelivery.groupdropoff}}</span>
+                        </div>
+                    </div>
+                {{/if}}
+                <div class="row">
+                    <div class="dropoff-address">
+                        <div class="col-sm-3 item-label">Address :  </div>
+                        <div class="delivery-address col-sm-5 text-center">{{selectedDelivery.address}}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pick-up">
+                        <div class="col-sm-3 item-label">Pick-up Hours :  </div>
+                        <div class="col-sm-5 text-center">
+                            <span>{{selectedDelivery.dayOfWeek}} </span>
+                            <span>{{selectedDelivery.starttime}} - {{selectedDelivery.endtime}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="total">
+                <div class="row">
+                    <div class="price">
+                        <span class="col-sm-8">Weekly Price :  </span>
+                        <span class="col-sm-2">{{weeklyPrice}}</span>
+                        <span class="col-sm-2">per week</span>
+                    </div>
+                </div>
+            </div>
+            <div class="selected-weeks">
+                <div class="section-title">Dates Selected for Delivery :</div>
+                    {{#each selectedDates}}
+                        <div class="date">               
+                            <span>{{monthNum}}/</span> 
+                            <span>{{dayOfMonth}}</span>
+                        </div>
+                    {{/each}}
+            </div>
+            <div class="total row">
+                <div class="col-sm-8">Number of weeks selected :  </div>
+                <span class="weeks-selected col-sm-2">{{weeksSelected}}</span>
+                <span class="col-sm-2">weeks</span>
+            </div>
+            {{#if skipDays}}
+                <div class="absent-dates">
+                    <div class="section-title">Dates Absent :</div>
+                    {{#each skipDays}}
+                        <div class="date">               
+                            <span>{{dayOfMonth}}-{{month}}</span> 
+                        </div>
+                    {{/each}}
+                </div>
+            {{/if}}
+            <div class="total share-total row">
+                <span class="col-sm-offset-4 col-sm-4">Share Total :  </span>
+                <span class="col-sm-2">{{total}}</span>
+            </div>
+        {{/each}}
+    </div>
+    <div data-js="grandTotal" class="grand-total text-center row"></div>
+    <div class="payment">    
+        <div class="header">Select a method of payment</div>
+        <div data-js="paymentOptions"></div>
+        <form data-js="paymentForm" class="hide form-horizontal">
+            <div class="credit-card-info form-group">
+                <label class="col-sm-3 control-label number">Card Number</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" data-js="number" id="number">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                    <span class="accepted-cards">Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Expiration</label>
+                <div class="col-sm-9 expiration">
+                    <input type="number" class="form-control" data-js="exp_month" maxlength="2" size="3" placeholder="mm" id="exp_month">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                    <span>&nbsp;/&nbsp;</span>
+                    <input type="number" class="form-control" data-js="exp_year" maxlength="4" size="4" placeholder="yyyy" id="exp_year">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">CVC</label>
+                <div class="col-sm-9 cvc">
+                    <input type="number" class="form-control" data-js="cvc" maxlength="3" size="4" id="cvc">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <button data-js="signupBtn" class="btn text-center disabled">Become a Member!</button>
+        </div>
+    </div>
+</div>

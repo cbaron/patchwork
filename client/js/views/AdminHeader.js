@@ -25,31 +25,27 @@ Object.assign( AdminHeader.prototype, MyView.prototype, {
 
     onUser: function( user ) {
         this.user = user
-        /*            
         this.templateData.name.text( this.user.get('name') )
-        this.templateData.signoutBtn.removeClass('hide')
-        */
+        this.templateData.userPanel.removeClass('hide')
     },
     
     requiresLogin: false,
 
     signout: function() {
 
-        /* TODO: disconnect socket */
+        document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        this.user.clear()
 
-        this.Q.fcall( this.user.destroy.bind(this.user), { headers: { token: this.user.get('token') } } )
-        .then( function() {
-            this.templateData.name.text('')
-            this.templateData.signoutBtn.addClass('hide')
-            this.user.clear()
-            this._.each( this.router.views, ( view, name ) => {
-                view.delete()
-                delete this.router[ name ]
-            } )
-            this.router.navigate( "/", { trigger: true } )
-        }.bind(this) )
-        .fail( err => console.log( "Error signing out : " + err.stack || err ) )
-        .done()
+        this.templateData.name.text('')
+        this.templateData.userPanel.addClass('hide')
+
+        Object.keys( this.router.views ).forEach( name => {
+            this.router.views[ name ].delete()
+            delete this.router.views[name] 
+        } )
+
+        this.delete()
+        this.router.navigate( "/", { trigger: true } )
     },
 
     template: require('../templates/adminHeader')( require('handlebars') )

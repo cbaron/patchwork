@@ -21,7 +21,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
         this.templateData.title.text('')
         this.templateData.header.show()
-        this.templateData.body.empty()
+        this.templateData.body.removeClass('hide').empty()
         this.templateData.footer.show()
         this.templateData.cancelBtn.show().text('Cancel')
         this.templateData.closeBtn.show()
@@ -61,7 +61,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         if( options.body ) {
             this.templateData.body.removeClass('hide')
             this.slurpTemplate( { template: options.body, insertion: { $el: this.templateData.body, method: 'append' } } )
-        } else { this.templateData.body.addClass('hide') }
+        } else if( !options.body && this.templateData.body.children().length === 0 ) { this.templateData.body.addClass('hide') }
 
         if( options.hideFooter ) this.templateData.footer.hide() 
 

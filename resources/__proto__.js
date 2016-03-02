@@ -8,6 +8,12 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function() {
             this.query = require('querystring').parse( require('url').parse( this.request.url ).query )
+            Object.keys( this.query ).forEach( attr => {
+                if( this.query[ attr ].charAt(0) === '{' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                    if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
+                }
+            } )
         },
 
         PATCH: function() {
@@ -54,9 +60,9 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         this.body += someData;
 
-        if( this.body.length > 1e10 ) {
+        if( this.body.length > 1e6 ) {
             this.request.connection.destroy();
-            return this.requestEnded.reject("Too much data")
+            throw new Error("Too much data");
         }
     },
 
@@ -88,7 +94,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.PATCH.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
-    POST: function() {
+    POST() {
         return [
             this.slurpBody.bind(this),
             this.context.POST.bind(this),
@@ -112,7 +118,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function( result ) {
             var body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
-            return this.respond( { body: { success: true, result: body } } )
+            return this.respond( { body: body } )
         },
 
         PATCH: function( result ) {
@@ -199,7 +205,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         User() {
             return new Promise( ( resolve, reject ) => {
-                if( this.token === undefined ) return reject('No token')
+                if( ! this.token ) { this.user = { }; return resolve() }
                 this.jws.createVerify( {
                     algorithm: "HS256",
                     key: process.env.JWS_SECRET,
@@ -208,7 +214,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
                     if( ! verified ) reject( 'Invalid Signature' )
                     this.user = obj.payload
                     resolve()
-                } ).on( 'error', reject )
+                } ).on( 'error', e => { this.user = { }; return resolve() } )
             } )
         }
     }

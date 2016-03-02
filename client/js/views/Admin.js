@@ -17,6 +17,8 @@ Object.assign( Admin.prototype, Table.prototype, {
         .done()
     },
 
+    requiresRole: 'admin',
+
     selection: true,
 
     template: require('../templates/admin')( require('handlebars') )

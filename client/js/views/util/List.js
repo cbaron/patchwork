@@ -1,5 +1,5 @@
 var MyView = require('../MyView'),
-    ListView = function() { return MyView.apply( this, arguments ) };
+    ListView = function() { return MyView.apply( this, arguments ) }
 
 Object.assign( ListView.prototype, MyView.prototype, {
 
@@ -9,8 +9,12 @@ Object.assign( ListView.prototype, MyView.prototype, {
                 Object.assign( { container: this.templateData.container, model: model, selection: this.selection }, this.getItemViewOptions() ) )
             .on( 'removed', () => delete this.itemViews[ model.id ] )
 
-        if( this.selection ) this.itemViews[ model.id ].on( 'clicked', model => this.onItemClick( model ) )
         this.emit( 'itemAdded', model )
+        
+        if( model.get('unselectable') ) return
+
+        if( this.selection ) this.itemViews[ model.id ].on( 'clicked', model => this.onItemClick( model ) )
+        if( this.selected ) this.onItemClick( model )
     },
 
     collection: { },
@@ -23,12 +27,12 @@ Object.assign( ListView.prototype, MyView.prototype, {
             .on( 'remove', item => this.removeItem( item ) )
             .on( 'update', () => this.noItemCheck() )
             .on( 'sort', () => this.reOrderDOM() )
-
+           
         return this
     },
 
     fetchItems() {
-        this.items.fetch( { headers: this.fetch.headers, reset: true } )
+        this.items.fetch( Object.assign( {}, { reset: true }, this.fetch ) )
         .fail( err => console.log( 'Error fetching collection : ' + this.url + " -- " + err.stack ||err ) )
 
         return this
@@ -38,7 +42,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
         var clickedIndex = this.items.indexOf( model ),
             closest = undefined,
             maxDistance = 0,
-            selectedIndexes = Object.keys( this.selectedItems ).map( memberId => this.items.indexOf( this.items.get(memberId) ) ).sort()
+            selectedIndexes = Object.keys( this.selectedItems ).map( id => this.items.indexOf( this.items.get(id) ) ).sort()
 
         selectedIndexes.forEach( index => {
             var distance = Math.abs( index - clickedIndex )
@@ -76,7 +80,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     onItemClick: function( model ) {
         var method = this.util.format( '%sselectItem',
-                ( this.itemViews[ model.id ].templateData.container.hasClass('selected') && Object.keys( this.selectedItems ).length === 1 ) ? 'un' : '' )
+                ( this.itemViews[ model.id ].templateData.container.hasClass('selected') && this.selection !== 'multiComplex' ) ? 'un' : '' )
 
         this[ method ]( model )
     },
@@ -93,7 +97,7 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     postRender() {
 
-        if( this.selection === 'multi' ) {
+        if( this.selection === 'multiComplex' ) {
 
             this.$(document)
                 .on( 'keydown', this.handleKeydown.bind(this) )
@@ -106,14 +110,17 @@ Object.assign( ListView.prototype, MyView.prototype, {
         this.itemViews = []
         this.selectedItems = { }
        
-        this.createItems() 
+        this.createItems()
 
-        if( this.fetch )  this.fetchItems()
+        if( this.itemModels ) this.items.reset( ( typeof this.itemModels === "function" ) ? this.itemModels() : this.itemModels )
+        
+        if( this.fetch ) this.fetchItems()
     },
 
     removeItem( item ) {
         if( this.itemViews[ item.id ].templateData.container.hasClass('selected') ) this.unselectItem( item )
-        this.itemViews[ item.id ].templateData.container.remove()
+        this.itemViews[ item.id ].delete()
+        delete this.itemViews[ item.id ]
     },
 
     reOrderDOM: function() {
@@ -136,10 +143,12 @@ Object.assign( ListView.prototype, MyView.prototype, {
 
     },
 
-    selectItem: function( model ) {
+    selectItem( model ) {
         var selectedIds = Object.keys( this.selectedItems )
 
-        if( this.pressedKey === undefined ) selectedIds.forEach( memberId => this.unselectItem( this.selectedItems[ memberId ] ) ) 
+        if( ( this.pressedKey === undefined && this.selection === 'multiComplex' ) || this.selection === 'single' ) {
+            selectedIds.forEach( id => this.unselectItem( this.selectedItems[ id ] ) ) 
+        }
        
         if( this.pressedKey === 'shift' && selectedIds.length ) { 
             let end = this.getClosestClickedIndex( model ),

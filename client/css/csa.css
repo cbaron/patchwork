@@ -1,6 +1,9 @@
 .csa-class h2 {
   color: #c98702;
 }
+.csa-class h3 {
+  text-align: center;
+}
 .csa-class figure {
   margin: 0 auto;
   padding: 20px 0;

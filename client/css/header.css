@@ -11,7 +11,7 @@
   background-image: url('/static/img/headers/crop-fields-sm.jpg');
 }
 .signup .header-class {
-  background-image: url('/static/img/greens.jpg');
+  background-image: url('/static/img/headers/cherry-tomatoes-sm.jpg');
 }
 .about .header-class {
   background-image: url('/static/img/headers/dog-and-chard-sm.jpg');
@@ -45,13 +45,15 @@
   float: none;
   margin: 5px 16.5px 0;
   text-align: center;
-  font-size: 15px;
+  font-size: 17px;
   font-family: "RalewayRegular";
-  font-weight: 600;
   line-height: 1.5em;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   cursor: pointer;
+}
+.header-class .navbar-collapse .navbar-nav li:hover {
+  font-weight: 700;
 }
 .header-class .header-title {
   width: 100%;
@@ -76,6 +78,9 @@
   color: white;
 }
 .csa .header-class .header-title {
+  color: white;
+}
+.signup .header-class .header-title {
   color: white;
 }
 .get-involved .header-class .header-title {
@@ -109,6 +114,9 @@
   }
   .markets .header-class {
     background-image: url('/static/img/headers/greens-xs.jpg');
+  }
+  .signup .header-class {
+    background-image: url('/static/img/headers/cherry-tomatoes-xs.jpg');
   }
   .get-involved .header-class {
     background-image: url('/static/img/headers/on-the-tractor-xs.jpg');
@@ -161,6 +169,12 @@
     color: white;
   }
   .markets .header-class .navbar-collapse .navbar-nav li:hover {
+    color: #e6e6e6;
+  }
+  .signup .header-class .navbar-collapse .navbar-nav li {
+    color: white;
+  }
+  .signup .header-class .navbar-collapse .navbar-nav li:hover {
     color: #e6e6e6;
   }
   .get-involved .header-class .navbar-collapse .navbar-nav li {

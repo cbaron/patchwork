@@ -42,8 +42,16 @@
        url('/static/fonts/Raleway-Regular-webfont.svg') format('svg');
 }
 
+@font-face {
+  font-family: 'RalewayRegular';
+  font-weight: 700;
+  src: url('/static/fonts/Raleway-Bold-webfont.woff') format('woff'),
+       url('/static/fonts/Raleway-Bold-webfont.ttf') format('truetype');
+}
+
 .modal-backdrop {
     bottom: 0;
+    position: fixed;
 }
 
 html {
@@ -92,6 +100,10 @@ h2 {
 
 h3 {
     font-size: 20px;
+
+    a {
+        font-size: 2rem;
+    }
 }
 
 img {
@@ -100,11 +112,18 @@ img {
 }
 
 a {
+    color: #398439;
     cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2rem;
+
+    &:hover {
+        color: #398439;
+    }
 }
 
-button {
-    margin: 5px;
+a[href^="mailto:"] {
+    font-size: 1rem;
 }
 
 div.btn-row {
@@ -114,7 +133,7 @@ div.btn-row {
 div.header {
     margin: 5px 0 15px 0;
     text-align: center;
-    font-size: large;
+    font-size: 1.25rem;
 }
 
 .form-group {
@@ -165,6 +184,12 @@ ul, li {
     text-align: center;
 }
 
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 .w10 { width: 10%; }
 .w15 { width: 15%; }
 .w16 { width: 16%; }
@@ -173,6 +198,36 @@ ul, li {
 .w50 { width: 50%; }
 .w70 { width: 70%; }
 
-@media( max-width: 768px ) {
+
+.slide-in-right {
+    animation: slide-in-right 0.5s forwards;
+    -webkit-animation: slide-in-right 0.5s forwards;
 }
 
+.slide-in-left {
+    animation: slide-in-left 0.5s forwards;
+    -webkit-animation: slide-in-left 0.5s forwards;
+}
+
+@keyframes slide-in-left {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in-left {
+    0% { -webkit-transform: translateX(-100%); }
+    100% { -webkit-transform: translateX(0%); }
+}
+
+@keyframes slide-in-right {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in-right {
+    0% { -webkit-transform: translateX(100%); }
+    100% { -webkit-transform: translateX(0%); }
+}
+    
+@media( max-width: 768px ) {
+}

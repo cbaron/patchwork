@@ -21,7 +21,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     create( data ) {
-        //console.log(this.binaryUploadString)
+
         this.createProperties.forEach( property => {
             if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
             if( property.range === "File" ) data[ "imageUpload" ] = this.binaryUploadString
@@ -130,20 +130,19 @@ Object.assign( Resource.prototype, Table.prototype, {
     initTypeahead( property ) {
 
         var bloodhound = new Bloodhound( {
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace(property.descriptor.column.name),
             identify: obj => obj.id,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                filter: response => response[ property.fk.table ],
                 replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query) ),
-                url: this.util.format( "/%s?%s=%QUERY", property.descriptor.table, property.descriptor.column.name )
+                url: this.util.format( "/%s?%s=%QUERY&like=1", property.descriptor.table, property.descriptor.column.name )
             }
         } ),
         el = this.$( '#' + property.property )
 
         bloodhound.initialize()
 
-        el.typeahead( { hint: true }, { display: obj => obj.name, source: bloodhound.ttAdapter() } )
+        el.typeahead( { hint: true }, { display: obj => obj[ property.descriptor.column.name ], source: bloodhound.ttAdapter() } )
         .bind( 'typeahead:selected typeahead:autocompleted', ( obj, selected, name ) => {
             this[ property.fk.table + "Typeahead" ] = selected
             el.one( 'change', () => this[ property.fk.table + "Typeahead" ] = undefined )
@@ -193,12 +192,17 @@ Object.assign( Resource.prototype, Table.prototype, {
         var el = this.$( '#' + property.property )
 
         if( ! el ) return
-        if( ! property.fk ) return el.val( this.modelToEdit.get( property.property ) )
+        if( ! property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
         
         this.initTypeahead( property ) 
 
+        console.log( property )
+        console.log( this.modelToEdit.attributes )
+
         el.typeahead( 'val', this.modelToEdit.get( property.fk.recorddescriptor ).value )
     },
+
+    requiresRole: 'admin',
 
     showCreateDialog() {
 
@@ -216,7 +220,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             title: this.util.format( 'Create %s', this.label )
         } )
         .on( 'shown', () => this.createProperties.forEach( property => {
-            if( property.fk ) this.initTypeahead( property )
+            if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
             else if( property.range === "File" ) this.modalView.templateData.imageUpload.on( 'change', this.initFileUpload.bind(this) )
         } ) )
