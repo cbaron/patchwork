@@ -7,6 +7,12 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
 
     bcrypt: require('bcrypt-nodejs'),
 
+    context() {
+        [ 'password', 'email' ].forEach( attr => {
+            if( ! this.body[ attr ] ) throw new Error( this.format( "%s is a required field", attr ) )
+        } )
+    },
+
     handleQueryResult: function( result ) {
 
         if( ( result.rows.length !== 1 ) || ( this.bcrypt.compareSync( this.body.password, result.rows[0].password ) === false ) ) {
@@ -16,12 +22,15 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
         this.user = this._.omit( result.rows[0], [ 'password' ] )
 
         return this.User.attachUserRoles.call(this)
-        .then( () => this.User.createToken() )
+        .then( () => this.User.createToken.call(this) )
         .then( token => this.User.respondSetCookie.call( this, token, this.user ) )
     },
 
     POST() {
-        return this.slurpBody().then( () => this.queryMemberTable() ).then( result => this.handleQueryResult( result ) )
+        return this.slurpBody()
+        .then( () => this.context() )
+        .then( () => this.queryMemberTable() )
+        .then( result => this.handleQueryResult( result ) )
     },
 
     query( attr ) { return this.dbQuery( { query: this.format("SELECT * FROM person WHERE %s = $1", attr ), values: [ this.body.email ] } ) },
@@ -30,12 +39,6 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
         return this.query( "email" ).then( result => {
             if( result.rows.length === 1 ) return result
             return this.query( "username" )
-        } )
-    },
-
-    validatePOST() {
-        [ 'password', 'email' ].forEach( attr => {
-            if( ! this.body[ attr ] ) throw new Error( this.format( "%s is a required field", attr ) )
         } )
     }
 

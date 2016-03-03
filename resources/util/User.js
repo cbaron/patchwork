@@ -11,7 +11,9 @@ module.exports = {
                 header: { "alg": "HS256", "typ": "JWT" },
                 payload: JSON.stringify( this.user ),
                 privateKey: process.env.JWS_SECRET,
-            } ).on( 'done', signature => resolve( signature ) )
+            } )
+            .on( 'done', signature => resolve( signature ) )
+            .on( 'error', e => { this.user = { }; return resolve() } )
         } )
     },
 
