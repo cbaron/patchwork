@@ -147,10 +147,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     storeTableData( tableResult ) {
         tableResult.forEach( row => {
-             var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-             this.tables[ row.table_name ] =
-                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
-         } )
+            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
+            this.tables[ row.table_name ] =
+                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+        } )
     },
     
     storeTableMetaData( metaDataResult ) {

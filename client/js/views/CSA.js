@@ -24,8 +24,11 @@ Object.assign( CSA.prototype, GetData.prototype, {
         largeshareexamplecolumnone: require('../templates/listItem')( require('handlebars') ),
         largeshareexamplecolumntwo: require('../templates/listItem')( require('handlebars') )
     },
-    
+
     postRender() {
+
+        GetData.prototype.postRender.call(this)
+        
         if( window.location.hash ) {
             this.$('body').animate( {
                 scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top + this.$(window).height() }, 1000 )

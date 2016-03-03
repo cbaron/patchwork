@@ -24,8 +24,10 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         this.createProperties.forEach( property => {
             if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
-            if( property.range === "File" ) data[ "imageUpload" ] = this.binaryUploadString
+            if( property.range === "File" ) data[ "imageupload" ] = this.binaryUploadString
         } )
+
+        console.log( JSON.stringify(data) )
 
         this.$.ajax( {
             headers: { accept: 'application/json' },
@@ -33,7 +35,6 @@ Object.assign( Resource.prototype, Table.prototype, {
             data: JSON.stringify( data ),
             method: 'POST',
             url: this.util.format( "/%s", this.resource ),
-            //processData: ( this.createProperties.range === "File" ) ? false : true
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 ) this.setFields( response )
@@ -112,18 +113,15 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     initFileUpload( e ) {
         var reader = new FileReader(),
-            file = this.modalView.templateData.imageUpload[0].files[0]
+            preview = this.modalView.templateData.imageuploadPreview,
+            file = this.modalView.templateData.imageupload[0].files[0]
         
-        reader.onloadend = function( e ) {
-            var arrayBuffer = e.target.result
-            console.log( arrayBuffer )
-            console.log( arrayBuffer.byteLength )
-            var dataView = new DataView( arrayBuffer )
-            var decoder = new TextDecoder('utf-8')
-            this.binaryUploadString = decoder.decode( dataView )
-        }.bind(this);
+        reader.onload = function() {
+            preview.src = reader.result
+            this.binaryUploadString = reader.result
+        }
 
-        if( file ) reader.readAsArrayBuffer( file )
+        if( file ) reader.readAsDataURL( file )
 
     },
 
@@ -222,7 +220,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         .on( 'shown', () => this.createProperties.forEach( property => {
             if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
             else if( property.range === "Date" ) this.initDatepicker( property )
-            else if( property.range === "File" ) this.modalView.templateData.imageUpload.on( 'change', this.initFileUpload.bind(this) )
+            else if( property.range === "File" ) this.modalView.templateData.imageupload.on( 'change', this.initFileUpload.bind(this) )
         } ) )
         .on( 'submit', data => this.create(data) )
 
