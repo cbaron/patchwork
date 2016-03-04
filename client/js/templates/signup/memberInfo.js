@@ -19,7 +19,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 
   return "<div class=\"member-info col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2\" data-js=\"container\"><div class=\"header\">Please provide us with some information about yourself</div><form class=\"form-horizontal\">        "
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.fields : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </form></div>";
+    + "        <div style=\"display: none;\"><input type=\"text\" id=\"PreventChromeAutocomplete\" name=\"PreventChromeAutocomplete\" autocomplete=\"address-level4\" /></div></form></div>";
 },"useData":true});
 
 };

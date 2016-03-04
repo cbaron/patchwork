@@ -5,6 +5,7 @@ Object.assign( Html.prototype, {
     GET() {
         return this.respond( this.page( {
             bodyClass: this.path[1],
+            googleApiKey: process.env.GOOGLE_API_KEY,
             firefox: /Firefox/.test( this.request.headers[ 'user-agent' ] ),
             title: "Patchwork Gardens"
         } ) )

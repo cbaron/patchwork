@@ -150,6 +150,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
 
         this.groupDropoffPromise = share.getGroupDropoffs()
+
+        this.user.on( 'change:address', () => {
+            var selectedIds = Object.keys( this.selectedItems )
+
+            if( selectedIds.length === 0 ) return
+
+            this.unselectItem( this.items.get( selectedIds[0] ) )
+        } )
     },
 
     requiresLogin: false,
