@@ -24,10 +24,10 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         this.createProperties.forEach( property => {
             if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
-            if( property.range === "File" ) data[ "imageupload" ] = this.binaryUploadString
+            if( property.range === "File" ) {
+                console.log('definitely a file')
+                data[ "imageupload" ] = this.binaryUploadString }
         } )
-
-        console.log( JSON.stringify(data) )
 
         this.$.ajax( {
             headers: { accept: 'application/json' },
@@ -117,9 +117,10 @@ Object.assign( Resource.prototype, Table.prototype, {
             file = this.modalView.templateData.imageupload[0].files[0]
         
         reader.onload = function() {
-            preview.src = reader.result
+            console.log(file)
+            preview.attr( 'src', reader.result )
             this.binaryUploadString = reader.result
-        }
+        }.bind(this)
 
         if( file ) reader.readAsDataURL( file )
 
@@ -175,6 +176,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     postRender() {
         Table.prototype.postRender.call(this)
         this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
+        console.log(this.items)
     },
 
     setFields( instance ) {

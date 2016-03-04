@@ -9,3 +9,6 @@
   padding: 3px;
   position: absolute;
 }
+.resource .preview {
+  max-width: 300px;
+}

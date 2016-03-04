@@ -15,6 +15,9 @@
     width: 40%;
   }
 }
+.admin .modal .modal-body .preview {
+  max-width: 300px;
+}
 .admin-header {
   background-color: white;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
@@ -742,6 +745,10 @@ footer .future-days {
   font-size: .5rem;
   padding: 3px;
   position: absolute;
+}
+
+.resource .preview {
+  max-width: 300px;
 }
 .share-label {
   background-color: #f2f2f2;

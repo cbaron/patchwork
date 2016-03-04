@@ -60,7 +60,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         this.body += someData;
 
-        if( this.body.length > 1e6 ) {
+        if( this.body.length > 1e10 ) {
             this.request.connection.destroy();
             throw new Error("Too much data");
         }
