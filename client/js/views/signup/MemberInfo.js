@@ -161,7 +161,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     valid = false
                     this.showError( this.templateData[ field.name ], field.error )
                 } else {
-                    this.user.set( field.name,  this.templateData[ field.name ].val() )
+                    this.user.set( field.name, this.templateData[ field.name ].val() )
                 }
             } )
         } ) )
