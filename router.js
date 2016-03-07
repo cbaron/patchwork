@@ -96,6 +96,23 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         response.end( message )
     },
+
+    handleFileRequest( request, response, path ) {
+        var table = this.tables[ path[0] ],
+            column = this._( this.tables[ path[0] ].columns ).find( column =>
+                column.name === path[1] && column.dataType === "bytea" )
+
+        if( path.length !== 3 || table === undefined || column === undefined ) ||
+            Number.isNaN( parseInt( this.path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
+        
+        this._postgresQuery( this.util.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
+        .then( result => {
+            response.writeHead( 200, { Connection: "keep-alive" } )
+            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ].slice(15)body )
+        } )
+        .fail( err => this.handleFailure( response, err ) )
+        .done()
+    },
     
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
@@ -103,6 +120,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
+
+        if( ( request.method === "GET" && resource === "file" ) ) {
+                return this.handleFileRequest( request, response, path.splice(2,3) ) }
 
         if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
