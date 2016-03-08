@@ -72,16 +72,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         if( navigator.geolocation ) {
             navigator.geolocation.getCurrentPosition( position =>
               
-              this.addressAutoComplete.setBounds(
-                  new google.maps.Circle( {
-                      center: {
-                          lat: position.coords.latitude,
-                          lng: position.coords.longitude
-                      },
-                      radius: position.coords.accuracy } )
-                  .getBounds() )
+                this.addressAutoComplete.setBounds(
+                    new google.maps.Circle( {
+                        center: {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        radius: position.coords.accuracy } )
+                    .getBounds() )
 
-             )
+            )
         }
     },
 
@@ -106,7 +106,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
             
-            if( field.name === 'address' ) return
+            if( field.name === 'address' ) {
+                if( self.templateData.address.val() === '' ) self.showError( $el, field.error )
+                else return
+            }
                   
             self.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
                 if( valid ) { self.showValid( $el ) }
@@ -116,7 +119,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
 
         this.templateData.address.on( 'change', () => {
-            console.log( 'change' )
             if( ! this.validateAddress( this.templateData.address.val() ) ) {
                 this.showError( this.templateData.address, "Please select an address from the dropdown." )
             }
@@ -177,11 +179,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .fail( e => { console.log( e.stack || e ); return false } )
     },
     
-    validateAddress( address ) {
-        console.log( address )
-        console.log( this.user.get('address') )
-        return ( address === this.user.get('address') ) ? true : false
-    }
+    validateAddress( address ) { return ( address === this.user.get('address') ) ? true : false }
 
 } )
 
