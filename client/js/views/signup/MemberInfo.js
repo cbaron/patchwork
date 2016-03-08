@@ -108,7 +108,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             
             if( field.name === 'address' ) {
                 if( self.templateData.address.val() === '' ) self.showError( $el, field.error )
-                else return
+                return
             }
                   
             self.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
