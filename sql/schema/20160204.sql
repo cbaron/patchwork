@@ -10,7 +10,7 @@ CREATE TABLE staffprofile (
     id             SERIAL PRIMARY KEY,
     name           VARCHAR(100),
     profile        TEXT,
-    imageupload    bytea
+    image          bytea
 );
 
 CREATE TABLE deliveryoption (

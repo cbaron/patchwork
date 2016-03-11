@@ -1,4 +1,5 @@
-CREATE TABLE carouselimage (
+CREATE TABLE carousel (
     id             SERIAL PRIMARY KEY,
-    imageupload    bytea
+    filename       VARCHAR(100)
+    image          bytea
 );

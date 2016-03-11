@@ -4,7 +4,7 @@ var GetData = require('./util/GetData'),
 Object.assign( Home.prototype, GetData.prototype, {
 
     dataTables: [
-        { name: 'carouselimage', comparator: 'id'}
+        { name: 'carousel', comparator: 'id'}
     ],
 
     initialImage: { path: 'assortment.jpg', description: "Assorted vegetables" },

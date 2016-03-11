@@ -4,6 +4,10 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
+    _postgresQuery: function( query, args ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( query, args );
+    },
+
     _postgresQuerySync( query, args ) {
         return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args );
     },
@@ -99,14 +103,15 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     handleFileRequest( request, response, path ) {
+
         var table = this.tables[ path[0] ],
             column = this._( this.tables[ path[0] ].columns ).find( column =>
                 column.name === path[1] && column.dataType === "bytea" )
 
         if( path.length !== 3 || table === undefined || column === undefined ||
-            Number.isNaN( parseInt( this.path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
+            Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
         
-        this._postgresQuery( this.util.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
+        this._postgresQuery( this.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
         .then( result => {
             response.writeHead( 200, { Connection: "keep-alive" } )
             response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ].slice(15) )
@@ -118,13 +123,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
-
-        console.log(request.method)
-        console.log(request.url)
-        console.log(path)
-        console.log( 'accept: ' + request.headers.accept )
-        console.log(this.routes.REST[ path[1] ])
-        console.log(this.tables[ path[1] ])
 
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
