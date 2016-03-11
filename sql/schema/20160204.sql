@@ -9,8 +9,8 @@ CREATE TABLE contactinfo (
 CREATE TABLE staffprofile (
     id             SERIAL PRIMARY KEY,
     name           VARCHAR(100),
-    text           VARCHAR(1000),
-    imagepath      VARCHAR(100)
+    profile        TEXT,
+    imageupload    bytea
 );
 
 CREATE TABLE deliveryoption (

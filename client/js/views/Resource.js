@@ -11,6 +11,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         return {
             model: this.Instance,
             parse: response => {
+                console.log(response)
                 this.label = response.label;
                 this.recordDescriptor = response.recordDescriptor;
                 if( response.operation["@type"] === "Create" ) this.createProperties = response.operation.expects.supportedProperty
@@ -176,7 +177,6 @@ Object.assign( Resource.prototype, Table.prototype, {
     postRender() {
         Table.prototype.postRender.call(this)
         this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
-        console.log(this.items)
     },
 
     setFields( instance ) {
@@ -231,9 +231,11 @@ Object.assign( Resource.prototype, Table.prototype, {
     showDeleteDialog() {
         
         this.modelToDelete = this.hoveredModel
+        console.log(this.modelToDelete)
+        console.log( this.modelToDelete.get( this.recordDescriptor ) )
 
         this.modalView.show( {
-            body: this.util.format( 'Are you sure you would like to delete %s?', this.modelToDelete.get( this.recordDescriptor ) ),
+            body: this.util.format( '<div>Are you sure you would like to delete %s?</div>', this.modelToDelete.get( this.recordDescriptor ) ),
             confirmText: 'Yes',
             title: this.util.format( 'Delete %s', this.label )
         } )
@@ -244,16 +246,20 @@ Object.assign( Resource.prototype, Table.prototype, {
     showEditDialog() {
 
         this.modelToEdit = this.hoveredModel
-
+        console.log(this.createProperties)
         this.modalView.show( {
             body: this.templates.create( {
-                fields: this.createProperties.map( property => 
+                fields: this.createProperties.map( property => {
+                    console.log(property.range)
+                    console.log(property.property)
+                    console.log( this.getLabel(property.property) )
+                    console.log( this.templates[ property.range] )
                     this.templates[ property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
                         name: property.property,
                         label: this.getLabel( property.property ),
                     } )
-                )
+                } )
             } ),
             title: this.util.format( 'Edit %s', this.label )
         } )

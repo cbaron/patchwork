@@ -55,6 +55,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         "date": "Date",
         "integer": "Integer",
         "money": "Float",
+        "text": "Text",
         "timestamp with time zone": "DateTime"
     },
 
@@ -102,13 +103,13 @@ Object.assign( Router.prototype, MyObject.prototype, {
             column = this._( this.tables[ path[0] ].columns ).find( column =>
                 column.name === path[1] && column.dataType === "bytea" )
 
-        if( path.length !== 3 || table === undefined || column === undefined ) ||
+        if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( this.path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
         
         this._postgresQuery( this.util.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
         .then( result => {
             response.writeHead( 200, { Connection: "keep-alive" } )
-            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ].slice(15)body )
+            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ].slice(15) )
         } )
         .fail( err => this.handleFailure( response, err ) )
         .done()
@@ -118,11 +119,18 @@ Object.assign( Router.prototype, MyObject.prototype, {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
 
+        console.log(request.method)
+        console.log(request.url)
+        console.log(path)
+        console.log( 'accept: ' + request.headers.accept )
+        console.log(this.routes.REST[ path[1] ])
+        console.log(this.tables[ path[1] ])
+
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
-        if( ( request.method === "GET" && resource === "file" ) ) {
-                return this.handleFileRequest( request, response, path.splice(2,3) ) }
+        if( ( request.method === "GET" && path[1] === "file" ) ) {
+            return this.handleFileRequest( request, response, path.splice(2,3) ) }
 
         if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )

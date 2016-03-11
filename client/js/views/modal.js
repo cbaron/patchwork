@@ -59,6 +59,8 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         } else { this.templateData.header.hide() }
 
         if( options.body ) {
+            console.log(options.body)
+            console.log(this.templateData.body)
             this.templateData.body.removeClass('hide')
             this.slurpTemplate( { template: options.body, insertion: { $el: this.templateData.body, method: 'append' } } )
         } else if( !options.body && this.templateData.body.children().length === 0 ) { this.templateData.body.addClass('hide') }
