@@ -188,7 +188,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         var el = this.$( '#' + property.property )
 
         if( ! el ) return
-        if( ! property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
+        if( ! property.fk || !property.descriptor ) return el.val( ( property.range === "File" ) ? '' : this.modelToEdit.get( property.property ) )
         
         this.initTypeahead( property ) 
 
