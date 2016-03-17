@@ -37,16 +37,22 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
        
         return this.dbQuery( { query: this.getHyperQuery() } )
         .then( result => {
-            rv[ this.path[1] ] = result.rows.map( row => {
-                var obj = { }
-                this._( this.tables[ this.path[1] ].columns )
-                    .filter( column => column.fk )
-                    .forEach( column => {
-                        var columnName = [ column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ].join('.')
+            var tableName = this.path[1],
+                table = this.tables[ tableName ],
+                fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),
+                fkColumns = this._( table.columns ).filter( column => column.fk )
 
-                        row[ columnName ] = { table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
-                        delete row[ column.name ]
-                    } )
+            rv[ tableName ] = result.rows.map( row => {
+                var obj = { }
+                
+                fkColumns.forEach( column => {
+                    var columnName = [ column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ].join('.')
+                    row[ columnName ] = { table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
+                    delete row[ column.name ]
+                } )
+
+                fileColumns.forEach( column => row[ column.name ] = { type: 'file' } )
+                
                 return row
             } )
             this.respond( { body: rv } )
@@ -96,7 +102,18 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 }
             } )
         
-        return this.format( "Select %s.* %s FROM %s %s", this.path[1], ( fkSelect.length ) ? ", " + fkSelect.join(', ') : "", this.path[1], fkFrom.join(' ') )
+        return this.format( "Select %s %s FROM %s %s", this.getSelect(), ( fkSelect.length ) ? ", " + fkSelect.join(', ') : "", this.path[1], fkFrom.join(' ') )
+ 
+    },
+
+    getSelect() {
+        var tableName = this.path[1], rv = [ ]
+
+        this.tables[ tableName ].columns.forEach( column => {
+            if( column.dataType !== 'bytea' ) rv.push( this.format( '%s.%s', tableName, column.name ) )
+        } )
+
+        return rv.join(', ')
     }
 
 } )

@@ -1,11 +1,27 @@
 var ListItem = require('./util/ListItem'),
-    InstanceRow = function() { return ListItem.apply( this, arguments ) }
+    InstanceRow = function() { 
+        this.files = [ ]
+        return ListItem.apply( this, arguments )
+    }
 
 Object.assign( InstanceRow.prototype, ListItem.prototype, {
 
     getFieldValue( field ) {
-        var modelValue = this.model.get(field)
-        return ( typeof modelValue === "object" && modelValue !== null ) ? modelValue.value : modelValue
+        
+        var modelValue = this.model.get(field),
+            isFile = false
+        
+        if( modelValue === null ) return ''
+
+        if( typeof modelValue === "object" && ( modelValue.type === "file" || modelValue.type === "Buffer" ) ) {
+            if( modelValue.src ) { return this.$('<img/>').attr( { src: modelValue.src } ).css( { height: '50px' } ) }
+            else if( modelValue.imageEl ) { return modelValue.imageEl }
+            else { isFile = true; this.files.push( field ); return '<span class="glyphicon glyphicon-picture"></span>' }
+        }
+
+        return ( typeof modelValue === "object" && modelValue !== null )
+            ? modelValue.value
+            : modelValue
     },
 
     getTemplateOptions() {
@@ -15,11 +31,34 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
         }
     },
 
+    loadFileIfVisible() {
+        var top = this.templateData.container[0].getBoundingClientRect().top,
+            visible = ( top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight) )
+        
+        if( visible ) this.imageLoader.add( this.files.map( column => ( { id: this.model.id, column: column } ) ) )
+        
+    },
+
     postRender() {
         ListItem.prototype.postRender.call(this)
         this.model.on( 'change', () =>
-            Object.keys( this.model.attributes ).forEach( field => this.templateData[ field ].text( this.getFieldValue( field ) ) )
+            Object.keys( this.model.attributes ).forEach( field =>
+                this.templateData[ field ].html( this.getFieldValue( field ) )
+            )
         )
+        //this.files.forEach( file =>
+           //     this.templateData[ file ].find('span').addClass('has-spinner').append( this.spinner.spin().el )
+       // )
+        if( this.files.length ) this.$(window).on( 'scroll', this._.throttle( () => this.loadFileIfVisible(), 500 ) )
+    },
+
+    retrievedImage( field ) {
+        //this.files = this._( this.files ).reject( field )
+        //if( this.files.length === 0 ) this.$(window).off( 'scroll', this.throttledLoad )
+    },
+
+    size() {
+        if( this.files.length ) this.loadFileIfVisible()
     },
 
     template: require('../templates/instanceRow')( require('handlebars') )

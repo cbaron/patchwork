@@ -1,11 +1,21 @@
 var Table = require('./util/Table'),
-    Resource = function() { return Table.apply( this, arguments ) }
+    Resource = function() {
+        this.spinner = new this.Spinner( {
+            color: '#fff',
+            length: 15,
+            scale: 0.25,
+            width: 5
+        } ).spin()
+        return Table.apply( this, arguments )
+    }
 
 Object.assign( Resource.prototype, Table.prototype, {
 
     Instance: require('../models/Instance'),
 
     ItemView: require('./InstanceRow'),
+
+    Spinner: require('../spin'),
 
     collection() {
         return {
@@ -21,11 +31,12 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     create( data ) {
-
         this.createProperties.forEach( property => {
-            if( property.fk ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
-            if( property.range === "File" ) data[ 'image' ] = this.imageUpload
+            if( property.fk && this[ property.fk.table + "Typeahead" ] ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
+            if( property.range === "File" ) { data[ property.property ] = this[ property.property + "File" ] }
         } )
+
+        this.modalView.templateData.confirmBtn.append( this.spinner.spin().el ).addClass('has-spinner')
 
         this.$.ajax( {
             headers: { accept: 'application/json' },
@@ -35,9 +46,11 @@ Object.assign( Resource.prototype, Table.prototype, {
             url: this.util.format( "/%s", this.resource ),
         } )
         .done( ( response, textStatus, jqXHR ) => {
-            if( this.items.length === 0 ) this.setFields( response )
+            if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
             this.items.add( response )
-            this.modalView.hide()
+            this.modalView.templateData.confirmBtn.removeClass('has-spinner')
+            this.spinner.stop()
+            this.modalView.hide( { reset: true } )
         } )
             
     },
@@ -53,7 +66,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         .done( ( response, textStatus, jqXHR ) => {
             this.items.remove( this.modelToDelete )
             this.modelToDelete = undefined
-            this.modalView.hide()
+            this.modalView.hide( { reset: true } )
         } )
     },
 
@@ -64,14 +77,18 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.createProperties.forEach( property => {
             if( property.fk ) {
                 if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ property.property ]; return }
-
                 data[ property.property ] = this[ property.fk.table + "Typeahead" ].id
-                modelAttrs[ property.fk.recorddescriptor ].id = this[ property.fk.table + "Typeahead" ].id
-                modelAttrs[ property.fk.recorddescriptor ].value = this[ property.fk.table + "Typeahead" ][property.fk.recorddescriptor]
-            } else {
-                modelAttrs[ property.property ] = data[ property.property ]
+                this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) ).id = this[ property.fk.table + "Typeahead" ].id
+                this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) )
+                    .value = this[ property.fk.table + "Typeahead" ][property.fk.recorddescriptor]
+            } else if( property.range === "File" ) {
+                data[ property.property ] = this[ property.property + "File" ]
+                if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
+                    this.modelToEdit.get( property.property ).src = this[ property.property + "File" ]
+                }
             }
-            if( property.range === "File" ) data[ "image" ] = this.imageUpload
+            else { modelAttrs[ property.property ] = data[ property.property ] }
+            
         } )
 
         this.$.ajax( {
@@ -82,9 +99,10 @@ Object.assign( Resource.prototype, Table.prototype, {
             url: this.util.format( "/%s/%d", this.resource, this.modelToEdit.id )
         } )
         .done( ( response, textStatus, jqXHR ) => {
-            this.modelToEdit.set( modelAttrs )
+            this.modelToEdit.set( modelAttrs, { silent: true } )
+            this.modelToEdit.trigger( 'change', this.modelToEdit )
             this.modelToEdit = undefined
-            this.modalView.hide()
+            this.modalView.hide( { reset: true } )
         } )
             
     },
@@ -101,6 +119,22 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     fetch: { headers: { accept: "application/ld+json" } },
 
+    getImage( model ) {   
+        var imageEl = new Image();
+       
+        imageEl.style.height = '50px' 
+        imageEl.onload = () => {
+            if( this.itemViews[ model.id ] ) this.itemViews[ model.id ].templateData[ model.get('column') ].html( imageEl )
+            if( this.items.get(model.id) ) this.items.get( model.id ).get( model.get('column') ).imageEl = imageEl
+            //this.itemViews[ model.id ].retrievedImage( model.get('column' ) )
+            window.setTimeout( () => this.imageLoader.remove(model), 100 )
+        }
+        
+        imageEl.onerror = () => window.setTimeout( () => this.imageLoader.remove(model), 100 )
+
+        imageEl.src = this.util.format( '/file/%s/%s/%d', this.resource, model.get('column'), model.id )
+    },
+
     getLabel( property ) {
         return this.format.capitalizeFirstLetter( property )
     },
@@ -109,18 +143,26 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.$( '#' + property.property ).datetimepicker( { format: "YYYY-MM-DD", minDate: this.moment() } )
     },
 
-    initFileUpload( e ) {
-        var reader = new FileReader(),
-            preview = this.modalView.templateData.imagePreview,
-            file = this.modalView.templateData.image[0].files[0]
-        
-        reader.onload = function() {
-            preview.attr( 'src', reader.result )
-            this.imageUpload = reader.result
-        }.bind(this)
+    initFileUploader( property ) {
+        var $el = this.modalView.templateData[ property.property ]
 
-        if( file ) reader.readAsDataURL( file )
+        this[ property.property + "File" ] === undefined
 
+        $el.on( 'change', e => {
+            var reader = new FileReader(),
+                btn = this.modalView.templateData[ property.property + "Btn" ]
+                    
+            btn.addClass('has-spinner').append( this.spinner.spin().el )
+
+            reader.onload = ( evt ) => {
+                this[ property.property + "File" ] = evt.target.result
+                btn.removeClass('has-spinner')
+                this.spinner.stop()
+                this.$( '#' + property.property + "-preview" ).attr( { src: evt.target.result } )
+            }
+
+            reader.readAsDataURL( e.originalEvent.target.files[0] )
+        } )
     },
 
     initTypeahead( property ) {
@@ -170,10 +212,32 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.templateData.editBtn.addClass('hide')
     },
 
-    postRender() {
-        Table.prototype.postRender.call(this)
-        this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
+    populateModalField( property ) {
+        var el = this.modalView.templateData[ property.property ], img
+
+        if( ! el ) return
+        if( property.range === 'File' ) {
+            this.initFileUploader( property )
+            img = this.itemViews[ this.modelToEdit.id ].templateData[ property.property ].find('img')
+            if( img.length ) this.modalView.templateData[ property.property + "Preview" ].replaceWith( img.clone(false).attr( { id: property.property + "-preview" } ) )
+            return
+        }
+        if( !property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
+        
+        this.initTypeahead( property ) 
+        el.typeahead( 'val', this.modelToEdit.get( property.columnName ).value )
     },
+
+    postRender() {
+        this.imageLoader = new ( require('backbone').Collection )()
+            .on( 'add', () => { if( this.imageLoader.length === 1 ) this.getImage( this.imageLoader.at(0) ) } )
+            .on( 'remove', () => { if( this.imageLoader.length ) this.getImage( this.imageLoader.at(0) ) } )
+
+        Table.prototype.postRender.call(this)
+        this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )
+    },
+
+    requiresRole: 'admin',
 
     setFields( instance ) {
         var keys = Object.keys( instance ), width = Math.floor( 100 / keys.length )
@@ -184,20 +248,14 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
     },
 
-    populateModalField( property ) {
-        var el = this.$( '#' + property.property )
-
-        if( ! el ) return
-        if( ! property.fk || !property.descriptor ) return el.val( ( property.range === "File" ) ? '' : this.modelToEdit.get( property.property ) )
-        
-        this.initTypeahead( property ) 
-
-        el.typeahead( 'val', this.modelToEdit.get( property.fk.recorddescriptor ).value )
-    },
-
-    requiresRole: 'admin',
-
     showCreateDialog() {
+
+        var onShown = () => this.createProperties.forEach( property => {
+                if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
+                else if( property.range === "Date" ) this.initDatepicker( property )
+                else if( property.range === "File" ) this.initFileUploader( property )
+             } ),
+            onSubmit = data => this.create(data)
 
         this.modalView.show( {
             body: this.templates.create( {
@@ -212,35 +270,43 @@ Object.assign( Resource.prototype, Table.prototype, {
             } ),
             title: this.util.format( 'Create %s', this.label )
         } )
-        .on( 'shown', () => this.createProperties.forEach( property => {
-            if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
-            else if( property.range === "Date" ) this.initDatepicker( property )
-            else if( property.range === "File" ) this.modalView.templateData.image.on( 'change', this.initFileUpload.bind(this) )
-        } ) )
-        .on( 'submit', data => this.create(data) )
+        .on( 'shown', onShown )
+        .on( 'submit', onSubmit )
+        .on( 'hidden', () => {
+            this.modalView.removeListener( 'submit', onSubmit )
+            this.modalView.removeListener( 'shown', onShown )
+        } )
 
     },
 
     showDeleteDialog() {
+
+        var onSubmit = () => this.deleteModel()
         
         this.modelToDelete = this.hoveredModel
 
         this.modalView.show( {
-            body: this.util.format( '<div>Are you sure you would like to delete %s?</div>', this.modelToDelete.get( this.recordDescriptor ) ),
+            body: this.util.format( 'Are you sure you would like to delete %s?', this.modelToDelete.get( this.recordDescriptor ) ),
             confirmText: 'Yes',
             title: this.util.format( 'Delete %s', this.label )
         } )
-        .on( 'submit', () => this.deleteModel() )
-        .on( 'hidden', () => this.modelToDelete = undefined )
+        .on( 'submit', onSubmit )
+        .on( 'hidden', () => {
+            this.modelToDelete = undefined
+            this.modalView.removeListener( 'submit', onSubmit )
+        } )
     },
 
     showEditDialog() {
 
+        var populateModalFields = () => this.createProperties.forEach( property => this.populateModalField( property ) ),
+            onSubmit = data => this.edit(data)
+
         this.modelToEdit = this.hoveredModel
-        
+
         this.modalView.show( {
             body: this.templates.create( {
-                fields: this.createProperties.map( property =>        
+                fields: this.createProperties.map( property => 
                     this.templates[ property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
                         name: property.property,
@@ -250,12 +316,13 @@ Object.assign( Resource.prototype, Table.prototype, {
             } ),
             title: this.util.format( 'Edit %s', this.label )
         } )
-        .on( 'shown', () => this.createProperties.forEach( property => {
-            this.populateModalField( property )
-            if( property.range === "File" ) this.modalView.templateData.image.on( 'change', this.initFileUpload.bind(this) )
-        } ) )
-        .on( 'submit', data => this.edit(data) )
-        .on( 'hidden', () => this.modelToEdit = undefined )
+        .on( 'shown', populateModalFields )
+        .on( 'submit', onSubmit )
+        .on( 'hidden', () => {
+            this.modalView.removeListener( 'shown', populateModalFields )
+            this.modalView.removeListener( 'submit', onSubmit )
+            this.modelToEdit = undefined
+        } )
     },
 
     template: require('../templates/resource')( require('handlebars') ),
@@ -263,7 +330,7 @@ Object.assign( Resource.prototype, Table.prototype, {
     templates: Object.assign( {}, Table.prototype.templates, {
         create: require('../templates/createInstance')( require('handlebars') ),
         Date: require('../templates/form/Date')( require('handlebars') ),
-        File: require('../templates/form/imageUpload')( require('handlebars') ),
+        File: require('../templates/form/File')( require('handlebars') ),
         Float: require('../templates/form/Text')( require('handlebars') ),
         Integer: require('../templates/form/Text')( require('handlebars') ),
         Text: require('../templates/form/Text')( require('handlebars') ),

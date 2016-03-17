@@ -8,7 +8,7 @@ Object.assign( Table.prototype, List.prototype, {
     },
 
     getItemViewOptions() {
-        return { container: this.templateData.body, fields: this.fields }
+        return { container: this.templateData.body, fields: this.fields, imageLoader: this.imageLoader, spinner: this.spinner }
     },
 
     getTemplateOptions() { return { fields: this.fields } },

@@ -1,14 +1,14 @@
 module.exports = function(Handlebars) {
 
 return Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var alias1=container.lambda, alias2=container.escapeExpression;
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
   return "        <td class=\"w"
     + alias2(alias1((depth0 != null ? depth0.width : depth0), depth0))
     + "\" data-js=\""
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
     + "\">"
-    + alias2(alias1((depth0 != null ? depth0.value : depth0), depth0))
+    + ((stack1 = alias1((depth0 != null ? depth0.value : depth0), depth0)) != null ? stack1 : "")
     + "</td>    ";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {};

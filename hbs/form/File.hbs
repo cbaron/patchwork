@@ -1,11 +1,10 @@
 <div class="form-group file-upload">
     <label for="{{name}}" class="col-sm-3 control-label">{{label}}</label>
     <div class="col-sm-9">
-        <button id="{{name}}-btn" class="btn btn-primary upload-wrap {{class}}">
+        <button data-js="{{name}}Btn" id="{{name}}-btn" class="btn btn-primary upload-wrap {{class}}">
             <span>Upload File</span>
             <input type="file" id="{{name}}" data-js="{{name}}" />
         </button>
         <img class="preview" id="{{name}}-preview" data-js="{{name}}Preview" />
     </div>
-
 </div>

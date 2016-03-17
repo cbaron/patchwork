@@ -15,7 +15,8 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
     },
 
     hide: function( options ) {
-        this.templateData = this._.omit( this.templateData, [ "email", "password" ] )
+        
+        this.templateData = this._.pick( this.templateData, this.templateDataKeys )
 
         this.templateData.container.modal('hide')
 
@@ -51,6 +52,8 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
     show( options ) {
 
+        this.templateDataKeys = Object.keys( this.templateData )
+
         var bsOpts = { show: true }
 
         if( options.title ) {
@@ -60,7 +63,9 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
 
         if( options.body ) {
             this.templateData.body.removeClass('hide')
-            this.slurpTemplate( { template: options.body, insertion: { $el: this.templateData.body, method: 'append' } } )
+            options.body.charAt(0) === '<'
+                ? this.slurpTemplate( { template: options.body, insertion: { $el: this.templateData.body, method: 'append' } } )
+                : this.templateData.body.html( options.body )
         } else if( !options.body && this.templateData.body.children().length === 0 ) { this.templateData.body.addClass('hide') }
 
         if( options.hideFooter ) this.templateData.footer.hide() 
@@ -77,7 +82,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         }
         
         this.templateData.container.modal( bsOpts )
-
+        
         return this;
     },
 

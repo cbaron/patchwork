@@ -107,9 +107,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         var table = this.tables[ path[0] ],
             column = this._( this.tables[ path[0] ].columns ).find( column =>
                 column.name === path[1] && column.dataType === "bytea" )
-        console.log(path)
-        console.log(table)
-        console.log(column)
+        
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
         
