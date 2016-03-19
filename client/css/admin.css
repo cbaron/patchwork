@@ -4,6 +4,3 @@
 .admin .modal .modal-body .preview {
   height: 50px;
 }
-.admin .modal .modal-body .preview.has-spinner {
-  width: 50px;
-}

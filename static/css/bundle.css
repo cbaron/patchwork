@@ -22,10 +22,6 @@
 .admin .modal .modal-body .preview {
   height: 50px;
 }
-
-.admin .modal .modal-body .preview.has-spinner {
-  width: 50px;
-}
 .admin-header {
   background-color: white;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
