@@ -76,7 +76,9 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     executeShareQueries( share ) {
         var membershareid;
-        return this.dbQuery( { query: 'INSERT INTO membershare ( memberid, shareid ) VALUES ( $1, $2 ) RETURNING id', values: [ this.memberid, share.id ] } )
+        return this.dbQuery( {
+            query: 'INSERT INTO membershare ( memberid, shareid, paymentmethod ) VALUES ( $1, $2, $3 ) RETURNING id',
+            values: [ this.memberid, share.id, ( Object.keys( this.body.payment ).length ) ? "Stripe" : "Cash" ] } )
         .then( function( result ) {
             membershareid = result.rows[0].id
             this.membershareids.push( membershareid )

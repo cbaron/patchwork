@@ -13,7 +13,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.user.set( {
             address: place.formatted_address,
             addressModel: {
-                postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name
+                postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
+                types: place.types
             }
         } )
     },
@@ -88,7 +89,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     getTemplateOptions() { return { fields: this.fields } },
 
     initAutocomplete() {
-        this.addressAutoComplete = new google.maps.places.Autocomplete( this.templateData.address.get(0), { types: ['geocode'] } )
+        this.addressAutoComplete = new google.maps.places.Autocomplete( this.templateData.address.get(0), { types: ['address'] } )
 
         this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
     },
@@ -117,12 +118,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
-
-        this.templateData.address.on( 'change', () => {
-            if( ! this.validateAddress( this.templateData.address.val() ) ) {
-                this.showError( this.templateData.address, "Please select an address from the dropdown." )
-            }
-        } )
     },
 
     removeError( $el ) {
@@ -179,7 +174,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .fail( e => { console.log( e.stack || e ); return false } )
     },
     
-    validateAddress( address ) { return ( address === this.user.get('address') ) ? true : false }
+    validateAddress( address ) {
+        if( this.$.trim( address ).length === 0 ) return false
+        
+        this.user.set( {
+            customAddress:
+                ( address !== this.user.get('address') || ( ! this._( this.user.get('addressModel').types ).contains( "street_address" ) ) ) ? true : false
+        } )
+
+        return true
+    },
 
 } )
 

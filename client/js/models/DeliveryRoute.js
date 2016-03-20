@@ -14,8 +14,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         return Object.assign( response, {
 
             dayOfWeek: this.dayOfWeekMap[ response.dayofweek ],
-            starttime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.starttime ].join(' ') ).format('hA'),
-            endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.endtime ].join(' ') ).format('hA')
+            starttime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.starttime ].join(' ') ).format('h:mmA'),
+            endtime: this.moment( [ this.moment().format('YYYY-MM-DD'), response.endtime ].join(' ') ).format('h:mmA')
         } )
     },
 

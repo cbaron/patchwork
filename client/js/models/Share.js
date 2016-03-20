@@ -161,7 +161,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     timeToHumanTime( time ) {
-        return this.moment( [ this.moment().format('YYYY-MM-DD'), time ].join(' ') ).format('hA') 
+        return this.moment( [ this.moment().format('YYYY-MM-DD'), time ].join(' ') ).format('h:mmA') 
     }
 
 } ) )

@@ -24,10 +24,15 @@ Object.assign( Delivery.prototype, List.prototype, {
 
     template: require('../../templates/signup/delivery')( require('handlebars') ),
 
+    templates: {
+        verifyAddress: require('../../templates/signup/verifyAddress')( require('handlebars') )
+    },
+
     validate() {
         var valid = true,
             errorViews = [ ],
-            targetErrorView = null
+            targetErrorView = null,
+            homeDeliverySelected = false
        
         Object.keys( this.itemViews ).forEach( id => {
             if( ! this.itemViews[id].valid ) {
@@ -39,7 +44,10 @@ Object.assign( Delivery.prototype, List.prototype, {
            
         if( ! valid ) return false 
 
-        Object.keys( this.itemViews ).forEach( id => this.items.get( id ).set( 'selectedDelivery', this.itemViews[id].selectedDelivery ) )
+        Object.keys( this.itemViews ).forEach( id => {
+            this.items.get( id ).set( 'selectedDelivery', this.itemViews[id].selectedDelivery )
+            if( this.itemViews[id].selectedDelivery.isHome ) homeDeliverySelected = true
+        } )
         
         if( errorViews.length ) {
             targetErrorView = errorViews.slice(-1)[0]
@@ -49,6 +57,26 @@ Object.assign( Delivery.prototype, List.prototype, {
         }
 
         if( ! valid ) return
+
+        if( homeDeliverySelected && this.user.get('customAddress') ) {
+            this.modalView.show( {
+                body: this.templates.verifyAddress( { address: this.user.get('address'), zipCode: this.user.get('addressModel').postalCode } ),
+                hideCancelBtn: true,
+                static: true,
+                title: 'Verify Adress' } )
+            .on( 'submit', data => {
+                this.user.set( {
+                    address: data.verifiedAddress,
+                    addressModel: Object.assign( this.user.get('addressModel'), { postalCode: data.verifiedZipCode, types: [ "street_address" ]  } ),
+                    customAddress: false
+                }, { silent: true } )
+                this.Q( this.$.ajax( {
+                    data: JSON.stringify( this.user.attributes ),
+                    method: "PATCH",
+                    url: "/user" } ) )
+                this.modalView.templateData.container.modal('hide')
+            } )
+        }
 
         return true
     }

@@ -104,7 +104,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
-                    this.selectedDelivery = Object.assign( {}, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
+                    this.selectedDelivery = Object.assign(
+                        { deliveryoptionid: deliveryOption.id, isHome: true },
+                        this.homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] )
+                    )
                     
                     this.valid = true
                 } )
