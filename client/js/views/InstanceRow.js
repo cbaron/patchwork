@@ -36,7 +36,6 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
             visible = ( top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight) )
         
         if( visible ) this.imageLoader.add( this.files.map( column => ( { id: this.model.id, column: column } ) ) )
-        
     },
 
     postRender() {
@@ -44,22 +43,21 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
         this.model.on( 'change', () =>
             Object.keys( this.model.attributes ).forEach( field =>
                 this.templateData[ field ].html( this.getFieldValue( field ) )
-            )
-        )
-        //this.files.forEach( file =>
-           //     this.templateData[ file ].find('span').addClass('has-spinner').append( this.spinner.spin().el )
-       // )
-        if( this.files.length ) this.$(window).on( 'scroll', this._.throttle( () => this.loadFileIfVisible(), 500 ) )
+            ) )
+        
+        if( this.files.length ) this.$(window).on( 'scroll', this.throttledLoad )
     },
 
     retrievedImage( field ) {
-        //this.files = this._( this.files ).reject( field )
-        //if( this.files.length === 0 ) this.$(window).off( 'scroll', this.throttledLoad )
+        this.files = this._.reject( this.files, () => field )
+        if( this.files.length === 0 ) this.$(window).off( 'scroll', this.throttledLoad )
     },
 
     size() {
         if( this.files.length ) this.loadFileIfVisible()
     },
+
+    throttledLoad() { this._.throttle( () => this.loadFileIfVisible(), 500 ) },
 
     template: require('../templates/instanceRow')( require('handlebars') )
 

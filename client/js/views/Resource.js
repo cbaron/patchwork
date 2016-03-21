@@ -119,14 +119,18 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     fetch: { headers: { accept: "application/ld+json" } },
 
-    getImage( model ) {   
+    getImage( model ) {
+           
         var imageEl = new Image();
        
         imageEl.style.height = '50px' 
         imageEl.onload = () => {
-            if( this.itemViews[ model.id ] ) this.itemViews[ model.id ].templateData[ model.get('column') ].html( imageEl )
+            if( this.itemViews[ model.id ] ) {
+                this.itemViews[ model.id ].templateData[ model.get('column') ].html( imageEl )
+                this.itemViews[ model.id ].retrievedImage( model.get('column') )
+            }
             if( this.items.get(model.id) ) this.items.get( model.id ).get( model.get('column') ).imageEl = imageEl
-            //this.itemViews[ model.id ].retrievedImage( model.get('column' ) )
+            
             window.setTimeout( () => this.imageLoader.remove(model), 100 )
         }
         
