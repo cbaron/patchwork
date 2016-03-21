@@ -6,6 +6,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     Dropoff: require('./Dropoff'),
 
+    dayOfWeekMap: require('./DeliveryRoute').prototype.dayOfWeekMap,
+
     getDeliveryDates() {
         var dates = [ ],
             deliveryDay = this.get('selectedDelivery').dayofweek,
@@ -15,9 +17,6 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             startDay = startDay = deliveryDate.day()
         
         if( ! deliveryDay ) throw Error("No delivery Day")
-
-        
-        
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )

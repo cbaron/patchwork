@@ -31,13 +31,22 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     buildShares() {
-        return this.signupData.shares.map( share => ( {
-            id: share.id,
-            label: share.label,
-            options: share.get('selectedOptions'),
-            delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid' ] ),
-            skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
-        } ) )
+        
+
+        return this.signupData.shares.map( share => {
+            var selectedWeeks = share.get('selectedDates').length,
+                skipDays = share.get('skipDays'),
+                skipDaysTotal = ( skipDays ) ? skipDays.length : 0
+            
+            return {
+                id: share.id,
+                description: this.util.format('You will be receiving fresh food for %d out of %d weeks', selectedWeeks, selectedWeeks + skipDaysTotal),
+                label: share.get('label'),
+                options: share.get('selectedOptions'),
+                delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
+                skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined
+            }
+        } )
     },
 
     cardPaymentSelected() {
@@ -119,9 +128,35 @@ Object.assign( Summary.prototype, View.prototype, {
                              .get( selectedOption.shareoptionoptionid )
                              .get('price').replace(/\$|,/g, "") ) )
                     .reduce( ( a, b ) => a + b ),
-                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") )
+                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
+                address = ( selectedDelivery.get('name') === 'home' )
+                    ? this.user.get('address')
+                    : ( groupDropoff )
+                        ? groupDropoff.get('address')
+                        : '41 North Lutheran Church Road, Dayton, OH'
 
-                share.set( { total: weeklyTotal * share.get('selectedDates').length } )
+                share.set( {
+                    selectedDelivery: Object.assign( share.get('selectedDelivery'), {
+                        description:
+                            this.util.format('Delivery method: %s. Day/Time: %s %s-%s. Place: %s. Cost: %s per week.',
+                                selectedDelivery.get('label'),
+                                share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
+                                times.starttime, times.endtime, address, selectedDelivery.get('price') ) } ),
+                    total: weeklyTotal * share.get('selectedDates').length
+                } )
+
+                share.set( 'selectedOptions', share.get( 'selectedOptions' ).map( selectedOption => {
+                    var shareOption = share.get('shareoptions').get( selectedOption.shareoptionid ),
+                        shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
+
+                    return Object.assign( selectedOption, {
+                        description: this.util.format( '%s: %s %s %s per week',
+                            shareOption.get('name'),
+                            shareOptionOption.get('label'),
+                            shareOptionOption.get('unit') || "",
+                            shareOptionOption.get('price') )
+                    } )
+                } ) )
 
                 return {
                     shareBox: this.templates.ShareBox( share.attributes ),

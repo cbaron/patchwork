@@ -3,6 +3,8 @@ var Base = require('./__proto__'),
 
 Object.assign( Signup.prototype, Base.prototype, {
 
+    Email: require('../lib/Email'),
+
     Stripe: require('../lib/stripe'),
 
     User: require('./util/User'),
@@ -107,6 +109,29 @@ Object.assign( Signup.prototype, Base.prototype, {
         )
     },
 
+    generateEmailBody() {
+        var body = this.format('Hello %s,\r\n\r\nThanks for signing up for out CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
+
+        body += this.body.shares.map( share =>
+            this.format('Share: %s\r\n\t%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n',
+                share.label,
+                share.description,
+                share.delivery.description,
+                this._( share.options ).pluck('description').join('\r\n\t\t') )
+        ).join('\r\n\r\n')
+
+        body += this.getEmailPaymentString()
+        
+        return body
+    },
+
+    getEmailPaymentString( ) {
+        var total = this.body.total.toFixed(2)
+        return ( Object.keys( this.body.payment ).length )
+            ? this.format( "\r\n\r\nThank you for your online payment of $%s. If there is a problem with the transaction, we will be in touch", total )
+            : this.format( "\r\n\r\nYour total comes to $%s.  Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!", total )
+    },
+
     insertMember( personid ) {
         return this.dbQuery( {
             query: "INSERT INTO member ( phonenumber, address, extraaddress, balance, personid, heard, zipcode ) VALUES ( $1, $2, $3, $4, $5, $6, $7 ) RETURNING id",
@@ -134,7 +159,17 @@ Object.assign( Signup.prototype, Base.prototype, {
             if( this.error ) return this.respond( { body: { error: this.error } } )
             this.user.state.signup = { }
             return this.Q( this.User.createToken.call(this) )
-                    .then( token => this.User.respondSetCookie.call( this, token, { } ) )
+            .then( token => {
+                this.token = token
+                
+                return this.Q( this.Email.send( {
+                    to: this.body.member.email,
+                    from: 'eat.patchworkgardens@gmail.com',
+                    subject: 'Welcome to Patchwork Gardens CSA',
+                    body: this.generateEmailBody() } )
+                ).fail( err => console.log("Error generating confirmation email : " + err.stack || ere ) )
+            } )
+            .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
         }
     } ),
 

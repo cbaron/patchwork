@@ -39,6 +39,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     },
 
     dbQuery: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( data.query, data.values ),
+    dbQuerySync: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( data.query, data.values ),
 
     GET: function() {
         return [
