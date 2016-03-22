@@ -40,7 +40,9 @@ Object.assign( Summary.prototype, View.prototype, {
             
             return {
                 id: share.id,
-                description: this.util.format('You will be receiving fresh food for %d out of %d weeks', selectedWeeks, selectedWeeks + skipDaysTotal),
+                description:
+                    this.util.format('From %s to %s you will be receiving fresh food for %d out of %d weeks.',
+                        share.get('humanStartdate'), share.get('humanEnddate'), selectedWeeks, selectedWeeks + skipDaysTotal),
                 label: share.get('label'),
                 options: share.get('selectedOptions'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
@@ -110,6 +112,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
+        var spaceTwoTab = "\r\n\t\t"
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {
@@ -138,10 +141,13 @@ Object.assign( Summary.prototype, View.prototype, {
                 share.set( {
                     selectedDelivery: Object.assign( share.get('selectedDelivery'), {
                         description:
-                            this.util.format('Delivery method: %s. Day/Time: %s %s-%s. Place: %s. Cost: %s per week.',
+                            this.util.format('Delivery:%sMethod: %s%sDay/Time: %ss %s-%s%sPlace: %s%sCost: %s per week',
+                                spaceTwoTab,
                                 selectedDelivery.get('label'),
+                                spaceTwoTab,
                                 share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
-                                times.starttime, times.endtime, address, selectedDelivery.get('price') ) } ),
+                                times.starttime, times.endtime, spaceTwoTab,
+                                address, spaceTwoTab, selectedDelivery.get('price') ) } ),
                     total: weeklyTotal * share.get('selectedDates').length
                 } )
 
@@ -150,7 +156,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
 
                     return Object.assign( selectedOption, {
-                        description: this.util.format( '%s: %s %s %s per week',
+                        description: this.util.format( '%s: %s %s -- %s per week',
                             shareOption.get('name'),
                             shareOptionOption.get('label'),
                             shareOptionOption.get('unit') || "",

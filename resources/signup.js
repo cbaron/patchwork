@@ -110,12 +110,15 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     generateEmailBody() {
-        var body = this.format('Hello %s,\r\n\r\nThanks for signing up for out CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
+        var body = this.format('Hello %s,\r\n\r\nThanks for signing up for our CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
 
         body += this.body.shares.map( share =>
-            this.format('Share: %s\r\n\t%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n',
+            this.format('Share: %s\r\n\t%s%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n',
                 share.label,
                 share.description,
+                ( share.skipDays.length )
+                    ? this.format( "  You have opted out of produce for the following dates: %s.", share.skipDays.map( day => day.slice(5) ).join(', ') )
+                    : "",
                 share.delivery.description,
                 this._( share.options ).pluck('description').join('\r\n\t\t') )
         ).join('\r\n\r\n')
@@ -128,7 +131,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     getEmailPaymentString( ) {
         var total = this.body.total.toFixed(2)
         return ( Object.keys( this.body.payment ).length )
-            ? this.format( "\r\n\r\nThank you for your online payment of $%s. If there is a problem with the transaction, we will be in touch", total )
+            ? this.format( "\r\n\r\nThank you for your online payment of $%s. If there is a problem with the transaction, we will be in touch.", total )
             : this.format( "\r\n\r\nYour total comes to $%s.  Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!", total )
     },
 
