@@ -1,20 +1,18 @@
-var GetData = require('./util/GetData'),
-    About = function() { return GetData.apply( this, arguments ) }
+var CustomContent = require('./util/CustomContent'),
+    About = function() { return CustomContent.apply( this, arguments ) }
 
-Object.assign( About.prototype, GetData.prototype, {
-
-    dataTables: [ { name: 'staffprofile', comparator: 'id'} ],
-
-    getTemplateOptions() {
-        return { images: this.images }
-    },
+Object.assign( About.prototype, CustomContent.prototype, {
 
     requiresLogin: false,
+
+    tables: [ 
+        { name: 'staffprofile', comparator: 'id', el: 'staffProfile', image: true, template: 'staffProfile'}
+    ],
 
     template: require('../templates/about')( require('handlebars') ),
 
     templates: {
-        staffprofile: require('../templates/staffProfile')( require('handlebars') )
+        staffProfile: require('../templates/staffProfile')( require('handlebars') )
     }
 
 } )

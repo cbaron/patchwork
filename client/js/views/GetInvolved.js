@@ -1,22 +1,20 @@
-var GetData = require('./util/GetData'),
-    GetInvolved = function() { return GetData.apply( this, arguments ) }
+var CustomContent = require('./util/CustomContent'),
+    GetInvolved = function() { return CustomContent.apply( this, arguments ) }
 
-Object.assign( GetInvolved.prototype, GetData.prototype, {
-
-    dataTables: [
-        { name: 'internshipduty', comparator: 'id'},
-        { name: 'internshipqualification', comparator: 'id'},
-        { name: 'internshipcompensation', comparator: 'id'}
-    ],
+Object.assign( GetInvolved.prototype, CustomContent.prototype, {
 
     requiresLogin: false,
+
+    tables: [
+        { name: 'internshipduty', comparator: 'id', el: 'dutyList', template: 'listItem' },
+        { name: 'internshipqualification', comparator: 'id', el: 'qualificationList', template: 'listItem' },
+        { name: 'internshipcompensation', comparator: 'id', el: 'compensationList', template: 'listItem' }
+    ],
 
     template: require('../templates/getInvolved')( require('handlebars') ),
 
     templates: {
-        internshipduty: require('../templates/listItem')( require('handlebars') ),
-        internshipqualification: require('../templates/listItem')( require('handlebars') ),
-        internshipcompensation: require('../templates/listItem')( require('handlebars') )
+        listItem: require('../templates/listItem')( require('handlebars') )
     }
 
 } )

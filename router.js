@@ -103,7 +103,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     handleFileRequest( request, response, path ) {
-        console.log("file")
         var table = this.tables[ path[0] ],
             column = this._( this.tables[ path[0] ].columns ).find( column =>
                 column.name === path[1] && column.dataType === "bytea" )
@@ -123,7 +122,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
-        console.log(path)
 
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }

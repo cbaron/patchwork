@@ -1,21 +1,20 @@
-var GetData = require('./util/GetData'),
-    Markets = function() { return GetData.apply( this, arguments ) }
+var CustomContent = require('./util/CustomContent'),
+    Markets = function() { return CustomContent.apply( this, arguments ) }
 
-Object.assign( Markets.prototype, GetData.prototype, {
-
-    dataTables: [
-        { name: 'farmermarket', comparator: 'id'},
-        { name: 'retailoutlet', comparator: 'id'},
-        { name: 'restaurant', comparator: 'name'}
-    ],
+Object.assign( Markets.prototype, CustomContent.prototype, {
 
     requiresLogin: false,
+
+    tables: [
+        { name: 'farmermarket', comparator: 'id', el: 'farmerMarkets', template: 'business' },
+        { name: 'retailoutlet', comparator: 'id', el: 'retailOutlets', template: 'business' },
+        { name: 'restaurant', comparator: 'name', el: 'restaurants', template: 'restaurant' }
+    ],
 
     template: require('../templates/markets')( require('handlebars') ),
 
     templates: {
-        farmermarket: require('../templates/business')( require('handlebars') ),
-        retailoutlet: require('../templates/business')( require('handlebars') ),
+        business: require('../templates/business')( require('handlebars') ),
         restaurant: require('../templates/restaurant')( require('handlebars') )
     }
 

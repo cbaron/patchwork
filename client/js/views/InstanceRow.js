@@ -45,19 +45,19 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
                 this.templateData[ field ].html( this.getFieldValue( field ) )
             ) )
         
-        if( this.files.length ) this.$(window).on( 'scroll', this.throttledLoad )
+        if( this.files.length ) this.$(window).on( 'scroll.throttledLoad', this.throttledLoad.bind(this) )
     },
 
     retrievedImage( field ) {
         this.files = this._.reject( this.files, () => field )
-        if( this.files.length === 0 ) this.$(window).off( 'scroll', this.throttledLoad )
+        if( this.files.length === 0 ) this.$(window).off( 'scroll.throttledLoad' )
     },
 
     size() {
         if( this.files.length ) this.loadFileIfVisible()
     },
 
-    throttledLoad() { this._.throttle( () => this.loadFileIfVisible(), 500 ) },
+    throttledLoad() { this._.throttle( this.loadFileIfVisible(), 500 ) },
 
     template: require('../templates/instanceRow')( require('handlebars') )
 

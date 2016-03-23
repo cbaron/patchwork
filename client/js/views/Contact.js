@@ -1,16 +1,16 @@
-var GetData = require('./util/GetData'),
-    Contact = function() { return GetData.apply( this, arguments ) }
+var CustomContent = require('./util/CustomContent'),
+    Contact = function() { return CustomContent.apply( this, arguments ) }
 
-Object.assign( Contact.prototype, GetData.prototype, {
-
-    dataTables: [ { name: 'contactinfo', comparator: 'id'} ],
+Object.assign( Contact.prototype, CustomContent.prototype, {
 
     requiresLogin: false,
+
+    tables: [ { name: 'contactinfo', comparator: 'id', el: 'contactInfo', template: 'contact'} ],
 
     template: require('../templates/contact')( require('handlebars') ),
 
     templates: {
-        contactinfo: require('../templates/business')( require('handlebars') )
+        contact: require('../templates/business')( require('handlebars') )
     }
 
 } )
