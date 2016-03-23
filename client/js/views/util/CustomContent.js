@@ -8,6 +8,8 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
             var imageEl = new Image();
             imageEl.src = this.util.format( '/file/%s/image/%s', table.name, model.id )
             imageEl.onload = () => {
+                console.log('image loaded')
+                console.log(model)
                 model.set( 'tableName', table.name )
                 this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )
                 resolve()
