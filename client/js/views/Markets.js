@@ -6,8 +6,8 @@ Object.assign( Markets.prototype, CustomContent.prototype, {
     requiresLogin: false,
 
     tables: [
-        { name: 'farmermarket', comparator: 'id', el: 'farmerMarkets', template: 'business' },
-        { name: 'retailoutlet', comparator: 'id', el: 'retailOutlets', template: 'business' },
+        { name: 'farmermarket', comparator: 'name', el: 'farmerMarkets', template: 'business' },
+        { name: 'retailoutlet', comparator: 'name', el: 'retailOutlets', template: 'business' },
         { name: 'restaurant', comparator: 'name', el: 'restaurants', template: 'restaurant' }
     ],
 

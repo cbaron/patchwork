@@ -21,9 +21,9 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
     tables: [
         { name: 'csapageimage', comparator: 'id', el: 'csaImage', image: true, template: 'csaImage' },
-        { name: 'csastatements', comparator: 'id', el: 'csaStatements', template: 'listItem'},
-        { name: 'largeshareexamplecolumnone', comparator: 'id', el: 'shareContentsColumnOne', template: 'listItem' },
-        { name: 'largeshareexamplecolumntwo', comparator: 'id', el: 'shareContentsColumnTwo', template: 'listItem' }
+        { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
+        { name: 'largeshareexamplecolumnone', comparator: 'position', el: 'shareContentsColumnOne', template: 'listItem' },
+        { name: 'largeshareexamplecolumntwo', comparator: 'position', el: 'shareContentsColumnTwo', template: 'listItem' }
     ],
 
     template: require('../templates/csa')( require('handlebars') ),

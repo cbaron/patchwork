@@ -11,7 +11,7 @@ Object.assign( Home.prototype, CustomContent.prototype, {
     requiresLogin: false,
 
     tables: [
-        { name: 'carousel', comparator: 'id', el: 'carouselInner', image: true, template: 'carouselImage' }
+        { name: 'carousel', comparator: 'position', el: 'carouselInner', image: true, template: 'carouselImage' }
     ],
 
     template: require('../templates/home')( require('handlebars') ),

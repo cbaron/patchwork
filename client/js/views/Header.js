@@ -5,6 +5,16 @@ Object.assign( Header.prototype, Nav.prototype, {
 
     insertionMethod: 'before',
 
+    postRender() {
+        console.log('header postRender')
+        var headerImages = new ( this.Collection.extend( { url: "/header" } ) )()
+        headerImages.fetch().then( () => {
+            headerImages.models.forEach( model => {
+                console.log(model)
+            })
+        })
+    },
+
     size() {
         if( this.$(window).width() > 767 ) {
             this.templateData.headerTitle.on( 'click', this.navigate.bind(this) )

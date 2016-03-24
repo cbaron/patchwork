@@ -6,7 +6,7 @@ Object.assign( About.prototype, CustomContent.prototype, {
     requiresLogin: false,
 
     tables: [ 
-        { name: 'staffprofile', comparator: 'id', el: 'staffProfile', image: true, template: 'staffProfile'}
+        { name: 'staffprofile', comparator: 'position', el: 'staffProfile', image: true, template: 'staffProfile'}
     ],
 
     template: require('../templates/about')( require('handlebars') ),
