@@ -1,12 +1,4 @@
-@black-hover: lighten(black, 30%);
-@white-hover: darken(white, 10%);
-@about-maroon: #59020C;
-@about-hover: lighten(@about-maroon, 10%);
-@get-involved-blue: #0A2D3F;
-@get-involved-hover: lighten(@get-involved-blue, 15%);
-
-
-.header-class {
+.header {
 
     border: none;				
 	height: 475px;
@@ -15,38 +7,6 @@
 	background-repeat: no-repeat;
 	color: #666;
 	position: relative;
-
-	.home & {
-		background-image: url('/static/img/headers/crop-fields-sm.jpg');
-	}
-
-	.signup & {
-		background-image: url('/static/img/headers/cherry-tomatoes-sm.jpg');
-	}
-
-	.about & {
-		background-image: url('/static/img/headers/dog-and-chard-sm.jpg');
-	}
-
-	.csa & {
-		background-image: url('/static/img/headers/cauliflower-sm.jpg');
-	}
-
-	.markets & {
-		background-image: url('/static/img/headers/greens-sm.jpg');
-	}
-
-	.members & {
-		background-image: url('/static/img/dog_with_chard.jpg');
-	}
-
-	.get-involved & {
-		background-image: url('/static/img/headers/on-the-tractor-sm.jpg');
-	}
-
-	.contact & {
-		background-image: url('/static/img/headers/sidekick-shed-sm.jpg');
-	}
 
 	.navbar-collapse {
 		width: 100%;
@@ -88,42 +48,9 @@
 		font-weight: 300;
 		line-height: 1em;
 		text-transform: uppercase;
-		text-align: center;		
-
-		.home & {
-			color: black;			
-		}
-
-		.about & {
-			color: @about-maroon;
-		}
-
-		.markets & {
-			color: white;
-		}
-
-		.csa & {
-			color: white;
-		}
-
-		.signup & {
-			color: white;
-		}
-
-		.members & {
-			
-		}
-
-		.get-involved & {
-			color: @get-involved-blue;
-		}
-
-		.contact & {
-			color: black;
-		}
+		text-align: center;
 		
 	}
-
 
     @media only screen and (max-width: 500px) {
 		height: 315px;
@@ -139,34 +66,6 @@
 	}
 
     @media only screen and (max-width: 767px) {
-
-        .home & {
-            background-image: url('/static/img/headers/crop-fields-xs.jpg');
-        }
-
-        .about & {
-            background-image: url('/static/img/headers/dog-and-chard-xs.jpg');
-        }
-
-        .csa & {
-            background-image: url('/static/img/headers/cauliflower-xs.jpg');
-        }
-
-        .markets & {
-            background-image: url('/static/img/headers/greens-xs.jpg');
-        }
-
-        .signup & {
-        	background-image: url('/static/img/headers/cherry-tomatoes-xs.jpg');
-        }
-
-        .get-involved & {
-            background-image: url('/static/img/headers/on-the-tractor-xs.jpg');
-        }
-
-        .contact & {
-        	background-image: url('/static/img/headers/sidekick-shed-xs.jpg');
-        }
 
 		.navbar-collapse .navbar-nav {
 			position: absolute;
@@ -191,106 +90,16 @@
 
 		.header-title {
 			cursor: default;
-		}        
+		}
+
 	}
 
 	@media only screen and (min-width: 768px) {
 
-		.navbar-collapse .navbar-nav li {
-
-        	.home & {
-				color: black;					
-                &:hover {
-					color: @black-hover;                      
-				}
-            }
-
-            .about & {
-            	color: @about-maroon;
-            	&:hover {
-            		color: @about-hover;
-            	}
-            }
-
-			.csa & {
-				color: white;
-				&:hover {
-					color: @white-hover;
-				}
-			}
-
-			.markets & {
-				color: white;
-				&:hover {
-					color: @white-hover;
-				}
-			}
-
-			.signup & {
-				color: white;
-				&:hover {
-					color: @white-hover;
-				}
-			}
-
-			.get-involved & {
-				color: @get-involved-blue;
-				&:hover {
-					color: @get-involved-hover;
-				}
-			}
-
-			.contact & {
-				color: black;
-				&:hover {
-					color: lighten(black, 20%);
-				}
-			}
-
-		}
-
 		.navbar-collapse .navbar-nav>li:first-child {
 			display: none;
 		}
-
-		.header-title {
-
-			.home & {
-				&:hover {
-					color: @black-hover;
-				}
-			}
-
-			.about & { 
-				&:hover {
-					color: @about-hover;
-				}
-			}
-
-			.csa & {
-				&:hover {
-					color: @white-hover;
-				}
-			}
-
-			.markets & {
-				&:hover {
-					color: @white-hover;
-				}
-			}
-
-			.get-involved & {
-				&:hover {
-					color: @get-involved-hover;
-				}
-			}
-
-			.contact & {
-				&:hover {
-					color: lighten(black, 15%);
-				}
-			}
-		}		
+		
 	}
 
 }

@@ -31,11 +31,12 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
         }
     },
 
-    loadFileIfVisible() {
+    loadFileIfVisible() {        
         var top = this.templateData.container[0].getBoundingClientRect().top,
-            visible = ( top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight) )
+            visible = ( top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight) ),
+            imageLoaderModel = { id: this.model.id, columns: this.files }
         
-        if( visible ) this.imageLoader.add( this.files.map( column => ( { id: this.model.id, column: column } ) ) )
+        if( visible ) this.imageLoader.add( imageLoaderModel )
     },
 
     postRender() {
@@ -49,13 +50,11 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
     },
 
     retrievedImage( field ) {
-        this.files = this._.reject( this.files, () => field )
+        this.files = this._( this.files ).reject( file => file === field )
         if( this.files.length === 0 ) this.$(window).off( 'scroll.throttledLoad' )
     },
 
-    size() {
-        if( this.files.length ) this.loadFileIfVisible()
-    },
+    size() { if( this.files.length ) this.loadFileIfVisible() },
 
     throttledLoad() { this._.throttle( this.loadFileIfVisible(), 500 ) },
 

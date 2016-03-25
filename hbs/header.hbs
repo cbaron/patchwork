@@ -1,4 +1,4 @@
-<nav data-js="container" class="row header-class navbar navbar-default">
+<nav data-js="container" class="row header navbar navbar-default">
     <div class="navbar-header">
         <button data-js="hamburger" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-menu" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -8,8 +8,8 @@
         </button>
     </div>
 
-    <div class="collapse navbar-collapse" id="mobile-menu">
-        <ul class="nav navbar-nav">
+    <div data-js="navbarCollapse" class="collapse navbar-collapse" id="mobile-menu">
+        <ul data-js="navLinks" class="nav navbar-nav">
             <li data-id="{{home.name}}" data-js="{{home.name}}">{{home.label}}</li>
             {{#each fields}}
                 <li data-id="{{this.name}}" data-js="{{this.name}}">{{this.label}}</li>

@@ -81,7 +81,7 @@ Object.assign( Resource.prototype, Table.prototype, {
                 this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) ).id = this[ property.fk.table + "Typeahead" ].id
                 this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) )
                     .value = this[ property.fk.table + "Typeahead" ][property.fk.recorddescriptor]
-            } else if( property.range === "File" ) {
+            } else if( property.range === "File" ) {                
                 data[ property.property ] = this[ property.property + "File" ]
                 if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
                     this.modelToEdit.get( property.property ).src = this[ property.property + "File" ]
@@ -90,7 +90,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             else { modelAttrs[ property.property ] = data[ property.property ] }
             
         } )
-
+        
         this.$.ajax( {
             headers: { accept: 'application/json' },
             contentType: 'application/json',
@@ -119,24 +119,23 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     fetch: { headers: { accept: "application/ld+json" } },
 
-    getImage( model ) {
-           
+    getImage( model ) {  
         var imageEl = new Image();
        
         imageEl.style.height = '50px' 
         imageEl.onload = () => {
             if( this.itemViews[ model.id ] ) {
-                this.itemViews[ model.id ].templateData[ model.get('column') ].html( imageEl )
-                this.itemViews[ model.id ].retrievedImage( model.get('column') )
+                this.itemViews[ model.id ].templateData[ model.column ].html( imageEl )
+                this.itemViews[ model.id ].retrievedImage( model.column )
             }
-            if( this.items.get(model.id) ) this.items.get( model.id ).get( model.get('column') ).imageEl = imageEl
+            if( this.items.get( model.id ) ) this.items.get( model.id ).get( model.column ).imageEl = imageEl
             
             window.setTimeout( () => this.imageLoader.remove(model), 100 )
         }
         
         imageEl.onerror = () => window.setTimeout( () => this.imageLoader.remove(model), 100 )
 
-        imageEl.src = this.util.format( '/file/%s/%s/%d', this.resource, model.get('column'), model.id )
+        imageEl.src = this.util.format( '/file/%s/%s/%d', this.resource, model.column, model.id )
     },
 
     getLabel( property ) {
@@ -164,7 +163,7 @@ Object.assign( Resource.prototype, Table.prototype, {
                 this.spinner.stop()
                 this.$( '#' + property.property + "-preview" ).attr( { src: evt.target.result } )
             }
-
+            
             reader.readAsDataURL( e.originalEvent.target.files[0] )
         } )
     },
@@ -232,10 +231,21 @@ Object.assign( Resource.prototype, Table.prototype, {
         el.typeahead( 'val', this.modelToEdit.get( property.columnName ).value )
     },
 
+    initGetImage() {
+        var id = this.imageLoader.at(0).id,
+            columns = this.imageLoader.at(0).get('columns')
+
+        columns.forEach( column => this.getImage( { 'id': id, 'column': column } ) )
+    },
+
     postRender() {
         this.imageLoader = new ( require('backbone').Collection )()
-            .on( 'add', () => { if( this.imageLoader.length === 1 ) this.getImage( this.imageLoader.at(0) ) } )
-            .on( 'remove', () => { if( this.imageLoader.length ) this.getImage( this.imageLoader.at(0) ) } )
+            .on( 'add', () => { 
+                if( this.imageLoader.length === 1 ) this.initGetImage()
+            } )
+            .on( 'remove', () => { 
+                if( this.imageLoader.length ) this.initGetImage()
+            } )
 
         Table.prototype.postRender.call(this)
         this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )

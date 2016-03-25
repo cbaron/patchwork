@@ -13,7 +13,7 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "<nav data-js=\"container\" class=\"row header-class navbar navbar-default\"><div class=\"navbar-header\"><button data-js=\"hamburger\" type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#mobile-menu\" aria-expanded=\"false\"><span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span></button></div><div class=\"collapse navbar-collapse\" id=\"mobile-menu\"><ul class=\"nav navbar-nav\"><li data-id=\""
+  return "<nav data-js=\"container\" class=\"row header navbar navbar-default\"><div class=\"navbar-header\"><button data-js=\"hamburger\" type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#mobile-menu\" aria-expanded=\"false\"><span class=\"sr-only\">Toggle navigation</span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span></button></div><div data-js=\"navbarCollapse\" class=\"collapse navbar-collapse\" id=\"mobile-menu\"><ul data-js=\"navLinks\" class=\"nav navbar-nav\"><li data-id=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))
     + "\" data-js=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.home : depth0)) != null ? stack1.name : stack1), depth0))

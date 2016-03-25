@@ -1,4 +1,4 @@
-.header-class {
+.header {
   border: none;
   height: 475px;
   width: auto;
@@ -7,40 +7,16 @@
   color: #666;
   position: relative;
 }
-.home .header-class {
-  background-image: url('/static/img/headers/crop-fields-sm.jpg');
-}
-.signup .header-class {
-  background-image: url('/static/img/headers/cherry-tomatoes-sm.jpg');
-}
-.about .header-class {
-  background-image: url('/static/img/headers/dog-and-chard-sm.jpg');
-}
-.csa .header-class {
-  background-image: url('/static/img/headers/cauliflower-sm.jpg');
-}
-.markets .header-class {
-  background-image: url('/static/img/headers/greens-sm.jpg');
-}
-.members .header-class {
-  background-image: url('/static/img/dog_with_chard.jpg');
-}
-.get-involved .header-class {
-  background-image: url('/static/img/headers/on-the-tractor-sm.jpg');
-}
-.contact .header-class {
-  background-image: url('/static/img/headers/sidekick-shed-sm.jpg');
-}
-.header-class .navbar-collapse {
+.header .navbar-collapse {
   width: 100%;
   border: none;
 }
-.header-class .navbar-collapse .navbar-nav {
+.header .navbar-collapse .navbar-nav {
   text-align: center;
   width: 100%;
   margin-bottom: 10px;
 }
-.header-class .navbar-collapse .navbar-nav li {
+.header .navbar-collapse .navbar-nav li {
   display: inline-block;
   float: none;
   margin: 5px 16.5px 0;
@@ -52,10 +28,10 @@
   letter-spacing: 1.5px;
   cursor: pointer;
 }
-.header-class .navbar-collapse .navbar-nav li:hover {
+.header .navbar-collapse .navbar-nav li:hover {
   font-weight: 700;
 }
-.header-class .header-title {
+.header .header-title {
   width: 100%;
   padding: 0 15px;
   margin: 5px auto;
@@ -68,69 +44,27 @@
   text-transform: uppercase;
   text-align: center;
 }
-.home .header-class .header-title {
-  color: black;
-}
-.about .header-class .header-title {
-  color: #59020C;
-}
-.markets .header-class .header-title {
-  color: white;
-}
-.csa .header-class .header-title {
-  color: white;
-}
-.signup .header-class .header-title {
-  color: white;
-}
-.get-involved .header-class .header-title {
-  color: #0A2D3F;
-}
-.contact .header-class .header-title {
-  color: black;
-}
 @media only screen and (max-width: 500px) {
-  .header-class {
+  .header {
     height: 315px;
   }
-  .header-class .header-title {
+  .header .header-title {
     font-size: 55px;
   }
 }
 @media only screen and (max-width: 400px) {
-  .header-class .header-title {
+  .header .header-title {
     font-size: 40px;
   }
 }
 @media only screen and (max-width: 767px) {
-  .home .header-class {
-    background-image: url('/static/img/headers/crop-fields-xs.jpg');
-  }
-  .about .header-class {
-    background-image: url('/static/img/headers/dog-and-chard-xs.jpg');
-  }
-  .csa .header-class {
-    background-image: url('/static/img/headers/cauliflower-xs.jpg');
-  }
-  .markets .header-class {
-    background-image: url('/static/img/headers/greens-xs.jpg');
-  }
-  .signup .header-class {
-    background-image: url('/static/img/headers/cherry-tomatoes-xs.jpg');
-  }
-  .get-involved .header-class {
-    background-image: url('/static/img/headers/on-the-tractor-xs.jpg');
-  }
-  .contact .header-class {
-    background-image: url('/static/img/headers/sidekick-shed-xs.jpg');
-  }
-  .header-class .navbar-collapse .navbar-nav {
+  .header .navbar-collapse .navbar-nav {
     position: absolute;
     width: 90%;
     left: 5%;
     margin: 0;
   }
-  .header-class .navbar-collapse .navbar-nav li {
+  .header .navbar-collapse .navbar-nav li {
     height: 100%;
     color: #ccc;
     background-color: #131313;
@@ -142,72 +76,12 @@
     padding: 5px 0;
     line-height: 2em;
   }
-  .header-class .header-title {
+  .header .header-title {
     cursor: default;
   }
 }
 @media only screen and (min-width: 768px) {
-  .home .header-class .navbar-collapse .navbar-nav li {
-    color: black;
-  }
-  .home .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #4d4d4d;
-  }
-  .about .header-class .navbar-collapse .navbar-nav li {
-    color: #59020C;
-  }
-  .about .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #8b0313;
-  }
-  .csa .header-class .navbar-collapse .navbar-nav li {
-    color: white;
-  }
-  .csa .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #e6e6e6;
-  }
-  .markets .header-class .navbar-collapse .navbar-nav li {
-    color: white;
-  }
-  .markets .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #e6e6e6;
-  }
-  .signup .header-class .navbar-collapse .navbar-nav li {
-    color: white;
-  }
-  .signup .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #e6e6e6;
-  }
-  .get-involved .header-class .navbar-collapse .navbar-nav li {
-    color: #0A2D3F;
-  }
-  .get-involved .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #145c81;
-  }
-  .contact .header-class .navbar-collapse .navbar-nav li {
-    color: black;
-  }
-  .contact .header-class .navbar-collapse .navbar-nav li:hover {
-    color: #333333;
-  }
-  .header-class .navbar-collapse .navbar-nav > li:first-child {
+  .header .navbar-collapse .navbar-nav > li:first-child {
     display: none;
-  }
-  .home .header-class .header-title:hover {
-    color: #4d4d4d;
-  }
-  .about .header-class .header-title:hover {
-    color: #8b0313;
-  }
-  .csa .header-class .header-title:hover {
-    color: #e6e6e6;
-  }
-  .markets .header-class .header-title:hover {
-    color: #e6e6e6;
-  }
-  .get-involved .header-class .header-title:hover {
-    color: #145c81;
-  }
-  .contact .header-class .header-title:hover {
-    color: #262626;
   }
 }

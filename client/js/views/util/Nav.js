@@ -33,11 +33,11 @@ Object.assign( Nav.prototype, MyView.prototype, {
     requiresLogin: false,
 
     navigate( e ) {
-        var id = this.$( e.currentTarget ).attr( 'data-id' )        
+        var id = this.$( e.currentTarget ).attr( 'data-id' )     
         this.router.navigate( id, { trigger: true } )     
     },
 
-    toggleLogo() { this.$('.header-title').toggle() }
+    toggleLogo() { this.templateData.headerTitle.toggle() }
 
 } )
 
