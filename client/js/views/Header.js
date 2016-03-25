@@ -54,6 +54,7 @@ Object.assign( Header.prototype, Nav.prototype, {
     },
 
     size() {
+        
         var model = this.model
 
         if( this.$(window).width() > 767 ) {

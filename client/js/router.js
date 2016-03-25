@@ -19,8 +19,8 @@ module.exports = new (
         },
 
         handler( resource ) {
-            this.adminHeader = require('./views/AdminHeader')
-            this.header = require('./views/Header')
+
+            this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
             this.footer = require('./views/Footer')
     
             this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
@@ -30,18 +30,19 @@ module.exports = new (
             this.userPromise.then( () => {
 
                 this.$('body').removeClass().addClass( resource )
-                if( ! resource === 'admin' ) this.header.initiateHeader( resource )
                 
-                if( this.user.id && resource === 'admin' ) this.adminHeader.onUser( this.user )
+                if( resource !== 'admin' ) this.header.initiateHeader( resource )
+                
+                if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
                 
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
                 
                 if( this.views[ resource ] ) this.views[ resource ].show()
                 else this.views[ resource ] = new ( this.resources[ resource ].view )( this.resources[ resource ].options )
             
-                if( this.header.templateData.headerTitle.css( 'display' ) === 'none' ) this.header.toggleLogo()
+                if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
                 
-                this.header.templateData.navbarCollapse.removeClass( 'in' )
+                this.header.$('.navbar-collapse').removeClass( 'in' )
                 this.$(window).scrollTop(0)
                 this.footer.size()
 
