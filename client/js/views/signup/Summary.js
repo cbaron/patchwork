@@ -82,7 +82,7 @@ Object.assign( Summary.prototype, View.prototype, {
             .removeClass('disabled')
             .addClass('btn-success')
             .off( 'click' )
-            .on( 'click', this.signupHandler )
+            .one( 'click', this.signupHandler )
     },
 
     events: {
@@ -327,7 +327,8 @@ Object.assign( Summary.prototype, View.prototype, {
             if( response.error ) {
                 this.showErrorModal( { error: response.error } )
                 this.templateData.signupBtn
-                    .on( 'click', this.signupHandler )
+                    .off('click')
+                    .one( 'click', this.signupHandler )
                     .text('Become a Member!')   
                 return
             }
@@ -339,7 +340,8 @@ Object.assign( Summary.prototype, View.prototype, {
         .fail( () => {
             this.showErrorModal()
             this.templateData.signupBtn
-                .on( 'click', this.signupHandler )
+                .off('click')
+                .one( 'click', this.signupHandler )
                 .text('Become a Member!')
         } )
         .always( () => {
