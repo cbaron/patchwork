@@ -119,7 +119,9 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     fetch: { headers: { accept: "application/ld+json" } },
 
-    getImage( model ) {  
+    getImage( model ) {
+        console.log( 'getImage' )
+        console.log(model)  
         var imageEl = new Image();
        
         imageEl.style.height = '50px' 
@@ -240,10 +242,14 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     postRender() {
         this.imageLoader = new ( require('backbone').Collection )()
-            .on( 'add', () => { 
+            .on( 'add', () => {
+                console.log('add')
+                console.log( 'imageLoader: ' + this.imageLoader.length ) 
                 if( this.imageLoader.length === 1 ) this.initGetImage()
             } )
-            .on( 'remove', () => { 
+            .on( 'remove', () => {
+                console.log('remove')
+                console.log( 'imageLoader: ' + this.imageLoader.length )
                 if( this.imageLoader.length ) this.initGetImage()
             } )
 

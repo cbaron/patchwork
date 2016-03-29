@@ -21,8 +21,9 @@ module.exports = new (
         handler( resource ) {
 
             this.header = ( resource === 'admin' ) ? require('./views/AdminHeader') : require('./views/Header')
+            if( resource !== 'admin' ) this.header.initiateHeader( resource )
+
             this.footer = require('./views/Footer')
-    
             this.footer[ ( resource === 'admin' ) ? 'hide' : 'show' ]()
 
             if( !resource ) return this.navigate( 'home', { trigger: true } )
@@ -31,7 +32,7 @@ module.exports = new (
 
                 this.$('body').removeClass().addClass( resource )
                 
-                if( resource !== 'admin' ) this.header.initiateHeader( resource )
+                
                 
                 if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
                 

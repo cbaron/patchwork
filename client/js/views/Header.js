@@ -5,8 +5,8 @@ Object.assign( Header.prototype, Nav.prototype, {
 
     bindHeaderEvents() {
         this.templateData.navLinks.children('li').on( {
-            mouseenter: ( event ) => this.loadHoverColor( event ),
-            mouseleave: ( event ) => this.loadColor( event )
+            mouseenter: ( e ) => this.loadHoverColor( e ),
+            mouseleave: ( e ) => this.loadColor( e )
         } )
         
         this.templateData.headerTitle.on( {

@@ -31,7 +31,7 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
         }
     },
 
-    loadFileIfVisible() {        
+    loadFileIfVisible() {       
         var top = this.templateData.container[0].getBoundingClientRect().top,
             visible = ( top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight) ),
             imageLoaderModel = { id: this.model.id, columns: this.files }
@@ -40,18 +40,23 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
     },
 
     postRender() {
+        console.log('postRender')
         ListItem.prototype.postRender.call(this)
         this.model.on( 'change', () =>
             Object.keys( this.model.attributes ).forEach( field =>
                 this.templateData[ field ].html( this.getFieldValue( field ) )
             ) )
         
-        if( this.files.length ) this.$(window).on( 'scroll.throttledLoad', this.throttledLoad.bind(this) )
+        if( this.files.length ) this.$(window).on( this.util.format( 'scroll.throttledLoad%s', this.model.id ), this.throttledLoad.bind(this) )
+        console.log( this.$._data( window, 'events' ) )
     },
 
     retrievedImage( field ) {
+        console.log( 'retrievedImage ')
         this.files = this._( this.files ).reject( file => file === field )
-        if( this.files.length === 0 ) this.$(window).off( 'scroll.throttledLoad' )
+        console.log( this.$._data( window, 'events' ) )
+        if( this.files.length === 0 ) this.$(window).off( this.util.format( 'scroll.throttledLoad%s', this.model.id ) )
+        console.log( this.$._data( window, 'events' ) )
     },
 
     size() { if( this.files.length ) this.loadFileIfVisible() },
