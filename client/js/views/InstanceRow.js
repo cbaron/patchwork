@@ -40,23 +40,20 @@ Object.assign( InstanceRow.prototype, ListItem.prototype, {
     },
 
     postRender() {
-        console.log('postRender')
         ListItem.prototype.postRender.call(this)
         this.model.on( 'change', () =>
             Object.keys( this.model.attributes ).forEach( field =>
                 this.templateData[ field ].html( this.getFieldValue( field ) )
             ) )
         
-        if( this.files.length ) this.$(window).on( this.util.format( 'scroll.throttledLoad%s', this.model.id ), this.throttledLoad.bind(this) )
-        console.log( this.$._data( window, 'events' ) )
+        if( this.files.length ) this.$(window)
+            .on( this.util.format( 'scroll.throttledLoad%s', this.model.id ), this.throttledLoad.bind(this) )
     },
 
     retrievedImage( field ) {
-        console.log( 'retrievedImage ')
         this.files = this._( this.files ).reject( file => file === field )
-        console.log( this.$._data( window, 'events' ) )
-        if( this.files.length === 0 ) this.$(window).off( this.util.format( 'scroll.throttledLoad%s', this.model.id ) )
-        console.log( this.$._data( window, 'events' ) )
+        if( this.files.length === 0 ) this.$(window)
+            .off( this.util.format( 'scroll.throttledLoad%s', this.model.id ) )
     },
 
     size() { if( this.files.length ) this.loadFileIfVisible() },

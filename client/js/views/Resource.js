@@ -120,8 +120,6 @@ Object.assign( Resource.prototype, Table.prototype, {
     fetch: { headers: { accept: "application/ld+json" } },
 
     getImage( model ) {
-        console.log( 'getImage' )
-        console.log(model)  
         var imageEl = new Image();
        
         imageEl.style.height = '50px' 
@@ -233,28 +231,20 @@ Object.assign( Resource.prototype, Table.prototype, {
         el.typeahead( 'val', this.modelToEdit.get( property.columnName ).value )
     },
 
-    initGetImage() {
+    postRender() {
+        this.imageLoader = new ( require('backbone').Collection )()
+            .on( 'add', () => { if( this.imageLoader.length === 1 ) this.processImageLoader() } )
+            .on( 'remove', () => { if( this.imageLoader.length ) this.processImageLoader() } )
+
+        Table.prototype.postRender.call(this)
+        this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )
+    },
+
+    processImageLoader() {
         var id = this.imageLoader.at(0).id,
             columns = this.imageLoader.at(0).get('columns')
 
         columns.forEach( column => this.getImage( { 'id': id, 'column': column } ) )
-    },
-
-    postRender() {
-        this.imageLoader = new ( require('backbone').Collection )()
-            .on( 'add', () => {
-                console.log('add')
-                console.log( 'imageLoader: ' + this.imageLoader.length ) 
-                if( this.imageLoader.length === 1 ) this.initGetImage()
-            } )
-            .on( 'remove', () => {
-                console.log('remove')
-                console.log( 'imageLoader: ' + this.imageLoader.length )
-                if( this.imageLoader.length ) this.initGetImage()
-            } )
-
-        Table.prototype.postRender.call(this)
-        this.items.on( 'reset', () => this.templateData.subHeading.text( this.label ) )
     },
 
     requiresRole: 'admin',
