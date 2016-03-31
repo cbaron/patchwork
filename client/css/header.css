@@ -45,6 +45,11 @@
   text-transform: uppercase;
   text-align: center;
 }
+@media only screen and (max-height: 175px) {
+  .header .header-title {
+    font-size: 30px !important;
+  }
+}
 @media only screen and (max-width: 500px) {
   .header {
     height: 315px;

@@ -66,7 +66,7 @@ Object.assign( Header.prototype, Nav.prototype, {
         }
         if( window.innerWidth < 768 && model ) {
 
-            ( aspectRatio > 1.6 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
+            ( aspectRatio > 1.52 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
 
             this.removeHeaderEvents()
             this.templateData.navLinks.children('li').css( 'color', '#ccc' )
