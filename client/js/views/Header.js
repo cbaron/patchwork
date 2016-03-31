@@ -37,15 +37,11 @@ Object.assign( Header.prototype, Nav.prototype, {
     loadHeader( model ) {
         this.templateData.container
             .css( 'background-image', this.util.format( "url( /file/header/image/%d )", model.id ) )
-        this.templateData.navLinks.children('li').css( 'color', model.get('color') )
-        this.templateData.headerTitle.css( 'color', model.get('color') )
     },
 
     loadMobileHeader( model ) {
         this.templateData.container
             .css( 'background-image', this.util.format( "url( /file/header/mobileimage/%d )", model.id ) )
-        this.templateData.navLinks.children('li').css( 'color', '#ccc' )
-        this.templateData.headerTitle.css( 'color', model.get('color') )
     },
 
     removeHeaderEvents() {
@@ -54,21 +50,32 @@ Object.assign( Header.prototype, Nav.prototype, {
     },
 
     size() {
-        
-        var model = this.model
+        var model = this.model,
+            width = this.$(window).width(),
+            height = this.templateData.container.height(),
+            aspectRatio = width / height
 
-        if( this.$(window).width() > 767 ) {
+        if( window.innerWidth > 767 && model ) {
+            this.loadHeader( model )
             this.bindHeaderEvents()
-            if( model ) this.loadHeader( model )
+            this.templateData.navLinks.children('li').css( 'color', model.get('color') )
+            this.templateData.headerTitle.css( 'color', model.get('color') ) 
+        
             if( this.templateData.headerTitle.css( 'display' ) === "none" )
                 this.templateData.headerTitle.css( 'display', 'inline-block' )
         }
-        if( this.$(window).width() < 768 ) {
+        if( window.innerWidth < 768 && model ) {
+
+            ( aspectRatio > 1.6 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
+
             this.removeHeaderEvents()
-            if( model ) this.loadMobileHeader( model )
+            this.templateData.navLinks.children('li').css( 'color', '#ccc' )
+            this.templateData.headerTitle.css( 'color', model.get('color') )
+            
             if( this.templateData.navbarCollapse.hasClass('in') )
                 this.templateData.headerTitle.css( 'display', 'none' )
         }
+
     },
 
     template: require('../templates/header')( require('handlebars') )
