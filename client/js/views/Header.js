@@ -54,7 +54,7 @@ Object.assign( Header.prototype, Nav.prototype, {
             width = this.$(window).width(),
             height = this.templateData.container.height(),
             aspectRatio = width / height
-
+        
         if( window.innerWidth > 767 && model ) {
             this.loadHeader( model )
             this.bindHeaderEvents()
@@ -66,7 +66,7 @@ Object.assign( Header.prototype, Nav.prototype, {
         }
         if( window.innerWidth < 768 && model ) {
 
-            ( aspectRatio > 1.52 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
+            ( aspectRatio > 1.6 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
 
             this.removeHeaderEvents()
             this.templateData.navLinks.children('li').css( 'color', '#ccc' )
