@@ -84,7 +84,7 @@ Object.assign( Resource.prototype, Table.prototype, {
             } else if( property.range === "File" ) {                
                 data[ property.property ] = this[ property.property + "File" ]
                 if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
-                    this.modelToEdit.get( property.property ).src = this[ property.property + "File" ]
+                    this.modelToEdit.get( property.property ).src = this.base64
                 }
             }
             else { modelAttrs[ property.property ] = data[ property.property ] }
@@ -138,6 +138,8 @@ Object.assign( Resource.prototype, Table.prototype, {
         imageEl.src = this.util.format( '/file/%s/%s/%d', this.resource, model.column, model.id )
     },
 
+    getImageData( base64 ) { return base64.slice( base64.indexOf(',') + 1 ) },
+
     getLabel( property ) {
         return this.format.capitalizeFirstLetter( property )
     },
@@ -158,10 +160,12 @@ Object.assign( Resource.prototype, Table.prototype, {
             btn.addClass('has-spinner').append( this.spinner.spin().el )
 
             reader.onload = ( evt ) => {
-                this[ property.property + "File" ] = evt.target.result
+                this.base64 = evt.target.result
+                var imageData = this.getImageData( this.base64 )
+                this[ property.property + "File" ] = imageData
                 btn.removeClass('has-spinner')
                 this.spinner.stop()
-                this.$( '#' + property.property + "-preview" ).attr( { src: evt.target.result } )
+                this.$( '#' + property.property + "-preview" ).attr( { src: this.base64 } )
             }
             
             reader.readAsDataURL( e.originalEvent.target.files[0] )

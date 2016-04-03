@@ -112,7 +112,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         this._postgresQuery( this.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
         .then( result => {
             response.writeHead( 200, { Connection: "keep-alive" } )
-            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ].slice(15) )
+            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ] )
         } )
         .fail( err => this.handleFailure( response, err ) )
         .done()
