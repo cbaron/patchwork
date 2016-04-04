@@ -22,15 +22,15 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     tables: [
         { name: 'csapageimage', comparator: 'id', el: 'csaImage', image: true, template: 'csaImage' },
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
-        { name: 'largeshareexamplecolumnone', comparator: 'position', el: 'shareContentsColumnOne', template: 'listItem' },
-        { name: 'largeshareexamplecolumntwo', comparator: 'position', el: 'shareContentsColumnTwo', template: 'listItem' }
+        { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
     ],
 
     template: require('../templates/csa')( require('handlebars') ),
 
     templates: {
         csaImage: require('../templates/imageInstance')( require('handlebars') ),
-        listItem: require('../templates/listItem')( require('handlebars') )
+        listItem: require('../templates/listItem')( require('handlebars') ),
+        listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') )
     }
 
 } )
