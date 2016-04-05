@@ -32,3 +32,8 @@
     height: 650px;
   }
 }
+@media only screen and (min-width: 1500px) {
+  .home-class .carousel .carousel-inner img {
+    height: 800px;
+  }
+}
