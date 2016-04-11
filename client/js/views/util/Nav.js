@@ -10,7 +10,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
         'about': { event: 'click', selector: '', method: 'navigate' },
         'csa': { event: 'click', selector: '', method: 'navigate' },
         'markets': { event: 'click', selector: '', method: 'navigate' },
-        'signup': { event: 'click', selector: '', method: 'navigate' },
+        'sign-up': { event: 'click', selector: '', method: 'navigate' },
         'members': { event: 'click', selector: '', method: 'navigate' },
         'get-involved': { event: 'click', selector: '', method: 'navigate' },
         'contact': { event: 'click', selector: '', method: 'navigate' }
@@ -20,8 +20,7 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'About Us', name: 'about' },
             { label: 'CSA Program', name: 'csa' },
             { label: 'Markets', name: 'markets' },
-            { label: 'Sign Up', name: 'signup' },
-            //{ label: 'Member Resources', name: 'members' },
+            { label: 'Sign-Up', name: 'sign-up' },
             { label: 'Get Involved', name: 'get-involved' },
             { label: 'Contact Us', name: 'contact' }
     ],

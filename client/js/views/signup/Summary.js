@@ -31,13 +31,24 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     buildShares() {
-        return this.signupData.shares.map( share => ( {
-            id: share.id,
-            label: share.label,
-            options: share.get('selectedOptions'),
-            delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid' ] ),
-            skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
-        } ) )
+        
+
+        return this.signupData.shares.map( share => {
+            var selectedWeeks = share.get('selectedDates').length,
+                skipDays = share.get('skipDays'),
+                skipDaysTotal = ( skipDays ) ? skipDays.length : 0
+            
+            return {
+                id: share.id,
+                description:
+                    this.util.format('From %s to %s you will be receiving fresh food for %d out of %d weeks.',
+                        share.get('humanStartdate'), share.get('humanEnddate'), selectedWeeks, selectedWeeks + skipDaysTotal),
+                label: share.get('label'),
+                options: share.get('selectedOptions'),
+                delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
+                skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined
+            }
+        } )
     },
 
     cardPaymentSelected() {
@@ -71,7 +82,7 @@ Object.assign( Summary.prototype, View.prototype, {
             .removeClass('disabled')
             .addClass('btn-success')
             .off( 'click' )
-            .on( 'click', this.signupHandler )
+            .one( 'click', this.signupHandler )
     },
 
     events: {
@@ -101,6 +112,7 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     getTemplateOptions() {
+        var spaceTwoTab = "\r\n\t\t"
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {
@@ -119,9 +131,38 @@ Object.assign( Summary.prototype, View.prototype, {
                              .get( selectedOption.shareoptionoptionid )
                              .get('price').replace(/\$|,/g, "") ) )
                     .reduce( ( a, b ) => a + b ),
-                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") )
+                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
+                address = ( selectedDelivery.get('name') === 'home' )
+                    ? this.user.get('address')
+                    : ( groupDropoff )
+                        ? groupDropoff.get('address')
+                        : '41 North Lutheran Church Road, Dayton, OH'
 
-                share.set( { total: weeklyTotal * share.get('selectedDates').length } )
+                share.set( {
+                    selectedDelivery: Object.assign( share.get('selectedDelivery'), {
+                        description:
+                            this.util.format('Delivery:%sMethod: %s%sDay/Time: %ss %s-%s%sPlace: %s%sCost: %s per week',
+                                spaceTwoTab,
+                                selectedDelivery.get('label'),
+                                spaceTwoTab,
+                                share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
+                                times.starttime, times.endtime, spaceTwoTab,
+                                address, spaceTwoTab, selectedDelivery.get('price') ) } ),
+                    total: weeklyTotal * share.get('selectedDates').length
+                } )
+
+                share.set( 'selectedOptions', share.get( 'selectedOptions' ).map( selectedOption => {
+                    var shareOption = share.get('shareoptions').get( selectedOption.shareoptionid ),
+                        shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
+
+                    return Object.assign( selectedOption, {
+                        description: this.util.format( '%s: %s %s -- %s per week',
+                            shareOption.get('name'),
+                            shareOptionOption.get('label'),
+                            shareOptionOption.get('unit') || "",
+                            shareOptionOption.get('price') )
+                    } )
+                } ) )
 
                 return {
                     shareBox: this.templates.ShareBox( share.attributes ),
@@ -286,7 +327,8 @@ Object.assign( Summary.prototype, View.prototype, {
             if( response.error ) {
                 this.showErrorModal( { error: response.error } )
                 this.templateData.signupBtn
-                    .on( 'click', this.signupHandler )
+                    .off('click')
+                    .one( 'click', this.signupHandler )
                     .text('Become a Member!')   
                 return
             }
@@ -298,7 +340,8 @@ Object.assign( Summary.prototype, View.prototype, {
         .fail( () => {
             this.showErrorModal()
             this.templateData.signupBtn
-                .on( 'click', this.signupHandler )
+                .off('click')
+                .one( 'click', this.signupHandler )
                 .text('Become a Member!')
         } )
         .always( () => {

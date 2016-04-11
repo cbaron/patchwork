@@ -3,8 +3,12 @@ var CustomContent = require('./util/CustomContent'),
 
 Object.assign( CSA.prototype, CustomContent.prototype, {
 
+    events: {
+        signupBtn: { method: 'routeToSignup' }
+    },
+
     hashToElement: {
-        'how-do-i-know': 'howDoIKnow'
+        'how-do-i-know': 'howDoIKnow',
     },
 
     postRender() {
@@ -24,6 +28,8 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
     ],
+    
+    routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
     template: require('../templates/csa')( require('handlebars') ),
 

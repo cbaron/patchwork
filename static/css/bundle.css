@@ -317,6 +317,12 @@ li {
   text-align: center;
 }
 
+.csa-class h3 .signup-btn {
+  color: #398439;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
 .csa-class figure {
   margin: 0 auto;
   padding: 20px 0;
@@ -530,6 +536,12 @@ footer .future-days {
 
 .home-class h3 {
   text-align: center;
+}
+
+.home-class h3 .signup-btn {
+  color: #398439;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .home-class .carousel {

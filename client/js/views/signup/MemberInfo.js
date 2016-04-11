@@ -4,8 +4,19 @@ var View = require('../MyView'),
 
 Object.assign( MemberInfo.prototype, View.prototype, {
 
-    Views: {
-        Addresses: require('./Addresses')
+    addressSelected() {
+        var place = this.addressAutoComplete.getPlace()
+
+        this.templateData.address.val( place.formatted_address ) 
+        this.showValid( this.templateData.address )
+
+        this.user.set( {
+            address: place.formatted_address,
+            addressModel: {
+                postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
+                types: place.types
+            }
+        } )
     },
 
     emailRegex: Form.emailRegex,
@@ -58,10 +69,36 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         validate: () => true
     } ],
 
+    geolocate() {
+        if( navigator.geolocation ) {
+            navigator.geolocation.getCurrentPosition( position =>
+              
+                this.addressAutoComplete.setBounds(
+                    new google.maps.Circle( {
+                        center: {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        radius: position.coords.accuracy } )
+                    .getBounds() )
+
+            )
+        }
+    },
+
     getTemplateOptions() { return { fields: this.fields } },
+
+    initAutocomplete() {
+        this.addressAutoComplete = new google.maps.places.Autocomplete( this.templateData.address.get(0), { types: ['address'] } )
+
+        this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
+    },
 
     postRender() {
         var self = this
+
+        this.initAutocomplete()
+        this.templateData.address.attr( 'placeholder', '' )
 
         this.fields.forEach( field => { if( this.user.has( field.name ) ) this.templateData[ field.name ].val( this.user.get( field.name ) ) } )
 
@@ -69,13 +106,15 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .on( 'blur', function() {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
-                
+            
+            if( field.name === 'address' ) {
+                if( self.templateData.address.val() === '' ) self.showError( $el, field.error )
+                return
+            }
+                  
             self.Q.fcall( field.validate.bind( self, $el.val() ) ).then( valid => {
-                if( valid ) {
-                    $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
-                    $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
-                    $el.siblings('.help-block').remove()
-                } else { self.showError( $el, field.error ) }
+                if( valid ) { self.showValid( $el ) }
+                else { self.showError( $el, field.error ) }
             } )
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
@@ -99,32 +138,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
            .after( Form.templates.fieldError( { error: error } ) )
     },
 
-    suggestAddresses( suggestions ) {
-
-        if( this.modalView.templateData.container.is(":visible") ) return
-
-        this.addressSuggestions =
-            new this.Views.Addresses( {
-                container: this.modalView.templateData.body,
-                itemModels: suggestions.map( ( suggestion, idx ) => ( { id: idx, string: suggestion.string } ) )
-            } )
-        
-        this.modalView.show( {
-            title: "Address Suggestions",
-            confirmText: "Choose Address"
-        } ).on( 'submit', () => {
-            var selectedIds = Object.keys( this.addressSuggestions.selectedItems ),
-                suggestion
-
-            if( selectedIds.length !== 1 ) return
-
-            suggestion = suggestions[ selectedIds[0] ]
-
-            this.templateData.address.val( suggestion.string ).focus()
-
-            this.modalView.hide()
-
-        } ).on( 'hidden', () => this.addressSuggestions.delete() )
+    showValid( $el ) {
+        $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
+        $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
+        $el.siblings('.help-block').remove()
     },
 
     template: require('../../templates/signup/memberInfo')( require('handlebars') ),
@@ -140,8 +157,9 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 if( result === false ) {
                     valid = false
                     this.showError( this.templateData[ field.name ], field.error )
+                } else {
+                    this.user.set( field.name, this.templateData[ field.name ].val() )
                 }
-                this.user.set( field.name,  this.templateData[ field.name ].val() )
             } )
         } ) )
         .then( () => {
@@ -157,32 +175,15 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
     
     validateAddress( address ) {
-        return this.Q(
-            this.$.ajax( {
-                headers: { accept: "application/json" },
-                data: { address: address },
-                method: "GET",
-                url: "/validate-address" } ) )
-        .then( response => {
-            if( response.valid.length === 0 ) {
-                 if( response.inexact.length === 0 ) return false
-                 else if( response.inexact.length === 1 ) {
-                    this.templateData.address.val( response.inexact[0].string ) 
-                    this.user.set( { addressModel: response.inexact[0].model } )
-                    return true
-                 } else {
-                     this.suggestAddresses( response.inexact ); return false
-                 }
-            }
-
-            this.templateData.address.val( response.valid[0].string ) 
-            this.user.set( { addressModel: response.valid[0].model } )
-            return true
+        if( this.$.trim( address ).length === 0 ) return false
+        
+        this.user.set( {
+            customAddress:
+                ( address !== this.user.get('address') || ( ! this._( this.user.get('addressModel').types ).contains( "street_address" ) ) ) ? true : false
         } )
-        .fail( e => { console.log( e.stack || e ); return false } )
-    }
 
-    
+        return true
+    },
 
 } )
 

@@ -104,7 +104,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
-                    this.selectedDelivery = Object.assign( {}, { deliveryoptionid: deliveryOption.id }, this.homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
+                    this.selectedDelivery = Object.assign(
+                        { deliveryoptionid: deliveryOption.id, isHome: true },
+                        this.homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] )
+                    )
                     
                     this.valid = true
                 } )
@@ -150,6 +153,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         } )
 
         this.groupDropoffPromise = share.getGroupDropoffs()
+
+        this.user.on( 'change:address', () => {
+            var selectedIds = Object.keys( this.selectedItems )
+
+            if( selectedIds.length === 0 ) return
+
+            this.unselectItem( this.items.get( selectedIds[0] ) )
+        } )
     },
 
     requiresLogin: false,
