@@ -635,7 +635,7 @@ footer .future-days {
   margin: 1em;
 }
 
-.signup-class .header {
+.signup-class .signup-header {
   margin-bottom: 30px;
   font-size: 1.75rem;
   line-height: 2rem;
@@ -729,7 +729,7 @@ footer .future-days {
   margin-top: 10px;
 }
 
-.signup-class .shares .header {
+.signup-class .shares .signup-header {
   margin-top: 45px;
 }
 
@@ -767,7 +767,7 @@ footer .future-days {
   background-color: #f7f7f7;
 }
 
-.signup-class .share-options .header {
+.signup-class .share-options .signup-header {
   padding-bottom: 15px;
   margin-bottom: 0;
 }
@@ -843,7 +843,7 @@ footer .future-days {
   margin-bottom: 15px;
 }
 
-.signup-class .delivery .header {
+.signup-class .delivery .signup-header {
   margin: 15px 0;
 }
 
@@ -947,7 +947,7 @@ footer .future-days {
   background-color: #f7f7f7;
 }
 
-.signup-class .date-selection .header {
+.signup-class .date-selection .signup-header {
   margin: 15px auto;
 }
 
@@ -1011,7 +1011,7 @@ footer .future-days {
   padding: 0 15px;
 }
 
-.signup-class .summary .share-summary .header {
+.signup-class .summary .share-summary .signup-header {
   margin: 0;
   padding: 15px 0;
 }
@@ -1091,7 +1091,7 @@ footer .future-days {
   padding: 0 20px;
 }
 
-.signup-class .summary .payment .header {
+.signup-class .summary .payment .signup-header {
   border: none;
   padding: 25px 0;
   margin: 0;

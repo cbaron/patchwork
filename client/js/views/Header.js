@@ -32,7 +32,10 @@ Object.assign( Header.prototype, Nav.prototype, {
 
     loadColor( event ) { this.$( event.target ).css( 'color', this.model.get('color') ) },
 
-    loadHoverColor( event ) { this.$( event.target ).css( 'color', this.model.get('hovercolor') ) },
+    loadHoverColor( event ) {
+        var el = $( event.target )
+        if( el.attr('data-id') !== 'home') this.$( event.target ).css( 'color', this.model.get('hovercolor') )
+    },
 
     loadHeader( model ) {
         this.templateData.container

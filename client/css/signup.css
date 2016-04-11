@@ -1,7 +1,7 @@
 .signup-class hr {
   margin: 1em;
 }
-.signup-class .header {
+.signup-class .signup-header {
   margin-bottom: 30px;
   font-size: 1.75rem;
   line-height: 2rem;
@@ -80,7 +80,7 @@
 .signup-class .shares .share-intro + .share-intro {
   margin-top: 10px;
 }
-.signup-class .shares .header {
+.signup-class .shares .signup-header {
   margin-top: 45px;
 }
 .signup-class .shares .share {
@@ -111,7 +111,7 @@
   padding-top: 10px;
   background-color: #f7f7f7;
 }
-.signup-class .share-options .header {
+.signup-class .share-options .signup-header {
   padding-bottom: 15px;
   margin-bottom: 0;
 }
@@ -173,7 +173,7 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.signup-class .delivery .header {
+.signup-class .delivery .signup-header {
   margin: 15px 0;
 }
 .signup-class .delivery .subheader {
@@ -257,7 +257,7 @@
   border-radius: 10px;
   background-color: #f7f7f7;
 }
-.signup-class .date-selection .header {
+.signup-class .date-selection .signup-header {
   margin: 15px auto;
 }
 .signup-class .date-selection .subheader {
@@ -310,7 +310,7 @@
   margin-bottom: 5px;
   padding: 0 15px;
 }
-.signup-class .summary .share-summary .header {
+.signup-class .summary .share-summary .signup-header {
   margin: 0;
   padding: 15px 0;
 }
@@ -377,7 +377,7 @@
   background-color: #f7f7f7;
   padding: 0 20px;
 }
-.signup-class .summary .payment .header {
+.signup-class .summary .payment .signup-header {
   border: none;
   padding: 25px 0;
   margin: 0;

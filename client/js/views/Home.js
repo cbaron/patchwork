@@ -3,11 +3,11 @@ var CustomContent = require('./util/CustomContent'),
 
 Object.assign( Home.prototype, CustomContent.prototype, {
 
-/*
     events: {
         signupBtn: { method: 'routeToSignup' }
     },
 
+/*
     initialImage: { path: 'assortment.jpg', description: "Assorted vegetables" },
 
     getTemplateOptions() {
