@@ -149,13 +149,14 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     initFileUploader( property ) {
-        var $el = this.modalView.templateData[ property.property ]
+        var name = property.property,
+            $el = this.modalView.templateData[ name ],
+            btn = this.modalView.templateData[ property.property + "Btn" ]
 
         this[ property.property + "File" ] === undefined
 
         $el.on( 'change', e => {
-            var reader = new FileReader(),
-                btn = this.modalView.templateData[ property.property + "Btn" ]
+            var reader = new FileReader()
                     
             btn.addClass('has-spinner').append( this.spinner.spin().el )
 
@@ -300,7 +301,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.modelToDelete = this.hoveredModel
 
         this.modalView.show( {
-            body: this.util.format( 'Are you sure you would like to delete %s?', this.modelToDelete.get( this.recordDescriptor ) ),
+            body: this.util.format( 'Are you sure you would like to delete %s?', this.modelToDelete.get( this.recordDescriptor ) || "this record" ),
             confirmText: 'Yes',
             title: this.util.format( 'Delete %s', this.label )
         } )
@@ -348,6 +349,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         Float: require('../templates/form/Text')( require('handlebars') ),
         Integer: require('../templates/form/Text')( require('handlebars') ),
         Text: require('../templates/form/Text')( require('handlebars') ),
+        TextArea: require('../templates/form/TextArea')( require('handlebars') ),
     } ),
 
     update( resource ) {

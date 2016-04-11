@@ -6,8 +6,7 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
     checkForEnter( e ) { if( e.keyCode === 13 ) this.emitConfirmation() },
 
     emitConfirmation: function() {
-        var data = this.getFormData()
-        this.emit( 'submit', data )
+        this.emit( 'submit', this.getFormData() )
     },
 
     events: {

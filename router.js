@@ -59,7 +59,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         "date": "Date",
         "integer": "Integer",
         "money": "Float",
-        "text": "Text",
+        "text": "TextArea",
         "timestamp with time zone": "DateTime"
     },
 
