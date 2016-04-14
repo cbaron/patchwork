@@ -47,7 +47,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
-            this.items.add( new this.Instance( response, { parse: true } )
+            this.items.add( new this.Instance( response, { parse: true } ) )
             this.modalView.templateData.confirmBtn.removeClass('has-spinner')
             this.spinner.stop()
             this.modalView.hide( { reset: true } )
@@ -178,14 +178,15 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     initTypeahead( property ) {
-
         var bloodhound = new Bloodhound( {
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace(property.descriptor.column.name),
             identify: obj => obj.id,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 replace: (url, query) => url.replace( '%QUERY', encodeURIComponent (query) ),
-                url: this.util.format( "/%s?%s=%QUERY&like=1", property.descriptor.table, property.descriptor.column.name )
+                url: this.util.format(
+                        "/%s?%s=%QUERY&like=1&path=%s",
+                        property.descriptor.table, property.descriptor.column.name, encodeURIComponent( JSON.stringify( property.descriptor.path ) ) )
             }
         } ),
         el = this.$( '#' + property.property )

@@ -12,6 +12,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
                 if( this.query[ attr ].charAt(0) === '{' ) {
                     this.query[ attr ] = JSON.parse( this.query[ attr ] )
                     if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
+                } else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
                 }
             } )
         },
