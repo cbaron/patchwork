@@ -130,7 +130,31 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.respond( payload )
         },
 
-        POST: function( result ) { this.respond( { body: result.rows[0] } ) }
+        POST: function( result ) {
+            var tableName = this.path[1],
+                table = this.tables[ tableName ],
+                fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),
+                fkColumns = this._( table.columns ).filter( column => column.fk ),
+                dateColumns = this._( table.columns ).filter( column => column.dataType === 'timestamp with time zone' ),
+                row = result.rows[0]
+            
+            fkColumns.forEach( column => {
+                var descriptor, columnName
+
+                if( ! ( column.fk && this.tables[ column.fk.table ].meta ) ) return
+
+                descriptor = this.getDescriptor( column.fk.table, [ ] )
+                columnName = [ descriptor.table, descriptor.column.name ].join('.')
+
+                row[ columnName ] = { descriptor: descriptor, table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
+                delete row[ column.name ]
+            } )
+
+            fileColumns.forEach( column => row[ column.name ] = { type: 'file' } )
+            dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
+                
+            this.respond( { body: row } )
+        }
     },
 
     slurpBody: function() {

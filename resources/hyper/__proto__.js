@@ -40,18 +40,26 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
             var tableName = this.path[1],
                 table = this.tables[ tableName ],
                 fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),
-                fkColumns = this._( table.columns ).filter( column => column.fk )
-
+                fkColumns = this._( table.columns ).filter( column => column.fk ),
+                dateColumns = this._( table.columns ).filter( column => column.dataType === 'timestamp with time zone' )
+            
             rv[ tableName ] = result.rows.map( row => {
                 var obj = { }
                 
                 fkColumns.forEach( column => {
-                    var columnName = [ column.fk.table, this.tables[ column.fk.table ].meta.recorddescriptor ].join('.')
-                    row[ columnName ] = { table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
+                    var descriptor, columnName
+
+                    if( ! ( column.fk && this.tables[ column.fk.table ].meta ) ) return
+
+                    descriptor = this.getDescriptor( column.fk.table, [ ] )
+                    columnName = [ descriptor.table, descriptor.column.name ].join('.')
+
+                    row[ columnName ] = { descriptor: descriptor, table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
                     delete row[ column.name ]
                 } )
 
                 fileColumns.forEach( column => row[ column.name ] = { type: 'file' } )
+                dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
                 
                 return row
             } )
@@ -81,7 +89,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor )
 
                 if( /id$/.test( fkTableDescriptor ) ) {
-                    fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
+                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
                     fkSelect.push(
                         this.format( '%s.%s AS "%s.%s"',
                             fkTableDescriptorColumn.fk.table,
@@ -89,7 +97,7 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                             fkTableDescriptorColumn.fk.table,
                             this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor )
                     )
-                    fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s',
+                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s',
                         fkTableDescriptorColumn.fk.table,
                         fkTableDescriptorColumn.fk.table,
                         "id",
@@ -98,12 +106,11 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     if( fkTableDescriptor ) {
                         fkSelect.push( this.format( '%s.%s AS "%s.%s"', column.fk.table, fkTableDescriptor, column.fk.table, fkTableDescriptor ) )
                     }
-                    fkFrom.push( this.format( 'JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
+                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
                 }
             } )
-        
+
         return this.format( "Select %s %s FROM %s %s", this.getSelect(), ( fkSelect.length ) ? ", " + fkSelect.join(', ') : "", this.path[1], fkFrom.join(' ') )
- 
     },
 
     getSelect() {

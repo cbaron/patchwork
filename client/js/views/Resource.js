@@ -47,7 +47,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
-            this.items.add( response )
+            this.items.add( new this.Instance( response, { parse: true } )
             this.modalView.templateData.confirmBtn.removeClass('has-spinner')
             this.spinner.stop()
             this.modalView.hide( { reset: true } )
@@ -76,11 +76,15 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         this.createProperties.forEach( property => {
             if( property.fk ) {
+                var attribute
+
                 if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ property.property ]; return }
+
+                attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
+
                 data[ property.property ] = this[ property.fk.table + "Typeahead" ].id
-                this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) ).id = this[ property.fk.table + "Typeahead" ].id
-                this.modelToEdit.get( this.util.format( '%s.%s', property.fk.table, property.fk.recorddescriptor ) )
-                    .value = this[ property.fk.table + "Typeahead" ][property.fk.recorddescriptor]
+                this.modelToEdit.get( attribute ).id = this[ property.fk.table + "Typeahead" ].id
+                this.modelToEdit.get( attribute ).value = this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ]
             } else if( property.range === "File" ) {                
                 data[ property.property ] = this[ property.property + "File" ]
                 if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
@@ -233,7 +237,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         if( !property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
         
         this.initTypeahead( property ) 
-        el.typeahead( 'val', this.modelToEdit.get( property.columnName ).value )
+        el.typeahead( 'val', this.modelToEdit.get( [ property.descriptor.table, property.descriptor.column.name ].join('.') ).value )
     },
 
     postRender() {
