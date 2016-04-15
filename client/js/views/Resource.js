@@ -52,11 +52,24 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
+
+            this.createProperties.forEach( property => {
+                if( property.fk && this[ property.fk.table + "Typeahead" ] && ( property.descriptor.path ) ) {
+                    response[ [ property.descriptor.table, property.descriptor.column.name ].join('.') ] = {
+                        descriptor: property.descriptor,
+                        table: property.fk.table,
+                        id: response[ property.property ],
+                        value: this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ] }
+                }
+            } )
+
             this.items.add( new this.Instance( response, { parse: true } ) )
             this.modalView.templateData.confirmBtn.removeClass('has-spinner')
             this.spinner.stop()
             this.modalView.hide( { reset: true } )
         } )
+
+    
             
     },
 
