@@ -32,7 +32,12 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     create( data ) {
         this.createProperties.forEach( property => {
-            if( property.fk && this[ property.fk.table + "Typeahead" ] ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
+            if( property.fk && this[ property.fk.table + "Typeahead" ] ) {
+                data[ property.property ] =
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                        ? [ property.descriptor.path[0].table, 'id' ].join('.')
+                        : 'id' ]
+            }
             if( property.range === "File" ) { data[ property.property ] = this[ property.property + "File" ] }
         } )
 
@@ -82,7 +87,11 @@ Object.assign( Resource.prototype, Table.prototype, {
 
                 attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
 
-                data[ property.property ] = this[ property.fk.table + "Typeahead" ].id
+                data[ property.property ] =
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                        ? [ property.descriptor.path[0].table, 'id' ].join('.')
+                        : 'id' ]
+
                 this.modelToEdit.get( attribute ).id = this[ property.fk.table + "Typeahead" ].id
                 this.modelToEdit.get( attribute ).value = this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ]
             } else if( property.range === "File" ) {                

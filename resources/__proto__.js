@@ -51,6 +51,17 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.GET.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
+    getDescriptor( tableName, path ) {
+        var table = this.tables[ tableName ],
+            descriptorColumn = this._( table.columns ).find( column => column.name === table.meta.recorddescriptor )
+
+        if( !descriptorColumn || !descriptorColumn.fk ) return { table: tableName, column: descriptorColumn, path }
+
+        path.push( { table: tableName, column: descriptorColumn } )
+
+        return this.getDescriptor( descriptorColumn.fk.table, path )
+    },
+
     getHeaders: function( body ) { return this._.extend( {}, this.headers, { 'Date': new Date().toISOString(), 'Content-Length': Buffer.byteLength( body ) } ) },
 
     headers: {

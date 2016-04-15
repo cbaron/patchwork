@@ -67,17 +67,6 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
         } )
     },
 
-    getDescriptor( tableName, path ) {
-        var table = this.tables[ tableName ],
-            descriptorColumn = this._( table.columns ).find( column => column.name === table.meta.recorddescriptor )
-
-        if( !descriptorColumn || !descriptorColumn.fk ) return { table: tableName, column: descriptorColumn, path }
-
-        path.push( { table: tableName, column: descriptorColumn } )
-
-        return this.getDescriptor( descriptorColumn.fk.table, path )
-    },
-
     getHyperQuery() {
         var fkSelect = [ ],
             fkFrom = [ ]
