@@ -1,0 +1,39 @@
+footer {
+  background-color: #131313;
+  color: #ccc;
+  width: auto;
+  margin-top: 10px;
+}
+footer ul {
+  margin: 10px 0px;
+  width: 100%;
+  text-align: center;
+}
+footer ul li {
+  display: inline-block;
+  float: none;
+  margin: 5px 10px;
+  text-align: center;
+  font-size: 15px;
+  font-family: "RalewayRegular";
+  line-height: 1.2em;
+  cursor: pointer;
+}
+footer ul li:hover {
+  color: #73756A;
+  text-shadow: 1px 1px 1px #337ab7;
+}
+footer hr {
+  border-top: 1px solid #ddd;
+  margin: 0 5%;
+  opacity: 0.25;
+}
+footer .future-days {
+  width: 100%;
+  display: inline-block;
+  float: none;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5em;
+}

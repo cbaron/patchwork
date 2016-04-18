@@ -1,0 +1,42 @@
+.csa-class h2 {
+  color: #c98702;
+}
+.csa-class h3 {
+  text-align: center;
+}
+.csa-class h3 .signup-btn {
+  color: #398439;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.csa-class figure {
+  margin: 0 auto;
+  padding: 20px 0;
+}
+.csa-class figure img {
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+}
+.csa-class figure figcaption {
+  text-align: center;
+  font-style: italic;
+}
+.csa-class ul {
+  display: inline-block;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+.csa-class ul li {
+  margin-bottom: 3px;
+  color: #155D75;
+  list-style-type: circle;
+}
+@media only screen and (max-width: 375px) {
+  .csa-class .first-column {
+    margin-bottom: 0;
+  }
+  .csa-class .second-column {
+    margin-top: 0;
+  }
+}

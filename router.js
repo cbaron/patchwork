@@ -1,30 +1,66 @@
 var router,
     MyObject = require('./lib/MyObject'),
-    Router = function() { return MyObject.apply( this, arguments ) };
+    Router = function() { return MyObject.apply( this, arguments ) }
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
-    _postgresQuerySync( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.postgres } ).querySync( query, args );
+    _postgresQuery: function( query, args ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( query, args );
     },
 
-    applyResource( request, response, path, resource ) {
+    _postgresQuerySync( query, args ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args );
+    },
 
-        var file = this.format('./resources/%s', this.routes[ path[1] || "/" ] )
+    applyHTMLResource( request, response, path ) {
+        return new Promise( ( resolve, reject ) => {
+
+            var file = './resources/html'
+
+            require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+                if( err ) reject( err )
+                new ( require(file) )( { path: path, request: request, response: response } )[ request.method ]().catch( err => reject( err ) )
+            } )
+        } )
+    },
+    
+    applyResource( request, response, path, subPath ) {
+
+        var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
+            file = this.format('./resources%s/%s', subPath || '', filename )
 
         return new Promise( ( resolve, reject ) => {
 
             require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
-                if( err ) reject( err )
-                
-                new ( require(file) )( {
+                var instance
+
+                if( err ) { 
+                    if( err.code !== "ENOENT" ) return reject( err )
+                    file = this.format( './resources%s/__proto__', subPath || '' )
+                }
+
+                instance = new ( require(file) )( {
                     request: request,
                     response: response,
-                    path: path
-                } )[ request.method ]()
-                .catch( err => reject( err ) )
+                    path: path,
+                    tables: this.tables,
+                } )
+
+                if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
+
+                instance[ request.method ]().catch( err => reject( err ) )
             } )
         } )
+    },
+
+    dataTypeToRange: {
+        "bytea": "File",
+        "character varying": "Text",
+        "date": "Date",
+        "integer": "Integer",
+        "money": "Float",
+        "text": "TextArea",
+        "timestamp with time zone": "DateTime"
     },
 
     getAllTables() {
@@ -37,67 +73,128 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     getTableColumns( tableName ) {
         return this.format(
-            'SELECT column_name',
+            'SELECT column_name, data_type',
             'FROM information_schema.columns',
             this.format( "WHERE table_name = '%s';", tableName ) )
     },
 
-    handleFailure( response, err, code ) {
+    getForeignKeys() {
+        return [
+            "SELECT conrelid::regclass AS table_from, conname, pg_get_constraintdef(c.oid)",
+            "FROM pg_constraint c",
+            "JOIN pg_namespace n ON n.oid = c.connamespace",
+            "WHERE contype = 'f' AND n.nspname = 'public';"
+        ].join(' ')
+    },
 
-        var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err,
-            body = JSON.stringify( { success: false, message: message } );
+    handleFailure( response, err, code, log ) {
+        var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err
 
-        console.log( err.stack || err );
+        if( log ) console.log( err.stack || err );
 
         response.writeHead( code || 500, Object.assign( {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Keep-Alive': 'timeout=50, max=100',
-            'Date': new Date().toISOString() }, { "Content-Length": Buffer.byteLength( body ) } ) )
+            'Date': new Date().toISOString() }, { "Content-Length": Buffer.byteLength( message ) } ) )
 
-        response.end( body )
+        response.end( message )
+    },
+
+    handleFileRequest( request, response, path ) {
+        var table = this.tables[ path[0] ],
+            column = this._( this.tables[ path[0] ].columns ).find( column =>
+                column.name === path[1] && column.dataType === "bytea" )
+        
+        if( path.length !== 3 || table === undefined || column === undefined ||
+            Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
+        
+        this._postgresQuery( this.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
+        .then( result => {
+            response.writeHead( 200, { Connection: "keep-alive" } )
+            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ] )
+        } )
+        .fail( err => this.handleFailure( response, err ) )
+        .done()
     },
     
     handler( request, response ) {
         var path = this.url.parse( request.url ).pathname.split("/")
-
         request.setEncoding('utf8');
 
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
-        if( this.routes[ path[1] || "/" ] === undefined ) return this.handleFailure( response, new Error("Not Found"), 404 )
+        if( ( request.method === "GET" && path[1] === "file" ) ) {
+            return this.handleFileRequest( request, response, path.splice(2,3) ) }
 
-        this.applyResource( request, response, path, this.routes[path[1]] )
-        .catch( err => this.handleFailure( response, err ) )
+        if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
+            return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
+        } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
+                   ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
+        } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
+            if( path[1] === "" ) path[1] === "index"
+            return this.applyResource( request, response, path, '/hyper' ).catch( err => this.handleFailure( response, err, 500, true ) )
+        }
+
+        return this.handleFailure( response, new Error("Not Found"), 404, false )
+
     },
 
     initialize() {
-        var tableResult = this._postgresQuerySync( this.getAllTables() )
+        var static = require('node-static')
 
-        this.storeTableData( tableResult )
+        this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
+        this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
+        this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
 
-        this.staticFolder = new (require('node-static').Server)();
+        this.staticFolder = new static.Server( undefined, { cache: false } )
 
         return this;
     },
 
     serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
 
+    storeForeignKeyData( foreignKeyResult ) {
+        foreignKeyResult.forEach( row => {
+            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
+           
+            column.fk = {
+                table: match[2],
+                column: match[3],
+                recorddescriptor: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recorddescriptor : null
+            }
+        } )
+    },
+
     storeTableData( tableResult ) {
-        tableResult.map( row => {
+        tableResult.forEach( row => {
             var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-            this.tables[ row.table_name ] = columnResult.map( column => column.column_name )
-        }, this )
+            this.tables[ row.table_name ] =
+                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
+        } )
+    },
+    
+    storeTableMetaData( metaDataResult ) {
+        metaDataResult.forEach( row => {
+            if( this.tables[ row.name ] ) this.tables[ row.name ].meta = this._( row ).pick( [ 'label', 'description', 'recorddescriptor' ] )
+         } )
     },
 
     url: require( 'url' )
 
-} );
+} )
 
 router = new Router( {
     routes: {
-        "/": "root"
+        REST: {
+            'auth': true,
+            'validate-address': true,
+            'signup': true,
+            'user': true
+        }
     },
     tables: { } 
 } ).initialize();

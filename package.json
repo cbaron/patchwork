@@ -1,20 +1,53 @@
 {
-  "name": "Patchwork",
-  "version": "0.0.1",
+  "description": "Site for Patchwork Gardens",
   "engines": {
     "node": "5.1.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.3.14",
     "backbone": "^1.2.3",
+    "bcrypt-nodejs": "0.0.3",
+    "bootstrap": "3.3.5",
+    "email": "^0.2.6",
     "handlebars": "^4.0.5",
+    "jquery": "^2.1.4",
+    "jws": "3.1.1",
+    "moment": "^2.10.6",
     "node-env-file": "^0.1.8",
     "node-static": "^0.7.7",
-    "q": "^1.4.1"
+    "pg": "^4.4.4",
+    "pg-native": "^1.10.0",
+    "pg-transaction": "^1.0.4",
+    "q": "^1.4.1",
+    "stripe": "^4.4.0"
   },
   "devDependencies": {
+    "address-validator": "^0.2.2",
+    "babel": "^6.3.26",
+    "babel-core": "^6.4.5",
+    "babel-plugin-object-assign": "^1.2.1",
+    "babel-plugin-transform-object-assign": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
     "grunt": "0.4.5",
     "grunt-contrib-handlebars": "0.11.0",
     "grunt-contrib-watch": "0.6.1",
-    "pg-native": "^1.10.0"
-  }
+    "gulp": "^3.9.0",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-less": "^3.0.5",
+    "gulp-plumber": "^1.0.1",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "path": "^0.12.7",
+    "strictify": "^0.2.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "license": "BSD-3-Clause",
+  "name": "Patchwork",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cbaron/patchwork.git"
+  },
+  "version": "0.0.1"
 }

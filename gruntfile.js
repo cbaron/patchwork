@@ -24,10 +24,10 @@ module.exports = function( grunt ) {
                       cwd: "./",
                       src: ['hbs/**/*.hbs'],
                       rename: function( dest, src ) {
-                          if( ! /hbs\/client\//.test( src ) ) {
-                              return "templates/" + src.replace(/^hbs[\/]/, '');
+                          if( ! /hbs\/server\//.test( src ) ) {
+                              return "client/js/templates/" + src.replace(/^hbs[\/]/, '');
                           } else {
-                              return "static/js/templates/" + src.replace(/^hbs[\/]/, '');
+                              return "templates/" + src.replace(/^.*[\\\/]/, '').split(".")[0] + ".js" 
                           }
                       },
                       ext: '.js'

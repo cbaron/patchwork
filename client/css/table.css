@@ -1,0 +1,70 @@
+.mytable {
+  height: 100%;
+  position: relative;
+}
+.mytable.no-items {
+  color: red;
+  padding-top: 20px;
+  text-align: center;
+}
+.mytable.no-items:before {
+  content: 'No items';
+  display: block;
+}
+.mytable.no-items table {
+  display: none;
+}
+.mytable table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+}
+.mytable table tr {
+  border-bottom: 1px solid #ebebeb;
+  display: flex;
+  padding: 10px 0px;
+}
+.mytable table th,
+.mytable table td {
+  display: inline-block;
+  float: left;
+  padding: 0px 20px;
+  vertical-align: middle;
+}
+.mytable table thead {
+  display: block;
+}
+.mytable table thead tr th {
+  cursor: pointer;
+  font-weight: bold;
+  padding-bottom: 15px;
+}
+.mytable table tbody {
+  display: block;
+}
+.mytable table tbody.no-items {
+  color: gray;
+  padding-top: 20px;
+  text-align: center;
+}
+.mytable table tbody.no-items:before {
+  content: 'No items';
+  display: block;
+}
+.mytable table tbody .delete-btn,
+.mytable table tbody .edit-btn {
+  position: absolute;
+  transition: all 1s ease;
+}
+.mytable table tbody tr:hover {
+  border-color: #ccc;
+  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 3;
+}
+.mytable table tbody td {
+  overflow: auto;
+}

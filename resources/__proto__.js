@@ -1,4 +1,4 @@
-var MyObject = require('../../lib/MyObject'),
+var MyObject = require('../lib/MyObject'),
     Resource = function() { return MyObject.apply( this, arguments ) }
 
 Object.assign( Resource.prototype, MyObject.prototype, {
@@ -8,6 +8,14 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function() {
             this.query = require('querystring').parse( require('url').parse( this.request.url ).query )
+            Object.keys( this.query ).forEach( attr => {
+                if( this.query[ attr ].charAt(0) === '{' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                    if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
+                } else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                }
+            } )
         },
 
         PATCH: function() {
@@ -33,6 +41,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     },
 
     dbQuery: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( data.query, data.values ),
+    dbQuerySync: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( data.query, data.values ),
 
     GET: function() {
         return [
@@ -54,7 +63,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         this.body += someData;
 
-        if( this.body.length > 1e6 ) {
+        if( this.body.length > 1e10 ) {
             this.request.connection.destroy();
             throw new Error("Too much data");
         }
@@ -78,6 +87,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             .done();
     },
 
+    jws: require('jws'),
+
     PATCH: function() {
         return [
             this.slurpBody.bind(this),
@@ -86,7 +97,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.PATCH.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
-    POST: function() {
+    POST() {
         return [
             this.slurpBody.bind(this),
             this.context.POST.bind(this),
@@ -94,9 +105,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.POST.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
-    queryBuilder: require('../../lib/queryBuilder'),
-
-    redisClient: require('../../lib/redis'),
+    queryBuilder: require('../lib/queryBuilder'),
 
     relations: [ ],
 
@@ -112,7 +121,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         GET: function( result ) {
             var body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
-            return this.respond( { body: { success: true, result: body } } )
+            return this.respond( { body: body } )
         },
 
         PATCH: function( result ) {
@@ -124,12 +133,29 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST: function( result ) {
-            this.respond( { body: {
-                success: true,
-                result: ( this.request.headers.iosapp )
-                    ? this._.pick( result.rows[0], [ 'serverId', 'createdAt', 'updatedAt' ] )
-                    : result.rows[0].id
-            } } )
+            var tableName = this.path[1],
+                table = this.tables[ tableName ],
+                fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),
+                fkColumns = this._( table.columns ).filter( column => column.fk ),
+                dateColumns = this._( table.columns ).filter( column => column.dataType === 'timestamp with time zone' ),
+                row = result.rows[0]
+            
+            fkColumns.forEach( column => {
+                var descriptor, columnName
+
+                if( ! ( column.fk && this.tables[ column.fk.table ].meta ) ) return
+
+                descriptor = this.getDescriptor( column.fk.table, [ ] )
+                columnName = [ descriptor.table, descriptor.column.name ].join('.')
+
+                row[ columnName ] = { descriptor: descriptor, table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }
+                delete row[ column.name ]
+            } )
+
+            fileColumns.forEach( column => row[ column.name ] = { type: 'file' } )
+            dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
+                
+            this.respond( { body: row } )
         }
     },
 
@@ -185,23 +211,38 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST: function() {
-            if( this.name === 'auth' || this.name === 'member' ) return
+            if( /(auth)/.test(this.path[1]) ) return
             
             this.validate.Token.call(this)
             
             return this.validate.User.call(this)
         },
-
+    
         Token: function() {
-            if( ! this.request.headers.token ) throw new Error("No token provided")
+            var list = {},
+                rc = this.request.headers.cookie
+
+            rc && rc.split(';').forEach( cookie => {
+                var parts = cookie.split('=');
+                list[ parts.shift().trim() ] = parts.join('=')
+            } )
+
+            this.token = list.patchworkjwt
         },
 
-        User: function() {
-            return this.Q.ninvoke( this.redisClient, "HGETALL", this.request.headers.token )
-            .then( function( user ) {
-                if( ! user ) throw new Error("Invalid Token")
-                this.user = user;
-            }.bind(this) )
+        User() {
+            return new Promise( ( resolve, reject ) => {
+                if( ! this.token ) { this.user = { }; return resolve() }
+                this.jws.createVerify( {
+                    algorithm: "HS256",
+                    key: process.env.JWS_SECRET,
+                    signature: this.token,
+                } ).on( 'done', ( verified, obj ) => {
+                    if( ! verified ) reject( 'Invalid Signature' )
+                    this.user = obj.payload
+                    resolve()
+                } ).on( 'error', e => { this.user = { }; return resolve() } )
+            } )
         }
     }
 
