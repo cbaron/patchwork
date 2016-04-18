@@ -15,10 +15,10 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
         CustomContent.prototype.postRender.call(this)
 
-        if( window.location.hash ) {
+        if( window.location.hash ) this.$(window).on( 'load', () =>
             this.$('body').animate( {
                 scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top + this.$(window).height() }, 1000 )
-        }
+        )
     },
 
     requiresLogin: false,
