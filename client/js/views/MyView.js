@@ -42,7 +42,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         Object.keys( this.templateData ).forEach( key => {
             var $el = this.templateData[key], val = $el.val()
-            if( /INPUT|TEXTAREA/.test( $el.prop('tagName') ) && val ) this.formData[key] = val
+            if( /INPUT|TEXTAREA|SELECT/.test( $el.prop('tagName') ) && val ) this.formData[key] = val
         } )
 
         return this.formData

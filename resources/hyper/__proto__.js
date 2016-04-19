@@ -41,8 +41,9 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 table = this.tables[ tableName ],
                 fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),
                 fkColumns = this._( table.columns ).filter( column => column.fk ),
-                dateColumns = this._( table.columns ).filter( column => column.dataType === 'timestamp with time zone' )
-            
+                dateColumns = this._( table.columns ).filter( column => column.dataType === 'timestamp with time zone' ),
+                timeColumns = this._( table.columns ).filter( column => column.dataType === 'time with time zone' )
+
             rv[ tableName ] = result.rows.map( row => {
                 var obj = { }
                 
@@ -60,22 +61,12 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
 
                 fileColumns.forEach( column => row[ column.name ] = { type: 'file' } )
                 dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
+                timeColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'time' } )
                 
                 return row
             } )
             this.respond( { body: rv } )
         } )
-    },
-
-    getDescriptor( tableName, path ) {
-        var table = this.tables[ tableName ],
-            descriptorColumn = this._( table.columns ).find( column => column.name === table.meta.recorddescriptor )
-
-        if( !descriptorColumn || !descriptorColumn.fk ) return { table: tableName, column: descriptorColumn, path }
-
-        path.push( { table: tableName, column: descriptorColumn } )
-
-        return this.getDescriptor( descriptorColumn.fk.table, path )
     },
 
     getHyperQuery() {

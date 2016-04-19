@@ -60,7 +60,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
         "integer": "Integer",
         "money": "Float",
         "text": "TextArea",
-        "timestamp with time zone": "DateTime"
+        "timestamp with time zone": "DateTime",
+        "time with time zone": "Time"
     },
 
     getAllTables() {

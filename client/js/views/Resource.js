@@ -32,7 +32,12 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     create( data ) {
         this.createProperties.forEach( property => {
-            if( property.fk && this[ property.fk.table + "Typeahead" ] ) { data[ property.property ] = this[ property.fk.table + "Typeahead" ].id }
+            if( property.fk && this[ property.fk.table + "Typeahead" ] ) {
+                data[ property.property ] =
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                        ? [ property.descriptor.path[0].table, 'id' ].join('.')
+                        : 'id' ]
+            }
             if( property.range === "File" ) { data[ property.property ] = this[ property.property + "File" ] }
         } )
 
@@ -47,11 +52,24 @@ Object.assign( Resource.prototype, Table.prototype, {
         } )
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
+
+            this.createProperties.forEach( property => {
+                if( property.fk && this[ property.fk.table + "Typeahead" ] && ( property.descriptor.path ) ) {
+                    response[ [ property.descriptor.table, property.descriptor.column.name ].join('.') ] = {
+                        descriptor: property.descriptor,
+                        table: property.fk.table,
+                        id: response[ property.property ],
+                        value: this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ] }
+                }
+            } )
+
             this.items.add( new this.Instance( response, { parse: true } ) )
             this.modalView.templateData.confirmBtn.removeClass('has-spinner')
             this.spinner.stop()
             this.modalView.hide( { reset: true } )
         } )
+
+    
             
     },
 
@@ -82,7 +100,11 @@ Object.assign( Resource.prototype, Table.prototype, {
 
                 attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
 
-                data[ property.property ] = this[ property.fk.table + "Typeahead" ].id
+                data[ property.property ] =
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                        ? [ property.descriptor.path[0].table, 'id' ].join('.')
+                        : 'id' ]
+
                 this.modelToEdit.get( attribute ).id = this[ property.fk.table + "Typeahead" ].id
                 this.modelToEdit.get( attribute ).value = this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ]
             } else if( property.range === "File" ) {                
@@ -90,7 +112,8 @@ Object.assign( Resource.prototype, Table.prototype, {
                 if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
                     this.modelToEdit.get( property.property ).src = this.base64
                 }
-            }
+            } else if( property.property === "dayofweek" ) {
+                modelAttrs[ property.property ] = { raw: data[ property.property ], value: this.modelToEdit.DayOfWeekHash[ data[ property.property ] ] } }
             else { modelAttrs[ property.property ] = data[ property.property ] }
             
         } )
@@ -148,8 +171,18 @@ Object.assign( Resource.prototype, Table.prototype, {
         return this.format.capitalizeFirstLetter( property )
     },
 
-    initDatepicker( property ) {
-        this.$( '#' + property.property ).datetimepicker( { format: "YYYY-MM-DD", minDate: this.moment() } )
+    initDatepicker( property, value ) {
+        var time
+
+        if( property.range === "Time" ) {
+            time = value.slice( 0, -2 )
+            value = ( /AM/.test(value) || time.slice(0,1) === "12" ) ? time : this.util.format( '%d:%s', parseInt(time.split(":")[0]) + 12, time.split(":")[1] )
+        }
+
+        this.$( '#' + property.property ).datetimepicker(
+            ( property.range === "Time" )
+                ? { format: "h:mmA", defaultDate: this.moment( [ this.moment().format('YYYY-MM-DD'), value ].join(" ") ) }
+                : { format: "YYYY-MM-DD", minDate: this.moment() } )
     },
 
     initFileUploader( property ) {
@@ -235,9 +268,13 @@ Object.assign( Resource.prototype, Table.prototype, {
             if( img.length ) this.modalView.templateData[ property.property + "Preview" ].replaceWith( img.clone(false).attr( { id: property.property + "-preview" } ) )
             return
         }
-        if( !property.fk || !property.descriptor ) return el.val( this.modelToEdit.get( property.property ) )
         
-        this.initTypeahead( property ) 
+        if( /Date|Time/.test(property.range) ) { return this.initDatepicker( property, this.modelToEdit.get( property.property ).value ) }
+        else if( property.property === 'dayofweek' ) {
+            return el.val( this.modelToEdit.get( property.property ).raw )
+        }
+        else if( !property.fk || !property.descriptor ) { return el.val( this.modelToEdit.get( property.property ) ) }
+        
         el.typeahead( 'val', this.modelToEdit.get( [ property.descriptor.table, property.descriptor.column.name ].join('.') ).value )
     },
 
@@ -272,7 +309,7 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         var onShown = () => this.createProperties.forEach( property => {
                 if( property.fk && property.descriptor !== undefined ) this.initTypeahead( property )
-                else if( property.range === "Date" ) this.initDatepicker( property )
+                else if( /Date|Time/.test(property.range) ) this.initDatepicker( property )
                 else if( property.range === "File" ) this.initFileUploader( property )
              } ),
             onSubmit = data => this.create(data)
@@ -282,7 +319,9 @@ Object.assign( Resource.prototype, Table.prototype, {
                 fields: this.createProperties.map( property => 
                     this.templates[ property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
-                        label: this.getLabel( property.property ),
+                        label: this.getLabel( ( property.descriptor )
+                            ? [ property.descriptor.table, property.descriptor.column.name ].join('.')
+                            : property.property ),
                         name: property.property,
                         password: ( property.property === "password" ) ? true : false
                     } ) 
@@ -327,10 +366,12 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.modalView.show( {
             body: this.templates.create( {
                 fields: this.createProperties.map( property => 
-                    this.templates[ property.range ]( {
+                    this.templates[ ( property.property === "dayofweek" ) ? "DayOfWeek" : property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
                         name: property.property,
-                        label: this.getLabel( property.property ),
+                        label: this.getLabel( ( property.descriptor )
+                            ? [ property.descriptor.table, property.descriptor.column.name ].join('.')
+                            : property.property )
                     } )
                 )
             } ),
@@ -350,11 +391,13 @@ Object.assign( Resource.prototype, Table.prototype, {
     templates: Object.assign( {}, Table.prototype.templates, {
         create: require('../templates/createInstance')( require('handlebars') ),
         Date: require('../templates/form/Date')( require('handlebars') ),
+        DayOfWeek: require('../templates/form/DayOfWeek')( require('handlebars') ),
         File: require('../templates/form/File')( require('handlebars') ),
         Float: require('../templates/form/Text')( require('handlebars') ),
         Integer: require('../templates/form/Text')( require('handlebars') ),
         Text: require('../templates/form/Text')( require('handlebars') ),
         TextArea: require('../templates/form/TextArea')( require('handlebars') ),
+        Time: require('../templates/form/Date')( require('handlebars') )
     } ),
 
     update( resource ) {
