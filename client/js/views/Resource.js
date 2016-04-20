@@ -34,7 +34,7 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.createProperties.forEach( property => {
             if( property.fk && this[ property.fk.table + "Typeahead" ] ) {
                 data[ property.property ] =
-                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path.length )
                         ? [ property.descriptor.path[0].table, 'id' ].join('.')
                         : 'id' ]
             }
@@ -101,7 +101,7 @@ Object.assign( Resource.prototype, Table.prototype, {
                 attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
 
                 data[ property.property ] =
-                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path )
+                    this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path.length )
                         ? [ property.descriptor.path[0].table, 'id' ].join('.')
                         : 'id' ]
 
@@ -274,7 +274,8 @@ Object.assign( Resource.prototype, Table.prototype, {
             return el.val( this.modelToEdit.get( property.property ).raw )
         }
         else if( !property.fk || !property.descriptor ) { return el.val( this.modelToEdit.get( property.property ) ) }
-        
+       
+        this.initTypeahead( property ) 
         el.typeahead( 'val', this.modelToEdit.get( [ property.descriptor.table, property.descriptor.column.name ].join('.') ).value )
     },
 
