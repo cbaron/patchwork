@@ -25,7 +25,7 @@ Object.assign( Table.prototype, List.prototype, {
     },
 
     templates: {
-        headerColumn: function( data ) { return this.util.format( '<th class="w%s" data-sort="%s">%s</th>', data.width, data.name, data.label ) }
+        headerColumn: function( data ) { return this.util.format( '<th class="w%s %s" data-sort="%s">%s</th>', data.width, data.name, data.name, data.label ) }
     }
 
 } )

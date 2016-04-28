@@ -1,5 +1,6 @@
 .mytable {
   height: 100%;
+  overflow-x: auto;
   position: relative;
 }
 .mytable.no-items {
@@ -16,8 +17,7 @@
 }
 .mytable table {
   border-collapse: collapse;
-  width: 100%;
-  display: block;
+  min-width: 100%;
 }
 .mytable table tr {
   border-bottom: 1px solid #ebebeb;
@@ -26,10 +26,20 @@
 }
 .mytable table th,
 .mytable table td {
+  color: #666;
   display: inline-block;
   float: left;
+  font-size: 100%;
+  line-height: inherit;
+  min-width: 150px;
   padding: 0px 20px;
+  text-align: left;
   vertical-align: middle;
+  white-space: normal;
+}
+.mytable table th.description,
+.mytable table td.description {
+  width: 300px;
 }
 .mytable table thead {
   display: block;

@@ -253,6 +253,10 @@ li {
   width: 10%;
 }
 
+.w11 {
+  width: 11%;
+}
+
 .w14 {
   width: 14%;
 }
@@ -1428,6 +1432,7 @@ footer .future-days {
 }
 .mytable {
   height: 100%;
+  overflow-x: auto;
   position: relative;
 }
 
@@ -1448,8 +1453,7 @@ footer .future-days {
 
 .mytable table {
   border-collapse: collapse;
-  width: 100%;
-  display: block;
+  min-width: 100%;
 }
 
 .mytable table tr {
@@ -1460,10 +1464,21 @@ footer .future-days {
 
 .mytable table th,
 .mytable table td {
+  color: #666;
   display: inline-block;
   float: left;
+  font-size: 100%;
+  line-height: inherit;
+  min-width: 150px;
   padding: 0px 20px;
+  text-align: left;
   vertical-align: middle;
+  white-space: normal;
+}
+
+.mytable table th.description,
+.mytable table td.description {
+  width: 300px;
 }
 
 .mytable table thead {

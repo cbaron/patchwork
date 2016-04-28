@@ -171,18 +171,20 @@ Object.assign( Resource.prototype, Table.prototype, {
         return this.format.capitalizeFirstLetter( property )
     },
 
-    initDatepicker( property, value ) {
-        var time
+    initDatepicker( property, modelValue ) {
+        var time, value
+            
+        if( modelValue ) value = modelValue.value
 
-        if( property.range === "Time" ) {
+        if( value && property.range === "Time" ) {
             time = value.slice( 0, -2 )
             value = ( /AM/.test(value) || time.slice(0,1) === "12" ) ? time : this.util.format( '%d:%s', parseInt(time.split(":")[0]) + 12, time.split(":")[1] )
         }
-
+        
         this.$( '#' + property.property ).datetimepicker(
             ( property.range === "Time" )
-                ? { format: "h:mmA", defaultDate: this.moment( [ this.moment().format('YYYY-MM-DD'), value ].join(" ") ) }
-                : { format: "YYYY-MM-DD", minDate: this.moment() } )
+                ? { format: "h:mmA", defaultDate: ( value ) ? this.moment( [ this.moment().format('YYYY-MM-DD'), value ].join(" ") ) : "" }
+                : { format: "YYYY-MM-DD", defaultDate: ( value && modelValue.raw ) ? this.moment( modelValue.raw ).format('YYYY-MM-DD') : "" } )
     },
 
     initFileUploader( property ) {
@@ -235,17 +237,14 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     onRowMouseEnter( e ) {
         var row = this.$( e.currentTarget ),
-            position = row.position(),
-            top = position.top + ( row.outerHeight( true ) / 2 )
+            top = row.position().top + 13
 
         this.hoveredModel = this.items.get( row.attr( 'data-id' ) )
         this.templateData.editBtn.removeClass('hide')
         this.templateData.deleteBtn.removeClass('hide')
 
-        top -= ( this.templateData.editBtn.outerHeight() / 2 )
-        
-        this.templateData.editBtn.css( { top: top, right: '35px' } )
-        this.templateData.deleteBtn.css( { top: top, right: '5px' } )
+        this.templateData.editBtn.css( { top: top, left: '115px' } )
+        this.templateData.deleteBtn.css( { top: top, left: '135px' } )
     },
     
     onRowMouseLeave( e ) {
@@ -259,7 +258,9 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     populateModalField( property ) {
-        var el = this.modalView.templateData[ property.property ], img
+        var el = this.modalView.templateData[ property.property ],
+            img,
+            modelValue
 
         if( ! el ) return
         if( property.range === 'File' ) {
@@ -269,11 +270,15 @@ Object.assign( Resource.prototype, Table.prototype, {
             return
         }
         
-        if( /Date|Time/.test(property.range) ) { return this.initDatepicker( property, this.modelToEdit.get( property.property ).value ) }
+        modelValue = this.modelToEdit.get( property.property )
+         
+        if( /Date|Time/.test(property.range) ) { return this.initDatepicker( property, modelValue ) }
         else if( property.property === 'dayofweek' ) {
-            return el.val( this.modelToEdit.get( property.property ).raw )
+            return el.val( modelValue.raw )
         }
-        else if( !property.fk || !property.descriptor ) { return el.val( this.modelToEdit.get( property.property ) ) }
+        else if( !property.fk || !property.descriptor ) {
+            return el.val( ( typeof modelValue === "boolean" ) ? modelValue.toString() : modelValue )
+        }
        
         this.initTypeahead( property ) 
         el.typeahead( 'val', this.modelToEdit.get( [ property.descriptor.table, property.descriptor.column.name ].join('.') ).value )
@@ -391,6 +396,7 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     templates: Object.assign( {}, Table.prototype.templates, {
         create: require('../templates/createInstance')( require('handlebars') ),
+        Boolean: require('../templates/form/Boolean')( require('handlebars') ),
         Date: require('../templates/form/Date')( require('handlebars') ),
         DayOfWeek: require('../templates/form/DayOfWeek')( require('handlebars') ),
         File: require('../templates/form/File')( require('handlebars') ),

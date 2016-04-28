@@ -40,8 +40,9 @@ MyView.prototype._.extend( Modal.prototype, MyView.prototype, {
         } )
 
         this.templateData.container.on( 'shown.bs.modal', () => { 
+            var firstInput = this.$('.modal-body input:first')
             this.emit( 'shown' )
-            this.$('.modal-body input:first').focus()
+            if( firstInput.length && (! /date/.test( firstInput.attr('id') ) ) ) firstInput.focus()
         } )
 
         return this;

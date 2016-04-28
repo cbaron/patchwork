@@ -54,6 +54,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     dataTypeToRange: {
+        "boolean": "Boolean",
         "bytea": "File",
         "character varying": "Text",
         "date": "Date",

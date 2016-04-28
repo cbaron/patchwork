@@ -53,9 +53,15 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
     },
 
     querySync: function( query, args ) {
-        var client = new this._pgNative()
+        var client = new this._pgNative(),
+            rows
+
         client.connectSync( this.connectionString )
-        var rows = client.querySync( query, args )
+        
+        rows = client.querySync( query, args )
+
+        client.end()
+
         return rows        
     }
 
