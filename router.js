@@ -4,7 +4,15 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
-    _postgresQuery: function( query, args ) {
+    _postgresStream( query, pipe ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).stream( query, pipe )
+    },
+    
+    _postgresQueryStream( query, pipe ) {
+        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).queryStream( query, pipe )
+    },
+
+    _postgresQuery( query, args ) {
         return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( query, args );
     },
 
@@ -110,14 +118,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
         
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
-        
-        this._postgresQuery( this.format( 'SELECT %s FROM %s WHERE id = $1', path[1], path[0] ), [ path[2] ] )
-        .then( result => {
-            response.writeHead( 200, { Connection: "keep-alive" } )
-            response.end( ( result.rows[0][ path[1] ] === null ) ? '' : result.rows[0][ path[1] ] )
-        } )
-        .fail( err => this.handleFailure( response, err ) )
-        .done()
+
+        response.writeHead( 200, { 'Connection': 'keep-alive' } )
+        this._postgresQueryStream( this.format("SELECT encode( %s, 'hex' ) FROM %s WHERE id = %s", path[1], path[0], path[2] ), response )
+        .catch( err => this.handleFailure( response, err, 500, true ) )
     },
     
     handler( request, response ) {
@@ -143,7 +147,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return this.handleFailure( response, new Error("Not Found"), 404, false )
 
     },
-
     initialize() {
         var static = require('node-static')
 

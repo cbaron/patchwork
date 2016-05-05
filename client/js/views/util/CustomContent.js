@@ -23,8 +23,7 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
 
             if( table.image ) {
                 var promiseChain = new Promise( ( resolve, reject ) => resolve() )
-                this.collections[ table.name ].models.forEach( model => promiseChain = promiseChain
-                    .then( () => this.loadImageTable( table, model ) ) )
+                this.collections[ table.name ].models.forEach( model => promiseChain = promiseChain.then( () => this.loadImageTable( table, model ) ) )
             } else {
                 this.collections[ table.name ].models.forEach( model => 
                     this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )

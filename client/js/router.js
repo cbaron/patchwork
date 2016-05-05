@@ -32,10 +32,6 @@ module.exports = new (
 
                 this.$('body').removeClass().addClass( resource )
                 
-                
-                
-                if( this.user.id && resource === 'admin' ) this.header.onUser( this.user )
-                
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
                 
                 if( this.views[ resource ] ) this.views[ resource ].show()

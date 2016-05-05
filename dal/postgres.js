@@ -9,12 +9,14 @@ var Postgres = function() {
 
 Object.assign( Postgres.prototype, MyObject.prototype, {
 
+    _copyTo: require('pg-copy-streams').to,
+
     _handleConnect: function( err, client, done ) {
         if( err ) return this.deferred.connection.reject( new Error( "Error fetching client from pool : " + err ) )
 
         this.client = client;
         this.done = done;
-     
+
         this.deferred.connection.resolve( true );
 
         return this;
@@ -39,19 +41,54 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
         this.client.query( query, args, this._handleQuery.bind( this, query, args ) );
         return this;
     },
+    
+    _queryStream: require('pg-query-stream'),
 
     connect: function() {
         this._pg.connect( this.connectionString, this._handleConnect.bind(this) );
         return this.deferred.connection.promise;
     },
 
-    query: function( query, args ) {
-
-        this.connect().then( this._query.bind( this, query, args ) ).done();
-        
-        return this.deferred.query.promise;
+    query( query, args ) {
+        this.connect().then( this._query.bind( this, query, args ) ).done()
+        return this.deferred.query.promise
     },
 
+    queryStream( query, pipe ) {
+        return new Promise( ( resolve, reject ) => {
+            this.connect()
+            .then( () => {
+                var stream = this.client.query( new this._queryStream( query ) )
+                stream.on( 'end', () => { this.done(); pipe.end(); resolve() } )
+                stream.on( 'data', chunk => pipe.write( new Buffer( chunk.encode, 'hex' ).toString('binary'), 'binary' ) )
+                stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
+            } )
+            .fail( e => { console.log(e.stack || e ); reject(e) } )
+            .done()
+        } )
+    },
+
+    stream( query, pipe ) {
+        return new Promise( ( resolve, reject ) => {
+            this.connect()
+            .then( () => {
+                var stream = this.client.query( this._copyTo( query ) )
+                stream.setEncoding( null )
+                stream.on( 'end', () => {
+                    this.done()
+                    pipe.end()
+                    resolve()
+                } )
+                stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
+                stream.on( 'data', chunk => {
+                    pipe.write( new Buffer( chunk, 'hex' ).toString('binary'), 'binary' )
+                } )
+            } )
+            .fail( e => { console.log(e.stack || e ); reject(e) } )
+            .done()
+        } )
+    },
+    
     querySync: function( query, args ) {
         var client = new this._pgNative(),
             rows

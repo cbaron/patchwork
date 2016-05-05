@@ -16,7 +16,9 @@
     "node-env-file": "^0.1.8",
     "node-static": "^0.7.7",
     "pg": "^4.4.4",
+    "pg-copy-streams": "1.0.0",
     "pg-native": "^1.10.0",
+    "pg-query-stream": "^1.0.0",
     "pg-transaction": "^1.0.4",
     "q": "^1.4.1",
     "stripe": "^4.4.0"
