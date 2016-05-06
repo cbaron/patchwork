@@ -1,6 +1,7 @@
 var MyObject = require('../lib/MyObject');
 
 var Postgres = function() {
+    this.connectionString = process.env.POSTGRES
     return MyObject.apply( Object.assign( this, {
         client: undefined,
         deferred: { connection: this.Q.defer(), query: this.Q.defer() },
@@ -58,10 +59,13 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
         return new Promise( ( resolve, reject ) => {
             this.connect()
             .then( () => {
-                var stream = this.client.query( new this._queryStream( query ) )
-                stream.on( 'end', () => { this.done(); pipe.end(); resolve() } )
-                stream.on( 'data', chunk => pipe.write( new Buffer( chunk.encode, 'hex' ).toString('binary'), 'binary' ) )
-                stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
+                var qStream = new this._queryStream( query )
+                    stream = this.client.query( qStream )
+                stream.on( 'end', () => { this.done(); qStream.close(); pipe.end(); resolve() } )
+                stream.on( 'data', chunk => {
+                    pipe.write( new Buffer( chunk.encode, 'hex' ).toString('binary'), 'binary' )
+                } )
+                stream.on( 'error', e => { this.done(); qStream.close(); pipe.end(); console.log(e.stack || e); reject( e ) } )
             } )
             .fail( e => { console.log(e.stack || e ); reject(e) } )
             .done()
@@ -72,7 +76,7 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
         return new Promise( ( resolve, reject ) => {
             this.connect()
             .then( () => {
-                var stream = this.client.query( this._copyTo( query ) )
+                var stream = this.client.query( this._copyTo( query, { highWaterMark: 8192 } ) )
                 stream.setEncoding( null )
                 stream.on( 'end', () => {
                     this.done()
@@ -81,6 +85,7 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
                 } )
                 stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
                 stream.on( 'data', chunk => {
+                    console.log( query, chunk.length )
                     pipe.write( new Buffer( chunk, 'hex' ).toString('binary'), 'binary' )
                 } )
             } )
@@ -102,6 +107,6 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
         return rows        
     }
 
-} );
+} )
 
-module.exports = Postgres;
+module.exports = Postgres

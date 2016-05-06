@@ -120,7 +120,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
 
         response.writeHead( 200, { 'Connection': 'keep-alive' } )
-        this._postgresQueryStream( this.format("SELECT encode( %s, 'hex' ) FROM %s WHERE id = %s", path[1], path[0], path[2] ), response )
+
+        this._postgresStream(
+            this.format("COPY ( SELECT encode( %s, 'hex' ) FROM %s WHERE id = %s ) TO STDOUT", path[1], path[0], path[2] ),
+            response )
+
         .catch( err => this.handleFailure( response, err, 500, true ) )
     },
     

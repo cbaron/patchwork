@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+require('node-env-file')( __dirname + '../.env' );
+
+var dataPath = __dirname + '../static/data'
+    tables = [
+        { name: 'carousel', columns: [ 'image' ] },
+        { name: 'csapageimage', columns: [ 'image' ] },
+        { name: 'header', columns: [ 'image', 'mobileimage' ] },
+        { name: 'staffprofile', columns: [ 'image' ] }
+    ],
+    format = require('util').format,
+    fs = require('fs')
+    pg = require('../dal/postgres'),
+    mkDir = ( dir ) => new Promise( ( resolve, reject ) => {
+        fs.stat( dir, ( err, stats ) => {
+            if( err ) return reject( err )
+            if( stats.isDirectory() ) return resolve()
+            fs.mkdir( dir, err => {
+                if( err ) reject( err )
+                resolve()
+            } )
+        } )
+    } ),
+    zlib = require('zlib')
+
+
+tables.forEach( table => {
+    mkDir( format( "%s/%s", dataPath, table.name ) )
+    .then( () => Promise.all( table.columns.map( column => mkDir( format( "%s/%s/%s", dataPath, table.name, column ) ) ) ) )
+    .then( () => new pg().query( format( "SELECT id FROM %s" ), table.name ) )
+    .then( result => {
+        var chain = new Promise( ( resolve, reject ) => resolve() )
+        result.rows.forEach( row =>
+            table.columns.forEach( column =>
+                chain.then( () => new pg().query( format( "SELECT %s FROM %s WHERE id = %s", column, table.name, row.id ) ) )
+                .then( columnResult => new Promise( ( resolve, reject ) => {
+                    zlib.gzip( new Buffer( columnResult.rows[0][ column ], 'hex' ).toString('binary'), ( err, gzipResult ) =>
+                        fs.writeFile( format( "%s/%s/%s/%s.gz", dataPath, table.name, column, row.id ), gzipResult, { encoding: 'binary' }, err => {
+                            if( err ) return reject(err)
+                            resolve()
+                        } )
+                    )
+                } ) )
+            )
+        )
+        return chain
+    } )
+    .catch( e => console.log( e.stack || e ) )
+} )
