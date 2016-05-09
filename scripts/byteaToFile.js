@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-require('node-env-file')( __dirname + '../.env' );
+require('node-env-file')( __dirname + '/../.env' );
 
-var dataPath = __dirname + '../static/data'
+var dataPath = __dirname + '/../static/data'
     tables = [
         { name: 'carousel', columns: [ 'image' ] },
         { name: 'csapageimage', columns: [ 'image' ] },
@@ -14,10 +14,10 @@ var dataPath = __dirname + '../static/data'
     pg = require('../dal/postgres'),
     mkDir = ( dir ) => new Promise( ( resolve, reject ) => {
         fs.stat( dir, ( err, stats ) => {
-            if( err ) return reject( err )
-            if( stats.isDirectory() ) return resolve()
-            fs.mkdir( dir, err => {
-                if( err ) reject( err )
+            if( err && err.code !== 'ENOENT' ) { return reject( err.stack || err ) }
+            if( stats && stats.isDirectory() ) return resolve()
+            fs.mkdir( dir, mkdirErr => {
+                if( mkdirErr ) reject( mkdirErr.stack || mkdirErr )
                 resolve()
             } )
         } )
@@ -28,18 +28,20 @@ var dataPath = __dirname + '../static/data'
 tables.forEach( table => {
     mkDir( format( "%s/%s", dataPath, table.name ) )
     .then( () => Promise.all( table.columns.map( column => mkDir( format( "%s/%s/%s", dataPath, table.name, column ) ) ) ) )
-    .then( () => new pg().query( format( "SELECT id FROM %s" ), table.name ) )
+    .then( () => new pg().query( format( "SELECT id FROM %s", table.name ) ) )
     .then( result => {
         var chain = new Promise( ( resolve, reject ) => resolve() )
         result.rows.forEach( row =>
             table.columns.forEach( column =>
                 chain.then( () => new pg().query( format( "SELECT %s FROM %s WHERE id = %s", column, table.name, row.id ) ) )
                 .then( columnResult => new Promise( ( resolve, reject ) => {
-                    zlib.gzip( new Buffer( columnResult.rows[0][ column ], 'hex' ).toString('binary'), ( err, gzipResult ) =>
-                        fs.writeFile( format( "%s/%s/%s/%s.gz", dataPath, table.name, column, row.id ), gzipResult, { encoding: 'binary' }, err => {
-                            if( err ) return reject(err)
+                    fs.writeFile(
+                        format( "%s/%s/%s/%s", dataPath, table.name, column, row.id ),
+                        columnResult.rows[0][ column ].toString('binary'),
+                        { encoding: 'binary' }, err => {
+                            if( err ) return reject( err.stack || err )
                             resolve()
-                        } )
+                        }
                     )
                 } ) )
             )

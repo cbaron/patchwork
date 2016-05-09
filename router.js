@@ -73,6 +73,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
         "time with time zone": "Time"
     },
 
+    fs: require('fs'),
+
     getAllTables() {
         return this.format(
             "SELECT table_name",
@@ -113,19 +115,18 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     handleFileRequest( request, response, path ) {
         var table = this.tables[ path[0] ],
-            column = this._( this.tables[ path[0] ].columns ).find( column =>
-                column.name === path[1] && column.dataType === "bytea" )
+            column = this._( this.tables[ path[0] ].columns ).find( column => column.name === path[1] ),
+            stream
         
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
 
         response.writeHead( 200, { 'Connection': 'keep-alive' } )
 
-        this._postgresStream(
-            this.format("COPY ( SELECT encode( %s, 'hex' ) FROM %s WHERE id = %s ) TO STDOUT", path[1], path[0], path[2] ),
-            response )
-
-        .catch( err => this.handleFailure( response, err, 500, true ) )
+        stream = this.fs.createReadStream( this.format( '%s/static/data/%s/%s/%s', __dirname, path[0], column.name, path[2] ) )
+        
+        stream.on( 'error', err => this.handleFailure( response, err, 500, true ) )
+        stream.pipe( response )
     },
     
     handler( request, response ) {

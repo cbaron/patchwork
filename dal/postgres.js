@@ -85,7 +85,6 @@ Object.assign( Postgres.prototype, MyObject.prototype, {
                 } )
                 stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
                 stream.on( 'data', chunk => {
-                    console.log( query, chunk.length )
                     pipe.write( new Buffer( chunk, 'hex' ).toString('binary'), 'binary' )
                 } )
             } )
