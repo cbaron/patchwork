@@ -31,14 +31,21 @@ Object.assign( Resource.prototype, Table.prototype, {
     },
 
     create( data ) {
+        var files = []
+
         this.createProperties.forEach( property => {
+            var name = property.property
+
             if( property.fk && this[ property.fk.table + "Typeahead" ] ) {
-                data[ property.property ] =
+                data[ name ] =
                     this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path.length )
                         ? [ property.descriptor.path[0].table, 'id' ].join('.')
                         : 'id' ]
             }
-            if( property.range === "File" ) { data[ property.property ] = this[ property.property + "File" ] }
+            if( property.range === "File" ) {
+                delete data[ name ]
+                files.push( { name: name, data: this[ name + "File" ] } )
+            }
         } )
 
         this.modalView.templateData.confirmBtn.append( this.spinner.spin().el ).addClass('has-spinner')
@@ -53,24 +60,25 @@ Object.assign( Resource.prototype, Table.prototype, {
         .done( ( response, textStatus, jqXHR ) => {
             if( this.items.length === 0 && this.fields === undefined ) this.setFields( response )
 
-            this.createProperties.forEach( property => {
-                if( property.fk && this[ property.fk.table + "Typeahead" ] && ( property.descriptor.path ) ) {
-                    response[ [ property.descriptor.table, property.descriptor.column.name ].join('.') ] = {
-                        descriptor: property.descriptor,
-                        table: property.fk.table,
-                        id: response[ property.property ],
-                        value: this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ] }
-                }
+            Promise.all( files.map( file => this.uploadFile( file.name, file.data, response.id ) ) ).then( () => {
+
+                this.createProperties.forEach( property => {
+                    var name = property.property
+                    if( property.fk && this[ property.fk.table + "Typeahead" ] && ( property.descriptor.path ) ) {
+                        response[ [ property.descriptor.table, property.descriptor.column.name ].join('.') ] = {
+                            descriptor: property.descriptor,
+                            table: property.fk.table,
+                            id: response[ name ],
+                            value: this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ] }
+                    }
+                } )
+
+                this.items.add( new this.Instance( response, { parse: true } ) )
+                this.modalView.templateData.confirmBtn.removeClass('has-spinner')
+                this.spinner.stop()
+                this.modalView.hide( { reset: true } )
             } )
-
-            this.items.add( new this.Instance( response, { parse: true } ) )
-            this.modalView.templateData.confirmBtn.removeClass('has-spinner')
-            this.spinner.stop()
-            this.modalView.hide( { reset: true } )
         } )
-
-    
-            
     },
 
     deleteModel() {
@@ -90,17 +98,20 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     edit( data ) {
 
-        var modelAttrs = { }
+        var filePromises = [ ],
+            modelAttrs = { }
 
         this.createProperties.forEach( property => {
+            var name = property.property
+
             if( property.fk ) {
                 var attribute
 
-                if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ property.property ]; return }
+                if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ name ]; return }
 
                 attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
 
-                data[ property.property ] =
+                data[ name ] =
                     this[ property.fk.table + "Typeahead" ][ ( property.descriptor.path.length )
                         ? [ property.descriptor.path[0].table, 'id' ].join('.')
                         : 'id' ]
@@ -108,30 +119,32 @@ Object.assign( Resource.prototype, Table.prototype, {
                 this.modelToEdit.get( attribute ).id = this[ property.fk.table + "Typeahead" ].id
                 this.modelToEdit.get( attribute ).value = this[ property.fk.table + "Typeahead" ][ property.descriptor.column.name ]
             } else if( property.range === "File" ) {                
-                data[ property.property ] = this[ property.property + "File" ]
-                if( this[ property.property + "File" ] && this[ property.property + "File" ].length ) {
-                    this.modelToEdit.get( property.property ).src = this.base64
+                delete data[ name ]
+                if( this[ name + "File" ] && this[ name + "File" ].length ) {
+                    this.modelToEdit.get( name ).src = this[ name + "Base64" ]
+                    filePromises.push( this.uploadFile( name, this[ name + "File" ], this.modelToEdit.id ) )
                 }
             } else if( property.property === "dayofweek" ) {
                 modelAttrs[ property.property ] = { raw: data[ property.property ], value: this.modelToEdit.DayOfWeekHash[ data[ property.property ] ] } }
             else { modelAttrs[ property.property ] = data[ property.property ] }
             
         } )
-        
-        this.$.ajax( {
-            headers: { accept: 'application/json' },
-            contentType: 'application/json',
-            data: JSON.stringify( data ),
-            method: 'PATCH',
-            url: this.util.format( "/%s/%d", this.resource, this.modelToEdit.id )
-        } )
-        .done( ( response, textStatus, jqXHR ) => {
-            this.modelToEdit.set( modelAttrs, { silent: true } )
-            this.modelToEdit.trigger( 'change', this.modelToEdit )
-            this.modelToEdit = undefined
-            this.modalView.hide( { reset: true } )
-        } )
-            
+       
+        Promise.all( filePromises ).then( () =>
+            this.$.ajax( {
+                headers: { accept: 'application/json' },
+                contentType: 'application/json',
+                data: JSON.stringify( data ),
+                method: 'PATCH',
+                url: this.util.format( "/%s/%d", this.resource, this.modelToEdit.id )
+            } )
+            .done( ( response, textStatus, jqXHR ) => {
+                this.modelToEdit.set( modelAttrs, { silent: true } )
+                this.modelToEdit.trigger( 'change', this.modelToEdit )
+                this.modelToEdit = undefined
+                this.modalView.hide( { reset: true } )
+            } ) )
+        .catch( err => console.log( err.stack || err ) )
     },
 
     events: {
@@ -200,12 +213,12 @@ Object.assign( Resource.prototype, Table.prototype, {
             btn.addClass('has-spinner').append( this.spinner.spin().el )
 
             reader.onload = ( evt ) => {
-                this.base64 = evt.target.result
-                var imageData = this.getImageData( this.base64 )
+                var imageData = this.getImageData( evt.target.result )
                 this[ property.property + "File" ] = imageData
+                this[ property.property + "Base64" ] = evt.target.result
                 btn.removeClass('has-spinner')
                 this.spinner.stop()
-                this.$( '#' + property.property + "-preview" ).attr( { src: this.base64 } )
+                this.$( '#' + property.property + "-preview" ).attr( { src: evt.target.result } )
             }
             
             reader.readAsDataURL( e.originalEvent.target.files[0] )
@@ -419,6 +432,17 @@ Object.assign( Resource.prototype, Table.prototype, {
         this.items.on( 'reset', () => { this.templateData.subHeading.text( this.label ) } )
         
         this.fetchItems().show()
+    },
+
+    uploadFile( name, data, id ) {
+        return new Promise( ( resolve, reject ) => {
+            this.$.ajax( {
+                data: data,
+                method: "POST",
+                url: this.util.format( "/file/%s/%s/%d", this.resource, name, id ) } )
+            .done( ( response, textStatus, jqXHR ) => resolve() )
+            .fail( ( jqXHR, textStatus, err ) => reject( err ) )
+        } )
     }
 
 } )

@@ -25,7 +25,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
             var file = './resources/html'
 
-            require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+            this.fs.stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 if( err ) reject( err )
                 new ( require(file) )( { path: path, request: request, response: response } )[ request.method ]().catch( err => reject( err ) )
             } )
@@ -39,7 +39,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         return new Promise( ( resolve, reject ) => {
 
-            require('fs').stat( this.format( '%s/%s.js', __dirname, file ), err => {
+            this.fs.stat( this.format( '%s/%s.js', __dirname, file ), err => {
                 var instance
 
                 if( err ) { 
@@ -116,6 +116,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     handleFileRequest( request, response, path ) {
         var table = this.tables[ path[0] ],
             column = this._( this.tables[ path[0] ].columns ).find( column => column.name === path[1] ),
+            filePath = this.format( '%s/static/data/%s/%s/%s', __dirname, path[0], column.name, path[2] ),
             stream
         
         if( path.length !== 3 || table === undefined || column === undefined ||
@@ -123,10 +124,14 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         response.writeHead( 200, { 'Connection': 'keep-alive' } )
 
-        stream = this.fs.createReadStream( this.format( '%s/static/data/%s/%s/%s', __dirname, path[0], column.name, path[2] ) )
-        
-        stream.on( 'error', err => this.handleFailure( response, err, 500, true ) )
-        stream.pipe( response )
+        this.fs.stat( filePath, ( err, stat ) => {
+            if( err ) return this.handleFailure( response, err, 500, false ) 
+
+            stream = this.fs.createReadStream( filePath )
+            
+            stream.on( 'error', err => this.handleFailure( response, err, 500, true ) )
+            stream.pipe( response )
+        } )
     },
     
     handler( request, response ) {
@@ -136,8 +141,17 @@ Object.assign( Router.prototype, MyObject.prototype, {
         if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
             return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
 
-        if( ( request.method === "GET" && path[1] === "file" ) ) {
-            return this.handleFileRequest( request, response, path.splice(2,3) ) }
+        if( path[1] === "file" ) {
+            if( request.method === "GET" ) return this.handleFileRequest( request, response, path.splice(2,3) )
+            else if( request.method === "POST" ) {
+                return new ( require('./resources/file') )( {
+                    request: request,
+                    response: response,
+                    path: path.splice(2,3),
+                    tables: this.tables,
+                } ).POST().catch( err => this.handleFailure( response, err, 500, true ) )
+            }
+        }
 
         if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
@@ -195,6 +209,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     url: require( 'url' )
 
+
 } )
 
 router = new Router( {
@@ -207,6 +222,6 @@ router = new Router( {
         }
     },
     tables: { } 
-} ).initialize();
+} ).initialize()
 
-module.exports = router.handler.bind(router);
+module.exports = router.handler.bind(router)

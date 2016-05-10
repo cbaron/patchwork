@@ -257,6 +257,6 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         }
     }
 
-} );
+} )
 
-module.exports = Resource;
+module.exports = Resource
