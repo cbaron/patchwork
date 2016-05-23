@@ -54,6 +54,9 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                     if( ! ( column.fk && this.tables[ column.fk.table ].meta ) ) return
 
                     descriptor = this.getDescriptor( column.fk.table, [ ] )
+                    
+                    if( ! descriptor.column ) return
+
                     columnName = [ descriptor.table, descriptor.column.name ].join('.')
 
                     row[ columnName ] = { descriptor: descriptor, table: column.fk.table, id: row[ column.name ], value: row[ columnName ] }

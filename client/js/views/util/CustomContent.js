@@ -17,17 +17,16 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
         } )     
     },
 
-    loadTableData( table ) {        
+    loadTableData( table ) {
         this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
         this.collections[ table.name ].fetch().then( () => {
 
             if( table.image ) {
                 var promiseChain = new Promise( ( resolve, reject ) => resolve() )
-                this.collections[ table.name ].models.forEach( model => promiseChain = promiseChain.then( () => this.loadImageTable( table, model ) ) )
+                this.collections[ table.name ].forEach( model => promiseChain = promiseChain.then( () => this.loadImageTable( table, model ) ) )
             } else {
-                this.collections[ table.name ].models.forEach( model => 
-                    this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )
-            ) }
+                this.collections[ table.name ].forEach( model => this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) ) )
+            }
 
         } )
         .fail( err => new this.Error(err) )       
