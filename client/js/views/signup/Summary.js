@@ -20,10 +20,12 @@ Object.assign( Summary.prototype, View.prototype, {
     Spinner: require('../../plugins/spinner.js'),
 
     buildRequest() {
+        var addressModel = this.user.get('addressModel')
+
         return JSON.stringify( {
             member: Object.assign(
                 this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard' ] ),
-                { zipcode: this.user.get('addressModel').postalCode } ),
+                { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
             payment: ( this.fee ) ? this.getFormData() : {},
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
