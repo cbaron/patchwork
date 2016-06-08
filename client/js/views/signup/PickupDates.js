@@ -37,9 +37,9 @@ Object.assign( PickupDates.prototype, List.prototype, {
             }
         } )
         
-        List.prototype.postRender.call( this )
-
         this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
+
+        List.prototype.postRender.call( this )
     },
 
     requiresLogin: false,

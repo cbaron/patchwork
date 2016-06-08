@@ -175,13 +175,17 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
     
     validateAddress( address ) {
-        if( this.$.trim( address ).length === 0 ) return false
-        
-        this.user.set( {
-            customAddress:
-                ( address !== this.user.get('address') || ( ! this._( this.user.get('addressModel').types ).contains( "street_address" ) ) ) ? true : false
-        } )
+        var addressModel, customAddres
 
+        if( this.$.trim( address ).length === 0 ) return false
+
+        addressModel = this.user.get('addressModel')
+        customAddress = ( address !== this.user.get('address') || !addressModel || ( ! this._( addressModel.types ).contains( "street_address" ) ) ) ? true : false
+        
+        this.user.set( { customAddress: customAddress } )
+
+        if( customAddress ) this.user.set( { addressModel: { } } )
+                
         return true
     },
 

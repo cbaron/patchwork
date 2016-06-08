@@ -18,6 +18,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         
         if( ! deliveryDay ) throw Error("No delivery Day")
 
+        return new this.Collection([ ])
+
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()

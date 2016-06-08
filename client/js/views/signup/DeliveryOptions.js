@@ -86,8 +86,17 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     },
 
     homeFeedback( deliveryOption ) {
+        var addressModel = this.user.get('addressModel'),
+            userPostalCode = ( addressModel ) ? addressModel.postalCode : undefined
 
-        var userPostalCode = this.user.get('addressModel').postalCode
+        if( !userPostalCode ) {
+
+            this.showFeedback('<div class="message">Because we could not lookup your address, we are currently unable to provide a delivery day for the week or time.  We will take care of this in the next step by having you verify your address.</div>')
+
+            this.selectedDelivery = { deliveryoptionid: deliveryOption.id, isHome: true }
+            
+            return this.valid = true
+        }
 
         this.zipRoute = new ( this.Model.extend( { parse: response => response[0], urlRoot: "/zipcoderoute" } ) )()
         this.homeDeliveryRoute = new this.Models.DeliveryRoute()
