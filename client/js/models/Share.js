@@ -16,9 +16,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             nextWeek = this.moment().add( 7, 'days' ),
             startDay = startDay = deliveryDate.day()
         
-        if( ! deliveryDay ) throw Error("No delivery Day")
-
-        return new this.Collection([ ])
+        if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])
 
         while( startDay != deliveryDay ) {
             deliveryDate.add( 1, 'days' )

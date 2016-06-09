@@ -12,15 +12,39 @@ Object.assign( DateSelection.prototype, List.prototype, {
     itemModels() { return this.signupData.shares.models },
 
     postRender() {
+
         List.prototype.postRender.call(this)
 
         this.signupData.shares.on( 'add', share => this.items.add( share ) )
                               .on( 'remove', share => this.items.remove( share ) )
+
+        this.preValidate()
+    },
+
+    preValidate() {
+        this.goBack = false
+
+        this.signupData.shares.forEach( share => {
+            var selectedDelivery = share.get('selectedDelivery')
+
+            if( !Number.isInteger(selectedDelivery.dayofweek) || !selectedDelivery.starttime || !selectedDelivery.starttime ) {
+                share.set( { selectedDelivery: { } } )
+                this.goBack = true
+            }
+        } )
     },
 
     requiresLogin: false,
 
     selection: true,
+
+    show() {
+        List.prototype.show.call(this)
+
+        this.preValidate()
+
+        return this
+    },
 
     template: require('../../templates/signup/dateSelection')( require('handlebars') ),
 

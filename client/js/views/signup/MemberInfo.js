@@ -175,7 +175,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
     
     validateAddress( address ) {
-        var addressModel, customAddres
+        var addressModel, customAddress
 
         if( this.$.trim( address ).length === 0 ) return false
 

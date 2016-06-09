@@ -108,7 +108,11 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.showProperNav()
         
-        if( this.instances[ currentViewName ] ) return this.instances[ currentViewName ].show().templateData.container.addClass(klass)
+        if( this.instances[ currentViewName ] ) {
+            this.instances[ currentViewName ].show().templateData.container.addClass(klass)
+            if( this.instances[ currentViewName ].goBack ) this.goBack()
+            return
+        }
         
         this.instances[ currentViewName ] =
             new this.views[ this.currentIndex ].view( {
@@ -123,6 +127,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
             this.views[ this.currentIndex ].on.forEach( eventData =>
                 this.instances[ currentViewName ].on( eventData.event, () => this[ eventData.method ]() ) )
         }
+
+        if( this.instances[ currentViewName ].goBack ) this.goBack()
         
         return this
     },

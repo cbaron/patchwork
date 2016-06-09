@@ -5,6 +5,10 @@ Object.assign( Delivery.prototype, List.prototype, {
 
     ItemView: require('./DeliveryOptions'),
 
+    Models: {
+        DeliveryRoute: require('../../models/DeliveryRoute'),
+    },
+
     collection: { comparator: 'startEpoch' },
 
     getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData } },
@@ -58,7 +62,12 @@ Object.assign( Delivery.prototype, List.prototype, {
             }, 500 )
         }
 
+        console.log( "valid : " + valid )
+
         if( ! valid ) return false
+        
+        console.log( "home delivery selected : " + homeDeliverySelected )
+        console.log( " custom address " + this.user.get('customAddress') )
 
         if( homeDeliverySelected && this.user.get('customAddress') ) {
             this.modalView.show( {
@@ -73,47 +82,62 @@ Object.assign( Delivery.prototype, List.prototype, {
 
                 deferred.resolve()
             } )
-            .on( 'submit', data => {
-                
+            .on( 'submit', () => {
+                var zipRoute = new ( this.Model.extend( { parse: response => response[0], urlRoot: "/zipcoderoute" } ) )(),
+                    homeDeliveryRoute = new this.Models.DeliveryRoute(),
+                    userAttributes
+
                 this.$('#zipCodeFormGroup').removeClass('has-error')
                 this.$('#zipCodeHelpBlock').addClass('hide')
+                
+                if( ! this.$('#verifiedZipCode').val().length ) {
+                    this.$('#zipCodeFormGroup').addClass('has-error')
+                    this.$('#zipCodeHelpBlock').removeClass('hide')
+                    return
+                }
 
-                this.user.set( {
-                    address: data.verifiedAddress,
-                    addressModel: Object.assign( this.user.get('addressModel') || {} , { postalCode: data.verifiedZipCode, types: [ "street_address" ]  } ),
-                    customAddress: false
-                }, { silent: true } )
-                this.Q( this.$.ajax( {
-                    data: JSON.stringify( this.user.attributes ),
-                    method: "PATCH",
-                    url: "/user" } ) )
+                this.Q( zipRoute.fetch( { data: { zipcode: this.$('#verifiedZipCode').val() } } ) )
                 .then( () => {
-                    var zipRoute = new ( this.Model.extend( { parse: response => response[0], urlRoot: "/zipcoderoute" } ) )(),
-                        homeDeliveryRoute = new this.Models.DeliveryRoute()
+                    if( Object.keys( zipRoute.attributes ).length === 0 ) {
+                        this.$('#zipCodeFormGroup').addClass('has-error')
+                        this.$('#zipCodeHelpBlock').removeClass('hide')
+                        return
+                    }    
 
-                    zipRoute.fetch( { data: { zipcode: this.user.get('addressModel').postalCode } } )
-                        .done( () => {
-                            if( Object.keys( zipRoute.attributes ).length === 0 ) {
-                                this.$('#zipCodeFormGroup').addClass('has-error')
-                                this.$('#zipCodeHelpBlock').removeClass('hide')
-                            }    
-                            homeDeliveryRoute.set( { id: this.zipRoute.get('routeid') } ).fetch()
-                            .done( () => {
-                                 Object.keys( this.itemViews ).forEach( id => {
-                                    if( this.itemViews[id].selectedDelivery.isHome ) {
-                                        this.items.get( id ).set( 'selectedDelivery',
-                                            Object.assign( this.itemViews[id].selectedDelivery, homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) ) )
-                                    }
-                                 } )
-                                this.modalView.templateData.container.modal('hide')
-                            } )
+                    return this.Q( homeDeliveryRoute.set( { id: zipRoute.get('routeid') } ).fetch() )
+                    .then( () => {
+                        Object.keys( this.itemViews ).forEach( id => {
+                            var selectedDelivery = Object.assign( this.itemViews[id].selectedDelivery, homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
+                            if( this.itemViews[id].selectedDelivery.isHome ) {
+                                this.items.get( id ).set( 'selectedDelivery', selectedDelivery )
+                                console.log(this.signupData.shares.get(id))
+                                this.signupData.shares.get(id).set('selectedDelivery', selectedDelivery)
+
+                            }
                         } )
+
+                        userAttributes = Object.assign( {}, this.user.attributes, {
+                            address: this.$('#verifiedAddress').val(),
+                            addressModel: Object.assign( this.user.get('addressModel') || {} , { postalCode: this.$('#verifiedZipCode').val(), types: [ "street_address" ]  } ),
+                            customAddress: false
+                        } )
+
+                        return this.Q( this.$.ajax( { data: JSON.stringify( userAttributes ), method: "PATCH", url: "/user" } ) )
+                    } ).then( () => {
+                        this.user.set( userAttributes, { silent: true } )
+                        this.modalView.templateData.container.modal('hide')
+                        deferred.resolve(true)
+                    } )
                 } )
-                .then( deferred.resolve )
-                .fail( deferred.reject ).done()
+                .fail( e => {
+                    console.log(e.stack || e);
+                    deferred.reject(e)
+                } )
+                .done()
+                
+                return deferred.promise
             } )
 
-            return deferred.promise
         }
 
         return true

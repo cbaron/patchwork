@@ -39,6 +39,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
         
         this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
 
+
         List.prototype.postRender.call( this )
     },
 
