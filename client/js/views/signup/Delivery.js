@@ -62,13 +62,8 @@ Object.assign( Delivery.prototype, List.prototype, {
             }, 500 )
         }
 
-        console.log( "valid : " + valid )
-
         if( ! valid ) return false
         
-        console.log( "home delivery selected : " + homeDeliverySelected )
-        console.log( " custom address " + this.user.get('customAddress') )
-
         if( homeDeliverySelected && this.user.get('customAddress') ) {
             this.modalView.show( {
                 body: this.templates.verifyAddress( { address: this.user.get('address'), zipCode: postalCode } ),
@@ -110,7 +105,6 @@ Object.assign( Delivery.prototype, List.prototype, {
                             var selectedDelivery = Object.assign( this.itemViews[id].selectedDelivery, homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
                             if( this.itemViews[id].selectedDelivery.isHome ) {
                                 this.items.get( id ).set( 'selectedDelivery', selectedDelivery )
-                                console.log(this.signupData.shares.get(id))
                                 this.signupData.shares.get(id).set('selectedDelivery', selectedDelivery)
 
                             }
@@ -135,8 +129,9 @@ Object.assign( Delivery.prototype, List.prototype, {
                 } )
                 .done()
                 
-                return deferred.promise
             } )
+                
+            return deferred.promise
 
         }
 
