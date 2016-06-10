@@ -15,7 +15,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             endDate = this.moment( this.get('enddate') ),
             nextWeek = this.moment().add( 7, 'days' ),
             startDay = startDay = deliveryDate.day()
-        
+
         if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])
 
         while( startDay != deliveryDay ) {
@@ -31,6 +31,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         }
         
         this.set( { deliveryDates: new this.Collection( dates ) } )
+
         return this.get('deliveryDates')
     },
 

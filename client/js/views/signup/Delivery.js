@@ -51,7 +51,7 @@ Object.assign( Delivery.prototype, List.prototype, {
         if( ! valid ) return false 
 
         Object.keys( this.itemViews ).forEach( id => {
-            this.items.get( id ).set( 'selectedDelivery', this.itemViews[id].selectedDelivery )
+            this.items.get( id ).set( 'selectedDelivery', Object.assign( {}, this.itemViews[id].selectedDelivery ) )
             if( this.itemViews[id].selectedDelivery.isHome ) homeDeliverySelected = true
         } )
         
@@ -102,11 +102,11 @@ Object.assign( Delivery.prototype, List.prototype, {
                     return this.Q( homeDeliveryRoute.set( { id: zipRoute.get('routeid') } ).fetch() )
                     .then( () => {
                         Object.keys( this.itemViews ).forEach( id => {
-                            var selectedDelivery = Object.assign( this.itemViews[id].selectedDelivery, homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
+                            var selectedDelivery = Object.assign( {}, this.itemViews[id].selectedDelivery, homeDeliveryRoute.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
                             if( this.itemViews[id].selectedDelivery.isHome ) {
                                 this.items.get( id ).set( 'selectedDelivery', selectedDelivery )
-                                this.signupData.shares.get(id).set('selectedDelivery', selectedDelivery)
-
+                                this.itemViews[id].selectedDelivery = selectedDelivery
+                                this.itemViews[id].showFeedback( this.itemViews[id].feedback.home( selectedDelivery ) )
                             }
                         } )
 

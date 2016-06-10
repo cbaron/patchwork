@@ -24,9 +24,9 @@ Object.assign( DateSelection.prototype, List.prototype, {
     preValidate() {
         this.goBack = false
 
-        this.signupData.shares.forEach( share => {
+        this.items.forEach( share => {
             var selectedDelivery = share.get('selectedDelivery')
-
+            
             if( !Number.isInteger(selectedDelivery.dayofweek) || !selectedDelivery.starttime || !selectedDelivery.starttime ) {
                 share.set( { selectedDelivery: { } } )
                 this.goBack = true
