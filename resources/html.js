@@ -21,7 +21,7 @@ Object.assign( Html.prototype, {
         }
     },
     
-    page: require('../templates/page')( require('handlebars') ),
+    page: require('../templates/page'),
 
     respond: function( body ) {
         return new Promise( ( resolve, reject ) => {

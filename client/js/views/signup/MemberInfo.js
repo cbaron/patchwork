@@ -63,6 +63,11 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         error: "Passwords must match.",
         validate: function( val ) { return val === this.templateData.password.val() }
     }, {
+        name: 'omission',
+        label: 'One food you do not want',
+        type: 'text',
+        validate: () => true
+    }, {
         name: 'heard',
         label: 'How you heard about us',
         type: 'text',
@@ -94,6 +99,19 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
     },
 
+    initializeFoodOmission() {
+        this.foods = new ( this.Collection.extend( { comparator: 'name', url: `/food` ) } )
+        
+        this.foods.fetch().then( () => {
+            this.foods.models.forEach( food => {
+                if( model.get('page') === resource ) {
+                    this.model = model
+                    this.size()                                      
+                }                
+            } )
+        } )
+    },
+
     postRender() {
         var self = this
 
@@ -118,6 +136,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
+
+        this.initializeFoodOmission()
     },
 
     removeError( $el ) {
@@ -144,7 +164,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         $el.siblings('.help-block').remove()
     },
 
-    template: require('../../templates/signup/memberInfo')( require('handlebars') ),
+    template: require('../../templates/signup/memberInfo'),
 
     validate() {
         var valid = true

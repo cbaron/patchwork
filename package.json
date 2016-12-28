@@ -1,7 +1,7 @@
 {
   "description": "Site for Patchwork Gardens",
   "engines": {
-    "node": "5.1.0"
+    "node": "7.2.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.3.14",
