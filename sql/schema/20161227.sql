@@ -16,6 +16,10 @@ CREATE TABLE memberfoodomission (
     producefamilyid INTEGER REFERENCES producefamily (id)
 );
 
+INSERT INTO tablemeta ( name, label, description, recorddescriptor ) VALUES ( 'producefamily', 'Produce Family', 'Each record is a category of produce', 'name' );
+INSERT INTO tablemeta ( name, label, description, recorddescriptor ) VALUES ( 'produce', 'Produce', 'Each record is a type of produce', 'name' );
+INSERT INTO tablemeta ( name, label, description, recorddescriptor ) VALUES ( 'memberfoodomission', 'Member Food Omission', 'Each record is the food a member does not want', NULL );
+
 INSERT INTO producefamily ( name ) VALUES ('Mustards');
 INSERT INTO producefamily ( name ) VALUES ('Kale');
 INSERT INTO producefamily ( name ) VALUES ('Pac Choi');
