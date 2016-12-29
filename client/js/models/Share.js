@@ -10,10 +10,13 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     getDeliveryDates() {
         var dates = [ ],
+            now = this.moment(),
             deliveryDay = this.get('selectedDelivery').dayofweek,
             deliveryDate = this.moment( this.get('startdate') ),
             endDate = this.moment( this.get('enddate') ),
-            nextWeek = this.moment().add( 7, 'days' ),
+            nextWeek = ( now.day() === 6 || ( now.day() === 5 && now.hour() > 5 ) )
+                ? this.moment().day(15).hour(0).minute(0).second(0).millisecond(0)
+                : this.moment().day(8).hour(0).minute(0).second(0).millisecond(0),
             startDay = startDay = deliveryDate.day()
 
         if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])

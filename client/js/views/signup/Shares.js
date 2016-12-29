@@ -28,7 +28,17 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     postRender() {
         List.prototype.postRender.call(this)
-        this.on( 'itemSelected', () => this.templateData.container.removeClass('has-error') )
+
+        this.on( 'itemSelected', model => {
+            this.templateData.container.removeClass('has-error')
+            if( /summer/i.test( model.get('name') ) || /summer/i.test( model.get('label') ) ) {
+                this.items.forEach( model => {
+                    if( /spring/i.test( model.get('name') ) || /spring/i.test( model.get('label') ) ) {
+                        this.itemViews[model.id].show()
+                    }
+                } )
+            }
+        } )
 
         this.signupData.shares = new ( this.Collection.extend( { comparator: 'startEpoch' } ) )()
 

@@ -10,6 +10,8 @@ Object.assign( Share.prototype, ListItem.prototype, {
         ListItem.prototype.postRender.call(this)
 
         new this.ShareBox( { container: this.templateData.shareBox, insertionMethod: 'prepend', model: this.model } )
+
+        if( /spring/i.test( this.model.get('name') ) || /spring/i.test( this.model.get('label') ) ) this.hide()
     },
 
     requiresLogin: false,
