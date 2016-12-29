@@ -13,7 +13,7 @@ CREATE TABLE memberfoodomission (
     id              SERIAL PRIMARY KEY,
     memberid        INTEGER REFERENCES member (id),
     produceid       INTEGER REFERENCES produce (id),
-    producefamilyid INTEGER REFERENCES produce (id)
+    producefamilyid INTEGER REFERENCES producefamily (id)
 );
 
 INSERT INTO producefamily ( name ) VALUES ('Mustards');

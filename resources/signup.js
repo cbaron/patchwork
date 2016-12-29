@@ -17,8 +17,9 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.executeUserQueries()
             .then( memberid => {
                 this.memberid = memberid
-                return this.Q.all( this.body.shares.map( share => this.executeShareQueries( share ) ) )
+                return this.handleFoodOmission( memberid )
             } )
+            .then( () => this.Q.all( this.body.shares.map( share => this.executeShareQueries( share ) ) ) )
             .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( ) } )
         }
     } ),
@@ -133,6 +134,23 @@ Object.assign( Signup.prototype, Base.prototype, {
         return ( Object.keys( this.body.payment ).length )
             ? this.format( "\r\n\r\nThank you for your online payment of $%s. If there is a problem with the transaction, we will be in touch.", total )
             : this.format( "\r\n\r\nYour total comes to $%s.  Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!", total )
+    },
+
+    handleFoodOmission( memberid ) {
+        if( this.body.member.omission.length === 0 ) return this.Q()
+
+        return this.dbQuery( {
+            query: `SELECT * FROM memberfoodomission WHERE memberid = $1`,
+            values: [ memberid ] } )
+        .then( result => {
+            var values = [ memberid, this.body.member.omission[0].produceid || this.body.member.omission[0].producefamilyid ],
+                column = this.body.member.omission[0].produceid ? 'produceid' : 'producefamilyid',
+                nullColumn = this.body.member.omission[0].produceid ? 'producefamilyid' : 'produceid'
+
+            return result.rows.length === 0
+                ? this.dbQuery( { query: `INSERT into memberfoodomission ( memberid, ${column} ) VALUES ( $1, $2 )`, values } )
+                : this.dbQuery( { query: `UPDATE memberfoodomission SET ${column} = $2, ${nullColumn} = NULL WHERE memberid = $1`, values } )
+        } )
     },
 
     insertMember( personid ) {

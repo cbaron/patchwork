@@ -102,14 +102,14 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     initializeFoodOmission() {
         this.foods = new ( this.Collection.extend( { comparator: 'foodproduceid', url: `/food` } ) )
         
-        this.foods.fetch().then( () => {
+        return this.foods.fetch().then( () => {
             const data = this.foods.models.map( ( food, i ) => Object.assign( { id: i }, food.attributes ) ),
                   renderer =  data => 
                     data.produceid
                         ? `<span class="${data.producefamilyid ? 'produce-in-family' : ''}">${data.name}</span>`
                         : `<span class="produce-family">All ${data.name}</span>`
 
-            this.templateData.omission.magicSuggest( {
+            this.templateData.omission = this.templateData.omission.magicSuggest( {
                 allowFreeEntries: false,
                 data,
                 highlight: false,
@@ -120,7 +120,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 selectionRenderer: renderer,
                 valueField: 'id'
             } )
-        } )
+
+            this.templateData.omission.val = value => value ? this.templateData.omission.setSelection( value ) : this.templateData.omission.getSelection()
+            return Promise.resolve()
+        }, e => console.log(e.stack || e) )
     },
 
     postRender() {
@@ -128,9 +131,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.initAutocomplete()
         this.templateData.address.attr( 'placeholder', '' )
-
-        this.fields.forEach( field => { if( this.user.has( field.name ) ) this.templateData[ field.name ].val( this.user.get( field.name ) ) } )
-
+        
+        this.initializeFoodOmission()
+        .then( () =>
+            this.fields.forEach( field => {
+                if( this.user.has( field.name ) ) {
+                    this.templateData[ field.name ].val( this.user.get( field.name ) )
+                }
+            } )
+        )
+        
         this.templateData.container.find('input')
         .on( 'blur', function() {
             var $el = self.$(this),
@@ -148,7 +158,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
 
-        this.initializeFoodOmission()
     },
 
     removeError( $el ) {

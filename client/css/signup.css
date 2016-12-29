@@ -27,14 +27,15 @@
 .signup-class .walkthrough-container {
   min-height: 500px;
 }
+.signup-class .walkthrough-container > div:first-child {
+  z-index: 3;
+  position: relative;
+}
 .signup-class .nav {
   font-size: 2rem;
   margin-bottom: 30px;
   margin-top: 30px;
-}
-.signup-class .nav > div {
   position: relative;
-  z-index: -1;
 }
 .signup-class .nav .glyphicon {
   cursor: pointer;
