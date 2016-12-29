@@ -701,6 +701,11 @@ footer .future-days {
   margin-top: 30px;
 }
 
+.signup-class .nav > div {
+  position: relative;
+  z-index: -1;
+}
+
 .signup-class .nav .glyphicon {
   cursor: pointer;
 }
@@ -783,6 +788,14 @@ footer .future-days {
   border: 1px solid #666;
   border-radius: 5px;
   background-color: #f7f7f7;
+}
+
+.signup-class .member-info .produce-family {
+  font-weight: bold;
+}
+
+.signup-class .member-info .produce-in-family {
+  margin-left: 15px;
 }
 
 .signup-class .member-info .help-block {

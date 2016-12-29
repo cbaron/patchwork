@@ -5,7 +5,7 @@ module.exports = p =>
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/typeahead.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-combobox.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/magicsuggest.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bundle.css">
 
         <meta charset="UTF-8">
@@ -15,9 +15,9 @@ module.exports = p =>
         <script src="/static/js/babel-polyfill.js"></script>
         <script src="/static/js/bundle.js"${p.firefox? ' type="application/javascript;version=1.7"' : ''}></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
-        <script src="/static/js/bootstrap-combobox.js"></script>
+        <script src="/static/js/magicsuggest.js"></script>
 
-        <title>${p.title}}</title>
+        <title>${p.title}</title>
     </head>
 
     <body class="${p.bodyClass}">

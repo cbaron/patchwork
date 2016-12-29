@@ -216,6 +216,7 @@ router = new Router( {
     routes: {
         REST: {
             'auth': true,
+            'food': true,
             'validate-address': true,
             'signup': true,
             'user': true

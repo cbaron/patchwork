@@ -65,7 +65,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     }, {
         name: 'omission',
         label: 'One food you do not want',
-        type: 'text',
+        type: 'select',
         validate: () => true
     }, {
         name: 'heard',
@@ -100,14 +100,25 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
 
     initializeFoodOmission() {
-        this.foods = new ( this.Collection.extend( { comparator: 'name', url: `/food` ) } )
+        this.foods = new ( this.Collection.extend( { comparator: 'foodproduceid', url: `/food` } ) )
         
         this.foods.fetch().then( () => {
-            this.foods.models.forEach( food => {
-                if( model.get('page') === resource ) {
-                    this.model = model
-                    this.size()                                      
-                }                
+            const data = this.foods.models.map( ( food, i ) => Object.assign( { id: i }, food.attributes ) ),
+                  renderer =  data => 
+                    data.produceid
+                        ? `<span class="${data.producefamilyid ? 'produce-in-family' : ''}">${data.name}</span>`
+                        : `<span class="produce-family">All ${data.name}</span>`
+
+            this.templateData.omission.magicSuggest( {
+                allowFreeEntries: false,
+                data,
+                highlight: false,
+                placeholder: '',
+                maxDropHeight: 200,
+                maxSelection: 1,
+                renderer,
+                selectionRenderer: renderer,
+                valueField: 'id'
             } )
         } )
     },

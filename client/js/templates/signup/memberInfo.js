@@ -6,10 +6,13 @@ module.exports = p =>
 p.fields.map( field =>        
     `<div class="form-group">
         <label for="${field.name}" class="col-sm-3 control-label">${field.label}</label>
-        <div class="col-sm-9">
-            <input type="${field.type}" class="form-control" id="${field.name}" data-js="${field.name}">
-            <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
-        </div>
+        <div class="col-sm-9">` +
+            ( field.type === 'select'
+                ? `<div id="${field.name}" data-js="${field.name}"></div>`
+                : `<input type="${field.type}" class="form-control" id="${field.name}" data-js="${field.name}">` +
+                  `<span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>`
+            ) +
+        `</div>
     </div>` ).join('') +
         
         `<div style="display: none;"><input type="text" id="PreventChromeAutocomplete" name="PreventChromeAutocomplete" autocomplete="address-level4" /></div>
