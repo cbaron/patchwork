@@ -52,5 +52,8 @@
     "type": "git",
     "url": "https://github.com/cbaron/patchwork.git"
   },
+  "scripts": {
+      "watch": "gulp watch"
+  },
   "version": "0.0.1"
 }

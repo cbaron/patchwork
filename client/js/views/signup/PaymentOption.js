@@ -5,7 +5,7 @@ Object.assign( PaymentOption.prototype, ListItem.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/paymentOption')( require('handlebars') )
+    template: require('../../templates/signup/paymentOption')
 
 } )
 
