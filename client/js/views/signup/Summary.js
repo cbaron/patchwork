@@ -26,7 +26,7 @@ Object.assign( Summary.prototype, View.prototype, {
             member: Object.assign(
                 this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard', 'omission' ] ),
                 { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
-            payment: ( this.fee ) ? this.getFormData() : {},
+            payment: ( this.paymentSelected === 'card' ) ? this.getFormData() : {},
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
         } )
@@ -57,6 +57,7 @@ Object.assign( Summary.prototype, View.prototype, {
         this.signupHandler = () => { if( this.validateCardInfo() ) this.signup() }
 
         this.fee = false
+        this.paymentSelected = 'card'
         this.updateGrandTotal()
 
         this.templateData.paymentForm.removeClass('hide')
@@ -68,6 +69,7 @@ Object.assign( Summary.prototype, View.prototype, {
         this.signupHandler = () => this.signup()
 
         this.fee = false
+        this.paymentSelected = 'cash'
 
         this.enableSignupBtn()
     },
@@ -228,6 +230,7 @@ Object.assign( Summary.prototype, View.prototype, {
     paymentUnselected() {
 
         this.fee = false
+        this.selectedPayment = undefined
         this.updateGrandTotal()
 
         this.templateData.signupBtn.addClass('disabled').removeClass('btn-success').off( 'click' )
@@ -237,6 +240,7 @@ Object.assign( Summary.prototype, View.prototype, {
     postRender() {
         
         this.fee = false
+        this.selectedPayment = undefined
         
         View.prototype.postRender.call(this)
 
