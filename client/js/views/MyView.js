@@ -12,6 +12,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     $: require('jquery'),
 
+    Xhr: require('../Xhr'),
+
     delegateEvents( key, el ) {
         var type;
 

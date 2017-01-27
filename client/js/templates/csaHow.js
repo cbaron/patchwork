@@ -6,9 +6,5 @@ module.exports = p =>
     <div data-js="groupDeliveryOptions"></div>
     <div>
         <span>On-Farm pick-up</span>
-        <span> - 41 N. Lutheran Church Rd., Dayton, OH 45417 - </span>
-        <span data-js="farmPickupTime">Thurs. 3:00 - 7:00pm</span>
-        <span>(Discount this option:</span>
-        <span data-js="discount"></span>
-        <span>)</span>
+        <div data-js="farmPickupOption"></div>
     </div>`

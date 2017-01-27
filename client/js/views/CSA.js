@@ -3,6 +3,10 @@ var CustomContent = require('./util/CustomContent'),
 
 Object.assign( CSA.prototype, CustomContent.prototype, {
 
+    Models: {
+        DeliveryRoute: require('../models/DeliveryRoute') 
+    },
+
     events: {
         signupBtn: { method: 'routeToSignup' }
     },
@@ -11,14 +15,32 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
         'how-do-i-know': 'howDoIKnow',
     },
 
+    parseDeliveryInfo: require('../models/DeliveryRoute').prototype.parse,
+
     postRender() {
         CustomContent.prototype.postRender.call(this)
 
-        this.$('body').animate( {
-            scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
+        if( window.location.hash ) {
+            this.$('body').animate( {
+                scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
+        }
 
         this.on( 'insertedcsadeliveryinfoTemplate', () => {
 
+            this.Xhr( { method: 'get', resource: 'currentGroupDelivery' } )
+            .then( data => {
+                data.forEach( datum =>
+                    this.slurpTemplate( {
+                        template: this.templates.groupDeliveryOption( ( new this.Models.DeliveryRoute( datum, { parse: true } ) ).attributes ),
+                        insertion: { $el: this.templateData.groupDeliveryOptions }
+                    } )
+                )
+            } )
+            .catch( e => new this.Error(e) )
+
+            this.Xhr( { method: 'get', resource: 'currentFarmDelivery' } )
+            .then( data => console.log( data ) )
+            .catch( e => new this.Error(e) )
         } )
     },
 
@@ -36,6 +58,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
     templates: {
         csaHow: require('../templates/csaHow'),
+        groupDeliveryOption: require('../templates/groupDeliveryOption'),
         listItem: require('../templates/listItem')( require('handlebars') ),
         listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') )
     }

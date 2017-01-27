@@ -61,17 +61,21 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
         this.items.on( 'reset', () => { if( this.items.length === 0 ) return this.emit('noShares') } )
 
-        if( this.sessionShares ) {
-            var sessionShareIds = this.sessionShares.map( share => share.id )
-            this.on( 'itemAdded', model => {
-                var sessionShare = this._( this.sessionShares ).find( share => share.id == model.id )
+        this.on( 'initialized', () =>
+            this.items.forEach( item => {
+                const sessionShare = this.sessionShares.find( share => share.id === item.id )
                 if( sessionShare ) {
-                    this.selectItem( model )
-                    this.signupData.shares.add( model )
-                    if( sessionShare.selectedOptions ) model.set( 'selectedOptions', sessionShare.selectedOptions ) 
-                    if( sessionShare.selectedDelivery ) model.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
-                    if( sessionShare.skipDays ) { model.set( 'skipDays', sessionShare.skipDays ) }
+                    this.selectItem( item )
+                    this.signupData.shares.add( item )
+                    if( sessionShare.selectedOptions ) item.set( 'selectedOptions', sessionShare.selectedOptions ) 
+                    if( sessionShare.selectedDelivery ) item.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
+                    if( sessionShare.skipDays ) { item.set( 'skipDays', sessionShare.skipDays ) }
                 }
+            } )
+        )
+
+        if( this.sessionShares ) {
+            this.on( 'itemAdded', () => {
                 if( Object.keys( this.itemViews ).length === this.items.length ) this.emit('initialized')
             } )
         }

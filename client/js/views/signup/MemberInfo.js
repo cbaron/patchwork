@@ -130,8 +130,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         var self = this;
 
         ( window.google && window.google.maps ) 
-            ? this.initAutoComplete()
-            : window.initGMap = () => this.initAutoComplete()
+            ? this.initAutocomplete()
+            : window.initGMap = () => this.initAutocomplete()
 
         this.templateData.address.attr( 'placeholder', '' )
         
