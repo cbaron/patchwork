@@ -12,31 +12,26 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     },
 
     postRender() {
-
         CustomContent.prototype.postRender.call(this)
 
-        this.on( 'insertedTemplate', tableName => {
-            if( window.location.hash && tableName === "csapageimage" ) {
-                this.$('body').animate( {
-                    scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
-            }
-        } )
+        this.$('body').animate( {
+            scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
     },
 
     requiresLogin: false,
 
     tables: [
-        { name: 'csapageimage', comparator: 'id', el: 'csaImage', image: true, template: 'csaImage' },
+        { name: 'csadeliveryinfo', el: 'how', template: 'csaHow' },
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
     ],
     
     routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
-    template: require('../templates/csa')( require('handlebars') ),
+    template: () => require('../templates/csa'),
 
     templates: {
-        csaImage: require('../templates/imageInstance')( require('handlebars') ),
+        csaHow: require('../templates/csaHow'),
         listItem: require('../templates/listItem')( require('handlebars') ),
         listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') )
     }

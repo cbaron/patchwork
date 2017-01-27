@@ -18,7 +18,7 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
     },
 
     loadTableData( table ) {
-        this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: this.util.format("/%s", table.name ) } ) )()
+        this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: `/${table.name}` } ) )()
         this.collections[ table.name ].fetch().then( () => {
 
             if( table.image ) {
