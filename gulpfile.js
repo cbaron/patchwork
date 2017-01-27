@@ -47,6 +47,6 @@ gulp.task('concatCss', [ 'less' ], function () {
 });
 
 gulp.task("watch", function(){
-    gulp.watch('./client/js/**/*.js', ['modules'])
+    //gulp.watch('./client/js/**/*.js', ['modules'])
     gulp.watch('./less/**/*.less', ['concatCss'])
 });

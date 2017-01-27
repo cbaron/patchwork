@@ -8,6 +8,7 @@ Number.isInteger = Number.isInteger || function(value) {
 };
 
 window.$ = window.jQuery = $
+window.initGMap = () => true
 
 require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')

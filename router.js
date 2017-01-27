@@ -4,6 +4,8 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
+    Path: require('path'),
+
     _postgresStream( query, pipe ) {
         return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).stream( query, pipe )
     },
@@ -138,8 +140,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
 
-        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
-            return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
+        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) return this.serveStaticFile( request, response, path )
+
 
         if( path[1] === "file" ) {
             if( request.method === "GET" ) return this.handleFileRequest( request, response, path.splice(2,3) )
@@ -178,7 +180,42 @@ Object.assign( Router.prototype, MyObject.prototype, {
         return this;
     },
 
-    serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
+    serveStaticFile( request, response, path ) {
+        var fileName = path.pop(),
+            filePath = `${__dirname}/${path.join('/')}/${fileName}`,
+            ext = this.Path.extname( filePath )
+
+        return this.P( this.fs.stat, [ filePath ] )
+        .then( ( [ stat ] ) => new Promise( ( resolve, reject ) => {
+            
+            var stream = this.fs.createReadStream( filePath )
+            
+            response.on( 'error', e => { stream.end(); reject(e) } )
+            stream.on( 'error', reject )
+            stream.on( 'end', () => {
+                response.end();
+                resolve()
+            } )
+
+            response.writeHead(
+                200,
+                {
+                    'Cache-Control': `max-age=600`,
+                    'Connection': 'keep-alive',
+                    'Content-Encoding': ext === ".gz" ? 'gzip' : 'identity',
+                    'Content-Length': stat.size,
+                    'Content-Type':
+                        /\.css/.test(fileName)
+                            ? 'text/css'
+                            : ext === '.svg'
+                                ? 'image/svg+xml'
+                                : 'text/plain'
+                }
+            )
+            stream.pipe( response, { end: false } )
+        } ) )
+        .catch( e => console.log( e.stack || e ) )
+    },
 
     storeForeignKeyData( foreignKeyResult ) {
         foreignKeyResult.forEach( row => {
