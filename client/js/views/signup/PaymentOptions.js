@@ -7,7 +7,7 @@ Object.assign( PaymentOptions.prototype, List.prototype, {
 
     itemModels: [
         { id: 1, name: 'cash', label: 'Cash or Check', note: 'Mail payment to Patchwork' },
-        { id: 2, name: 'card', label: 'Credit Card', note: 'A 3% fee will apply.' }
+        { id: 2, name: 'card', label: 'Credit Card', note: 'Pay online.' }
     ],
 
     requiresLogin: false,
