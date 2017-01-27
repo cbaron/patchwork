@@ -1,7 +1,7 @@
 module.exports = p =>
     `<p>${p.homedeliveryintro}</p>
     <h3>Patchwork Gardens Home Delivery Range</h3>
-    <img src="${p.deliveryrange}" />
+    <img src="/file/csadeliveryinfo/deliveryrange/${p.id}" />
     <p>${p.groupdeliveryintro}</p>
     <div data-js="groupDeliveryOptions"></div>
     <div>
