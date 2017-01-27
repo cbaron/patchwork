@@ -10,3 +10,6 @@ CREATE TABLE csadeliveryinfo (
 );
 
 INSERT INTO tablemeta ( name, label, description, recorddescriptor ) VALUES ( 'csadeliveryinfo', 'CSA Delivery Info', 'Data to be displayed on the /csa page.  One record only.', null );
+
+ALTER TABLE csadeliveryinfo DROP COLUMN deliveryrange;
+ALTER TABLE csadeliveryinfo ADD COLUMN deliveryrange bytea;
