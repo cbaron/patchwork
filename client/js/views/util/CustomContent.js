@@ -11,7 +11,7 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
                 model.set( 'tableName', table.name )
                 if( table.name === "carousel" && model.get('position') === 1 ) model.set( 'first', true )
                 this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )
-                this.emit( 'insertedTemplate', table.name )
+                this.emit( `inserted${table.name}Template` )
                 resolve()
             }
         } )     
@@ -26,6 +26,7 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
                 this.collections[ table.name ].forEach( model => promiseChain = promiseChain.then( () => this.loadImageTable( table, model ) ) )
             } else {
                 this.collections[ table.name ].forEach( model => this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) ) )
+                this.emit( `inserted${table.name}Template` )
             }
 
         } )

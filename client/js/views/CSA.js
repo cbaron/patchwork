@@ -16,6 +16,10 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
         this.$('body').animate( {
             scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
+
+        this.on( 'insertedcsadeliveryinfoTemplate', () => {
+
+        } )
     },
 
     requiresLogin: false,
