@@ -26,15 +26,32 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         return { container: this.templateData.shares }
     },
 
+    isSeason( season, model ) {
+        const re = new RegExp( season, 'i' )
+
+        return Boolean( re.test( model.get('name') ) || re.test( model.get('label') ) )
+    },
+
     postRender() {
         List.prototype.postRender.call(this)
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            if( /summer/i.test( model.get('name') ) || /summer/i.test( model.get('label') ) ) {
-                this.items.forEach( model => {
-                    if( /spring/i.test( model.get('name') ) || /spring/i.test( model.get('label') ) ) {
-                        this.itemViews[model.id].show()
+            if( this.isSeason( 'summer', model ) ) {
+                this.items.forEach( share => {
+                    if( this.isSeason( 'spring', share ) ) {
+                        this.itemViews[share.id].show()
+                    }
+                } )
+            }
+        } )
+
+        this.on( 'itemUnselected', model => {
+            if( this.isSeason( 'summer', model ) ) {
+                this.items.forEach( share => {
+                    if( this.isSeason( 'spring', share ) ) {
+                        this.itemViews[share.id].hide()
+                        this.unselectItem( share )
                     }
                 } )
             }
