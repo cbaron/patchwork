@@ -5,7 +5,7 @@ Object.assign( CurrentFarmDelivery.prototype, Base.prototype, {
 
     GET() {
         return this.dbQuery( { query: `SELECT dr.*, d.* FROM deliveryoption d JOIN deliveryroute dr ON d.name = dr.label WHERE d.name = 'farm'` } )
-        .then( results => this.respond( { body: result.rows.length ? results.rows[0] : [ ] } ) )
+        .then( result => this.respond( { body: result.rows.length ? result.rows[0] : { } } ) )
     }
     
 } )

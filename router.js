@@ -6,21 +6,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     Path: require('path'),
 
-    _postgresStream( query, pipe ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).stream( query, pipe )
-    },
-    
-    _postgresQueryStream( query, pipe ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).queryStream( query, pipe )
-    },
+    Postgres: require('./dal/postgres'),
 
-    _postgresQuery( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( query, args );
-    },
-
-    _postgresQuerySync( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args );
-    },
+    _postgresQuery( query, args ) { return this.Postgres.query( query, args ) },
 
     applyHTMLResource( request, response, path ) {
         return new Promise( ( resolve, reject ) => {
@@ -169,11 +157,17 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     },
     initialize() {
-        this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
-        this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
-        this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
-
-        return this
+        return this._postgresQuery( this.getAllTables() )
+        .then( results => 
+            this.storeTableData( results.rows ).then( () => this._postgresQuery( "SELECT * FROM tablemeta" ) )
+        )
+        .then( results => {
+            this.storeTableMetaData( results.rows )
+            return this._postgresQuery( this.getForeignKeys() )
+        } )
+        .then( results => {
+            return Promise.resolve( this.storeForeignKeyData( results.rows ) )
+        } )
     },
 
     serveStaticFile( request, response, path ) {
@@ -227,11 +221,17 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     storeTableData( tableResult ) {
-        tableResult.forEach( row => {
-            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-            this.tables[ row.table_name ] =
-                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
-        } )
+        return Promise.all(
+            tableResult.map( row =>
+                this._postgresQuery( this.getTableColumns( row.table_name ) )
+                .then( result =>
+                    Promise.resolve(
+                        this.tables[ row.table_name ] =
+                            { columns: result.rows.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) }
+                    )
+                )
+            )
+        )
     },
     
     storeTableMetaData( metaDataResult ) {
@@ -245,12 +245,13 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
 } )
 
-router = new Router( {
+module.exports = new Router( {
     routes: {
         REST: {
             'auth': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,
+            'currentShare': true,
             'food': true,
             'validate-address': true,
             'signup': true,
@@ -258,6 +259,4 @@ router = new Router( {
         }
     },
     tables: { } 
-} ).initialize()
-
-module.exports = router.handler.bind(router)
+} )

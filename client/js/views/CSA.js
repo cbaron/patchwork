@@ -39,7 +39,18 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
             .catch( e => new this.Error(e) )
 
             this.Xhr( { method: 'get', resource: 'currentFarmDelivery' } )
-            .then( data => console.log( data ) )
+            .then( data =>
+                this.slurpTemplate( {
+                    template: this.templates.farmDeliveryOption( ( new this.Models.DeliveryRoute( data, { parse: true } ) ).attributes ),
+                    insertion: { $el: this.templateData.farmPickupOption }
+                } )
+            )
+            .catch( e => new this.Error(e) )
+
+            this.Xhr( { method: 'get', resource: 'currentShare' } )
+            .then( data =>
+                console.log(data)
+            )
             .catch( e => new this.Error(e) )
         } )
     },
@@ -58,6 +69,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
     templates: {
         csaHow: require('../templates/csaHow'),
+        farmDeliveryOption: require('../templates/farmDeliveryOption'),
         groupDeliveryOption: require('../templates/groupDeliveryOption'),
         listItem: require('../templates/listItem')( require('handlebars') ),
         listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') )

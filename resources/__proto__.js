@@ -3,6 +3,8 @@ var MyObject = require('../lib/MyObject'),
 
 Object.assign( Resource.prototype, MyObject.prototype, {
 
+    Postgres: require('../dal/postgres'),
+
     context: {
         DELETE:function(){},
 
@@ -40,8 +42,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         POST: function() { return this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
     },
 
-    dbQuery: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( data.query, data.values ),
-    dbQuerySync: data => new ( require('../dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( data.query, data.values ),
+    dbQuery( data  ) { return this.Q( this.Postgres.query( data.query, data.values ) ) },
 
     GET: function() {
         return [
