@@ -188,7 +188,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         address: ( groupDropoff )
                             ? groupDropoff.get('address')
                             : ( selectedDelivery.get('name') === 'farm' )
-                                ? "9057 W. Third St., Dayton, OH 45417"
+                                ? "41 N. Lutheran Church Rd"
                                 : this.user.get('address'),
                         dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery') ],
                         starttime: times.starttime,
