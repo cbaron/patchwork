@@ -11,7 +11,7 @@ module.exports = p =>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <script src="https://maps.googleapis.com/maps/api/js?key=${p.googleApiKey}&libraries=places">
+        <script src="https://maps.googleapis.com/maps/api/js?key=${p.googleApiKey}&libraries=places"></script>
         <script src="/static/js/babel-polyfill.js"></script>
         <script src="/static/js/bundle.js"${p.firefox? ' type="application/javascript;version=1.7"' : ''}></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
