@@ -1,7 +1,7 @@
 module.exports = p => `<div data-js="container" class="home-class client-view">
     <h4>Fresh food from farmers you know!</h4>
     <h3>
-        <button data-js="signupBtn" class="btn btn-link signup-btn">CSA Sign-up Form!</button>
+        <button data-js="signupBtn" class="btn btn-link signup-btn">Join our CSA!</button>
     </h3>
     <div data-js="carousel" id="carousel" class="carousel slide">
         <div data-js="carouselInner" class="carousel-inner" role="listbox"></div>

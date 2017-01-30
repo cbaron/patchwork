@@ -33,7 +33,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     
     routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
-    template: require('../templates/csa')( require('handlebars') ),
+    template: require('../templates/csa'),
 
     templates: {
         csaImage: require('../templates/imageInstance')( require('handlebars') ),
