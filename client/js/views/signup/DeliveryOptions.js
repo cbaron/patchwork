@@ -146,8 +146,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             var deliveryOptions = share.get('deliveryoptions')
 
             this.items.reset( deliveryOptions.models )
-            if( deliveryOptions.length === 0 ) this.templateData.options.text('This share does not have delivery options associated with it.  Please contact Patchwork and sign up for this particular share at  a later date.')
 
+            if( deliveryOptions.length === 0 ) this.templateData.options.text('This share does not have delivery options associated with it.  Please contact Patchwork and sign up for this particular share at a later date.')
         } )
         .fail( e => console.log( e.stack || e ) )
         .done()

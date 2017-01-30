@@ -7,4 +7,5 @@ module.exports = p =>
     <div>
         <span>On-Farm pick-up</span>
         <div data-js="farmPickupOption"></div>
-    </div>`
+    </div>
+    <div data-js="deliveryMatrix"></div>`

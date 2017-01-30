@@ -48,7 +48,12 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
             .catch( e => new this.Error(e) )
 
             this.Xhr( { method: 'get', resource: 'currentShare' } )
-            .then( data =>
+            .then( ( { deliveryOptions, produceOptions } ) =>
+                this.slurpTemplate( {
+                    template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => option.optoin
+
+    `
+    `
                 console.log(data)
             )
             .catch( e => new this.Error(e) )
