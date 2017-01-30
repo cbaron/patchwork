@@ -20,7 +20,7 @@ Object.assign( Home.prototype, CustomContent.prototype, {
 
     routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
 
-    template: require('../templates/home')( require('handlebars') ),
+    template: require('../templates/home'),
 
     templates: {
         carouselImage: require('../templates/carouselImage')( require('handlebars') ),
