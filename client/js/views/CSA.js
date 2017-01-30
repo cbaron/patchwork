@@ -50,11 +50,15 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
             this.Xhr( { method: 'get', resource: 'currentShare' } )
             .then( ( { deliveryOptions, produceOptions } ) =>
                 this.slurpTemplate( {
-                    template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => option.optoin
+                    template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
+                    insertion: { $el: this.templateData.deliveryMatrix }
+                } )
 
-    `
-    `
-                console.log(data)
+                this.slurpTemplate( {
+                    template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
+                    insertion: { $el: this.templateData.nonSizeOptions }
+                } )
+            
             )
             .catch( e => new this.Error(e) )
         } )
@@ -74,6 +78,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
     templates: {
         csaHow: require('../templates/csaHow'),
+        deliveryMatrix: require('../templates/deliveryMatrix'),
         farmDeliveryOption: require('../templates/farmDeliveryOption'),
         groupDeliveryOption: require('../templates/groupDeliveryOption'),
         listItem: require('../templates/listItem')( require('handlebars') ),

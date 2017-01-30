@@ -22,11 +22,11 @@ Object.assign( CurrentShare.prototype, Base.prototype, {
     },
 
     getOptionQuery( shareId ) {
-        return `SELECT so.name as "optionPrompt", soo.* ` +
+        return `SELECT so.name as "prompt", soo.* ` +
                `FROM shareoptionshare sos ` +
                `JOIN shareoption so ON so.id = sos.shareoptionid ` +
                `JOIN shareoptionoption soo ON soo.shareoptionid = so.id ` +
-               `WHERE sos.shareid = ${shareId}`
+               `WHERE sos.shareid = ${shareId} ORDER BY soo.price`
     },
 
     getShareId() {
