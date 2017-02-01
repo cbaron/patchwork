@@ -5,8 +5,8 @@ Object.assign( Html.prototype, {
     GET() {
         return this.respond( this.page( {
             bodyClass: this.path[1],
+            isDev: Boolean( process.env.NODE_ENV === "development" ),
             googleApiKey: process.env.GOOGLE_API_KEY,
-            firefox: /Firefox/.test( this.request.headers[ 'user-agent' ] ),
             title: "Patchwork Gardens"
         } ) )
     },

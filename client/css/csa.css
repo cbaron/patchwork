@@ -1,3 +1,6 @@
+.csa-class p {
+  margin: 0 0 20px;
+}
 .csa-class h2 {
   color: #c98702;
 }
@@ -31,6 +34,53 @@
   margin-bottom: 3px;
   color: #155D75;
   list-style-type: circle;
+}
+.csa-class .how img {
+  display: block;
+  margin: 25px auto;
+  max-height: 400px;
+  max-width: 100%;
+}
+.csa-class .how .farmpickup,
+.csa-class .how .group-deliveries {
+  margin-bottom: 40px;
+}
+.csa-class .how .farmpickup span:first-child,
+.csa-class .how .group-deliveries span:first-child {
+  font-weight: bold;
+}
+.csa-class .how .delivery-martrix {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.csa-class .how .delivery-martrix > div:first-child {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+.csa-class .how .delivery-martrix .row:first-child {
+  color: #c98702;
+  font-weight: bold;
+}
+.csa-class .how .delivery-martrix .row:not(:first-child) > div:first-child {
+  color: #155D75;
+  font-weight: bold;
+}
+.csa-class .how .delivery-martrix .cell {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  padding: 15px 0px;
+}
+.csa-class .how .non-size-options {
+  margin-bottom: 40px;
+}
+.csa-class .how .non-size-options .intro {
+  margin-bottom: 15px;
+}
+.csa-class .how .non-size-options ul {
+  margin-left: 30px;
+}
+.csa-class .how .non-size-options .option {
+  padding: 30px 0px;
 }
 @media only screen and (max-width: 375px) {
   .csa-class .first-column {

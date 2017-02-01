@@ -4,21 +4,11 @@ var router,
 
 Object.assign( Router.prototype, MyObject.prototype, {
 
-    _postgresStream( query, pipe ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).stream( query, pipe )
-    },
-    
-    _postgresQueryStream( query, pipe ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).queryStream( query, pipe )
-    },
+    Path: require('path'),
 
-    _postgresQuery( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).query( query, args );
-    },
+    Postgres: require('./dal/postgres'),
 
-    _postgresQuerySync( query, args ) {
-        return new ( require('./dal/postgres') )( { connectionString: process.env.POSTGRES } ).querySync( query, args );
-    },
+    _postgresQuery( query, args ) { return this.Postgres.query( query, args ) },
 
     applyHTMLResource( request, response, path ) {
         return new Promise( ( resolve, reject ) => {
@@ -114,10 +104,16 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     handleFileRequest( request, response, path ) {
-        var table = this.tables[ path[0] ],
-            column = this._( this.tables[ path[0] ].columns ).find( column => column.name === path[1] ),
-            filePath = this.format( '%s/static/data/%s/%s/%s', __dirname, path[0], column.name, path[2] ),
-            stream
+        const table = this.tables[ path[0] ]
+
+        if( table === undefined ) return this.handleFailure( response, '404', 404, false )
+
+        const column = table.columns.find( column => column.name === path[1] )
+
+        if( column === undefined ) return this.handleFailure( response, '404', 404, false )
+
+        const filePath = `${__dirname}/static/data/${path[0]}/${column.name}/${path[2]}`
+        let stream = undefined
         
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
@@ -138,8 +134,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
 
-        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) {
-            return request.addListener( 'end', this.serveStaticFile.bind( this, request, response ) ).resume() }
+        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) return this.serveStaticFile( request, response, path )
+
 
         if( path[1] === "file" ) {
             if( request.method === "GET" ) return this.handleFileRequest( request, response, path.splice(2,3) )
@@ -167,18 +163,55 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     },
     initialize() {
-        var static = require('node-static')
-
-        this.storeTableData( this._postgresQuerySync( this.getAllTables() ) )
-        this.storeTableMetaData( this._postgresQuerySync( "SELECT * FROM tablemeta" ) )
-        this.storeForeignKeyData( this._postgresQuerySync( this.getForeignKeys() ) )
-
-        this.staticFolder = new static.Server( undefined, { cache: false } )
-
-        return this;
+        return this._postgresQuery( this.getAllTables() )
+        .then( results => 
+            this.storeTableData( results.rows ).then( () => this._postgresQuery( "SELECT * FROM tablemeta" ) )
+        )
+        .then( results => {
+            this.storeTableMetaData( results.rows )
+            return this._postgresQuery( this.getForeignKeys() )
+        } )
+        .then( results => {
+            return Promise.resolve( this.storeForeignKeyData( results.rows ) )
+        } )
     },
 
-    serveStaticFile( request, response ) { this.staticFolder.serve( request, response ) },
+    serveStaticFile( request, response, path ) {
+        var fileName = path.pop(),
+            filePath = `${__dirname}/${path.join('/')}/${fileName}`,
+            ext = this.Path.extname( filePath )
+
+        return this.P( this.fs.stat, [ filePath ] )
+        .then( ( [ stat ] ) => new Promise( ( resolve, reject ) => {
+            
+            var stream = this.fs.createReadStream( filePath )
+            
+            response.on( 'error', e => { stream.end(); reject(e) } )
+            stream.on( 'error', reject )
+            stream.on( 'end', () => {
+                response.end();
+                resolve()
+            } )
+
+            response.writeHead(
+                200,
+                {
+                    'Cache-Control': `max-age=600`,
+                    'Connection': 'keep-alive',
+                    'Content-Encoding': ext === ".gz" ? 'gzip' : 'identity',
+                    'Content-Length': stat.size,
+                    'Content-Type':
+                        /\.css/.test(fileName)
+                            ? 'text/css'
+                            : ext === '.svg'
+                                ? 'image/svg+xml'
+                                : 'text/plain'
+                }
+            )
+            stream.pipe( response, { end: false } )
+        } ) )
+        .catch( e => console.log( e.stack || e ) )
+    },
 
     storeForeignKeyData( foreignKeyResult ) {
         foreignKeyResult.forEach( row => {
@@ -194,11 +227,17 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     storeTableData( tableResult ) {
-        tableResult.forEach( row => {
-            var columnResult = this._postgresQuerySync( this.getTableColumns( row.table_name ) )
-            this.tables[ row.table_name ] =
-                { columns: columnResult.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) } 
-        } )
+        return Promise.all(
+            tableResult.map( row =>
+                this._postgresQuery( this.getTableColumns( row.table_name ) )
+                .then( result =>
+                    Promise.resolve(
+                        this.tables[ row.table_name ] =
+                            { columns: result.rows.map( columnRow => ( { name: columnRow.column_name, dataType: columnRow.data_type, range: this.dataTypeToRange[columnRow.data_type] } ) ) }
+                    )
+                )
+            )
+        )
     },
     
     storeTableMetaData( metaDataResult ) {
@@ -212,10 +251,13 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
 } )
 
-router = new Router( {
+module.exports = new Router( {
     routes: {
         REST: {
             'auth': true,
+            'currentFarmDelivery': true,
+            'currentGroupDelivery': true,
+            'currentShare': true,
             'food': true,
             'validate-address': true,
             'signup': true,
@@ -223,6 +265,4 @@ router = new Router( {
         }
     },
     tables: { } 
-} ).initialize()
-
-module.exports = router.handler.bind(router)
+} )

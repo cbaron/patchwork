@@ -1,111 +1,146 @@
-var MyObject = require('../lib/MyObject');
+module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').prototype, {
 
-var Postgres = function() {
-    this.connectionString = process.env.POSTGRES
-    return MyObject.apply( Object.assign( this, {
-        client: undefined,
-        deferred: { connection: this.Q.defer(), query: this.Q.defer() },
-        done: undefined } ), arguments )
-}
-
-Object.assign( Postgres.prototype, MyObject.prototype, {
-
-    _copyTo: require('pg-copy-streams').to,
-
-    _handleConnect: function( err, client, done ) {
-        if( err ) return this.deferred.connection.reject( new Error( "Error fetching client from pool : " + err ) )
-
-        this.client = client;
-        this.done = done;
-
-        this.deferred.connection.resolve( true );
-
-        return this;
+    initialize() {
+        return this.getTableData()
     },
 
-    _handleQuery: function( query, args, err, result ) {
-        this.done();
-
-        if( err ) return this.deferred.query.reject( new Error( this.format( 'Running query (%s [%s]) : %s', query, args, err ) ) )
-
-        this.deferred.query.resolve( result );
-
-        return this;
+    query( query, args, opts = { } ) {
+        return this._factory( opts ).query( query, args )
     },
 
-    _pg: require('pg'),
-
-    _pgNative: require('pg-native'),
-
-    _query: function( query, args ) {
-
-        this.client.query( query, args, this._handleQuery.bind( this, query, args ) );
-        return this;
-    },
-    
-    _queryStream: require('pg-query-stream'),
-
-    connect: function() {
-        this._pg.connect( this.connectionString, this._handleConnect.bind(this) );
-        return this.deferred.connection.promise;
+    select( name, where, opts = { } ) {
+        const keys = Object.keys( where )
+              whereClause = keys.map( ( key, i ) => `"${key}" = $${i+1}` ).join(', ')
+        return this._factory( opts ).query(
+            `SELECT * FROM ${name} WHERE ${whereClause}`,
+            keys.map( key => where[key] )
+        )
     },
 
-    query( query, args ) {
-        this.connect().then( this._query.bind( this, query, args ) ).done()
-        return this.deferred.query.promise
+    truncate() {
+        return this.query( `TRUNCATE ` + Object.keys( this.tables ).map( table => `"${table}"` ).join(', ') )
     },
 
-    queryStream( query, pipe ) {
-        return new Promise( ( resolve, reject ) => {
-            this.connect()
-            .then( () => {
-                var qStream = new this._queryStream( query )
-                    stream = this.client.query( qStream )
-                stream.on( 'end', () => { this.done(); qStream.close(); pipe.end(); resolve() } )
-                stream.on( 'data', chunk => {
-                    pipe.write( new Buffer( chunk.encode, 'hex' ).toString('binary'), 'binary' )
+    getColumnDescription( table, column ) {
+        const isEnum = ( this.enumReference && this.enumReference[ table.table_name ] && this.enumReference[ table.table_name ][ column.column_name ] ) ? true : false,
+              range = isEnum
+                ? this.enumReference[ table.table_name ][ column.column_name ]
+                : this.dataTypeToRange[column.data_type]
+        return {
+            isEnum,
+            isNullable: column.is_nullable,
+            maximumCharacterLength: column.data_type === "text" ? 1000 : column.character_maximum_length,
+            name: column.column_name,
+            range
+        }
+    }, 
+
+    getSelectList( table, opts={} ) {
+        const tableAlias = opts.alias ? opts.alias : table
+        return this.tables[ table ].columns.map( column => `"${tableAlias}"."${column.name}" as "${tableAlias}.${column.name}"` ).join(', ')
+    },
+
+    getTableData() {
+        return this.query( this._queries.selectAllTables() )
+        .then( result =>
+            Promise.all( result.rows.map( row =>
+                this.query( this._queries.selectTableColumns( row.table_name ) )
+                .then( columnResult =>
+                    Promise.resolve(
+                        this.tables[ row.table_name ] = { columns: columnResult.rows.map( columnRow => this.getColumnDescription( row, columnRow ) ) }
+                    )
+                )
+            ) )
+        )
+        .then( () =>
+            this.query( this._queries.selectForeignKeys() )
+            .then( result =>
+                Promise.resolve(
+                    result.rows.forEach( row => {
+                        const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                        let column = this.tables[ row.tablefrom.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
+                        
+                        column.fk = {
+                            table: match[2],
+                            column: match[3],
+                            recordType: ( this.tables[ match[2] ].meta ) ? this.tables[ match[2] ].meta.recordType : null
+                        }
+                    } )
+                )
+            )
+        )
+    },
+
+    _factory( data ) {
+        return Object.create( {
+            connect() {
+                return new Promise( ( resolve, reject ) => {
+                    this.pool.connect( ( err, client, done ) => {
+                        if( err ) return reject( err )
+
+                        this.client = client
+                        this.done = done
+                     
+                        resolve()
+                    } )
                 } )
-                stream.on( 'error', e => { this.done(); qStream.close(); pipe.end(); console.log(e.stack || e); reject( e ) } )
-            } )
-            .fail( e => { console.log(e.stack || e ); reject(e) } )
-            .done()
-        } )
+            },
+
+            query( query, args ) {
+                return this.connect().then( () =>
+                    new Promise( ( resolve, reject ) => {
+                        this.client.query( query, args, ( err, result ) => {
+                            this.done()
+
+                            if( err ) return reject( err )
+
+                            resolve( result )
+                        } )
+                    } )
+                )
+            },
+        }, { pool: { value: this.pool } } )
     },
 
-    stream( query, pipe ) {
-        return new Promise( ( resolve, reject ) => {
-            this.connect()
-            .then( () => {
-                var stream = this.client.query( this._copyTo( query, { highWaterMark: 8192 } ) )
-                stream.setEncoding( null )
-                stream.on( 'end', () => {
-                    this.done()
-                    pipe.end()
-                    resolve()
-                } )
-                stream.on( 'error', e => { this.done(); console.log(e.stack || e); reject( e ) } )
-                stream.on( 'data', chunk => {
-                    pipe.write( new Buffer( chunk, 'hex' ).toString('binary'), 'binary' )
-                } )
-            } )
-            .fail( e => { console.log(e.stack || e ); reject(e) } )
-            .done()
-        } )
+    _queries: {
+
+        selectAllTables() { return [
+           "SELECT table_name",
+           "FROM information_schema.tables",
+           "WHERE table_schema='public'",
+           "AND table_type='BASE TABLE';"
+        ].join(' ') },
+
+        selectForeignKeys() { return [
+            "SELECT conrelid::regclass AS tableFrom, conname, pg_get_constraintdef(c.oid)",
+            "FROM pg_constraint c",
+            "JOIN pg_namespace n ON n.oid = c.connamespace",
+            "WHERE contype = 'f' AND n.nspname = 'public';"
+        ].join(' ') },
+
+        selectTableColumns( tableName ) {
+            return [
+                'SELECT column_name, data_type, is_nullable, character_maximum_length',
+                'FROM information_schema.columns',
+                `WHERE table_name = '${tableName}'`
+            ].join(' ')
+        },
+
     },
-    
-    querySync: function( query, args ) {
-        var client = new this._pgNative(),
-            rows
 
-        client.connectSync( this.connectionString )
-        
-        rows = client.querySync( query, args )
-
-        client.end()
-
-        return rows        
+    dataTypeToRange: {
+        "bigint": "Integer",
+        "boolean": "Boolean",
+        "character varying": "Text",
+        "date": "Date",
+        "integer": "Integer",
+        "money": "Float",
+        "real": "Float",
+        "timestamp with time zone": "DateTime",
+        "text": "Text"
     }
 
+} ), {
+    pool: { value: new (require('pg')).Pool() },
+    tables: { value: { } }
 } )
-
-module.exports = Postgres

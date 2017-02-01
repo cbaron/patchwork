@@ -127,9 +127,12 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
 
     postRender() {
-        var self = this
+        var self = this;
 
-        this.initAutocomplete()
+        ( window.google && window.google.maps ) 
+            ? this.initAutocomplete()
+            : window.initGMap = () => this.initAutocomplete()
+
         this.templateData.address.attr( 'placeholder', '' )
         
         this.initializeFoodOmission()

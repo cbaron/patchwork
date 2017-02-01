@@ -42,14 +42,13 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
         if( this.has('deliveryoptions') ) return this.Q( this.get('deliveryoptions') )
 
-        return this.Q( new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )().fetch() )
+        return this.Q( new ( this.Collection.extend( { url: "/sharedeliveryoption" } ) )().fetch( { data: { shareid: this.id } } ) )
         .then( mappings => {
-            var deliveryOptions
+            var deliveryOptions = new ( this.Collection.extend( { url: "/deliveryoption" } ) )()
 
-            if( mappings.length === 0 ) return
-
-            deliveryOptions = new ( this.Collection.extend( { url: "/deliveryoption" } ) )()
             this.set( { deliveryoptions: deliveryOptions } )
+
+            if( mappings.length === 0 ) return this.Q()
 
             return this.Q( deliveryOptions.fetch( { data: { id: mappings.map( record => record.deliveryoptionid ).join(',') } } ) )
         } )

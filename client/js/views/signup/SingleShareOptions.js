@@ -38,6 +38,7 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
         new this.Views.ShareBox( { container: this.templateData.shareBox, insertionMethod: 'prepend', model: share } )
 
+        //TODO: Write UI when no options exist.
         this.model.getShareOptions()
             .then( () => share.get('shareoptions').forEach( shareoption => this.items.add( shareoption ) ) )
             .fail( e => console.log( e.stack || e ) )
