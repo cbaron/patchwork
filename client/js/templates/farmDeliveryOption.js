@@ -1,8 +1,7 @@
 module.exports = p =>
-`<div>
+`<div class="farmpickup">
     <span>${p.label}</span>
-    <span>${p.address}</span>
+    <span>-- ${p.farmpickup} --</span>
     <span>${p.dayOfWeek}</span>
-    <span>${p.starttime}</span>
-    <span>${p.endtime}</span>
+    <span>${p.starttime} - ${p.endtime}</span>
 </div>`

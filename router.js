@@ -104,10 +104,16 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
 
     handleFileRequest( request, response, path ) {
-        var table = this.tables[ path[0] ],
-            column = this._( this.tables[ path[0] ].columns ).find( column => column.name === path[1] ),
-            filePath = this.format( '%s/static/data/%s/%s/%s', __dirname, path[0], column.name, path[2] ),
-            stream
+        const table = this.tables[ path[0] ]
+
+        if( table === undefined ) return this.handleFailure( response, '404', 404, false )
+
+        const column = table.columns.find( column => column.name === path[1] )
+
+        if( column === undefined ) return this.handleFailure( response, '404', 404, false )
+
+        const filePath = `${__dirname}/static/data/${path[0]}/${column.name}/${path[2]}`
+        let stream = undefined
         
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )

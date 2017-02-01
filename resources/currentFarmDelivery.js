@@ -4,8 +4,13 @@ var Base = require('./__proto__'),
 Object.assign( CurrentFarmDelivery.prototype, Base.prototype, {
 
     GET() {
-        return this.dbQuery( { query: `SELECT dr.*, d.* FROM deliveryoption d JOIN deliveryroute dr ON d.name = dr.label WHERE d.name = 'farm'` } )
-        .then( result => this.respond( { body: result.rows.length ? result.rows[0] : { } } ) )
+        return Promise.all( [
+            this.dbQuery( { query: `SELECT dr.*, d.* FROM deliveryoption d JOIN deliveryroute dr ON d.name = dr.label WHERE d.name = 'farm'` } ),
+            this.dbQuery( { query: `SELECT farmpickup FROM contactinfo LIMIT 1` } )
+        ] )
+        .then( ( [ deliveryOption, farmPickup ] ) =>
+            this.respond( { body: deliveryOption.rows.length && farmPickup.rows.length ? Object.assign( {}, deliveryOption.rows[0], farmPickup.rows[0] ) : { } } )
+        )
     }
     
 } )

@@ -18,11 +18,12 @@ Object.assign( CurrentShare.prototype, Base.prototype, {
         return `SELECT dop.* ` +
                `FROM sharedeliveryoption sdo ` +     
                `JOIN deliveryoption dop ON dop.id = sdo.deliveryoptionid ` +
-               `WHERE sdo.shareid = ${shareId}`
+               `WHERE sdo.shareid = ${shareId} ` +
+               `ORDER BY dop.price ASC`
     },
 
     getOptionQuery( shareId ) {
-        return `SELECT so.name as "prompt", soo.* ` +
+        return `SELECT so.id as "shareOptionId", so.name as "prompt", so.information, soo.* ` +
                `FROM shareoptionshare sos ` +
                `JOIN shareoption so ON so.id = sos.shareoptionid ` +
                `JOIN shareoptionoption soo ON soo.shareoptionid = so.id ` +

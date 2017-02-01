@@ -25,7 +25,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
                 scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
         }
 
-        this.on( 'insertedcsadeliveryinfoTemplate', () => {
+        this.on( 'insertedcsainfoTemplate', () => {
 
             this.Xhr( { method: 'get', resource: 'currentGroupDelivery' } )
             .then( data => {
@@ -48,18 +48,22 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
             .catch( e => new this.Error(e) )
 
             this.Xhr( { method: 'get', resource: 'currentShare' } )
-            .then( ( { deliveryOptions, produceOptions } ) =>
+            .then( ( { deliveryOptions, produceOptions } ) => {
+
                 this.slurpTemplate( {
                     template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
                     insertion: { $el: this.templateData.deliveryMatrix }
                 } )
 
                 this.slurpTemplate( {
-                    template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
+                    template: this.templates.nonSizeOptions( { options: produceOptions.filter( option => (!/size/i.test( option.prompt )) && option.label === "1" ) } ),
                     insertion: { $el: this.templateData.nonSizeOptions }
                 } )
+
+                const homeDelivery = deliveryOptions.find( option => option.name === 'home' )
+                if( homeDelivery ) this.templateData.homeDeliveryIntro.text( this.templateData.homeDeliveryIntro.text().replace( /\$[\d\.]*/, `${homeDelivery.price}` ) )
             
-            )
+            } )
             .catch( e => new this.Error(e) )
         } )
     },
@@ -67,7 +71,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     requiresLogin: false,
 
     tables: [
-        { name: 'csadeliveryinfo', el: 'how', template: 'csaHow' },
+        { name: 'csainfo', el: 'how', template: 'csaHow' },
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
     ],
@@ -82,7 +86,8 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
         farmDeliveryOption: require('../templates/farmDeliveryOption'),
         groupDeliveryOption: require('../templates/groupDeliveryOption'),
         listItem: require('../templates/listItem')( require('handlebars') ),
-        listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') )
+        listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') ),
+        nonSizeOptions: require('../templates/nonSizeOptions'),
     }
 
 } )
