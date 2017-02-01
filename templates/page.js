@@ -15,6 +15,8 @@ module.exports = p =>
             ? '<script src="/static/js/vendor.js.gz"></script><script src="/static/js/debug.js.gz"></script>'
             : '<script src="/static/js/bundle.js.gz"></script>'
         }
+
+        <script src="/static/js/babel-polyfill.js"></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
         <script src="/static/js/magicsuggest.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=${p.googleApiKey}&libraries=places&callback=initGMap"></script>
