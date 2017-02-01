@@ -1,7 +1,7 @@
 module.exports =
 `<div data-js="container" class="csa-class client-view">
     <h3>
-        <button data-js="signupBtn" class="btn btn-link signup-btn">2016 CSA Sign-up Form!</button>
+        <button data-js="signupBtn" class="btn btn-link signup-btn">Join our CSA!</button>
     </h3>
     <div class="about-csa">
         <h2>What is CSA?</h2>
