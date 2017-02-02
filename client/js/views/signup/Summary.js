@@ -17,6 +17,8 @@ Object.assign( Summary.prototype, View.prototype, {
 
     DayOfWeekMap: require('../../models/DeliveryRoute').prototype.dayOfWeekMap,
 
+    ContactInfo: require('../../models/ContactInfo'),
+
     Spinner: require('../../plugins/spinner.js'),
 
     buildRequest() {
@@ -33,8 +35,6 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     buildShares() {
-        
-
         return this.signupData.shares.map( share => {
             var selectedWeeks = share.get('selectedDates').length,
                 skipDays = share.get('skipDays'),
@@ -140,7 +140,7 @@ Object.assign( Summary.prototype, View.prototype, {
                     ? this.user.get('address')
                     : ( groupDropoff )
                         ? groupDropoff.get('address')
-                        : '41 North Lutheran Church Road, Dayton, OH'
+                        : this.ContactInfo.data.farmpickup
 
                 share.set( {
                     selectedDelivery: Object.assign( share.get('selectedDelivery'), {
@@ -188,7 +188,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         address: ( groupDropoff )
                             ? groupDropoff.get('address')
                             : ( selectedDelivery.get('name') === 'farm' )
-                                ? "41 N. Lutheran Church Rd"
+                                ? this.ContactInfo.data.farmpickup
                                 : this.user.get('address'),
                         dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery') ],
                         starttime: times.starttime,
@@ -264,6 +264,8 @@ Object.assign( Summary.prototype, View.prototype, {
 
     render() {
         var dataPromises = [ ]
+
+        dataPromises.push( this.ContactInfo.get() )
 
         this.signupData.shares.forEach( share => {
             if( ! share.has('shareoptions') ) dataPromises.push( share.getShareOptions() )
