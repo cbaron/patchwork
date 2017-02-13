@@ -22,6 +22,10 @@ module.exports =
             <ul data-js="shareExample" class="col-sm-8"></ul>
         </div>
         <p>This box has a retail value of about $30. Small shares will receive a smaller variety of fruits and vegetables. We try to do our best to have plenty of everything we grow to provide a satisfying box for all of our members. However, in the event that particular fruits or vegetables are in limited supply, large shares will receive preference.  This is one reason to consider a Large share if appropriate for your eating habits.</p>
+        <div class="csa-customization">
+            <h2>New this year: customize your box!</h2>
+            <div data-js="customize"></div>
+        </div>
     </div>
     <hr>
     <div class="how">

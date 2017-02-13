@@ -28,18 +28,18 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
         this.on( 'insertedcsainfoTemplate', () => {
 
             this.Xhr( { method: 'get', resource: 'currentGroupDelivery' } )
-            .then( data => {
+            .then( data =>
                 data.forEach( datum =>
                     this.slurpTemplate( {
                         template: this.templates.groupDeliveryOption( ( new this.Models.DeliveryRoute( datum, { parse: true } ) ).attributes ),
                         insertion: { $el: this.templateData.groupDeliveryOptions }
                     } )
                 )
-            } )
+            )
             .catch( e => new this.Error(e) )
 
             this.Xhr( { method: 'get', resource: 'currentFarmDelivery' } )
-            .then( data =>
+            .then( data => 
                 this.slurpTemplate( {
                     template: this.templates.farmDeliveryOption( ( new this.Models.DeliveryRoute( data, { parse: true } ) ).attributes ),
                     insertion: { $el: this.templateData.farmPickupOption }
@@ -71,6 +71,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     requiresLogin: false,
 
     tables: [
+        { name: 'csacustomization', el: 'customize', template: 'csaCustomization' },
         { name: 'csainfo', el: 'how', template: 'csaHow' },
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
@@ -81,6 +82,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     template: () => require('../templates/csa'),
 
     templates: {
+        csaCustomization: require('../templates/csaCustomization'),
         csaHow: require('../templates/csaHow'),
         deliveryMatrix: require('../templates/deliveryMatrix'),
         farmDeliveryOption: require('../templates/farmDeliveryOption'),

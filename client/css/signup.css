@@ -98,8 +98,11 @@
 .signup-class .shares .share:hover {
   border-color: rgba(201, 135, 2, 0.7);
 }
+.signup-class .shares .share:hover.inactive {
+  border-color: transparent;
+}
 .signup-class .shares .share.selected {
-  background-color: rgba(201, 135, 2, 0.1);
+  background-color: #fce1ac;
 }
 .signup-class .member-info {
   border: 1px solid #666;
@@ -115,6 +118,15 @@
 .signup-class .member-info .help-block {
   text-align: center;
   font-size: .75rem;
+}
+.signup-class .member-info .control-label[for="omission"] {
+  position: relative;
+}
+.signup-class .member-info .control-label[for="omission"] .glyphicon-info-sign {
+  position: absolute;
+  right: -7px;
+  cursor: pointer;
+  color: #155D75;
 }
 .signup-class .share-options {
   border: 1px solid #666;
@@ -522,6 +534,9 @@
   }
   .signup-class .member-info .form-control {
     margin-bottom: 15px;
+  }
+  .signup-class .member-info .form-group .ms-helper {
+    top: -14px;
   }
   .signup-class .delivery .delivery-options .share-label {
     text-align: center;

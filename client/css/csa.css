@@ -35,6 +35,9 @@
   color: #155D75;
   list-style-type: circle;
 }
+.csa-class .csa-contents .csa-customization .intro {
+  font-weight: bold;
+}
 .csa-class .how img {
   display: block;
   margin: 25px auto;
@@ -73,14 +76,54 @@
 .csa-class .how .non-size-options {
   margin-bottom: 40px;
 }
-.csa-class .how .non-size-options .intro {
-  margin-bottom: 15px;
-}
 .csa-class .how .non-size-options ul {
   margin-left: 30px;
 }
 .csa-class .how .non-size-options .option {
   padding: 30px 0px;
+}
+.csa-class .how .non-size-options .add-on-table {
+  border: 1px solid black;
+  width: 70%;
+  margin: 30px 15%;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  border-bottom: 1px solid black;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row:last-child {
+  border-bottom: none;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-name {
+  font-weight: bold;
+  color: #155D75;
+  width: 15%;
+  text-align: center;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 1px solid black;
+  width: 85%;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+  padding-left: 10px;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+  font-weight: bold;
+  width: 15%;
+  text-align: center;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+  width: 55%;
+}
+.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+  width: 30%;
+  padding-right: 10px;
 }
 @media only screen and (max-width: 375px) {
   .csa-class .first-column {
@@ -88,5 +131,47 @@
   }
   .csa-class .second-column {
     margin-top: 0;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .csa-class .how .non-size-options .add-on-table {
+    width: 100%;
+    margin: 30px 0;
+  }
+}
+@media only screen and (max-width: 650px) {
+  .csa-class .how .non-size-options .add-on-table {
+    display: block;
+    border: none;
+    width: 100%;
+    margin: 15px 0;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row {
+    display: block;
+    border-bottom: none;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-name {
+    width: auto;
+    text-align: left;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details {
+    display: block;
+    border-left: none;
+    width: auto;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+    padding-left: 0;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+    width: auto;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+    width: auto;
+  }
+  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+    width: auto;
+    padding-right: 0;
   }
 }

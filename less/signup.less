@@ -118,10 +118,13 @@
 
             &:hover {
                 border-color: rgba(201, 135, 2, .7);
+                &.inactive {
+                    border-color: transparent;
+                }
             }
             
             &.selected {
-                background-color: rgba(201, 135, 2, .1);
+                background-color: #fce1ac;
             }
         }
     }
@@ -142,6 +145,17 @@
         .help-block {
             text-align: center;
             font-size: .75rem;
+        }
+
+        .control-label[for="omission"] {
+            position: relative;
+
+            .glyphicon-info-sign {
+                position: absolute;
+                right: -7px;
+                cursor: pointer;
+                color: #155D75;
+            }
         }
     }
 
@@ -690,6 +704,10 @@
         .member-info {
             .form-control {
                 margin-bottom: 15px;
+            }
+
+            .form-group .ms-helper {
+                top: -14px;
             }
         }
 
