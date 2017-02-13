@@ -21,6 +21,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
     emailRegex: Form.emailRegex,
 
+    events: { 
+        'infoBtn': { method: 'showInfoModal' }
+    },
+
     fields: [ {
         name: 'name',
         label: 'Name',
@@ -64,8 +68,9 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         validate: function( val ) { return val === this.templateData.password.val() }
     }, {
         name: 'omission',
-        label: 'One food you do not want',
+        label: 'One vegetable to never receive',
         type: 'select',
+        info: true,
         validate: () => true
     }, {
         name: 'heard',
@@ -181,6 +186,17 @@ Object.assign( MemberInfo.prototype, View.prototype, {
            .after( Form.templates.fieldError( { error: error } ) )
     },
 
+    showInfoModal() {
+        this.Xhr( { method: 'get', resource: 'csacustomization' } )
+        .then( data =>
+            this.modalView.show( {
+                body: this.templates.csaCustomization( data[0] ),
+                hideFooter: true
+            } )
+        )
+        .catch( e => new this.Error(e) )
+    },
+
     showValid( $el ) {
         $el.parent().parent().removeClass('has-error').addClass('has-feedback has-success')
         $el.next().removeClass('hide').removeClass('glyphicon-remove').addClass('glyphicon-ok')
@@ -188,6 +204,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
 
     template: require('../../templates/signup/memberInfo'),
+
+    templates: {
+        csaCustomization: require('../../templates/csaCustomization')
+    },
 
     validate() {
         var valid = true

@@ -40,7 +40,9 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             if( this.isSeason( 'summer', model ) ) {
                 this.items.forEach( share => {
                     if( this.isSeason( 'spring', share ) ) {
-                        this.itemViews[share.id].show()
+                        this.itemViews[share.id].templateData.container
+                            .removeClass('inactive')
+                            .on( 'click', () => this.itemViews[share.id].emit( 'clicked', this.itemViews[share.id].model ) )
                     }
                 } )
             }
@@ -50,7 +52,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             if( this.isSeason( 'summer', model ) ) {
                 this.items.forEach( share => {
                     if( this.isSeason( 'spring', share ) ) {
-                        this.itemViews[share.id].hide()
+                        this.itemViews[share.id].templateData.container.addClass('inactive').off('click')
                         this.unselectItem( share )
                     }
                 } )

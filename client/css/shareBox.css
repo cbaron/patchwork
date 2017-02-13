@@ -17,3 +17,10 @@
   color: #155D75;
   font-size: .75rem;
 }
+.inactive .share-label > div:nth-child(2) {
+  color: #666;
+}
+.inactive .share-label {
+  background-color: #ccc;
+  color: #666;
+}

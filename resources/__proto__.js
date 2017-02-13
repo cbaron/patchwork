@@ -9,7 +9,10 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         DELETE:function(){},
 
         GET: function() {
-            this.query = require('querystring').parse( require('url').parse( this.request.url ).query )
+            const query = require('url').parse( this.request.url ).query
+            if( query === '{}' ) return this.query = { }
+            this.query = require('querystring').parse( query )
+
             Object.keys( this.query ).forEach( attr => {
                 if( this.query[ attr ].charAt(0) === '{' ) {
                     this.query[ attr ] = JSON.parse( this.query[ attr ] )

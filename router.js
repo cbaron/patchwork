@@ -114,7 +114,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
         const filePath = `${__dirname}/static/data/${path[0]}/${column.name}/${path[2]}`
         let stream = undefined
-        
+
         if( path.length !== 3 || table === undefined || column === undefined ||
             Number.isNaN( parseInt( path[2], 10 ) ) ) return this.handleFailure( response, "Sorry mate" )
 
