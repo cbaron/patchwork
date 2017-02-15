@@ -3,6 +3,18 @@ var CustomContent = require('./util/CustomContent'),
 
 Object.assign( GetInvolved.prototype, CustomContent.prototype, {
 
+    postRender() {
+        CustomContent.prototype.postRender.call(this)
+
+        this.on( 'insertedemploymentTemplate', () => {
+            if( this.templateData.employmentTable.children().length === 1 ) {
+                this.templateData.employmentTable.remove()
+                this.templateData.openPositions.text( 'We currently have no positions open. Stay Tuned!' )
+            }
+        } )
+        
+    },
+
     requiresLogin: false,
 
     tables: [
