@@ -38,6 +38,7 @@
   border-left: 1px solid black;
 }
 .get-involved-class .employment-table .cell img {
-  width: 20px;
+  cursor: pointer;
   margin: 0;
+  width: 20px;
 }

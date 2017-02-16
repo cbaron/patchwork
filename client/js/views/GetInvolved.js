@@ -3,6 +3,14 @@ var CustomContent = require('./util/CustomContent'),
 
 Object.assign( GetInvolved.prototype, CustomContent.prototype, {
 
+    onPdfClick( e ) {
+        window.open( `/file/employment/jobdescription/${ e.target.getAttribute('data-id') }` )
+    },
+
+    events: {
+        pdf: { method: 'onPdfClick' }
+    },
+
     postRender() {
         CustomContent.prototype.postRender.call(this)
 

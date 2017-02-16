@@ -27,7 +27,7 @@ module.exports =
     <hr>
     <div class="employment">
         <h2>Employment Opportunities</h2>
-        <p data-js="openPositions">We have the following positions open. Please download the PDF for a detailed description.</p>
+        <p data-js="openPositions">We have the following positions open. Please click the PDF icon for a detailed description.</p>
         <div data-js="employmentTable" class="col-xs-12 col-sm-6 employment-table">
             <div class="row">
                 <div class="cell col-xs-8">Job Title</div>

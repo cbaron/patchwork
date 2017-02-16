@@ -5,7 +5,7 @@ p.visible
     `<div class="row">
         <div class="cell col-xs-8">${p.jobtitle}</div>
         <div class="cell col-xs-4">
-            <a href="/file/employment/jobdescription/${p.id}"><img src="/static/img/pdf.svg" /></a>
+            <img data-id="${p.id}" data-js="pdf" src="/static/img/pdf.svg" />
         </div>
     </div>`
     : ``
