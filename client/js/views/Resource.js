@@ -175,7 +175,9 @@ Object.assign( Resource.prototype, Table.prototype, {
         
         imageEl.onerror = () => window.setTimeout( () => this.imageLoader.remove(model), 100 )
 
-        imageEl.src = this.util.format( '/file/%s/%s/%d', this.resource, model.column, model.id )
+        imageEl.src = ( model.column === "jobdescription" )
+            ? '/static/img/pdf.svg'
+            : this.util.format( '/file/%s/%s/%d', this.resource, model.column, model.id )
     },
 
     getImageData( base64 ) { return base64.slice( base64.indexOf(',') + 1 ) },
@@ -213,12 +215,16 @@ Object.assign( Resource.prototype, Table.prototype, {
             btn.addClass('has-spinner').append( this.spinner.spin().el )
 
             reader.onload = ( evt ) => {
-                var imageData = this.getImageData( evt.target.result )
+                var imageData = this.getImageData( evt.target.result ),
+                    previewImageSrc = ( evt.target.result.slice(0,20) === 'data:application/pdf' )
+                        ? '/static/img/pdf.svg'
+                        : evt.target.result
+
                 this[ property.property + "File" ] = imageData
                 this[ property.property + "Base64" ] = evt.target.result
                 btn.removeClass('has-spinner')
                 this.spinner.stop()
-                this.$( '#' + property.property + "-preview" ).attr( { src: evt.target.result } )
+                this.$( '#' + property.property + "-preview" ).attr( { src: previewImageSrc } )
             }
             
             reader.readAsDataURL( e.originalEvent.target.files[0] )

@@ -104,6 +104,9 @@
 .signup-class .shares .share.selected {
   background-color: #fce1ac;
 }
+.signup-class .shares .share.inactive {
+  cursor: default;
+}
 .signup-class .member-info {
   border: 1px solid #666;
   border-radius: 5px;

@@ -616,6 +616,44 @@ footer .future-days {
   margin-top: 1em;
   color: #c98702;
 }
+
+.get-involved-class .employment-table {
+  margin: 20px 0;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.get-involved-class .employment-table .row {
+  border-bottom: 1px solid black;
+}
+
+.get-involved-class .employment-table .row:first-child {
+  color: #c98702;
+  font-weight: bold;
+}
+
+.get-involved-class .employment-table .row:last-child {
+  border-bottom: none;
+}
+
+.get-involved-class .employment-table .row:not(:first-child) > div:first-child {
+  color: #155D75;
+  font-weight: bold;
+}
+
+.get-involved-class .employment-table .cell {
+  padding: 15px 0px;
+}
+
+.get-involved-class .employment-table .cell:last-child {
+  border-left: 1px solid black;
+}
+
+.get-involved-class .employment-table .cell img {
+  cursor: pointer;
+  margin: 0;
+  width: 20px;
+}
 .header {
   border: none;
   height: 475px;
@@ -967,6 +1005,10 @@ footer .future-days {
 
 .signup-class .shares .share.selected {
   background-color: #fce1ac;
+}
+
+.signup-class .shares .share.inactive {
+  cursor: default;
 }
 
 .signup-class .member-info {

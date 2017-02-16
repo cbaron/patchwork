@@ -1,3 +1,6 @@
+@orange: #c98702;
+@blue:   #155D75;
+
 .get-involved-class {
     
     ul {
@@ -14,6 +17,46 @@
     h3 {
         margin-top: 1em;
         color: #c98702;
+    }
+
+    .employment-table {
+        margin: 20px 0;
+        text-align: center;
+        border: 1px solid black;
+
+        .row {
+            border-bottom: 1px solid black;
+        }
+
+        .row:first-child {
+            color: @orange;
+            font-weight: bold;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .row:not(:first-child) {
+            > div:first-child {
+                color: @blue;
+                font-weight: bold;
+            }
+        }
+
+        .cell {
+            padding: 15px 0px;
+
+            &:last-child {                
+                border-left: 1px solid black;
+            }
+
+            img {
+                cursor: pointer;
+                margin: 0;
+                width: 20px;
+            }
+        }
     }
     
 }
