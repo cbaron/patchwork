@@ -1,8 +1,14 @@
 module.exports =
 `<div class="get-involved-class client-view" data-js="container">
-    <div class="volunteer">
-        <h2>Volunteer</h2>
-        <p>Want to help out at Patchwork Gardens?  Throughout the growing season, there are a variety of opportunities for those who would like to lend a hand.  To share your interest in volunteering with us, please fill out the <a href="https://docs.google.com/forms/d/1GuFrGKvpzJaFY5Dhz3kBsIy_AaY6xZ3NzuqTzvOFmrw/viewform">Patchwork Gardens Volunteer Form</a>.</p>
+    <div class="employment">
+        <h2>Employment Opportunities</h2>
+        <p data-js="openPositions">We have the following positions open. Please click the PDF icon for a detailed description.</p>
+        <div data-js="employmentTable" class="col-xs-12 col-sm-6 employment-table">
+            <div class="row">
+                <div class="cell col-xs-8">Job Title</div>
+                <div class="cell col-xs-4">Description</div>
+            </div>
+        </div>
     </div>
     <hr>
     <div class="internships">
@@ -25,14 +31,8 @@ module.exports =
         </div>
     </div>
     <hr>
-    <div class="employment">
-        <h2>Employment Opportunities</h2>
-        <p data-js="openPositions">We have the following positions open. Please click the PDF icon for a detailed description.</p>
-        <div data-js="employmentTable" class="col-xs-12 col-sm-6 employment-table">
-            <div class="row">
-                <div class="cell col-xs-8">Job Title</div>
-                <div class="cell col-xs-4">Description</div>
-            </div>
-        </div>
+    <div class="volunteer">
+        <h2>Volunteer</h2>
+        <p>Want to help out at Patchwork Gardens?  Throughout the growing season, there are a variety of opportunities for those who would like to lend a hand.  To share your interest in volunteering with us, please fill out the <a href="https://docs.google.com/forms/d/1GuFrGKvpzJaFY5Dhz3kBsIy_AaY6xZ3NzuqTzvOFmrw/viewform">Patchwork Gardens Volunteer Form</a>.</p>
     </div>
 </div>`
