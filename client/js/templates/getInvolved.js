@@ -1,6 +1,6 @@
 module.exports =
 `<div class="get-involved-class client-view" data-js="container">
-    <div class="employment">
+    <div class="employment clearfix">
         <h2>Employment Opportunities</h2>
         <p data-js="openPositions">We have the following positions open. Please click the PDF icon for a detailed description.</p>
         <div data-js="employmentTable" class="col-xs-12 col-sm-6 employment-table">
