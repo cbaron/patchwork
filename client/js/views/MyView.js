@@ -62,7 +62,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-
         if( ! this.container ) this.container = this.$('#content')
         
         this.router = this.getRouter()

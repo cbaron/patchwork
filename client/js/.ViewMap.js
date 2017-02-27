@@ -1,0 +1,20 @@
+module.exports={
+	About: require('./views/About'),
+	Admin: require('./views/Admin'),
+	AdminPlus: require('./views/AdminPlus'),
+	CSA: require('./views/CSA'),
+	Contact: require('./views/Contact'),
+	CustomerInfo: require('./views/CustomerInfo'),
+	GetInvolved: require('./views/GetInvolved'),
+	Home: require('./views/Home'),
+	InstanceRow: require('./views/InstanceRow'),
+	ManageCustomer: require('./views/ManageCustomer'),
+	Markets: require('./views/Markets'),
+	Members: require('./views/Members'),
+	MyView: require('./views/MyView'),
+	Resource: require('./views/Resource'),
+	ResourceRow: require('./views/ResourceRow'),
+	Seasons: require('./views/Seasons'),
+	Signup: require('./views/Signup'),
+	modal: require('./views/modal')
+}

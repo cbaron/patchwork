@@ -26,8 +26,7 @@ Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototy
     getTemplateOptions() { return { fields: this.fields } },
 
     initialize() {
-
-        if( window.location.pathname === "/admin" ) {
+        if( window.location.pathname === "/admin" || window.location.pathname === "/admin-plus" ) {
             Object.assign( this.fields[0], {
                 label: 'Email or Username',
                 error: "Username must be at least 6 characters long.",
@@ -50,7 +49,7 @@ Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototy
         this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
     
         require('../models/User').set( response );
-        this.emit( "success" );
+        this.emit( "success", response );
         this.hide().done();
     },
 

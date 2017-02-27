@@ -1,0 +1,182 @@
+.admin-plus-home {
+  margin-top: 105px;
+  text-align: center;
+}
+.admin-plus-home .manage-btn {
+  background-color: #f2f2f2;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
+  color: #c98702;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 20px;
+  text-align: center;
+  width: 250px;
+  text-transform: uppercase;
+}
+.admin-plus-home .manage-btn:hover {
+  background-color: #ebebeb;
+}
+.btn-ghost {
+  color: #2d2d2d;
+  background-color: #fff;
+  border-color: #2d2d2d;
+  display: inline-block;
+  min-width: 15rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 1rem 2rem;
+  border: 3px solid;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+.btn-ghost:hover,
+.btn-ghost:focus {
+  background-color: #2d2d2d;
+  color: #fff;
+}
+.btn-ghost:active {
+  background-color: #626262;
+  color: #fff;
+  border-color: #626262;
+}
+.form-grouping {
+  margin-bottom: 1rem;
+}
+.form-grouping.horizontal {
+  display: flex;
+  align-items: center;
+}
+.form-grouping.horizontal .form-input {
+  margin-left: 0.5rem;
+}
+.form-grouping.horizontal .form-label {
+  width: 6%;
+  text-align: right;
+  margin-right: 1rem;
+}
+.input-std {
+  display: block;
+  position: relative;
+  background-color: #fff;
+  padding: 0.5rem 0.375rem;
+  border: 2px solid #666;
+  border-radius: 0.2rem;
+  transition: all 0.4s ease-in-out;
+}
+.input-std:focus {
+  outline: 0;
+  box-shadow: 0 0 1px 1px #999;
+}
+.form-label {
+  display: inline-block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.input-flat {
+  display: block;
+  padding: 0.5rem 0.375rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 3px solid #2d2d2d;
+  transition: all 0.4s ease-in-out;
+}
+.input-flat:focus {
+  background-color: #ddd;
+}
+.input-flat::-webkit-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat::-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat:-ms-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-flat:-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless {
+  display: block;
+  background-color: #ddd;
+  padding: 0.5rem 0.375rem;
+  border: none;
+  transition: all 0.4s ease-in-out;
+}
+.input-borderless:focus {
+  background-color: #eee;
+}
+.input-borderless::-webkit-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless::-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless:-ms-input-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.input-borderless:-moz-placeholder {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.valid .feedback,
+.valid .form-label {
+  color: #08703c;
+}
+.valid .form-input {
+  border-color: #075f33;
+}
+.valid .form-input,
+.valid .input-borderless,
+.valid .input-flat {
+  background-color: #dbfceb;
+}
+.error .feedback,
+.error .form-label {
+  color: #982c1f;
+}
+.error .form-input {
+  border-color: #81251a;
+}
+.error .form-input,
+.error .input-borderless,
+.error .input-flat {
+  background-color: #f9e6e4;
+}
+.manage-customer {
+  margin: 100px 15px 15px;
+}
+.manage-customer .form-label {
+  color: #c98702;
+  font-size: 20px;
+}
+.manage-customer h3 {
+  color: #c98702;
+  font-weight: bold;
+}
+.manage-customer .table-row {
+  display: flex;
+  align-items: center;
+}
+.manage-customer .table-row .cell {
+  padding: 1px 5px;
+  border: 1px solid #000;
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: 250px;
+  overflow-x: hidden;
+  white-space: nowrap;
+}

@@ -1,0 +1,2 @@
+ALTER TABLE person ADD COLUMN "secondaryEmail" VARCHAR(100);
+ALTER TABLE member ADD COLUMN "onPaymentPlan" BOOLEAN DEFAULT FALSE;

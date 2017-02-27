@@ -23,7 +23,6 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     
     applyResource( request, response, path, subPath ) {
-
         var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
             file = this.format('./resources%s/%s', subPath || '', filename )
 
@@ -259,6 +258,7 @@ module.exports = new Router( {
             'currentGroupDelivery': true,
             'currentShare': true,
             'food': true,
+            'never-receive': true,
             'validate-address': true,
             'signup': true,
             'user': true

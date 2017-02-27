@@ -9,18 +9,28 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         DELETE:function(){},
 
         GET: function() {
+            const supportedOperations = [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*' ]
             const query = require('url').parse( this.request.url ).query
+
             if( query === '{}' ) return this.query = { }
-            this.query = require('querystring').parse( query )
+            this.query = ( query !== null && query.charAt(0) === "{" )
+                ? JSON.parse( decodeURIComponent( query ) )
+                : require('querystring').parse( query )
 
             Object.keys( this.query ).forEach( attr => {
-                if( this.query[ attr ].charAt(0) === '{' ) {
-                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
-                    if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
-                } else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
+                if( ( typeof this.query[ attr ] === 'string' && this.query[ attr ].charAt(0) === '{' )
+                || ( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) ) {
                     this.query[ attr ] = JSON.parse( this.query[ attr ] )
                 }
+
+                if( typeof this.query[ attr ] === 'object' || this.query[ attr ].charAt(0) === '{' ) {
+                    if( supportedOperations.indexOf( this.query[ attr ].operation ) === -1 ) throw new Error('Invalid Parameter')
+                } //else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
+                    //this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                //}
             } )
+            //console.log( 'proto context end' )
+            //console.log( this.query )
         },
 
         PATCH: function() {
