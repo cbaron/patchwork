@@ -21,7 +21,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
     constructor() {
         if( this.requiresLogin && (!this.user.id ) ) return this.handleLogin()
-        //if( this.requiresLogin && (!this.user.data || !this.user.data.id ) ) return this.handleLogin()
+        if( this.user && !this.isAllowed( this.user.attributes ) ) return this.scootAway()
 
         return this.initialize().render()
     },
@@ -64,11 +64,17 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         )
     },
 
+    isAllowed( user ) {
+        return this.requiresRole && user.roles.includes( this.requiresRole )
+    },
+
     handleLogin() {
         this.router = this.getRouter()
         this.modalView = require('./modal')
 
         require('./Login').show().once( "success", userData => {
+            if( !this.isAllowed( userData ) ) return this.scootAway()
+
             this.user.set( userData )
             this.router.header.onUser( this.user )
             return this.onLogin()
@@ -162,6 +168,14 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     requiresLogin: false,
+
+    scootAway() {
+        this.Toast.show( 'error', 'You are not allowed here.  Sorry.')
+        .catch( e => { this.Error( e ); this.emit( 'navigate', `/` ) } )
+        .then( () => this.emit( 'navigate', `/` ) )
+
+        return this
+    },
 
     show() {
         if( this.els.container.classList.contains( 'hidden' ) ) {

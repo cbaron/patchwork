@@ -10,6 +10,7 @@ module.exports = Object.create( {
                 name: { value: name },
                 factory: { value: this },
                 template: { value: this.Templates[ lower ] },
+                Toast: { value: this.Toast },
                 //user: { value: this.User }
             }, opts )
         ).constructor()
@@ -19,6 +20,6 @@ module.exports = Object.create( {
 
 }, {
     Templates: { value: require('../.TemplateMap') },
-    //User: { value: require('../models/User') },
+    Toast: { value: require('../views/Toast') },
     Views: { value: require('../.ViewMap') }
 } )

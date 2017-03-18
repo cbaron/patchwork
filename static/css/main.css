@@ -1,3 +1,35 @@
+.Toast {
+  background-color: #b13325;
+  border-radius: 5px;
+  box-shadow: 0 0 12px #999;
+  color: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  opacity: 0.8;
+  position: fixed;
+  padding: 1rem;
+  right: 2rem;
+  top: 2rem;
+  transition: all 3s ease-in-out;
+  z-index: 200;
+}
+.Toast.success {
+  background-color: #4aa252;
+}
+.Toast >div:first-child {
+  float: left;
+  padding: 0.5rem;
+}
+.Toast >div:first-child svg {
+  height: 2rem;
+  width: 2rem;
+}
+.Toast >div:nth-child(2) {
+  float: left;
+  padding: 0 0.5rem;
+}
+.Toast >div:nth-child(2) >div:first-child {
+  font-weight: bold;
+}
 .admin-plus-home {
   margin-top: 105px;
   text-align: center;
@@ -17,6 +49,13 @@
 }
 .admin-plus-home .manage-btn:hover {
   background-color: #ebebeb;
+}
+.hide {
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+.hidden {
+  display: none !important;
 }
 .btn-ghost {
   color: #2d2d2d;

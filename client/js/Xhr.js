@@ -14,7 +14,6 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
                 }
                 if( data.method === "get" || data.method === "options" ) {
                     let qs = data.qs ? `?${data.qs}` : ''
-                    console.log( `/${data.resource}${qs}` )
                     req.open( data.method, `/${data.resource}${qs}` )
                     this.setHeaders( req, data.headers )
                     req.send(null)

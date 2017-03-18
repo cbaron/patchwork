@@ -16,5 +16,6 @@ module.exports={
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),
 	Signup: require('./views/Signup'),
+	Toast: require('./views/Toast'),
 	modal: require('./views/modal')
 }

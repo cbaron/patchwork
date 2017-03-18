@@ -1,11 +1,6 @@
-var $ = require('jquery'),
-    router = require('./router');
+var $ = require('jquery')
 
-Number.isInteger = Number.isInteger || function(value) {
-  return typeof value === "number" && 
-    isFinite(value) && 
-    Math.floor(value) === value;
-};
+require('./polyfill')
 
 window.$ = window.jQuery = $
 window.initGMap = () => true
@@ -13,7 +8,8 @@ window.initGMap = () => true
 require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')
 
-$( () => {
+window.onload = () => {
+    require('./router') 
     require('./views/modal')
     require('backbone').history.start( { pushState: true } )
-} )
+}

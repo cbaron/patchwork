@@ -1,11 +1,15 @@
 const fs = require('fs'),
-      router = require('./router')
+      router = require('./router'),
+      Postgres = require('./dal/postgres')
 
 require('node-env-file')( __dirname + '/.env' )
 
 const port = process.env.PORT || 80
 
-router.initialize()
+Promise.all( [
+    router.initialize(),
+    Postgres.initialize()
+] )
 .then( () => {
     
     require('http').createServer( ( request, response ) => {

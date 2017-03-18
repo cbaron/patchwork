@@ -3,34 +3,38 @@ var MyObject = require('../lib/MyObject'),
 
 Object.assign( Resource.prototype, MyObject.prototype, {
 
+    Db: require('./lib/Db'),
+
     Postgres: require('../dal/postgres'),
+
+    QueryString: require('querystring'),
+    
+    Response: require('./lib/Response'),
 
     context: {
         DELETE:function(){},
 
         GET: function() {
-            const supportedOperations = [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*' ]
             const query = require('url').parse( this.request.url ).query
-
             if( query === '{}' ) return this.query = { }
-            this.query = ( query !== null && query.charAt(0) === "{" )
-                ? JSON.parse( decodeURIComponent( query ) )
-                : require('querystring').parse( query )
+
+            if( query !== null && query.charAt(0) === "{" ) {
+                this.veeTwo = true
+                this.path.shift()
+                if( [ 'member', 'person' ].includes[ this.path[0] ] && this.
+                return this.query = JSON.parse( decodeURIComponent( query ) )
+            }
+                
+            this.query = this.QueryString.parse( query )
 
             Object.keys( this.query ).forEach( attr => {
-                if( ( typeof this.query[ attr ] === 'string' && this.query[ attr ].charAt(0) === '{' )
-                || ( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) ) {
+                if( this.query[ attr ].charAt(0) === '{' ) {
+                    this.query[ attr ] = JSON.parse( this.query[ attr ] )
+                    if( ! this._( [ '<', '>', '<=', '>=', '=', '<>', '!=' ] ).contains( this.query[ attr ].operation ) ) throw new Error('Invalid Parameter')
+                } else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
                     this.query[ attr ] = JSON.parse( this.query[ attr ] )
                 }
-
-                if( typeof this.query[ attr ] === 'object' || this.query[ attr ].charAt(0) === '{' ) {
-                    if( supportedOperations.indexOf( this.query[ attr ].operation ) === -1 ) throw new Error('Invalid Parameter')
-                } //else if( attr === 'path' && this.query[ attr ].charAt(0) === '[' ) {
-                    //this.query[ attr ] = JSON.parse( this.query[ attr ] )
-                //}
             } )
-            //console.log( 'proto context end' )
-            //console.log( this.query )
         },
 
         PATCH: function() {
@@ -50,7 +54,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     db: {
         DELETE: function() { return this.dbQuery( this.queryBuilder.deleteQuery.call( this ) ) },
-        GET: function() { return this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
+        GET: function() { return this.veeTwo ? this.Db.GET( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
         PATCH: function() { return this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
         POST: function() { return this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
     },
@@ -145,7 +149,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         DELETE: function( result ) { this.respond( { body: { success: true } } ) },
 
         GET: function( result ) {
-            var body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
+            if( this.veeTwo ) { return this.Response.GET( this, result ) }
+            const body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
             return this.respond( { body: body } )
         },
 

@@ -10,13 +10,13 @@ module.exports = new (
         ViewFactory: require('./factory/View'),
 
         adminPlusHandler( resource ) {
-            console.log( 'adminPlusHandler' )
-            console.log( resource )
             this.header = require('./views/AdminHeader')
 
             if( this.footer ) this.footer.hide()
 
             this.userPromise.then( () => {
+
+                console.log( this.header )            
 
                 if( this.user.id ) this.header.onUser( this.user )
 
@@ -31,10 +31,7 @@ module.exports = new (
         },
 
         createAdminPlusView( resource ) {
-            console.log( 'createAdminPlusView' )
-            console.log( resource )
             const view = this.routeToViewName[ resource ] || resource
-            console.log( view )
 
             return this.ViewFactory.create( view, {
                 insertion: { value: { el: document.querySelector('#content') } },
@@ -48,6 +45,8 @@ module.exports = new (
             this.user = require('./models/User');
 
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
+
+            console.log( this.userPromise )
 
             this.views = { }
 

@@ -1,1 +1,1 @@
-client/js/templates
+client/js/views/templates/

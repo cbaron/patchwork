@@ -24,22 +24,22 @@ Object.assign( Router.prototype, MyObject.prototype, {
     
     applyResource( request, response, path, subPath ) {
         var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
-            file = this.format('./resources%s/%s', subPath || '', filename )
+            file = `./resources${subPath || ''}/${filename}`
 
         return new Promise( ( resolve, reject ) => {
 
-            this.fs.stat( this.format( '%s/%s.js', __dirname, file ), err => {
+            this.fs.stat( `${__dirname}/${file}.js`, err => {
                 var instance
 
                 if( err ) { 
                     if( err.code !== "ENOENT" ) return reject( err )
-                    file = this.format( './resources%s/__proto__', subPath || '' )
+                    file = `./resources${subPath || ''}/__proto__`
                 }
 
                 instance = new ( require(file) )( {
-                    request: request,
-                    response: response,
-                    path: path,
+                    request,
+                    response,
+                    path,
                     tables: this.tables,
                 } )
 
