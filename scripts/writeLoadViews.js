@@ -5,7 +5,7 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
     FS: require('fs'),
 
     constructor( dir ) {
-        const excludedFiles = [ 'Footer.js', 'Login.js', 'Header.js', 'AdminHeader.js' ]
+        const excludedFiles = [ 'Login.js', 'AdminHeader.js' ]
 
         this.P( this.FS.readdir, [ `${dir}/views` ] )
         .then( ( [ files ] ) =>
@@ -25,7 +25,7 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
             )
         )
         .then( () =>
-           this.P( this.FS.readdir, [ `${dir}/templates` ] )
+           this.P( this.FS.readdir, [ `${dir}/views/templates` ] )
             .then( ( [ files ] ) => 
                 this.P(
                     this.FS.writeFile,
@@ -35,7 +35,7 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
                         files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
                              .map( name => {
                                  name = name.replace('.js','')
-                                 return `${name}: require('./templates/${name}')`
+                                 return `${name}: require('./views/templates/${name}')`
                              } )
                              .join(',\n\t') +
                         `\n}`

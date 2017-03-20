@@ -1,88 +1,120 @@
-var Nav = require('./util/Nav'),
-    Header = function() { return Nav.apply( this, arguments ) }
-
-Object.assign( Header.prototype, Nav.prototype, {      
+module.exports = Object.assign( require('./__proto__'), {
 
     bindHeaderEvents() {
-        this.templateData.navLinks.children('li').on( {
-            mouseenter: ( e ) => this.loadHoverColor( e ),
-            mouseleave: ( e ) => this.loadColor( e )
+        this.onMouseEnterLink = e => this.loadHoverColor( e )
+        this.onMouseLeaveLink = e => this.loadColor( e )
+        this.onNavigate = e => this.navigate(e)
+
+        Array.from( this.els.navLinks.children ).forEach( li => {
+            li.addEventListener( 'mouseenter', this.onMouseEnterLink )
+            li.addEventListener( 'mouseleave', this.onMouseLeaveLink )
         } )
         
-        this.templateData.headerTitle.on( {
-            click: ( e ) => this.navigate( e ),
-            mouseenter: ( e ) => this.loadHoverColor( e ),
-            mouseleave: ( e ) => this.loadColor( e )
-        } )       
+        this.els.headerTitle.addEventListener( 'click', this.onNavigate )
+        this.els.headerTitle.addEventListener( 'mouseenter', this.onMouseEnterLink )
+        this.els.headerTitle.addEventListener( 'mouseleave', this.onMouseLeaveLink )
     },
 
-    initiateHeader( resource ) {
-        var headerImages = new ( this.Collection.extend( { url: "/header" } ) )()
-        headerImages.fetch().then( () => {
-            headerImages.models.forEach( model => {
-                if( model.get('page') === resource ) {
-                    this.model = model
+    events: {
+        'hamburger': 'click',
+    },
+
+    onNavigation( resource ) {
+        this.modelPromise.then( () =>
+            this.model.data.forEach( datum => {
+                if( datum.page === resource ) {
+                    this.currentlySelected = datum
                     this.size()                                      
-                }                
+                }
             } )
-        } )
+        )
+
+        return this
     },
 
     insertionMethod: 'before',
 
-    loadColor( event ) { this.$( event.target ).css( 'color', this.model.get('color') ) },
+    loadColor( e ) { e.target.style.color = this.currentlySelected.color },
 
-    loadHoverColor( event ) {
-        var el = $( event.target )
-        if( el.attr('data-id') !== 'home') this.$( event.target ).css( 'color', this.model.get('hovercolor') )
+    loadHoverColor( e ) {
+        if( e.target.getAttribute( 'data-id' ) !== 'home') e.target.style.color = this.currentlySelected.hovercolor
     },
 
-    loadHeader( model ) {
-        this.templateData.container
-            .css( 'background-image', this.util.format( "url( /file/header/image/%d )", model.id ) )
+    loadHeader() {
+        this.els.container.style.backgroundImage = `url( /file/header/image/${this.currentlySelected.id} )`
     },
 
-    loadMobileHeader( model ) {
-        this.templateData.container
-            .css( 'background-image', this.util.format( "url( /file/header/mobileimage/%d )", model.id ) )
+    loadMobileHeader() {
+        this.els.container.style.backgroundImage = `url( /file/header/mobileimage/${this.currentlySelected.id})`
+    },
+
+    onHamburgerClick() {
+        this.toggleLogo()
+    },
+
+    postRender() {
+        this.model = Object.create( this.Model, { resource: { value: 'header' } } )
+        this.modelPromise = this.model.get()
+
+        return this
+    },
+
+    navigate( e ) {
+        this.emit( 'navigate', `/${e.target.getAttribute('data-id')}` )
     },
 
     removeHeaderEvents() {
-        this.templateData.navLinks.children('li').off( 'mouseenter mouseleave' )
-        this.templateData.headerTitle.off( 'click mouseenter mouseleave')
+        this.templateData.navLinks.children.forEach( li => {
+            li.removeEventListener( 'mouseenter', this.onMouseEnterLink )
+            li.removeEventListener( 'mouseleave', this.onMouseLeaveLink )
+        } )
+        
+        this.els.headerTitle.removeEventListener( 'click', this.onNavigate )
+        this.els.headerTitle.removeEventListener( 'mouseenter', this.onMouseEnterLink )
+        this.els.headerTitle.removeEventListener( 'mouseleave', this.onMouseLeaveLink )
     },
 
     size() {
-        var model = this.model,
-            width = this.$(window).width(),
-            height = this.templateData.container.height(),
+        const model = this.currentlySelected,
+            width = this.els.container.clientWidth,
+            height = this.els.container.clientHeight,
             aspectRatio = width / height
         
         if( window.innerWidth > 767 && model ) {
-            this.loadHeader( model )
-            this.bindHeaderEvents()
-            this.templateData.navLinks.children('li').css( 'color', model.get('color') )
-            this.templateData.headerTitle.css( 'color', model.get('color') ) 
-        
-            if( this.templateData.headerTitle.css( 'display' ) === "none" )
-                this.templateData.headerTitle.css( 'display', 'inline-block' )
-        }
-        if( window.innerWidth < 768 && model ) {
 
-            ( aspectRatio > 1.6 ) ? this.loadHeader( model ) : this.loadMobileHeader( model )
+            this.loadHeader()
+            this.bindHeaderEvents()
+            Array.from( this.els.navLinks.children ).forEach( li => li.style.color = this.currentlySelected.color )
+            this.els.headerTitle.style.color = this.currentlySelected.color
+        
+            if( this.els.headerTitle.style.display === "none" ) this.els.headerTitle.style.display = 'inline-block'
+
+        } else if( window.innerWidth < 768 && model ) {
+
+            ( aspectRatio > 1.6 ) ? this.loadHeader() : this.loadMobileHeader()
 
             this.removeHeaderEvents()
-            this.templateData.navLinks.children('li').css( 'color', '#ccc' )
-            this.templateData.headerTitle.css( 'color', model.get('color') )
+            Array.from( this.els.navLinks.children ).forEach( li => li.style.color = '#ccc' )
+            this.els.headerTitle.style.color = this.currentlySelected.color
             
-            if( this.templateData.navbarCollapse.hasClass('in') )
-                this.templateData.headerTitle.css( 'display', 'none' )
+            if( this.els.navbarCollapse.hasClass('in') ) this.els.headerTitle.style.display = 'none'
         }
-
     },
 
-    template: require('../templates/header')( require('handlebars') )
+
+    fields: [
+            { label: 'About Us', name: 'about' },
+            { label: 'CSA Program', name: 'csa' },
+            { label: 'Markets', name: 'markets' },
+            { label: 'Sign-Up', name: 'sign-up' },
+            { label: 'Get Involved', name: 'get-involved' },
+            { label: 'Contact Us', name: 'contact' }
+    ],
+
+    templateOpts() {
+        return { fields: this.fields, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+    },
+
+    toggleLogo() { this.els.headerTitle.classList.toggle('hidden') }
 
 } )
-
-module.exports = new Header()

@@ -3,8 +3,6 @@ module.exports = new (
 
         $: require('jquery'),
         Error: require('../../lib/MyError'),
-        Footer: require('./views/Footer'),
-        Header: require('./views/Header'),
         Resource: require('./views/Resource'),
 
         ViewFactory: require('./factory/View'),
@@ -16,6 +14,8 @@ module.exports = new (
 
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
+            this.footer = this.ViewFactory.create( 'footer', { insertion: { value: { el: this.content, method: 'after' } } } )
+
             this.views = { }
 
             return this;
@@ -23,16 +23,19 @@ module.exports = new (
 
         handleHeader( resource ) {
             if( /admin/.test(resource) ) {
-                if( this.adminHeader ) { this.adminHeader.onNavigate() }
+                if( this.adminHeader ) { this.adminHeader.onNavigation() }
                 else { this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { value: { el: this.content, method: 'insertBefore' } } } ) }
             } else {
                 if( this.adminHeader ) { this.adminHeader.hide() }
-                this.Header.initiateHeader( resource )
+                if( this.header ) { this.header.onNavigation( resource ) }
+                else {
+                    this.header = this.ViewFactory.create( 'header', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
+                    this.header.onNavigation( resource ) }
             }
         },
 
         handleFooter( resource ) {
-            this.Footer[ /admin/.test( resource ) ? 'hide' : 'show' ]()
+            this.footer.els.container.classList.toggle( 'hidden', /admin/.test( resource ) )
         },
 
         handler( resource ) {
@@ -56,12 +59,12 @@ module.exports = new (
                         .on( 'navigate', route => this.navigate( route, { trigger: true } ) )
                         .on( 'deleted', () => delete this.views[lower] )
                     : new ( this.resources[ resource ].view )( this.resources[ resource ].options )
-           
-           
-                if( !/admin/.test( resource ) {  
-                    if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
-                    this.header.$('.navbar-collapse').removeClass( 'in' )
-                    this.$(window).scrollTop(0)
+                        .on( 'navigate', data => this.navigate( data.location, data.options ) )
+                        
+                if( !/admin/.test( resource ) ) {  
+                    if( this.header.els.headerTitle.style.display === 'none' ) this.header.toggleLogo()
+                    this.header.els.navbarCollapse.classList.remove('in')
+                    document.body.scrollTop = 0
                     this.footer.size()
                 }
 

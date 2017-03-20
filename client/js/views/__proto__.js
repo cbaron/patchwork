@@ -60,14 +60,16 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
             {},
             (this.model) ? this.model.data : {} ,
             { user: (this.user) ? this.user.data : {} },
-            { opts: (this.templateOpts) ? this.templateOpts : {} }
+            { opts: (this.templateOpts)
+                ? typeof this.templateOpts === 'function'
+                    ? this.templateOpts()
+                    : this.templateOpts
+                 : {} }
         )
     },
 
     isAllowed( user ) {
-        console.log( this.requiresRole )
-        console.log( user )
-        console.log( user.roles.includes( this.requiresRole ) )
+        if( !this.requiresRole ) return true
         return this.requiresRole && user.roles.includes( this.requiresRole )
     },
 

@@ -1,7 +1,4 @@
-var MyView = require('../MyView'),
-    Nav = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( Nav.prototype, MyView.prototype, {
+module.exports = {
 
     events: {
         'hamburger': { event: 'click', selector: '', method: 'toggleLogo' },
@@ -25,19 +22,17 @@ Object.assign( Nav.prototype, MyView.prototype, {
             { label: 'Contact Us', name: 'contact' }
     ],
 
-    getTemplateOptions() { return { fields: this.fields, home: this.home } },
-
-    home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' },
-
-    requiresLogin: false,
+    templateOpts() {
+        return { fields: this.fields, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+    },
 
     navigate( e ) {
         var id = this.$( e.currentTarget ).attr( 'data-id' )     
-        this.router.navigate( id, { trigger: true } )     
+        this.emit( 'navigate', { location: id, options: { trigger: true } } )
     },
 
-    toggleLogo() { this.templateData.headerTitle.toggle() }
+    requiresLogin: false,
 
-} )
+    toggleLogo() { this.els.headerTitle.toggle() }
 
-module.exports = Nav
+}
