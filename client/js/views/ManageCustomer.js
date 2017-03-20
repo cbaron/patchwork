@@ -29,12 +29,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
+        console.log("ASDASD")
         this.initAutoComplete()
 
         this.on( 'customerSelected', personData => {
             this.views.customerInfo.getTableData( personData )
         } )
 
+        console.log("ASDASD")
         return this
     },
 

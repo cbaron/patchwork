@@ -65,6 +65,9 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     isAllowed( user ) {
+        console.log( this.requiresRole )
+        console.log( user )
+        console.log( user.roles.includes( this.requiresRole ) )
         return this.requiresRole && user.roles.includes( this.requiresRole )
     },
 
@@ -87,7 +90,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     hide() {
-        if( !document.body.contains(this.els.container) || this.isHidden() ) {
+        if( !this.els || !document.body.contains(this.els.container) || this.isHidden() ) {
             return Promise.resolve()
         } else if( this.els.container.classList.contains('hide') ) {
             return new Promise( resolve => this.once( 'hidden', resolve ) )

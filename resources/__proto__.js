@@ -21,7 +21,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             if( query !== null && query.charAt(0) === "{" ) {
                 this.veeTwo = true
                 this.path.shift()
-                if( [ 'member', 'person' ].includes[ this.path[0] ] && this.
+                if( [ 'member', 'person' ].includes[ this.path[0] ] && !this.user.roles.includes('admin') ) throw Error("401")
                 return this.query = JSON.parse( decodeURIComponent( query ) )
             }
                 

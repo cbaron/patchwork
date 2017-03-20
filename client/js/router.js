@@ -3,50 +3,18 @@ module.exports = new (
 
         $: require('jquery'),
 
-        Error: require('./MyError'),
+        Error: require('../../lib/MyError'),
 
         Resource: require('./views/Resource'),
 
         ViewFactory: require('./factory/View'),
 
-        adminPlusHandler( resource ) {
-            this.header = require('./views/AdminHeader')
-
-            if( this.footer ) this.footer.hide()
-
-            this.userPromise.then( () => {
-
-                console.log( this.header )            
-
-                if( this.user.id ) this.header.onUser( this.user )
-
-                Object.keys( this.views ).forEach( key => this.views[key].hide() )
-
-                //if( this.views.resource ) return this.views.resource.update( resource )
-
-                this.views.resource = this.createAdminPlusView( resource )
-
-            } ).catch( err => new this.Error(err) )
-
-        },
-
-        createAdminPlusView( resource ) {
-            const view = this.routeToViewName[ resource ] || resource
-
-            return this.ViewFactory.create( view, {
-                insertion: { value: { el: document.querySelector('#content') } },
-                //path: { value: path, writable: true },
-                user: { value: this.user }
-            } )
-            
-        },
-
         initialize: function() {
-            this.user = require('./models/User');
+            this.content = document.querySelector('#content')
+
+            this.user = require('./models/User')
 
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
-
-            console.log( this.userPromise )
 
             this.views = { }
 
@@ -63,13 +31,19 @@ module.exports = new (
             if( !resource ) return this.navigate( 'home', { trigger: true } )
           
             this.userPromise.then( () => {
+                if( this.user.id && /admin/.test(resource) ) this.header.onUser( this.user )
+
                 this.$('body').removeClass().addClass( resource )
                 
-                Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
+                Object.keys( this.views ).forEach( view => { console.log( view ); this.views[ view ].hide() } )
                 
                 if( this.views[ resource ] ) this.views[ resource ].show()
-                else this.views[ resource ] = ( resource === "admin-plus" )
-                    ? this.createAdminPlusView( resource )
+                else this.views[ resource ] = resource === "admin-plus"
+                    ? this.ViewFactory.create( resource, {
+                        insertion: { value: { el: this.content } },
+                        user: { value: this.user } } )
+                        .on( 'navigate', route => this.navigate( route, { trigger: true } ) )
+                        .on( 'deleted', () => delete this.views[lower] )
                     : new ( this.resources[ resource ].view )( this.resources[ resource ].options )
             
                 if( this.header.$('.header-title').css( 'display' ) === 'none' ) this.header.toggleLogo()
@@ -101,6 +75,30 @@ module.exports = new (
             } ).catch( err => new this.Error(err) )
         },
 
+        adminPlusHandler( resource ) {
+            this.header = require('./views/AdminHeader')
+
+            if( this.footer ) this.footer.hide()
+
+            this.userPromise.then( () => {
+
+                if( this.user.id ) this.header.onUser( this.user )
+
+                Object.keys( this.views ).forEach( key => this.views[key].hide() )
+
+                if( this.views[ resource ] ) return this.views[ resource ].onNavigation( resource )
+
+                this.views[ resource ] =
+                    this.ViewFactory.create( resource, {
+                        insertion: { value: { el: this.content } },
+                        user: { value: this.user }
+                    } )
+                    .on( 'navigate', route => this.navigate( route, { trigger: true } ) )
+                    .on( 'deleted', () => delete this.views[lower] )
+            } )
+            .catch( err => new this.Error(err) )
+        },
+
         resources: {
 
             admin: {
@@ -123,11 +121,6 @@ module.exports = new (
             members: { view: require('./views/Members'), options: { } },
             "get-involved": { view: require('./views/GetInvolved'), options: { } },
             contact: { view: require('./views/Contact'), options: { } }
-        },
-
-        routeToViewName: {
-            'admin-plus': 'adminPlus',
-            'manage-customer': 'manageCustomer'
         },
 
         routes: {
