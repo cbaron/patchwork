@@ -1,55 +1,29 @@
-var MyView = require('./MyView'),
-    AdminHeader = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( AdminHeader.prototype, MyView.prototype, {
+module.exports = Object.assign( require( './__proto__' ), {
 
     events: {
-        'signoutBtn': { event: 'click', selector: '', method: 'signout' }
+        'signoutBtn': 'click'
     },
 
-    getTemplateOptions() { return { logo: '/static/img/logo.gif' } },
-
-    hide: function() {
-
-        return this.Q.Promise( function( resolve, reject ) {
-            this.templateData.container.hide( 10, () => {
-                this.hidden = true
-                this.size()
-                resolve();
-            } );
-
-        }.bind(this) );
-    },
+    getTemplateOpts: { logo: '/static/img/logo.gif' },
 
     insertionMethod: 'before',
 
     onUser: function( user ) {
         this.user = user
-        this.templateData.name.text( this.user.get('name') )
-        this.templateData.userPanel.removeClass('hide')
+        this.els.name.textContent = this.user.get('name')
+        this.els.userPanel.classList.remove( 'hide' )
     },
     
     requiresLogin: false,
 
-    signout: function() {
-
+    onSignoutBtnClick: function() {
         document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         this.user.clear()
 
-        this.templateData.name.text('')
-        this.templateData.userPanel.addClass('hide')
+        this.els.name.textContent = ''
+        this.templateData.userPanel.classList.add('hide')
 
-        Object.keys( this.router.views ).forEach( name => {
-            this.router.views[ name ].delete()
-            delete this.router.views[name] 
-        } )
-
-        this.delete()
-        this.router.navigate( "/", { trigger: true } )
-    },
-
-    template: require('../templates/adminHeader')( require('handlebars') )
+        this.emit('signout')
+    }
 
 } )
-
-module.exports = new AdminHeader()

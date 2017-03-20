@@ -2,23 +2,23 @@ module.exports = Object.create( {
 
     create( name, opts ) {
         const lower = name
-        name = this._processName(  )
+        name = this._processName( name )
 
         return Object.create(
             this.Views[ name ],
             Object.assign( {
                 name: { value: name },
                 factory: { value: this },
-                template: { value: this.Templates[ lower ] },
+                template: { value: this.Templates[ name ] },
                 Toast: { value: this.Toast },
-                //user: { value: this.User }
+                user: { value: this.User }
             }, opts )
         ).constructor()
     },
 
     _processName( name ) {
-        let hypen = name.indexOf('-')
-        if( hyphen !== -1 ) return name.charAt(0).toUpperCase() + name.slice( 0, hypen - 1 ) + name.charAt(hypen + 1).toUpperCase() + name.slice( hypen + 2 )
+        let hyphen = name.indexOf('-')
+        if( hyphen !== -1 ) return name.charAt(0).toUpperCase() + name.slice( 1, hyphen ) + name.charAt(hyphen + 1).toUpperCase() + name.slice( hyphen + 2 )
         
         return name.charAt(0).toUpperCase() + name.slice(1)
     },
@@ -26,5 +26,6 @@ module.exports = Object.create( {
 }, {
     Templates: { value: require('../.TemplateMap') },
     Toast: { value: require('../views/Toast') },
-    Views: { value: require('../.ViewMap') }
+    Views: { value: require('../.ViewMap') },
+    User: { value: require('../models/User') }
 } )
