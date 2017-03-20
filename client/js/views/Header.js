@@ -1,4 +1,6 @@
-module.exports = Object.assign( require('./__proto__'), {
+module.exports = Object.assign( {}, require('./__proto__'), {
+
+    Nav: require( '../models/Nav'),
 
     bindHeaderEvents() {
         this.onMouseEnterLink = e => this.loadHoverColor( e )
@@ -17,6 +19,7 @@ module.exports = Object.assign( require('./__proto__'), {
 
     events: {
         'hamburger': 'click',
+        'navLinks': 'click'
     },
 
     onNavigation( resource ) {
@@ -50,6 +53,10 @@ module.exports = Object.assign( require('./__proto__'), {
 
     onHamburgerClick() {
         this.toggleLogo()
+    },
+
+    onNavLinksClick( e ) {
+        this.emit( 'navigate', `/${e.target.getAttribute('data-id')}` )
     },
 
     postRender() {
@@ -101,18 +108,8 @@ module.exports = Object.assign( require('./__proto__'), {
         }
     },
 
-
-    fields: [
-            { label: 'About Us', name: 'about' },
-            { label: 'CSA Program', name: 'csa' },
-            { label: 'Markets', name: 'markets' },
-            { label: 'Sign-Up', name: 'sign-up' },
-            { label: 'Get Involved', name: 'get-involved' },
-            { label: 'Contact Us', name: 'contact' }
-    ],
-
     templateOpts() {
-        return { fields: this.fields, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
     },
 
     toggleLogo() { this.els.headerTitle.classList.toggle('hidden') }

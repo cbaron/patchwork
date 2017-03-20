@@ -10,8 +10,5 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     requiresLogin: true,
 
-    requiresRole: 'admin',
-
-    template: require('../templates/adminPlus')
-
+    requiresRole: 'admin'
 } )

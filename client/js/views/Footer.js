@@ -1,7 +1,9 @@
-module.exports = Object.assign( require('./__proto__'), {
+module.exports = Object.assign( {}, require('./__proto__'), {
+
+    Nav: require('../models/Nav'),
 
     events: {
-        list: 'click',
+        list: 'click'
     },
 
     size() {
@@ -20,22 +22,13 @@ module.exports = Object.assign( require('./__proto__'), {
         return this
     },
 
-    fields: [
-            { label: 'About Us', name: 'about' },
-            { label: 'CSA Program', name: 'csa' },
-            { label: 'Markets', name: 'markets' },
-            { label: 'Sign-Up', name: 'sign-up' },
-            { label: 'Get Involved', name: 'get-involved' },
-            { label: 'Contact Us', name: 'contact' }
-    ],
-
     onListClick( e ) {
         if( e.target.tagName !== 'LI' ) return
         this.emit( 'navigate', `/${e.target.getAttribute('data-id')}` )
     },
 
     templateOpts() {
-        return { fields: this.fields, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
     }
 
 } )

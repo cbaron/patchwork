@@ -60,7 +60,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
             {},
             (this.model) ? this.model.data : {} ,
             { user: (this.user) ? this.user.data : {} },
-            { opts: (this.templateOpts)
+            { opts: this.templateOpts
                 ? typeof this.templateOpts === 'function'
                     ? this.templateOpts()
                     : this.templateOpts

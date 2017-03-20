@@ -1,8 +1,8 @@
-module.exports = p => ``+
+module.exports = p =>
 `<nav data-js="container" class="admin-header">
     <div class="clearfix hidden-xs">
         <div class="logo-container">
-            <img src="{p.opts.logo}"/>
+            <img src="${p.opts.logo}"/>
         </div>
         <div data-js="userPanel" class="pull-right hide">
             <button data-js="signoutBtn" class="btn btn-link">Sign Out</button>

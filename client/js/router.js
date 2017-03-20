@@ -1,7 +1,6 @@
 module.exports = new (
     require('backbone').Router.extend( {
 
-        $: require('jquery'),
         Error: require('../../lib/MyError'),
         Resource: require('./views/Resource'),
 
@@ -14,7 +13,9 @@ module.exports = new (
 
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
-            this.footer = this.ViewFactory.create( 'footer', { insertion: { value: { el: this.content, method: 'after' } } } )
+            this.footer =
+                this.ViewFactory.create( 'footer', { insertion: { value: { el: this.content, method: 'after' } } } )
+                .on( 'navigate', this.onViewNavigate.bind(this) )
 
             this.views = { }
 
@@ -29,7 +30,9 @@ module.exports = new (
                 if( this.adminHeader ) { this.adminHeader.hide() }
                 if( this.header ) { this.header.onNavigation( resource ) }
                 else {
-                    this.header = this.ViewFactory.create( 'header', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
+                    this.header =
+                        this.ViewFactory.create( 'header', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
+                        .on( 'navigate', this.onViewNavigate.bind(this) )
                     this.header.onNavigation( resource ) }
             }
         },
@@ -45,9 +48,10 @@ module.exports = new (
             this.handleFooter( resource )
           
             this.userPromise.then( () => {
-                if( this.user.id && /admin/.test(resource) ) this.header.onUser( this.user )
+                if( this.user.id && /admin/.test(resource) ) this.adminHeader.onUser( this.user )
 
-                this.$('body').removeClass().addClass( resource )
+                document.body.setAttribute( 'class', '' )
+                document.body.classList.add( resource )
                 
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
                 
@@ -56,7 +60,7 @@ module.exports = new (
                     ? this.ViewFactory.create( resource, {
                         insertion: { value: { el: this.content } },
                         user: { value: this.user } } )
-                        .on( 'navigate', route => this.navigate( route, { trigger: true } ) )
+                        .on( 'navigate', this.onViewNavigate.bind(this) )
                         .on( 'deleted', () => delete this.views[lower] )
                     : new ( this.resources[ resource ].view )( this.resources[ resource ].options )
                         .on( 'navigate', data => this.navigate( data.location, data.options ) )
@@ -70,6 +74,8 @@ module.exports = new (
 
             } ).catch( err => new this.Error(err) )
         },
+
+        onViewNavigate( route ) { this.navigate( route, { trigger: true } ) },
 
         onSignout() {
             Object.keys( this.views ).forEach( name => {
@@ -105,7 +111,7 @@ module.exports = new (
 
             this.userPromise.then( () => {
 
-                if( this.user.id ) this.header.onUser( this.user )
+                //if( this.user.id ) this.adminHeader.onUser( this.user )
 
                 Object.keys( this.views ).forEach( key => this.views[key].hide() )
 
@@ -116,7 +122,7 @@ module.exports = new (
                         insertion: { value: { el: this.content } },
                         user: { value: this.user }
                     } )
-                    .on( 'navigate', route => this.navigate( route, { trigger: true } ) )
+                    .on( 'navigate', this.onViewNavigate.bind(this) )
                     .on( 'deleted', () => delete this.views[lower] )
             } )
             .catch( this.Error )

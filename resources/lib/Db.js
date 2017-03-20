@@ -9,18 +9,32 @@ module.exports = Object.create( {
     },
 
     GET( resource ) {
-        var paramCtr = 1,
-            name = resource.path[0],
-            queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query ),
-            where = ( queryKeys.length ) ? 'WHERE' : ''
+        const table = resource.path[0],
+            queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query )
+            
+        let paramCtr = 1,
+            joins = [ ],
+            selects = { [table]: true },
+            where = undefined
 
         queryKeys.forEach( key => {
             const operation = typeof resource.query[key] === 'object' ? resource.query[key].operation : `=`
-            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*' ].includes( operation ) ) { throw new Error('Invalid parameter') }
-            where += ` "${name}"."${key}" ${operation} $${paramCtr++}` 
+            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join' ].includes( operation ) ) { throw new Error('Invalid parameter') }
+
+            if( operation === 'join' ) {
+                let fkCol = this.Postgres.tables[ table ].columns.find( column => column.name === key )
+                joins.push( `JOIN "${fkCol.fk.table}" ON "${table}"."${fkCol.name}" = "${fkCol.fk.table}"."${fkCol.fk.column}"` )
+                selects[ fkCol.fk.table ] = true
+            } else {
+                where += ` "${name}"."${key}" ${operation} $${paramCtr++}` 
+            }
         } )
         
-        return this.Postgres.query( `SELECT ${this._getColumns(name)} FROM "${name}" ${where}`,
+        where = paramCtr > 1 ? 'WHERE ${where}' : ''
+        joins = joins.join(' ')
+        selects = Object.keys( selects ).map( table => this._getColumns(table) ).join(', ')
+
+        return this.Postgres.query( `SELECT ${selects}this._getColumns(table)} FROM "${table}" ${joins} ${where}`,
             queryKeys.map( key => typeof resource.query[key] === 'object' ? resource.query[key].value : resource.query[key] )
         )
     },

@@ -5,7 +5,7 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
     FS: require('fs'),
 
     constructor( dir ) {
-        const excludedFiles = [ 'Login.js', 'AdminHeader.js' ]
+        const excludedFiles = [ 'Login.js' ]
 
         this.P( this.FS.readdir, [ `${dir}/views` ] )
         .then( ( [ files ] ) =>

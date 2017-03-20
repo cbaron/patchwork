@@ -29,29 +29,25 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        console.log("ASDASD")
         this.initAutoComplete()
 
         this.on( 'customerSelected', personData => {
             this.views.customerInfo.getTableData( personData )
         } )
 
-        console.log("ASDASD")
         return this
     },
 
     requiresLogin: true,
 
     search( attr, term, suggest ) {
-        return this.model.get( { query: { [attr]: { operation: '~*', value: term } } } )
+        return this.model.get( { query: { [attr]: { operation: '~*', value: term }, 'personid': { operation: 'join' } } } )
         .then( () => {
             if( ! this.model.data.length ) return Promise.resolve( false )
                 
             this.handleAutoCompleteResults( 'name', suggest )
             return Promise.resolve( true )
         } )
-    },
-
-    template: require('../templates/manageCustomer')
+    }
 
 } )

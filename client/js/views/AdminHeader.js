@@ -4,12 +4,11 @@ module.exports = Object.assign( require( './__proto__' ), {
         'signoutBtn': 'click'
     },
 
-    getTemplateOpts: { logo: '/static/img/logo.gif' },
+    templateOpts: { logo: '/static/img/logo.gif' },
 
     insertionMethod: 'before',
 
-    onUser: function( user ) {
-        this.user = user
+    onUser() {
         this.els.name.textContent = this.user.get('name')
         this.els.userPanel.classList.remove( 'hide' )
     },

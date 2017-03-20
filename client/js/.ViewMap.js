@@ -1,6 +1,7 @@
 module.exports={
 	About: require('./views/About'),
 	Admin: require('./views/Admin'),
+	AdminHeader: require('./views/AdminHeader'),
 	AdminPlus: require('./views/AdminPlus'),
 	CSA: require('./views/CSA'),
 	Contact: require('./views/Contact'),
