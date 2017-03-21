@@ -15,6 +15,7 @@ module.exports={
 	Markets: require('./views/Markets'),
 	Members: require('./views/Members'),
 	MyView: require('./views/MyView'),
+	OrderOptions: require('./views/OrderOptions'),
 	Resource: require('./views/Resource'),
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),

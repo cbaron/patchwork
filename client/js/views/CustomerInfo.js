@@ -1,27 +1,28 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    clear() {
+        this.fields.forEach( field => this.els[ field.name ].textContent = ''
+    },
+
     fields: [
-        { name: 'name', label: 'Name' },
-        { name: 'email', label: 'Email' },
-        { name: 'secondaryEmail', label: 'Secondary Email' },
-        { name: 'phonenumber', label: 'Phone' },
-        { name: 'address', label: 'Address' },
-        { name: 'neverReceive', label: 'Vegetable to Never Receive' },
-        { name: 'onPaymentPlan', label: 'On Payment Plan' }
+        { table: 'person', name: 'name', label: 'Name' },
+        { table: 'person', name: 'email', label: 'Email' },
+        { table: 'person', name: 'secondaryEmail', label: 'Secondary Email' },
+        { table: 'member', name: 'phonenumber', label: 'Phone' },
+        { table: 'member', name: 'address', label: 'Address' },
+        { table: 'member', name: 'neverReceive', label: 'Vegetable to Never Receive' },
+        { table: 'member', name: 'onPaymentPlan', label: 'On Payment Plan' }
     ],
 
-    getTableData( personData ) {
-        console.log( personData )
-        this.models.person.data = personData
+    update( customer ) {
+        this.clear()
 
-        return this.models.member.get( { query: { personid: { operation: '=', value: personData.id } } } )
-        .then( () => {
+        this.model = customer
 
-            return this.models.neverReceive.get( { resource: `never-receive/${personData.id}` } )
-            .then( () => {
-                this.populateTable()
-            })
-        } )
+        this.models.neverReceive.get( { resource: `never-receive/${customer.member.data.id}` } )
+        .then( () => this.populateTable() )
+        .then( () => this.show() )
+        .catch( this.Error )
     },
 
     getTemplateOptions() {
@@ -35,13 +36,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     populateTable() {
-        Object.keys( this.models ).forEach( model => {
-            Object.keys( this.models[ model ].data ).forEach( attr => {
-                if( this.els[ attr ] ) this.els[ attr ].textContent = this.models[ model ].data[ attr ]
-            } )
-        } )
-
-        this.show()
+        this.fields.forEach( field => this.els[ field.name ].textContent = this.model[ field.table ].data[ field.name ] )
     }
 
 } )

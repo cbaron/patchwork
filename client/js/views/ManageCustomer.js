@@ -1,6 +1,6 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    model: require('../models/ManageCustomer'),
+    model: require('../models/Customer'),
 
     initAutoComplete() {
         const myAutoComplete = new autoComplete( {
@@ -13,7 +13,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                this.emit( 'customerSelected', this.model.data.find( person => person.data[ this.attr ] === term ) )
+                this.emit( 'customerSelected', this.model.data.find( datum => datum.person.data[ this.attr ] === term ) )
             }
 
         } )
@@ -22,9 +22,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.initAutoComplete()
 
-        this.on( 'customerSelected', personData => {
-            this.views.customerInfo.getTableData( personData )
+        this.on( 'customerSelected', customer => {
+            this.views.customerInfo.update( customer )
+            this.views.seasons.update( customer )
         } )
+
+        this.views.seasons.on( 'selected', share => this.views.orderOptions.update( share ) )
 
         return this
     },
@@ -37,7 +40,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( ! this.model.data.length ) return Promise.resolve( false )
     
             this.attr = attr            
-            suggest( this.model.data.map( person => person.data[ attr ] ) )
+            suggest( this.model.data.map( datum => datum.person.data[ attr ] ) )
             return Promise.resolve( true )
         } )
     }

@@ -7,4 +7,5 @@ module.exports = p =>
     <hr>
     <div data-view="customerInfo" class="hide hidden"></div>
     <div data-view="seasons" class="hide hidden"></div>
+    <div data-view="orderOptions" class="hide hidden"></div>
 </div>`

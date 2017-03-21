@@ -9,9 +9,6 @@ module.exports = p => {
     return `` +
     `<div class="hide hidden">
         <h3>Customer Info</h3>
-        <div class="customer-info-table">
-            ${rows}
-        </div>
+        <div class="customer-info-table">${rows}</div>
     </div>`
-
 }
