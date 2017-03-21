@@ -1,7 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     clear() {
-        this.fields.forEach( field => this.els[ field.name ].textContent = ''
+        this.fields.forEach( field => this.els[ field.name ].textContent = '' )
     },
 
     fields: [
@@ -13,17 +13,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         { table: 'member', name: 'neverReceive', label: 'Vegetable to Never Receive' },
         { table: 'member', name: 'onPaymentPlan', label: 'On Payment Plan' }
     ],
-
-    update( customer ) {
-        this.clear()
-
-        this.model = customer
-
-        this.models.neverReceive.get( { resource: `never-receive/${customer.member.data.id}` } )
-        .then( () => this.populateTable() )
-        .then( () => this.show() )
-        .catch( this.Error )
-    },
 
     getTemplateOptions() {
         return { fields: this.fields }
@@ -37,6 +26,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     populateTable() {
         this.fields.forEach( field => this.els[ field.name ].textContent = this.model[ field.table ].data[ field.name ] )
+    },
+    
+    update( customer ) {
+        this.clear()
+
+        this.model = customer
+
+        this.models.neverReceive.get( { resource: `never-receive/${customer.member.data.id}` } )
+        .then( () => this.populateTable() )
+        .then( () => this.show() )
+        .catch( this.Error )
     }
 
 } )

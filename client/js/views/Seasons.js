@@ -4,6 +4,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     clear() { this.els.list.innerHTML = '' },
 
+    events: {
+        list: 'click'
+    },
+
+    onListClick( e ) {
+        if( this.currentSelection ) this.currentSelection.removeClass('selected')
+        
+        const el = e.target
+        this.currentSelection = el
+        el.classList.add( 'selected' )
+        this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
+    },
+
     templates: {
         share: share => `<li data-id="${share.id}" class="cell">${share.label}</li>`
     },

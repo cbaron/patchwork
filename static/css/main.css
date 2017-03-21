@@ -1,3 +1,7 @@
+.Seasons .selected {
+  background-color: #ffa500;
+  background-opacity: 0.5;
+}
 .Toast {
   background-color: #b13325;
   border-radius: 5px;

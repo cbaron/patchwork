@@ -27,7 +27,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.seasons.update( customer )
         } )
 
-        this.views.seasons.on( 'selected', share => this.views.orderOptions.update( share ) )
+        this.views.seasons.on( 'selected', data => this.views.orderOptions.update( data ) )
 
         return this
     },
