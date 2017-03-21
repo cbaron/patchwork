@@ -15,28 +15,30 @@ module.exports = Object.create( {
         let paramCtr = 1,
             joins = [ ],
             selects = { [table]: true },
-            where = undefined
+            where = '',
+            params = [ ]
 
         queryKeys.forEach( key => {
-            const operation = typeof resource.query[key] === 'object' ? resource.query[key].operation : `=`
+            const datum = resource.query[key],
+                operation = typeof datum === 'object' ? datum.operation : `=`
             if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join' ].includes( operation ) ) { throw new Error('Invalid parameter') }
 
             if( operation === 'join' ) {
-                let fkCol = this.Postgres.tables[ table ].columns.find( column => column.name === key )
-                joins.push( `JOIN "${fkCol.fk.table}" ON "${table}"."${fkCol.name}" = "${fkCol.fk.table}"."${fkCol.fk.column}"` )
-                selects[ fkCol.fk.table ] = true
+                let fkCol = this.Postgres.tables[ datum.value.table ].columns.find( column => column.name === datum.value.column )
+                if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )
+                joins.push( `JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )
+                selects[ datum.value.table ] = true
             } else {
-                where += ` "${name}"."${key}" ${operation} $${paramCtr++}` 
+                where += ` "${table}"."${key}" ${operation} $${paramCtr++}` 
+                params.push( typeof datum === 'object' ? datum.value : datum )
             }
         } )
         
-        where = paramCtr > 1 ? 'WHERE ${where}' : ''
+        where = paramCtr > 1 ? `WHERE ${where}` : ''
         joins = joins.join(' ')
-        selects = Object.keys( selects ).map( table => this._getColumns(table) ).join(', ')
+        selects = Object.keys( selects ).map( tableName => this._getColumns( tableName, { extend: true } ) ).join(', ')
 
-        return this.Postgres.query( `SELECT ${selects}this._getColumns(table)} FROM "${table}" ${joins} ${where}`,
-            queryKeys.map( key => typeof resource.query[key] === 'object' ? resource.query[key].value : resource.query[key] )
-        )
+        return this.Postgres.query( `SELECT ${selects} FROM "${table}" ${joins} ${where}`, params )
     },
 
     PATCH( resource ) { 
@@ -59,8 +61,12 @@ module.exports = Object.create( {
             bodyKeys.map( key => resource.body[key] ) )
     },
 
-    _getColumns( name ) { return this.Postgres.tables[ name ].columns.map( column => `"${name}"."${column.name}"` ).join(', ') },
-
+    _getColumns( name, opts={} ) {
+        return this.Postgres.tables[ name ].columns.map( column =>
+            `"${name}"."${column.name}"` + ( opts.extend ? ` as "${name}.${column.name}"` : '' )
+        ).join(', ')
+    },
+        
     _wrapKeys: keys => keys.map( key => `"${key}"` ).join(', ')
 
 }, { } )

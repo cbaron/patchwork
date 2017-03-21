@@ -47,7 +47,12 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
                 this.query( this._queries.selectTableColumns( row.table_name ) )
                 .then( columnResult =>
                     Promise.resolve(
-                        this.tables[ row.table_name ] = { columns: columnResult.rows.map( columnRow => this.getColumnDescription( row, columnRow ) ) }
+                        this.tables[ row.table_name ] = {
+                            columns: columnResult.rows.reduce( ( memo, columnRow ) =>
+                                columnRow.column_name !== 'password' ? memo.concat( this.getColumnDescription( row, columnRow ) ) : memo,
+                                [ ]
+                            )
+                        }
                     )
                 )
             ) )
@@ -92,7 +97,7 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
                         this.client.query( query, args, ( err, result ) => {
                             this.done()
 
-                            if( err ) return reject( err )
+                            if( err ) { console.log( query ); return reject( err ) }
 
                             resolve( result )
                         } )

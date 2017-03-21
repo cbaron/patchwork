@@ -1,14 +1,6 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    handleAutoCompleteResults( column, suggest ) {
-        if( this.model.data.length ) {
-            const suggestions = this.model.data.map( person => person[ column ] )
-            this.persons = this.model.data
-            return suggest( suggestions )
-        }
-    },
-
-    model: require('../models/Person'),
+    model: require('../models/ManageCustomer'),
 
     initAutoComplete() {
         const myAutoComplete = new autoComplete( {
@@ -21,8 +13,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                const personData = this.persons.find( person => person.name === term || person.email === term )
-                this.emit( 'customerSelected', personData )
+                this.emit( 'customerSelected', this.model.data.find( person => person.data[ this.attr ] === term ) )
             }
 
         } )
@@ -41,11 +32,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     requiresLogin: true,
 
     search( attr, term, suggest ) {
-        return this.model.get( { query: { [attr]: { operation: '~*', value: term }, 'personid': { operation: 'join' } } } )
+        return this.model.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
             if( ! this.model.data.length ) return Promise.resolve( false )
-                
-            this.handleAutoCompleteResults( 'name', suggest )
+    
+            this.attr = attr            
+            suggest( this.model.data.map( person => person.data[ attr ] ) )
             return Promise.resolve( true )
         } )
     }

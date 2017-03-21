@@ -11,6 +11,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     ],
 
     getTableData( personData ) {
+        console.log( personData )
         this.models.person.data = personData
 
         return this.models.member.get( { query: { personid: { operation: '=', value: personData.id } } } )
