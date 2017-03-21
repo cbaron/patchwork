@@ -7,5 +7,6 @@ module.exports={
 	ManageCustomer: require('./views/templates/ManageCustomer'),
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Seasons: require('./views/templates/Seasons'),
-	Toast: require('./views/templates/Toast')
+	Toast: require('./views/templates/Toast'),
+	WeekOptions: require('./views/templates/WeekOptions')
 }

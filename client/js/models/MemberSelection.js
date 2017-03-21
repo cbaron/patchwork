@@ -6,14 +6,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 ( memo, key ) => {
                     const index = key.indexOf('.'),
                         table = key.slice(0, index)
-                    if( table !== 'share' ) return memo
+                    if( table !== 'shareoptionoption' ) return memo
 
                     return Object.assign( memo, { [ key.slice( index + 1 ) ]: row[key] } )
                 },
-                { membershareid: row[ 'membershare.id' ] }
+                { shareoptionid: row[ 'shareoptionid.id' ] }
             )
         )
     },
 
-    resource: 'membershare'
+    resource: 'membershareoption'
 } )

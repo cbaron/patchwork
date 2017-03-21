@@ -21,12 +21,12 @@ module.exports = Object.create( {
         queryKeys.forEach( key => {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
-            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join' ].includes( operation ) ) { throw new Error('Invalid parameter') }
+            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
 
-            if( operation === 'join' ) {
+            if( /join/.test( operation ) ) {
                 let fkCol = this.Postgres.tables[ datum.value.table ].columns.find( column => column.name === datum.value.column )
                 if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )
-                joins.push( `JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )
+                joins.push( `${operation === 'leftJoin' ? 'LEFT' : ''} JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )
                 selects[ datum.value.table ] = true
             } else {
                 where += ` "${table}"."${key}" ${operation} $${paramCtr++}` 

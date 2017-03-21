@@ -9,7 +9,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onListClick( e ) {
-        if( this.currentSelection ) this.currentSelection.removeClass('selected')
+        if( this.currentSelection ) this.currentSelection.classList.remove('selected')
         
         const el = e.target
         this.currentSelection = el

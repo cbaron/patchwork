@@ -1,6 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    model: require('../models/Customer'),
+    Customer: require('../models/Customer'),
+    Delivery: require('../models/Delivery'),
 
     initAutoComplete() {
         const myAutoComplete = new autoComplete( {
@@ -13,7 +14,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                this.emit( 'customerSelected', this.model.data.find( datum => datum.person.data[ this.attr ] === term ) )
+                this.emit( 'customerSelected', this.Customer.data.find( datum => datum.person.data[ this.attr ] === term ) )
             }
 
         } )
@@ -27,7 +28,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.seasons.update( customer )
         } )
 
-        this.views.seasons.on( 'selected', data => this.views.orderOptions.update( data ) )
+        this.views.seasons.on( 'selected', data => {
+            this.Delivery.get( {
+                query: {
+                    membershareid: data.share.membershareid,
+                    deliveryoptionid: { operation: 'join', value: { table: 'deliveryoption', column: 'id' } },
+                    groupdropoffid: { operation: 'join', value: { table: 'groupdropoff', column: 'id' } }
+                }
+            } )
+            .then( () => {
+                Object.assign( data, { delivery: this.Delivery } )
+                this.views.orderOptions.update( data )
+                this.views.weekOptions.update( data )
+            } )
+        } )
 
         return this
     },
@@ -35,12 +49,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     requiresLogin: true,
 
     search( attr, term, suggest ) {
-        return this.model.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
+        return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
-            if( ! this.model.data.length ) return Promise.resolve( false )
+            if( ! this.Customer.data.length ) return Promise.resolve( false )
     
             this.attr = attr            
-            suggest( this.model.data.map( datum => datum.person.data[ attr ] ) )
+            suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
             return Promise.resolve( true )
         } )
     }

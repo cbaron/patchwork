@@ -8,4 +8,5 @@ module.exports = p =>
     <div data-view="customerInfo" class="hide hidden"></div>
     <div data-view="seasons" class="hide hidden"></div>
     <div data-view="orderOptions" class="hide hidden"></div>
+    <div data-view="weekOptions" class="hide hidden"></div>
 </div>`
