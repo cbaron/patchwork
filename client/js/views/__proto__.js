@@ -2,6 +2,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
     Model: require('../models/__proto__'),
 
+    Moment: require('moment'),
+
     NumberFormat: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
       currency: 'USD',

@@ -23,7 +23,7 @@ module.exports = Object.create( {
                 operation = typeof datum === 'object' ? datum.operation : `=`
             if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
 
-            if( /join/.test( operation ) ) {
+            if( /join/i.test( operation ) ) {
                 let fkCol = this.Postgres.tables[ datum.value.table ].columns.find( column => column.name === datum.value.column )
                 if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )
                 joins.push( `${operation === 'leftJoin' ? 'LEFT' : ''} JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )

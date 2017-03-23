@@ -33,10 +33,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 query: {
                     membershareid: data.share.membershareid,
                     deliveryoptionid: { operation: 'join', value: { table: 'deliveryoption', column: 'id' } },
-                    groupdropoffid: { operation: 'join', value: { table: 'groupdropoff', column: 'id' } }
+                    groupdropoffid: { operation: 'leftJoin', value: { table: 'groupdropoff', column: 'id' } }
                 }
             } )
             .then( () => {
+                //TODO:If no delivery, Toast, or some UI
                 Object.assign( data, { delivery: this.Delivery } )
                 this.views.orderOptions.update( data )
                 this.views.weekOptions.update( data )

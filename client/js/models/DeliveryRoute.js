@@ -1,14 +1,6 @@
 module.exports = require('backbone').Model.extend( Object.assign( { }, require('../../../lib/MyObject').prototype, {
 
-    dayOfWeekMap: {
-        0: 'Sunday',
-        1: 'Monday',
-        2: 'Tuesday',
-        3: 'Wednesday',
-        4: 'Thursday',
-        5: 'Friday',
-        6: 'Saturday'
-    },
+    dayOfWeekMap: require('./DayOfWeek'),
 
     parse( response ) {
         return Object.assign( response, {
