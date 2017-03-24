@@ -9,5 +9,6 @@ module.exports={
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Seasons: require('./views/templates/Seasons'),
 	Toast: require('./views/templates/Toast'),
+	Transactions: require('./views/templates/Transactions'),
 	WeekOptions: require('./views/templates/WeekOptions')
 }

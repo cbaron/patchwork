@@ -21,6 +21,7 @@ module.exports={
 	Seasons: require('./views/Seasons'),
 	Signup: require('./views/Signup'),
 	Toast: require('./views/Toast'),
+	Transactions: require('./views/Transactions'),
 	WeekOptions: require('./views/WeekOptions'),
 	modal: require('./views/modal')
 }
