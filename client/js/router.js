@@ -38,7 +38,7 @@ module.exports = new (
         },
 
         handleFooter( resource ) {
-            this.footer.els.container.classList.toggle( 'hidden', /admin/.test( resource ) )
+            this.footer.els.container.classList.toggle( 'fd-hidden', /admin/.test( resource ) )
         },
 
         handler( resource ) {

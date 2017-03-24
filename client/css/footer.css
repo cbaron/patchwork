@@ -4,6 +4,9 @@ footer {
   width: auto;
   margin-top: 10px;
 }
+footer.fd-hide {
+  transition: none;
+}
 footer ul {
   margin: 10px 0px;
   width: 100%;

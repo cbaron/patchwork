@@ -1,9 +1,9 @@
-//var View = require('../MyView'),
-    //ShareBox = function() { return View.apply( this, arguments ) }
+var View = require('../MyView'),
+    ShareBox = function() { return View.apply( this, arguments ) }
 
-//Object.assign( ShareBox.prototype, View.prototype, {
+Object.assign( ShareBox.prototype, View.prototype, {
 
-module.exports = Object.assign( {}, require('../__proto__'), {
+//module.exports = Object.assign( {}, require('../__proto__'), {
 
     getTemplateOptions() { return this.model.attributes },
 
@@ -13,4 +13,4 @@ module.exports = Object.assign( {}, require('../__proto__'), {
 
 } )
 
-//module.exports = ShareBox
+module.exports = ShareBox

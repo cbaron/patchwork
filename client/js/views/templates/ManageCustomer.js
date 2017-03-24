@@ -1,12 +1,13 @@
 module.exports = p =>
-`<div class="manage-customer">
-    <div class="form-grouping">
-        <label class="form-label">Search Customers</label>  
-        <input class="input-std type="text" id="customer">
+`<div>
+    <div class="main-search">
+        <div class="form-grouping horizontal">
+            <label class="form-label">Search Customers</label>  
+            <input class="input-std type="text" id="customer">
+        </div>
     </div>
-    <hr>
-    <div data-view="customerInfo" class="hide hidden"></div>
-    <div data-view="seasons" class="hide hidden"></div>
-    <div data-view="orderOptions" class="hide hidden"></div>
-    <div data-view="weekOptions" class="hide hidden"></div>
+    <div data-view="customerInfo"></div>
+    <div data-view="seasons"></div>
+    <div data-view="orderOptions"></div>
+    <div data-view="weekOptions"></div>
 </div>`

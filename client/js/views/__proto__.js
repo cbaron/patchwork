@@ -96,13 +96,13 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     hide() {
         if( !this.els || !document.body.contains(this.els.container) || this.isHidden() ) {
             return Promise.resolve()
-        } else if( this.els.container.classList.contains('hide') ) {
-            return new Promise( resolve => this.once( 'hidden', resolve ) )
+        } else if( this.els.container.classList.contains('fd-hide') ) {
+            return new Promise( resolve => this.once( 'fd-hidden', resolve ) )
         } else {
             return new Promise( resolve => {
                 this.onHiddenProxy = e => this.onHidden(resolve)
                 this.els.container.addEventListener( 'transitionend', this.onHiddenProxy )
-                this.els.container.classList.add('hide')
+                this.els.container.classList.add('fd-hide')
             } )
         }
     },
@@ -118,12 +118,12 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } )
     },
     
-    isHidden() { return this.els.container.classList.contains('hidden') },
+    isHidden() { return this.els.container.classList.contains('fd-hidden') },
 
     onHidden( resolve ) {
         this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
-        this.els.container.classList.add('hidden')
-        resolve( this.emit('hidden') )
+        this.els.container.classList.add('fd-hidden')
+        resolve( this.emit('fd-hidden') )
     },
 
     onLogin() {
@@ -185,25 +185,25 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     show() {
-        if( this.els.container.classList.contains( 'hidden' ) ) {
-            this.els.container.classList.remove( 'hidden' )
+        if( this.els.container.classList.contains( 'fd-hidden' ) ) {
+            this.els.container.classList.remove( 'fd-hidden' )
             
             return new Promise( resolve => {
                 setTimeout( () => {
                     this.onShownProxy = e => this.onShown(resolve)
                     this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'hide' )
+                    this.els.container.classList.remove( 'fd-hide' )
                 }, 10 ) 
             } )
-        } else if( this.els.container.classList.contains( 'hide' ) ) {
-            this.els.container.classList.remove( 'hide' )
+        } else if( this.els.container.classList.contains( 'fd-hide' ) ) {
+            this.els.container.classList.remove( 'fd-hide' )
             this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
             
             return new Promise( resolve => {
                 setTimeout( () => {
                     this.onShownProxy = e => this.onShown(resolve)
                     this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'hide' )
+                    this.els.container.classList.remove( 'fd-hide' )
                 }, 10 ) 
             } )
         } else {

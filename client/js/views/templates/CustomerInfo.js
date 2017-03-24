@@ -7,7 +7,7 @@ module.exports = p => {
     ).join('')
 
     return `` +
-    `<div class="hide hidden">
+    `<div class="fd-hide fd-hidden">
         <h3>Customer Info</h3>
         <div class="customer-info-table">${rows}</div>
     </div>`
