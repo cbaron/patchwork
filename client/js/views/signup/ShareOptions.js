@@ -10,7 +10,7 @@ Object.assign( ShareOptions.prototype, List.prototype, {
     events: {
     },
 
-    getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData } },
+    getItemViewOptions() { return { container: this.templateData.shares, signupData: this.signupData, factory: this.factory } },
     
     itemModels() { return this.signupData.shares.models },
 

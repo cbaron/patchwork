@@ -23,8 +23,6 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     } },
 
     getItemViewOptions() {
-        console.log( this.factory )
-
         return { container: this.templateData.shares, factory: this.factory }
     },
 
