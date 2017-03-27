@@ -1,0 +1,50 @@
+.WeekOptions
+    
+    >div:first-child
+        font-weight: bold
+        
+    ol
+        display: flex
+        flex-wrap: wrap
+        width: 35%
+        margin-top: 1rem
+        
+        .delivery-date
+            background-color: #555
+            border: 1px solid beige
+            box-shadow: 1px 2px 5px #ccc
+            color: darken(#c98702, 5%)
+            opacity: .7;
+            cursor: pointer
+            display: flex
+            flex-direction: column
+            justify-content: center
+            align-items: center
+            font-family: "RalewayRegular"
+            padding: .6rem 1.4rem
+            margin: 1px
+            line-height: 1.2
+
+            &:hover {
+                background-color: lighten(#555, 5%)
+            }
+            
+            &.selected {
+                background-color: rgba(201, 135, 2, .3)
+                color: #c98702
+                opacity: 1
+            }
+            
+            &.unselectable {
+                background-color: rgba(85,85,85,0.1)
+                cursor: not-allowed
+                opacity: .3
+            }
+
+            >div {
+                font-weight: bold
+
+                &:first-child {
+                    font-weight: normal
+                }
+            }

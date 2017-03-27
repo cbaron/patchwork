@@ -563,6 +563,10 @@ footer {
   margin-top: 10px;
 }
 
+footer.fd-hide {
+  transition: none;
+}
+
 footer ul {
   margin: 10px 0px;
   width: 100%;
@@ -819,7 +823,7 @@ footer .future-days {
   color: #c98702;
   display: inline-block;
   font-family: "RalewayRegular";
-  padding: 10px;
+  padding: .65rem;
   text-align: center;
   width: 155px;
 }

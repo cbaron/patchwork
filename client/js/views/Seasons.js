@@ -11,14 +11,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     onListClick( e ) {
         if( this.currentSelection ) this.currentSelection.classList.remove('selected')
         
-        const el = e.target
+        const el = e.target.closest('div.share-label')
+
         this.currentSelection = el
         el.classList.add( 'selected' )
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
     },
 
     templates: {
-        share: share => `<li data-id="${share.id}" class="cell">${share.label}</li>`
+        shareBox: require('./templates/ShareBox')
     },
 
     update( customer ) {
@@ -27,7 +28,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.clear()
          
         this.MemberSeason.get( { query: { memberid: customer.member.data.id, shareid: { operation: 'join', value: { table: 'share', column: 'id' } } } } )
-        .then( () => this.MemberSeason.data.forEach( season => this.slurpTemplate( { template: this.templates.share( season ), insertion: { el: this.els.list } } ) ) )
+        .then( () => this.MemberSeason.data.forEach( season => this.slurpTemplate( { template: this.templates.shareBox( season ), insertion: { el: this.els.list } } ) ) )
         .then( () => this.show() )
         .catch( this.Error )
     }

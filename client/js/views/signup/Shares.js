@@ -23,7 +23,9 @@ Object.assign( ShareSelection.prototype, List.prototype, {
     } },
 
     getItemViewOptions() {
-        return { container: this.templateData.shares }
+        console.log( this.factory )
+
+        return { container: this.templateData.shares, factory: this.factory }
     },
 
     isSeason( season, model ) {

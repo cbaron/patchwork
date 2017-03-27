@@ -3,16 +3,16 @@ var ListItem = require('../util/ListItem'),
 
 Object.assign( Share.prototype, ListItem.prototype, {
 
-    ShareBox: require('./ShareBox'),
-
     postRender() {
         ListItem.prototype.postRender.call(this)
 
-        new this.ShareBox( { container: this.templateData.shareBox, insertionMethod: 'prepend', model: this.model } )
+        this.factory.create( 'shareBox', { insertion: { value: { el: this.templateData.shareBox.get(0) } }, model: { value: this.model } } )
 
         if( /spring/i.test( this.model.get('name') ) || /spring/i.test( this.model.get('label') ) ) {
             this.templateData.container.addClass('inactive').off('click')
         }
+
+        return this
     },
 
     requiresLogin: false,

@@ -8,7 +8,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     determineDates( dayOfWeek ) {
         this.dates = [ ]
 
-        console.log( dayOfWeek )
         if( ! Number.isInteger( dayOfWeek ) ) return this
 
         const now = this.Moment(),
@@ -38,7 +37,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         return delivery.groupdropoff.id
             ? this.Xhr( { method: 'get', resource: 'sharegroupdropoff', qs: JSON.stringify( { shareid: this.model.share.id, groupdropoffid: delivery.groupdropoff.id } ) } )
-              .then( response => { console.log( response ); return Promise.resolve( response[0].dayofweek ) } )
+              .then( response => Promise.resolve( response[0].dayofweek ) )
             : delivery.deliveryoption.name === 'farm'
                 ? this.Route.data.find( route => route.label == 'farm' ).dayofweek
                 : this.Xhr( {

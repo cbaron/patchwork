@@ -1,5 +1,5 @@
 module.exports = p => 
-`<div class="hide hidden">
+`<div class="fd-hide fd-hidden">
     <div>
         <h3>Transactions</h3>
         <span>value</span>

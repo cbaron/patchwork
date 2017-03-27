@@ -38,7 +38,7 @@ module.exports = new (
         },
 
         handleFooter( resource ) {
-            this.footer.els.container.classList.toggle( 'hidden', /admin/.test( resource ) )
+            this.footer.els.container.classList.toggle( 'fd-hidden', /admin/.test( resource ) )
         },
 
         handler( resource ) {
@@ -54,7 +54,7 @@ module.exports = new (
                 document.body.classList.add( resource )
                 
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
-                
+
                 if( this.views[ resource ] ) this.views[ resource ].show()
                 else this.views[ resource ] = resource === "admin-plus"
                     ? this.ViewFactory.create( resource, {
@@ -62,7 +62,7 @@ module.exports = new (
                         user: { value: this.user } } )
                         .on( 'navigate', this.onViewNavigate.bind(this) )
                         .on( 'deleted', () => delete this.views[lower] )
-                    : new ( this.resources[ resource ].view )( this.resources[ resource ].options )
+                    : new ( this.resources[ resource ].view )( Object.assign( { factory: this.ViewFactory }, this.resources[ resource ].options ) )
                         .on( 'navigate', data => this.navigate( data.location, data.options ) )
                         
                 if( !/admin/.test( resource ) ) {  

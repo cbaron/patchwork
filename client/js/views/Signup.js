@@ -118,6 +118,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
             new this.views[ this.currentIndex ].view( {
                 container: this.templateData.walkthrough,
                 containerClass: klass,
+                factory: this.factory,
                 signupData: this.signupData,
             } )
         
@@ -140,6 +141,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
 
         this.instances.shares = new this.views[0].view( {
             container: this.templateData.walkthrough,
+            factory: this.factory,
             sessionShares: data.shares,
             signupData: this.signupData
         } ).on( 'initialized', () => this.showProperView() )

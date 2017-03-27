@@ -4,24 +4,20 @@
         display: flex
         align-items: center
         
-        .form-input
-            margin-left: .5rem
-        .form-label
-            width: 6%
+        .form-label            
             text-align: right
             margin-right: 1rem
+            margin-bottom: 0
 
 .input-std
-    display: block
     position: relative
     background-color: #fff
-    padding: $input-padding
-    border: 2px solid #666
+    padding: .5rem
+    border: 1px solid #666
     border-radius: .2rem
-    transition: $input-transition
     &:focus
         outline: 0
-        box-shadow: 0 0 1px 1px #999
+        box-shadow: 0 0 1px 1px #ccc
     
 .form-label
     display: inline-block
@@ -31,12 +27,11 @@
         
 .input-flat
     display: block
-    padding: $input-padding
+    padding: .5rem
     border-top: none
     border-left: none
     border-right: none
     border-bottom: 3px solid $dark-gray
-    transition: $input-transition
     &:focus
         background-color: #ddd
     style-placeholder()
@@ -44,9 +39,8 @@
 .input-borderless
     display: block
     background-color: #ddd
-    padding: $input-padding
+    padding: .5rem
     border: none
-    transition: $input-transition
     &:focus
         background-color: #eee
     style-placeholder()

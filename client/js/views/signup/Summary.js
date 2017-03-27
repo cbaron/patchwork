@@ -368,7 +368,7 @@ Object.assign( Summary.prototype, View.prototype, {
     template: require('../../templates/signup/summary')( require('handlebars') ),
 
     templates: {
-        ShareBox: require('../../templates/signup/shareBox')( require('handlebars') )
+        ShareBox: require('../templates/ShareBox')
     },
 
     updateGrandTotal() {

@@ -5,10 +5,6 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
     ItemView: require('./ShareOption'),
 
-    Views: {
-        ShareBox: require('./ShareBox')
-    },
-
     getItemViewOptions() {
         return {
             container: this.templateData.options,
@@ -36,7 +32,7 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
             if( Object.keys( this.itemViews ).length == this.items.length ) this.updateTotal()
         } )
 
-        new this.Views.ShareBox( { container: this.templateData.shareBox, insertionMethod: 'prepend', model: share } )
+        this.factory.create( 'shareBox', { insertion: { el: this.templateData.shareBox.get(0) }, model: { value: share } } )
 
         //TODO: Write UI when no options exist.
         this.model.getShareOptions()

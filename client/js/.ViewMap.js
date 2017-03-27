@@ -19,6 +19,7 @@ module.exports={
 	Resource: require('./views/Resource'),
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),
+	ShareBox: require('./views/ShareBox'),
 	Signup: require('./views/Signup'),
 	Toast: require('./views/Toast'),
 	Transactions: require('./views/Transactions'),
