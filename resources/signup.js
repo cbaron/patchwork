@@ -124,7 +124,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this._( share.options ).pluck('description').join('\r\n\t\t') )
         ).join('\r\n\r\n')
 
-        body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`
+        if( this.body.member.omission.length ) body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`
         body += this.getEmailPaymentString()
 
         return body
