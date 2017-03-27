@@ -7,7 +7,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         list: 'click'
     },
 
-    model: Object.create( require('../models/__proto__'), { resource: { value: 'journal' } } ),
+    model: Object.create( require('../models/__proto__'), { resource: { value: 'csaTransaction' } } ),
 
     onListClick( e ) {
         if( this.currentSelection ) this.currentSelection.classList.remove('selected')

@@ -33,7 +33,7 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
         .then( result => this.handleQueryResult( result ) )
     },
 
-    query( attr ) { return this.dbQuery( { query: this.format("SELECT * FROM person WHERE %s = $1", attr ), values: [ this.body.email ] } ) },
+    query( attr ) { return this.Postgres.query( `SELECT * FROM person WHERE ${attr} = $1`, [ this.body.email ] ) }, 
 
     queryMemberTable() {
         return this.query( "email" ).then( result => {

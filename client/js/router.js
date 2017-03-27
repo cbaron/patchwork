@@ -11,6 +11,8 @@ module.exports = new (
 
             this.user = require('./models/User')
 
+            this.user.on( 'loggedIn', () => this.onLogin() )
+
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
             this.footer =
@@ -25,7 +27,10 @@ module.exports = new (
         handleHeader( resource ) {
             if( /admin/.test(resource) ) {
                 if( this.adminHeader ) { this.adminHeader.onNavigation() }
-                else { this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { value: { el: this.content, method: 'insertBefore' } } } ) }
+                else {
+                    this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
+                                       .on( 'signout', () => this.onSignout() )
+                 }
             } else {
                 if( this.adminHeader ) { this.adminHeader.hide() }
                 if( this.header ) { this.header.onNavigation( resource ) }
@@ -61,7 +66,7 @@ module.exports = new (
                         insertion: { value: { el: this.content } },
                         user: { value: this.user } } )
                         .on( 'navigate', this.onViewNavigate.bind(this) )
-                        .on( 'deleted', () => delete this.views[lower] )
+                        .on( 'deleted', () => delete this.views[resource] )
                     : new ( this.resources[ resource ].view )( Object.assign( { factory: this.ViewFactory }, this.resources[ resource ].options ) )
                         .on( 'navigate', data => this.navigate( data.location, data.options ) )
                         
@@ -105,13 +110,11 @@ module.exports = new (
         },
 
         adminPlusHandler( resource ) {
-            this.header = require('./views/AdminHeader')
-
-            if( this.footer ) this.footer.hide()
+            this.handleHeader( `admin/${resource}` )
+            this.handleFooter( `admin/${resource}` )
 
             this.userPromise.then( () => {
-
-                //if( this.user.id ) this.adminHeader.onUser( this.user )
+                this.adminHeader.onUser( this.user )
 
                 Object.keys( this.views ).forEach( key => this.views[key].hide() )
 
@@ -123,9 +126,17 @@ module.exports = new (
                         user: { value: this.user }
                     } )
                     .on( 'navigate', this.onViewNavigate.bind(this) )
-                    .on( 'deleted', () => delete this.views[lower] )
+                    .on( 'deleted', () => delete this.views[resource] )
             } )
             .catch( this.Error )
+        },
+
+        onLogin() {
+            this.onUser( this.user )
+        },
+
+        onUser( user ) {
+            if( this.adminHeader ) this.adminHeader.onUser( this.user )
         },
 
         resources: {

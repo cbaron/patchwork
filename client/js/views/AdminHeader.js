@@ -1,4 +1,4 @@
-module.exports = Object.assign( require( './__proto__' ), {
+module.exports = Object.assign( { }, require( './__proto__' ), {
 
     events: {
         'signoutBtn': 'click'
@@ -20,7 +20,7 @@ module.exports = Object.assign( require( './__proto__' ), {
         this.user.clear()
 
         this.els.name.textContent = ''
-        this.templateData.userPanel.classList.add('hide')
+        this.els.userPanel.classList.add('hide')
 
         this.emit('signout')
     }

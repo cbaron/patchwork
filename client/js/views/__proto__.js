@@ -55,8 +55,6 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         return this.model.get()
     },
 
-    getRouter() { return require('../router') },
-
     getTemplateOptions() {
         return Object.assign(
             {},
@@ -76,14 +74,13 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
 
     handleLogin() {
-        this.router = this.getRouter()
-        this.modalView = require('./modal')
 
         require('./Login').show().once( "success", userData => {
             if( !this.isAllowed( userData ) ) return this.scootAway()
 
             this.user.set( userData )
-            this.router.header.onUser( this.user )
+            this.user.trigger('loggedIn')
+
             return this.onLogin()
         } )
 

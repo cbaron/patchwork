@@ -68,7 +68,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.creditMember()
             .then( () => this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
                 this.Postgres.query(
-                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, this.membershareids[i], $3, 'Stripe' )`,
+                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe' )`,
                     [ share.total ] 
                 )
             ) ) ) )

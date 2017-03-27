@@ -49,6 +49,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     requiresLogin: true,
+    
+    requiresRole: 'admin',
 
     search( attr, term, suggest ) {
         return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
