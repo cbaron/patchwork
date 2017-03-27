@@ -91,7 +91,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     handleFailure( response, err, code, log ) {
         var message = ( process.env.NODE_ENV === "production" ) ? "Unknown Error" : err.stack || err
 
-        if( log ) console.log( err.stack || err );
+        if( log ) { console.log( new Date() ); console.log( err.stack || err ); }
 
         response.writeHead( code || 500, Object.assign( {
             'Content-Type': 'application/json',

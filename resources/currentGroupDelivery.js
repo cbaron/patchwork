@@ -21,7 +21,7 @@ Object.assign( CurrentGroupDelivery.prototype, Base.prototype, {
 
     getShareId() {
         return this.dbQuery( { query: `SELECT s.id FROM share s WHERE now() BETWEEN startdate AND enddate ORDER BY enddate DESC LIMIT 1` } )
-        .then( result => result.rows.length ? Promise.resolve( result ) : this.dbQuery( { query: `SELECT s.id FROM share s ORDER BY enddate DESC LIMIT 1` } ) )
+        .then( result => result.rows.length ? Promise.resolve( result ) : this.dbQuery( { query: `SELECT s.id FROM share s WHERE startdate > now() ORDER BY startdate ASC LIMIT 1` } ) )
         .then( result => result.rows[0].id )
     }
 
