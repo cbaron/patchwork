@@ -65,49 +65,56 @@ Object.assign( Signup.prototype, Base.prototype, {
         } )
         .then( charge => {
             if( this.error ) return
-            return this.Q.all( [ this.creditMember(),
-                this.dbQuery( {
-                    query: 'INSERT INTO transaction ( description, memberid, origin, amount ) VALUES ( $1, $2, $3, $4 )',
-                    values: [ "Full CSA Payment", this.memberid, 'Stripe', this.body.total ]
-                } )
-            ] )
+            return this.creditMember()
+            .then( () => this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
+                this.Postgres.query(
+                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, this.membershareids[i], $3, 'Stripe' )`,
+                    [ share.total ] 
+                )
+            ) ) ) )
         } )
-        .fail( e => {
-            console.log( this.format( '%s Failed to credit member or create transaction : %s -- body -- %s', new Date(), e.stack || e, JSON.stringify(this.body) ) )
-        } )
+        .fail( e => console.log( `${new Date()} - Failed to credit member or create transaction : ${e.stack || e} -- body -- ${JSON.stringify(this.body)}` ) )
     },
 
     executeShareQueries( share ) {
-        var membershareid;
+        let membershareid
+
         return this.dbQuery( {
             query: 'INSERT INTO membershare ( memberid, shareid, paymentmethod ) VALUES ( $1, $2, $3 ) RETURNING id',
             values: [ this.memberid, share.id, ( Object.keys( this.body.payment ).length ) ? "Stripe" : "Cash" ] } )
-        .then( function( result ) {
+        .then( result => {
             membershareid = result.rows[0].id
             this.membershareids.push( membershareid )
             return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
                     query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 ) RETURNING id",
                     values: [ membershareid, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
-        }.bind(this) )
-        .spread( function() {
+        } )
+        .spread( () => {
             return this.dbQuery( {
                 query: "INSERT INTO membersharedelivery ( membershareid, deliveryoptionid, groupdropoffid ) VALUES ( $1, $2, $3 ) RETURNING id",
                 values: [ membershareid, share.delivery.deliveryoptionid, share.delivery.groupdropoffid ] } )
-        }.bind(this) )
-        .then( function( result ) {
+        } )
+        .then( result => {
             return this.Q.all( share.skipDays.map( date =>
                 this.dbQuery( { query: "INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 ) RETURNING id",
                                 values: [ membershareid, date ] } ) ) ) 
-        }.bind(this) )
+        } )
+        .then( () => this.Q(
+            this.Postgres.query(
+                `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${membershareid}, $2 )`,
+                [ share.total, this.getShareSignupDescription(share) ]
+             )
+        ) )
+    },
+
+    getShareSignupDescription( share ) {
+        return `${share.options.map( option => option.description ).join(', ')} -- ${share.delivery.description} -- Absent: ${share.skipDays.map( day => day.slice(5) ).join(', ')}`
     },
 
     executeUserQueries() {
         return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.member.email ] } )
-        .then( result =>
-            this[ this.format( '%sPersonQueries', ( result.rows.length === 0 ) ? 'new' : 'update' ) ]
-                ( ( result.rows.length ) ? result.rows[0].id : undefined )
-        )
+        .then( result => this[ `${ result.rows.length === 0 ? 'new' : 'update' }PersonQueries` ]( result.rows.length ? result.rows[0].id : undefined ) )
     },
 
     generateEmailBody() {

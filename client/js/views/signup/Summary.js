@@ -48,7 +48,8 @@ Object.assign( Summary.prototype, View.prototype, {
                 label: share.get('label'),
                 options: share.get('selectedOptions'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
-                skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined
+                skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
+                total: share.get('total')
             }
         } )
     },
