@@ -3,7 +3,7 @@
 require('node-env-file')( __dirname + '/../.env' );
 
 const Postgres = require('../dal/postgres'),
-    Moment: require('moment')
+    Moment = require('moment')
 
 let sharesById = { },
     shareOptionOptionsById = { },
@@ -21,18 +21,15 @@ const getDayOfWeek = ( delivery, shareId, memberId ) {
               .then( response => Promise.resolve( response.rows[0].dayofweek ) )
 } 
 
-const determineDates( dayOfWeek ) {
+const determineDates( share, dayOfWeek ) {
     const dates = [ ]
 
     if( ! Number.isInteger( dayOfWeek ) ) throw Error("No Day Of Week")
 
-    const now = this.Moment(),
-        nextWeek = ( now.day() === 6 || ( now.day() === 5 && now.hour() > 5 ) )
-            ? this.Moment().day(15).hour(0).minute(0).second(0).millisecond(0)
-            : this.Moment().day(8).hour(0).minute(0).second(0).millisecond(0),
-        endDate = this.Moment( this.model.share.enddate )
+    const now = Moment(),
+        endDate = this.Moment( share.enddate )
         
-    let deliveryDate = this.Moment( this.model.share.startdate ),
+    let deliveryDate = this.Moment( share.startdate ),
         startDay = deliveryDate.day()
 
     while( startDay != dayOfWeek ) {
@@ -41,11 +38,11 @@ const determineDates( dayOfWeek ) {
     }
     
     while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-        this.dates.push( { date: this.Moment( deliveryDate ), unselectable: Boolean( deliveryDate.diff( nextWeek ) < 0 ) } )
+        dates.push( { date: this.Moment( deliveryDate )
         deliveryDate.add( 7, 'days' )
     }
 
-    return this
+    return dates
 }
   
 const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
@@ -60,10 +57,16 @@ const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
         weeklyTotal += deliveryOptionsById[ result.rows[0].deliveryoptionid ].price.replace( /\$|,/g, "" )
         return getDayOfWeek( result.rows[0], shareId, memberId )
     } )
-    .then( dayOfWeek =>
-        const dayOfWeek = getDayOPromise.resolve( weeklyTotal += deliveryOptionsById[ result.rows[0].deliveryoptionid ].price.replace( /\$|,/g, "" ) ) )
-
-
+    .then( dayOfWeek => 
+        Promise.all( [
+            Promise.resolve( determineDates( sharesById[ shareId ], dayOfWeek ).length ),
+            Postgres.query( `SELECT COUNT(id) FROM membershareskipweek WHERE membershareid = ${memberShareId}` )
+        ] )
+    )
+    .then( ( [ shareDateLength, skipResult ] ) => {
+        const total = weeklyTotal * ( shareDateLength - skipResult )
+        return Postgres.query( `INSERT INTO "csaTransaction" ( ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${membershareid}, $2 )`
+    } )
 }
 
 Promise.all( [
