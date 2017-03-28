@@ -1,7 +1,6 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-
-    clear() { this.els.entries.innerHTML = '' },
+    clear() { this.els.transactions.innerHTML = '' },
 
     events: {
         list: 'click'
@@ -19,16 +18,18 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     templates: {
-        share: share => `<li data-id="${share.id}" class="cell">${share.label}</li>`
+        Transaction: require('./templates/CsaTransaction')
     },
 
-    update( customer ) {
+    update( { customer, share } ) {
         this.customer = customer
+        this.share = share
       
         this.clear()
 
-        this.model.get( { query: { memberid: this.customer.member.id } } )
-        //.then( () => this.model.data.forEach( entry => this.slurpTemplate( { template: this.templates.entry( entry ), insertion: { el: this.els.entries } } ) ) )
+        this.model.get( { query: { memberShareId: share.membershareid } } )
+        .then( () => this.model.data.forEach( csaTransaction => this.slurpTemplate( { template: this.templates.Transaction( csaTransaction ), insertion: { el: this.els.transactions } } ) ) )
+        .then( () => this.show() )
         .catch( this.Error )
     }
 

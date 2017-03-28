@@ -109,7 +109,28 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     getShareSignupDescription( share ) {
-        return `${share.options.map( option => option.description ).join(', ')} -- ${share.delivery.description} -- Absent: ${share.skipDays.map( day => day.slice(5) ).join(', ')}`
+        const absent = share.skipDays.length ? `Absent: ${share.skipDays.map( day => day.slice(5) ).join(', ')}` : ``
+
+        return `${share.options.map( option => this.getShortOptionDescription( option.description ).trim() ).join(', ')} -- ` +
+               `${this.getShortDeliveryDescription( share.delivery.description )} -- ${absent}`
+               
+    },
+
+    getShortOptionDescription( description ) {
+        const colon = description.indexOf( ':' ),
+            dash = description.indexOf( '--' )
+       
+        if( colon === -1 || dash === -1 ) return description
+             
+        return description.slice( 0, colon ) + description.slice( colon + 1, dash )
+    },
+
+    getShortDeliveryDescription( description ) {
+        const match = /.*Method: (.+)/.exec( description )
+
+        if( match === null ) return description
+
+        return match[1].trim()
     },
 
     executeUserQueries() {

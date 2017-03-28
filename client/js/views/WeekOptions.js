@@ -3,6 +3,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     Route: Object.create( require('../models/__proto__'), { resource: { value: 'deliveryroute' } } ),
 
     clear() {
+        this.els.dates.innerHTML = ''
     },
 
     determineDates( dayOfWeek ) {

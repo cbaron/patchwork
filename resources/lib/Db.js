@@ -15,7 +15,7 @@ module.exports = Object.create( {
         let paramCtr = 1,
             joins = [ ],
             selects = { [table]: true },
-            where = '',
+            where = [ ],
             params = [ ]
 
         queryKeys.forEach( key => {
@@ -29,14 +29,14 @@ module.exports = Object.create( {
                 joins.push( `${operation === 'leftJoin' ? 'LEFT' : ''} JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )
                 selects[ datum.value.table ] = true
             } else {
-                where += ` "${table}"."${key}" ${operation} $${paramCtr++}` 
+                where.push(`"${table}"."${key}" ${operation} $${paramCtr++}`)
                 params.push( typeof datum === 'object' ? datum.value : datum )
             }
         } )
         
-        where = paramCtr > 1 ? `WHERE ${where}` : ''
+        where = paramCtr > 1 ? `WHERE ${where.join(' AND ')}` : ''
         joins = joins.join(' ')
-        selects = Object.keys( selects ).map( tableName => this._getColumns( tableName, { extend: true } ) ).join(', ')
+        selects = Object.keys( selects ).map( tableName => this._getColumns( tableName, { extend: joins.length } ) ).join(', ')
 
         return this.Postgres.query( `SELECT ${selects} FROM "${table}" ${joins} ${where}`, params )
     },

@@ -102,6 +102,32 @@
 .Toast >div:nth-child(2) >div:first-child {
   font-weight: bold;
 }
+.Transactions .heading {
+  display: flex;
+}
+.Transactions .heading >h3,
+.Transactions .heading >span {
+  border: none;
+  flex: 2;
+  font-size: 1rem;
+  margin: 0rem;
+  padding: 1rem;
+  line-height: 1rem;
+}
+.Transactions .heading >h3:last-child,
+.Transactions .heading >span:last-child {
+  flex: 4;
+}
+.Transactions ol li {
+  display: flex;
+}
+.Transactions ol li span {
+  flex: 2;
+  padding: 1rem;
+}
+.Transactions ol li span:last-child {
+  flex: 4;
+}
 .WeekOptions >div:first-child {
   font-weight: bold;
 }
