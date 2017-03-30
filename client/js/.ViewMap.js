@@ -6,6 +6,7 @@ module.exports={
 	CSA: require('./views/CSA'),
 	Contact: require('./views/Contact'),
 	CustomerInfo: require('./views/CustomerInfo'),
+	FoodOmission: require('./views/FoodOmission'),
 	Footer: require('./views/Footer'),
 	GetInvolved: require('./views/GetInvolved'),
 	Header: require('./views/Header'),

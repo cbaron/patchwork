@@ -1,0 +1,113 @@
+.CustomerInfo
+    
+    button
+        display: inline-block
+        font-size: .8rem
+        border: 1px solid transparent
+        padding: .25rem .8rem
+        letter-spacing: 1px
+        margin: 0
+        text-align: center
+        border-radius: .25rem
+        color white
+        &:focus
+            outline: 0
+        &.reset-btn
+            background-color: #FF9D14
+            margin: .5rem
+        &.review-btn
+            background-color: #155D75
+            margin: .5rem 0 0 37%
+        &.save-btn
+            background-color: rgba(57, 132, 57, .9)
+
+    .content
+        display:flex
+        
+        .customer-table        
+
+            .cell
+                background-color: white
+                padding: 3px 5px
+                height: 30px
+                border: 1px solid black
+                font-size: .9rem
+                font-weight: bold
+                width: 250px
+                overflow-x: hidden
+                white-space: nowrap
+                &.ms-ctn
+                    overflow-x: visible
+                &.edited
+                    color: rgba(57, 132, 57, .8)
+                    
+            .table-row
+                display: flex
+                align-items: center
+                
+                div[contenteditable=true]
+                    &:focus
+                        outline: 0
+                        background-color: #fce1ac
+                        color: #555
+                    
+                select
+                    padding: 5px
+                                           
+                .ms-ctn
+                    padding-right: 0
+                    
+                    .ms-sel-ctn
+                        margin-left: 0
+                    
+                    .ms-trigger
+                        background-color: #eee
+                        .ms-trigger-ico
+                            margin-top: 12px
+                
+                .ms-ctn-focus
+                    box-shadow: none
+                    
+        .edit-summary
+            margin-left: 3rem
+            border: 1px solid rgba(0,0,0,.1)
+            display: flex
+            flex-direction: column
+            background-color: #fff
+            font-weight: bold
+            
+            >div
+                &:first-child
+                    border-bottom: 1px solid rgba(0,0,0,.1)
+                    padding: .5rem
+                    font-weight: bold
+                    font-family: "RalewayRegular"
+                    background-color: #e7e7e7
+                    color: #666
+                    
+                &:nth-child(2)
+                    flex: 1 1 auto
+                    padding: .5rem
+                    >div
+                        padding-bottom: .25rem
+                        >span
+                            padding: 0 1rem
+                            font-weight: normal
+                            &:first-child
+                                color: rgba(169, 23, 23, .7)
+                            &:last-child
+                                color: rgba(57, 132, 57, .8)
+                                
+                &:last-child
+                    border-top: 1px solid rgba(0,0,0,.1)
+                    padding: .5rem
+                    text-align: center
+            
+            
+    .produce-family
+        font-weight: bold
+
+    .produce-in-family
+        margin-left: 15px
+        font-weight: normal
+

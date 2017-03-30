@@ -104,33 +104,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
     },
 
-    initializeFoodOmission() {
-        this.foods = new ( this.Collection.extend( { comparator: 'foodproduceid', url: `/food` } ) )
-        
-        return this.foods.fetch().then( () => {
-            const data = this.foods.models.map( ( food, i ) => Object.assign( { id: i }, food.attributes ) ),
-                  renderer =  data => 
-                    data.produceid
-                        ? `<span class="${data.producefamilyid ? 'produce-in-family' : ''}">${data.name}</span>`
-                        : `<span class="produce-family">All ${data.name}</span>`
-
-            this.templateData.omission = this.templateData.omission.magicSuggest( {
-                allowFreeEntries: false,
-                data,
-                highlight: false,
-                placeholder: '',
-                maxDropHeight: 200,
-                maxSelection: 1,
-                renderer,
-                selectionRenderer: renderer,
-                valueField: 'id'
-            } )
-
-            this.templateData.omission.val = value => value ? this.templateData.omission.setSelection( value ) : this.templateData.omission.getSelection()
-            return Promise.resolve()
-        }, e => console.log(e.stack || e) )
-    },
-
     postRender() {
         var self = this;
 
@@ -140,14 +113,20 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.templateData.address.attr( 'placeholder', '' )
         
-        this.initializeFoodOmission()
-        .then( () =>
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: document.querySelector('#omission'), method: 'after' } } } )
+
+        this.templateData.omission.remove()
+
+        this.FoodOmission.initializeFoodOmission()
+        .then( () => {
+            this.templateData.omission = this.FoodOmission.omission
+
             this.fields.forEach( field => {
                 if( this.user.has( field.name ) ) {
                     this.templateData[ field.name ].val( this.user.get( field.name ) )
                 }
             } )
-        )
+        } )
         
         this.templateData.container.find('input')
         .on( 'blur', function() {
@@ -226,6 +205,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } ) )
         .then( () => {
+            console.log( this.user.attributes )
             if( valid ) {
                 return this.Q( this.$.ajax( {
                     data: JSON.stringify( this.user.attributes ),
