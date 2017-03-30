@@ -16,9 +16,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                console.log( term )
-                this.emit( 'customerSelected', this.Customer.data.find( datum => { console.log( datum.person );
-                    return datum.person.data[ this.attr ] === term } ) )
+                this.emit( 'customerSelected', this.Customer.data.find( datum =>
+                    datum.person.data[ this.attr ] === term ) )
             }
 
         } )

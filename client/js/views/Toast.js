@@ -19,11 +19,13 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
 
     requiresLogin: false,
 
-    show( type, message ) {
+    showMessage( type, message ) {
         return new Promise( ( resolve, reject )  => {
             if( /show/.test( this.status ) ) this.teardown()
 
             this.resolution = resolve
+
+            if( type !== 'error' ) this.els.container.classList.add('success')
 
             this.els.message.textContent = message
             this.els.title.textContent = type === 'error' ? 'Error' : 'Success'
