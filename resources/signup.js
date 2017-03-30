@@ -33,12 +33,6 @@ Object.assign( Signup.prototype, Base.prototype, {
         }
     } ),
 
-    creditMember() {
-        return this.dbQuery( {
-            query: 'UPDATE member SET balance = balance + $1 WHERE id = $2',
-            values: [ this.body.total, this.memberid ] } )
-    },
-
     executePayment() {
 
         return this.Q(
@@ -52,8 +46,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             } )
         )
         .fail( failedPayment => {
-            return this.creditMember()
-            .then( () => this.rollbackShareQueries() )
+            return this.rollbackShareQueries()
             .fail( e => {
                 console.log( this.format( '%s Error rolling back after failed payment : %s -- body -- %s', new Date(), e.stack || e, JSON.stringify(this.body) ) )
                 this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
@@ -65,13 +58,12 @@ Object.assign( Signup.prototype, Base.prototype, {
         } )
         .then( charge => {
             if( this.error ) return
-            return this.creditMember()
-            .then( () => this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
+            return this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
                 this.Postgres.query(
                     `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe' )`,
                     [ share.total ] 
                 )
-            ) ) ) )
+            ) ) )
         } )
         .fail( e => console.log( `${new Date()} - Failed to credit member or create transaction : ${e.stack || e} -- body -- ${JSON.stringify(this.body)}` ) )
     },
@@ -184,12 +176,11 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     insertMember( personid ) {
         return this.dbQuery( {
-            query: "INSERT INTO member ( phonenumber, address, extraaddress, balance, personid, heard, zipcode ) VALUES ( $1, $2, $3, $4, $5, $6, $7 ) RETURNING id",
+            query: "INSERT INTO member ( phonenumber, address, extraaddress, personid, heard, zipcode ) VALUES ( $1, $2, $3, $4, $5, $6 ) RETURNING id",
             values: [
                 this.body.member.phonenumber,
                 this.body.member.address,
                 this.body.member.extraaddress,
-                this.body.total * -1,
                 personid,
                 this.body.member.heard,
                 this.body.member.zipcode,
@@ -256,14 +247,12 @@ Object.assign( Signup.prototype, Base.prototype, {
         .then( result => {
             var row = ( result.rows.length ) ? result.rows[0] : undefined
             if( row ) {
-                row.balance = parseFloat( row.balance.replace( /\$|,/g,'' ) )
                 return this.dbQuery( {
-                     query: "UPDATE member SET phonenumber = $1, address = $2, extraaddress = $3, balance = $4, heard = $5, zipcode = $6 WHERE id = $7",
+                     query: "UPDATE member SET phonenumber = $1, address = $2, extraaddress = $3, heard = $4, zipcode = $5 WHERE id = $6",
                      values: [
                         this.body.member.phonenumber,
                         this.body.member.address,
                         this.body.member.extraaddress,
-                        row.balance + ( this.body.total * -1 ),
                         this.body.member.heard,
                         this.body.member.zipcode,
                         row.id
