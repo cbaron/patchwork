@@ -5,7 +5,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( field.type !== 'select' ) this.els[ field.name ].textContent = ''
         } )
 
-        this.FoodOmission.emit('clear')
+        this.FoodOmission.clear()
     },
 
     events: {
@@ -131,7 +131,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         if( this.models.neverReceive.data.neverReceive ) {
-            this.FoodOmission.emit( 'setPlaceholder', this.models.neverReceive.data.neverReceive )
+            this.FoodOmission.setPlaceholder( this.models.neverReceive.data.neverReceive )
         }
 
         this.els.onPaymentPlan.selectedIndex = this.model.member.data.onPaymentPlan ? 0 : 1
@@ -145,11 +145,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.FoodOmission.initializeFoodOmission()
         .then( () => {
-            this.FoodOmission.emit('noHelper')
-            this.FoodOmission.emit('unstyle')
+            this.FoodOmission.removeHelperText()
+            this.FoodOmission.unstyle()
 
             this.FoodOmission.on( 'selectionChange', ( e, m ) => this.handleOmissionChange( e, m ) )
-
         } )
 
         this.els.infoTable.querySelectorAll('div[contenteditable=true]').forEach( el => {

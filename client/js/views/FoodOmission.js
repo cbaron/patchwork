@@ -4,6 +4,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     Foods: require('../models/Food'),
 
+    clear() { this.ms.clear() },
+
+    getMagicSuggest() { return this.ms },
+
     initializeFoodOmission() {      
         return this.Foods.get()
         .then( () => {
@@ -30,16 +34,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.ms.val = value =>
                 value ? this.ms.setSelection( value ) : this.ms.getSelection()
 
-            this.on( 'clear', () => this.ms.clear() )
-            this.on( 'setPlaceholder', text => this.ms.input.attr( 'placeholder', text ) )
-            this.on( 'noHelper', () => this.ms.helper[0].remove() )
-            this.on( 'unstyle', () => this.ms.container.removeClass('form-control') )
-
             this.$(this.ms).on( 'selectionchange', ( e, m ) => this.emit( 'selectionChange', e, m ) )
 
             return Promise.resolve()
         } )
         .catch( this.Error )
-    }
+    },
+
+    removeHelperText() { this.ms.helper[0].remove() },
+
+    setPlaceholder( text ) { this.ms.input.attr( 'placeholder', text ) },
+
+    unstyle() { this.ms.container.removeClass('form-control') }
 
 } )

@@ -119,7 +119,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.FoodOmission.initializeFoodOmission()
         .then( () => {
-            this.templateData.omission = this.FoodOmission.ms
+            this.templateData.omission = this.FoodOmission.getMagicSuggest()
 
             this.fields.forEach( field => {
                 if( this.user.has( field.name ) ) {
