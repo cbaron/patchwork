@@ -1,0 +1,1 @@
+module.exports = p => `<div>${p.label}: <span>${p.oldValue}</span>to<span>${p.newValue}</span></div>`

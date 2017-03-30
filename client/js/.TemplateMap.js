@@ -4,6 +4,8 @@ module.exports={
 	CsaTransaction: require('./views/templates/CsaTransaction'),
 	CustomerInfo: require('./views/templates/CustomerInfo'),
 	DeliveryDate: require('./views/templates/DeliveryDate'),
+	FieldEdit: require('./views/templates/FieldEdit'),
+	FoodOmission: require('./views/templates/FoodOmission'),
 	Footer: require('./views/templates/Footer'),
 	Header: require('./views/templates/Header'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),
