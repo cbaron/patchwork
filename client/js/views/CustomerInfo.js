@@ -5,7 +5,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( field.type !== 'select' ) this.els[ field.name ].textContent = ''
         } )
 
-        this.ms.clear()
+        this.FoodOmission.emit('clear')
     },
 
     events: {
@@ -35,8 +35,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( el.textContent !== this.model[ field.table ].data[ field.name ] ) {
             el.classList.add('edited')
-            this.editedFields[ field.name ] = el.textContent
-            if( this.editedFields[ field.name ] === '' ) this.editedFields[ field.name ] = null
+            this.editedFields[ field.name ] = el.textContent || null
         }
     },
 
@@ -52,11 +51,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.editedFields.neverReceive = m.val()
             this.emit('edited')
         }
-
     },
 
     models: {
-        memberFoodOmission: require('../models/MemberFoodOmission'),
         neverReceive: require('../models/NeverReceive')
     },
 
@@ -64,7 +61,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         const el = e.target
 
         el.classList.add('edited')
-        this.editedFields[ 'onPaymentPlan' ] = el.value
+        this.editedFields[ 'onPaymentPlan' ] = ( el.value === "true" )
         this.emit('edited')
     },
 
@@ -87,6 +84,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 if( ! oldValue && field.name !== 'onPaymentPlan' ) oldValue = 'EMPTY'
                 if( ! newValue && field.name !== 'onPaymentPlan' ) newValue = 'EMPTY'
 
+                if( field.name === 'onPaymentPlan' ) {
+                    oldValue = oldValue.toString()
+                    newValue = newValue.toString()
+                }
+
                 if( oldValue === 'EMPTY' && newValue === 'EMPTY' ) return
 
                 this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.Templates.fieldEdit( { label: field.label, oldValue, newValue } ) } )
@@ -104,7 +106,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.memberFoodOmissionData = { }
 
         this.fields.forEach( field => {
-            if( this.editedFields[ field.name ] || this.editedFields[ field.name ] === null ) {
+            if( this.editedFields[ field.name ] !== undefined ) {
                 this[ `${field.table}Data` ][ field.name ] = this.editedFields[ field.name ]
                 if( resourcesToUpdate.indexOf( field.table ) === -1 ) resourcesToUpdate.push( field.table )
             }
@@ -115,44 +117,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els.resetBtn.classList.add('hidden')
             this.els.reviewBtn.classList.add('hidden')
             this.els.editSummary.classList.add('hidden')
-            document.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
+            this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
 
-            this.Toast.show( 'success', 'Customer Info Updated!' )
+            this.Toast.showMessage( 'success', 'Customer Info Updated!' )
             this.update( this.model )
         } )
         .catch( this.Error )
-    },
-
-    updateMember() {
-        return this.Xhr( { method: 'PATCH', id: this.model.member.data.id, resource: 'member', data: JSON.stringify( this.memberData ) } )
-        .then( response => {
-            Object.keys( this.memberData ).forEach( field => this.model.member.data[ field ] = this.memberData[ field ] )
-            return Promise.resolve()
-        } )
-
-    },
-
-    updatePerson() {
-        return this.Xhr( { method: 'PATCH', id: this.model.person.data.id, resource: 'person', data: JSON.stringify( this.personData ) } )
-        .then( response => {
-            Object.keys( this.personData ).forEach( field => this.model.person.data[ field ] = this.personData[ field ] )
-            return Promise.resolve()
-        } )
-    },
-
-    updateMemberFoodOmission() {
-        let msData = this.memberFoodOmissionData.neverReceive[0],
-            method = this.models.memberFoodOmission.data.length ? 'PATCH' : 'POST',
-            data = { memberid: this.model.member.data.id, produceid: msData.produceid, producefamilyid: msData.producefamilyid },
-            opts = { method: method, resource: 'memberfoodomission', data: JSON.stringify( data ) }
-
-        if( method === 'PATCH' ) opts['id'] = this.models.memberFoodOmission.data[0].id
-
-        return this.Xhr( opts )
-        .then( response => {
-            this.models.neverReceive.data.neverReceive = this.memberFoodOmissionData.neverReceive[0].name
-            return Promise.resolve()
-        } )
     },
 
     populateTable() {
@@ -161,13 +131,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         if( this.models.neverReceive.data.neverReceive ) {
-            this.ms.input.attr( 'placeholder', this.models.neverReceive.data.neverReceive )
+            this.FoodOmission.emit( 'setPlaceholder', this.models.neverReceive.data.neverReceive )
         }
 
-        let paymentPlan = this.model.member.data.onPaymentPlan
-        
-        paymentPlan = paymentPlan + ''
-        this.els.onPaymentPlan.selectedIndex = paymentPlan == "true" ? 0 : 1
+        this.els.onPaymentPlan.selectedIndex = this.model.member.data.onPaymentPlan ? 0 : 1
     },
 
     postRender() {
@@ -178,17 +145,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.FoodOmission.initializeFoodOmission()
         .then( () => {
-            this.ms = this.FoodOmission.omission
+            this.FoodOmission.emit('noHelper')
+            this.FoodOmission.emit('unstyle')
 
-            this.ms.container.removeClass('form-control')
-            this.ms.container.addClass('cell')
-            this.ms.helper[0].remove()
-
-            this.FoodOmission.$(this.ms).on( 'selectionchange', ( e, m ) => this.handleOmissionChange( e, m ) )
+            this.FoodOmission.on( 'selectionChange', ( e, m ) => this.handleOmissionChange( e, m ) )
 
         } )
 
-        document.querySelectorAll('div[contenteditable=true]').forEach( el => {
+        this.els.infoTable.querySelectorAll('div[contenteditable=true]').forEach( el => {
             el.addEventListener( 'blur', e => this.handleBlur(e) )
             el.addEventListener( 'input', () => this.emit('edited') )
         } )
@@ -209,10 +173,43 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.editedFields = { }
 
         return this.models.neverReceive.get( { resource: `never-receive/${customer.member.data.id}` } )
-        .then( () => this.models.memberFoodOmission.get( { query: { memberid: customer.member.data.id } } ) )
         .then( () => this.populateTable() )
         .then( () => this.show() )
         .catch( this.Error )
+    },
+
+    updateMember() {
+        return this.Xhr( { method: 'PATCH', id: this.model.member.data.id, resource: 'member', data: JSON.stringify( this.memberData ) } )
+        .then( () =>
+            Promise.resolve(
+                Object.keys( this.memberData ).forEach( field => this.model.member.data[ field ] = this.memberData[ field ] )
+            )
+        )
+    },
+
+    updateMemberFoodOmission() {
+        let msData = this.memberFoodOmissionData.neverReceive[0],
+            method = this.models.neverReceive.data.id ? 'PATCH' : 'POST',
+            data = { memberid: this.model.member.data.id, produceid: msData.produceid, producefamilyid: msData.producefamilyid },
+            opts = { method: method, resource: 'memberfoodomission', data: JSON.stringify( data ) }
+
+        if( method === 'PATCH' ) opts['id'] = this.models.neverReceive.data.id
+
+        return this.Xhr( opts )
+        .then( () =>
+            Promise.resolve(
+                this.models.neverReceive.data.neverReceive = this.memberFoodOmissionData.neverReceive[0].name
+            )
+        )
+    },
+
+    updatePerson() {
+        return this.Xhr( { method: 'PATCH', id: this.model.person.data.id, resource: 'person', data: JSON.stringify( this.personData ) } )
+        .then( () =>
+            Promise.resolve(
+                Object.keys( this.personData ).forEach( field => this.model.person.data[ field ] = this.personData[ field ] )
+            )
+        )
     }
 
 } )

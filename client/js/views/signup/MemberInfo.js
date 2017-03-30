@@ -113,13 +113,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.templateData.address.attr( 'placeholder', '' )
         
-        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: document.querySelector('#omission'), method: 'after' } } } )
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: this.templateData.omission.get(0), method: 'after' } } } )
 
         this.templateData.omission.remove()
 
         this.FoodOmission.initializeFoodOmission()
         .then( () => {
-            this.templateData.omission = this.FoodOmission.omission
+            this.templateData.omission = this.FoodOmission.ms
 
             this.fields.forEach( field => {
                 if( this.user.has( field.name ) ) {
@@ -205,7 +205,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } ) )
         .then( () => {
-            console.log( this.user.attributes )
             if( valid ) {
                 return this.Q( this.$.ajax( {
                     data: JSON.stringify( this.user.attributes ),

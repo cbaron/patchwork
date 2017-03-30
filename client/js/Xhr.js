@@ -22,9 +22,6 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
                     req.open( data.method.toUpperCase(), path, true)
                     this.setHeaders( req, data.headers )
                     req.send( data.data || null )
-                    //req.open( data.method, `/${data.resource}`, true)
-                    //this.setHeaders( req, data.headers )
-                    //req.send( data.data )
                 }
             } )
         },

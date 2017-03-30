@@ -15,7 +15,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                         ? `<span class="${data.producefamilyid ? 'produce-in-family' : ''}">${data.name}</span>`
                         : `<span class="produce-family">All ${data.name}</span>`
 
-            this.omission = this.$('#omission').magicSuggest( {
+            this.ms = this.$( this.els.container ).magicSuggest( {
                 allowFreeEntries: false,
                 data,
                 highlight: false,
@@ -27,8 +27,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 valueField: 'id'
             } )
 
-            this.omission.val = value =>
-                value ? this.omission.setSelection( value ) : this.omission.getSelection()
+            this.ms.val = value =>
+                value ? this.ms.setSelection( value ) : this.ms.getSelection()
+
+            this.on( 'clear', () => this.ms.clear() )
+            this.on( 'setPlaceholder', text => this.ms.input.attr( 'placeholder', text ) )
+            this.on( 'noHelper', () => this.ms.helper[0].remove() )
+            this.on( 'unstyle', () => this.ms.container.removeClass('form-control') )
+
+            this.$(this.ms).on( 'selectionchange', ( e, m ) => this.emit( 'selectionChange', e, m ) )
 
             return Promise.resolve()
         } )

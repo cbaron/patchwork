@@ -22,7 +22,7 @@ module.exports = p => {
         <h3>Customer Info</h3>
         <button class="reset-btn hidden" data-js="resetBtn">Reset</button>
         <div class="content">
-            <div class="customer-table">
+            <div data-js="infoTable" class="customer-table">
                 ${rows}
                 <button class="review-btn hidden" data-js="reviewBtn">Review Changes</button>
             </div>

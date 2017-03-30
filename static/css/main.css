@@ -46,7 +46,8 @@
 .CustomerInfo .content {
   display: flex;
 }
-.CustomerInfo .content .customer-table .cell {
+.CustomerInfo .content .customer-table .cell,
+.CustomerInfo .content .customer-table .ms-ctn {
   background-color: #fff;
   padding: 3px 5px;
   height: 30px;
@@ -57,10 +58,8 @@
   overflow-x: hidden;
   white-space: nowrap;
 }
-.CustomerInfo .content .customer-table .cell.ms-ctn {
-  overflow-x: visible;
-}
-.CustomerInfo .content .customer-table .cell.edited {
+.CustomerInfo .content .customer-table .cell.edited,
+.CustomerInfo .content .customer-table .ms-ctn.edited {
   color: rgba(57,132,57,0.8);
 }
 .CustomerInfo .content .customer-table .table-row {
@@ -77,9 +76,11 @@
 }
 .CustomerInfo .content .customer-table .table-row .ms-ctn {
   padding-right: 0;
+  overflow-x: visible;
 }
 .CustomerInfo .content .customer-table .table-row .ms-ctn .ms-sel-ctn {
   margin-left: 0;
+  overflow-x: hidden;
 }
 .CustomerInfo .content .customer-table .table-row .ms-ctn .ms-trigger {
   background-color: #eee;
