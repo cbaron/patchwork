@@ -8,13 +8,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             selector: 'input#customer',
             minChars: 3,
             source: ( term, suggest ) => {
+                if( this.searching ) return
+                this.searching = true
                 this.search( 'name', term, suggest )
                 .then( found => found ? Promise.resolve(true) : this.search( 'email', term, suggest ) )
                 .then( found => found ? Promise.resolve(true) : this.search( 'secondaryEmail', term, suggest ) )
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                this.emit( 'customerSelected', this.Customer.data.find( datum => datum.person.data[ this.attr ] === term ) )
+                console.log( term )
+                this.emit( 'customerSelected', this.Customer.data.find( datum => { console.log( datum.person );
+                    return datum.person.data[ this.attr ] === term } ) )
             }
 
         } )
@@ -56,9 +60,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
             if( ! this.Customer.data.length ) return Promise.resolve( false )
-    
+   
             this.attr = attr            
             suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
+            this.searching = false
             return Promise.resolve( true )
         } )
     }
