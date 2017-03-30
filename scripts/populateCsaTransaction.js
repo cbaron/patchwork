@@ -9,36 +9,37 @@ let sharesById = { },
     shareOptionOptionsById = { },
     deliveryOptionsById = { },
     deliveryRoutesById = { },
-    farmRoute = undefined
+    farmRoute = undefined,
+    memberIdToMemberShareIds = { }
 
-const getDayOfWeek = ( delivery, shareId, memberId ) {
-    return delivery.groupdropoff.id
-        ? Postgres.query( `SELECT * FROM sharegroupdropoff WHERE shareid = ${shareId} AND groupdropoffid = ${deliverygroupdropoff.id}` )
+const getDayOfWeek = ( delivery, shareId, memberId ) => {
+    return delivery.groupdropoffid
+        ? Postgres.query( `SELECT * FROM sharegroupdropoff WHERE shareid = ${shareId} AND groupdropoffid = ${delivery.groupdropoffid}` )
           .then( response => Promise.resolve( response.rows[0].dayofweek ) )
-        : deliveryOptionsById[ delivery.deliveryoptionid ].name === 'farm'
+        : deliveryOptionsById[ delivery.deliveryoptionid ].label === 'farm'
             ? farmRoute.dayofweek
             : Postgres.query( `SELECT dr.dayofweek FROM deliveryroute dr JOIN zipcoderoute zcr ON dr.id = zcr.routeid WHERE zcr.zipcode = ( SELECT zipcode FROM member WHERE id = ${memberId} )` )
-              .then( response => Promise.resolve( response.rows[0].dayofweek ) )
+              .then( response => Promise.resolve( response.rows.length ? response.rows[0].dayofweek : undefined ) )
 } 
 
-const determineDates( share, dayOfWeek ) {
+const determineDates = ( share, dayOfWeek ) => {
     const dates = [ ]
 
     if( ! Number.isInteger( dayOfWeek ) ) throw Error("No Day Of Week")
 
     const now = Moment(),
-        endDate = this.Moment( share.enddate )
+        endDate = Moment( share.enddate )
         
-    let deliveryDate = this.Moment( share.startdate ),
+    let deliveryDate = Moment( share.startdate ),
         startDay = deliveryDate.day()
 
     while( startDay != dayOfWeek ) {
         deliveryDate.add( 1, 'days' )
-        startDay = this.Moment( deliveryDate ).day()
+        startDay = Moment( deliveryDate ).day()
     }
     
     while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-        dates.push( { date: this.Moment( deliveryDate )
+        dates.push( Moment( deliveryDate ) )
         deliveryDate.add( 7, 'days' )
     }
 
@@ -52,14 +53,14 @@ const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
         delivery = undefined,
         description = ''
 
-    return Postgres.query( `SELECT * FROM membershareoption JOIN  WHERE membershareid = ${memberShareId}` )
+    return Postgres.query( `SELECT * FROM membershareoption WHERE membershareid = ${memberShareId}` )
     .then( result => {
         const optionDescription = [ ]
         result.rows
             .sort( ( a, b ) => moneyToReal( shareOptionOptionsById[ a.shareoptionoptionid ].price ) - moneyToReal( shareOptionOptionsById[ a.shareoptionoptionid ].price ) )
             .forEach( option => {
-                weeklyTotal += shareOptionOptionsById[ option.shareoptionoptionid ].price.replace( /\$|,/g, "" )
-                optionDescription.push( `${ shareOptionsById[ row.shareoptionid ].name } ${ shareOptionOptionsById[ option.shareoptionoptionid ].label } ${ shareOptionOptionsById[ option.shareoptionoptionid ].unit || '' }` )
+                weeklyTotal += moneyToReal( shareOptionOptionsById[ option.shareoptionoptionid ].price )
+                optionDescription.push( `${ shareOptionsById[ option.shareoptionid ].name } ${ shareOptionOptionsById[ option.shareoptionoptionid ].label } ${ shareOptionOptionsById[ option.shareoptionoptionid ].unit || '' }` )
             } )
         description = optionDescription.join(', ') + ` -- `
         return Postgres.query( `SELECT * FROM membersharedelivery WHERE membershareid = ${memberShareId}` )
@@ -71,21 +72,60 @@ const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
         description += deliveryOption.label + ` -- `
         return getDayOfWeek( result.rows[0], shareId, memberId )
     } )
-    .then( dayOfWeek => 
-        Promise.all( [
+    .then( dayOfWeek => {
+        if( !dayOfWeek ) { console.log( `DayOfWeek issue for memberId: ${memberId}` ); return Promise.resolve() }
+
+        return Promise.all( [
             Promise.resolve( determineDates( sharesById[ shareId ], dayOfWeek ).length ),
             Postgres.query( `SELECT to_char(date, 'MM-DD') FROM membershareskipweek WHERE membershareid = ${memberShareId}` )
         ] )
-    )
-    .then( ( [ shareDateLength, skipResult ] ) => {
-        const total = weeklyTotal * ( shareDateLength - skipResult.rows.length )
-        if( skipResult.rows.length ) description += `Absent: ` + skipResult.rows.map( row.to_char ).join(', ')
-        return Postgres.query(
-            `INSERT INTO "csaTransaction" ( ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${memberShareId}, $2 )`
-            [ total, description ]
+        .then( ( [ shareDateLength, skipResult ] ) => {
+            const total = weeklyTotal * ( shareDateLength - skipResult.rows.length )
+            if( skipResult.rows.length ) description += `Absent: ` + skipResult.rows.map( row => row.to_char ).join(', ')
+            if( !memberIdToMemberShareIds[ memberId ] ) memberIdToMemberShareIds[ memberId ] = [ ]
+            memberIdToMemberShareIds[ memberId ].push( { id: memberShareId, value: total } )
+            return Postgres.query(
+                `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${memberShareId}, $2 )`,
+                [ total, description ]
+            )
+        } )
     } )
-    
-Share size Large, Bread shares 1 loaf, Extra greens 1 bag -- On-farm Pickup -- Absent: 06-15, 07-27, 09-07, 10-19, 10-26
+}
+
+const addStripeTransactions = memberId => {
+    return Postgres.query( `SELECT * FROM transaction WHERE created >= '2016-12-17' AND memberid = ${memberId}` )
+    .then( result => {
+        if( result.rows.length === 0 ) return
+
+        const memberShares = memberIdToMemberShareIds[ memberId ]
+
+        if( memberShares ) {
+            if( memberShares.reduce( ( memo, memberShare ) => memo += memberShare.value ) == result.rows.reduce( ( memo, row ) => memo += moneyToReal( row.amount ) ) ) {
+                return Promise.all( memberShares.map( memberShare =>
+                    Postgres.query( `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', ${memberShare.value}, ${memberShare.id}, 'Stripe' )` )
+                ) )
+            } else {
+                const memberShareValues = memberShares.sort( ( a, b ) => a.value - b.value ).map( share => share.value ),
+                    rowValues = result.rows.sort( ( a, b ) => moneyToReal( a.amount ) - moneyToReal( b.amount ) )
+
+                let i,j = 0, matches = [ ]
+                while( i < memberShareValues.length && j < rowValues.length ) {
+                    if( i == j ) { matches.push( i ) }
+                    else if( i > j ) { j++ }
+                    else { i++ }
+                }
+
+                if( matches.length ) {
+                    return Promise.all(
+                        matches.map( i => Postgres.query( `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', ${memberShares[i].value}, ${memberShares[i].id}, 'Stripe' )` ) )
+                    )
+                } else {
+                    console.log( `Found Stripe Transactions, but no match for memberId: ${memberId}` )
+                    return Promise.resolve()
+                }
+            }
+        } else { return Promise.resolve() }
+    } )
 }
 
 Promise.all( [
@@ -94,18 +134,20 @@ Promise.all( [
     Postgres.query( `SELECT * FROM shareoptionoption` ),
     Postgres.query( `SELECT * FROM deliveryoption` ),
     Postgres.query( `SELECT * FROM deliveryroute` ),
+] )
 .then( ( [ shares, shareOptions, shareOptionOptions, deliveryOptions, deliveryRoutes ] ) => {
     sharesById = shares.rows.reduce( ( memo, share ) => Object.assign( memo, { [ share.id ]: share } ), { } )
     shareOptionsById = shareOptions.rows.reduce( ( memo, shareOption ) => Object.assign( memo, { [ shareOption.id ]: shareOption } ), { } )
     shareOptionOptionsById = shareOptionOptions.rows.reduce( ( memo, shareOptionOption ) => Object.assign( memo, { [ shareOptionOption.id ]: shareOptionOption } ), { } )
     deliveryOptionsById = deliveryOptions.rows.reduce( ( memo, deliveryOption ) => Object.assign( memo, { [ deliveryOption.id ]: deliveryOption } ), { } )
     deliveryRoutesById = deliveryRoutes.rows.reduce( ( memo, deliveryRoute ) => Object.assign( memo, { [ deliveryRoute.id ]: deliveryRoute } ), { } )
-    farmRoute = deliveryRoutes.rows.find( deliveryRoute => deliveryRoute.name === 'farm' )
+    farmRoute = deliveryRoutes.rows.find( deliveryRoute => deliveryRoute.label === 'farm' )
     return Postgres.query( `SELECT * FROM membershare WHERE shareid IN ( ${ shares.rows.map( row => row.id ).join(', ') } )` )
 } )
 .then( result =>
-    result.rows.forEach( row => addCsaTransaction( row.shareid, row.id, row.memberid ) )
+    Promise.all( result.rows.map( row => addCsaTransaction( row.shareid, row.id, row.memberid ) ) )
 )
+.then( () => Postgres.query( `SELECT DISTINCT( memberid ) FROM membershare WHERE shareid IN ( ${ Object.keys( sharesById ).join(', ') } )` ) )
+.then( result => Promise.all( result.rows.map( row => addStripeTransactions( row.memberid ) ) ) )
 .catch( require( '../lib/MyError' ) )
-
-
+.then( () =>  process.exit(0) )
