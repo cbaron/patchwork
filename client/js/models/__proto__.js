@@ -9,6 +9,19 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
             this.data = this.parse ? this.parse( response ) : response
             return Promise.resolve(this.data)
         } )
-    }
+    },
+
+    post( model ) {
+        return this.Xhr( { method: 'post', resource: this.resource, headers: this.headers || {}, data: JSON.stringify( model ) } )
+        .then( response => {
+            if( this.parse ) response = this.parse( [ response ] )[0]
+
+            this.data = this.data ? this.data.concat( response ) : [ response ]
+
+            if( this.store ) Object.keys( this.store ).forEach( attr => this._store( response, attr ) )
+
+            return Promise.resolve( response )
+        } )
+    },
 
 } )

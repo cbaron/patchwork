@@ -1,14 +1,14 @@
 module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('events').EventEmitter.prototype, {
 
-    Model: require('../models/__proto__'),
-
-    Moment: require('moment'),
-
-    NumberFormat: new Intl.NumberFormat( 'en-US', {
+    Currency: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2
     } ),
+
+    Model: require('../models/__proto__'),
+
+    Moment: require('moment'),
 
     OptimizedResize: require('./lib/OptimizedResize'),
 

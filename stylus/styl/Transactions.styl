@@ -1,5 +1,13 @@
 .Transactions
 
+    .buttons
+        display: flex
+        
+        button
+            flex: 1
+            border: 1px solid black
+            border-radius: 0
+
     .heading
         display: flex
 
@@ -8,7 +16,7 @@
             flex: 2
             font-size: 1rem
             margin: 0rem
-            padding: 1rem
+            padding: .25rem
             line-height: 1rem
                 
             &:last-child
@@ -22,5 +30,51 @@
                 flex: 2
                 padding: 1rem
 
+                &.cell
+                    background-color: white
+                    padding: .25rem
+                    height: 30px
+                    border: 1px solid black
+                    font-size: .9rem
+                    font-weight: bold
+                    overflow-x: auto
+                    text-align: center
+                    white-space: nowrap
+
+                &.negative
+                    color: red
+                
+                &.negative:before
+                    content: '('
+                
+                &.negative:after
+                    content: ')'
+
                 &:last-child
+                    text-align: left
                     flex: 4
+
+    .add
+        border: 1px solid black
+        display: flex
+
+        >select, >input
+            flex: 2
+            margin: .25rem
+            
+            &:last-child
+                flex: 4
+
+    .balance
+        display: flex
+
+        h3, span
+            flex: 2
+            font-size: 1rem
+            margin: 0rem
+            padding: .25rem
+            line-height: 1rem
+            text-align: center
+                
+            &:last-child
+                flex: 4
