@@ -46,7 +46,7 @@ const determineDates = ( share, dayOfWeek ) => {
     return dates
 }
 
-const moneyToReal = price => price.replace( /\$|,/g, "" )
+const moneyToReal = price => parseFloat( price.replace( /\$|,/g, "" ) )
 
 const addCsaTransaction = ( shareId, memberShareId, memberId, paymentMethod ) => {
     let weeklyTotal = 0,
@@ -100,13 +100,13 @@ const addStripeTransactions = memberId => {
         const memberShares = memberIdToMemberShareIds[ memberId ]
 
         if( memberShares ) {
-            if( memberShares.reduce( ( memo, memberShare ) => memo += memberShare.value ) == result.rows.reduce( ( memo, row ) => memo += moneyToReal( row.amount ) ) ) {
+            if( memberShares.reduce( ( memo, memberShare ) => memo += memberShare.value, 0 ) == result.rows.reduce( ( memo, row ) => memo += moneyToReal( row.amount ), 0 ) ) {
                 return Promise.all( memberShares.map( memberShare =>
                     Postgres.query( `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', ${memberShare.value}, ${memberShare.id}, 'Stripe' )` )
                 ) )
             } else {
                 const memberShareValues = memberShares.sort( ( a, b ) => a.value - b.value ).map( share => share.value ),
-                    rowValues = result.rows.sort( ( a, b ) => moneyToReal( a.amount ) - moneyToReal( b.amount ) )
+                    rowValues = result.rows.sort( ( a, b ) => moneyToReal( a.amount ) - moneyToReal( b.amount ) ).map( row => moneyToReal( row.amount ) )
 
                 let i,j = 0, matches = [ ]
                 while( i < memberShareValues.length && j < rowValues.length ) {
