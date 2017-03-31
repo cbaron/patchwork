@@ -25,6 +25,7 @@
     ol
         li
             display: flex
+            position: relative
 
             span
                 flex: 2
@@ -53,6 +54,18 @@
                 &:last-child
                     text-align: left
                     flex: 4
+            
+            .error-svg
+                display: none
+                left: .5rem
+                height: 1rem
+                position: absolute
+                top: .5rem
+                width: 1rem
+
+            &:hover
+                .error-svg
+                    display: block
 
     .add
         border: 1px solid black

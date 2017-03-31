@@ -5,7 +5,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         addBtn: 'click',
         cancelBtn: 'click',
-        list: 'click'
+        list: 'click',
+        transaction: [ 'mouseenter', 'mouseleave' ]
     },
 
     insertTransaction( transaction ) {
@@ -16,27 +17,37 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onAddBtnClick() {
         if( this.state === 'confirming' ) {
-            this.model.post( [ 'action', 'value', 'checkNumber', 'description' ].reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } ) )
+            this.model.post( Object.assign(
+                { memberShareId: this.share.membershareid },
+                this.model.attributes.reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } )
+            ) )
             .then( () => {
                 this.insertTransaction( this.model.data[ this.model.data.length - 1 ] )
                 this.updateBalance()
-                this.els.addBtn.textContent( 'Add Transaction' )
-                this.state = ''
                 this.Toast.showMessage( 'success', 'Transaction added!' )
+                this.resetState()
             } )
-            .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error adding transaction' ) } )
+            .catch( e => {
+                this.Error(e);
+                this.Toast.showMessage( 'error', 'Error adding transaction' )
+                this.resetState()
+            } )
                         
         } else if( this.state === 'adding' ) {
-            this.els.cancelBtn.classList.add('hidden')
-            this.els.addBtn.textContent = 'Are you sure?'
 
-            this.state === 'confirming'
+            this.els.addBtn.textContent = 'Are you sure?'
+            this.state = 'confirming'
+
         } else if( !this.state ) {
             this.els.cancelBtn.classList.remove('hidden')
             this.els.addTransactionRow.classList.remove('hidden')
 
-            this.state === 'adding'
+            this.state = 'adding'
         }
+    },
+    
+    onCancelBtnClick() {
+        this.resetState()
     },
 
     onListClick( e ) {
@@ -46,6 +57,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.currentSelection = el
         el.classList.add( 'selected' )
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
+    },
+
+    onTransactionMouseenter( e ) { 
+    },
+
+    onTransactionMouseleave( e ) {
+    },
+
+    resetState() {
+        this.els.addTransactionRow.classList.add('hidden')
+        this.model.attributes.forEach( attr => this.els[ attr ].value = attr === 'action' ? this.model.actions[0] : '' )
+        this.els.addBtn.textContent = 'Add Transaction'
+        this.els.cancelBtn.classList.add('hidden')
+        this.state = ''
     },
 
     templateOpts() {

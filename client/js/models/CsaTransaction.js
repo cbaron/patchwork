@@ -7,6 +7,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         'Season Signup'
     ],
 
+    attributes: [ 'action', 'value', 'checkNumber', 'description' ],
+
     getBalance() {
         return this.data.reduce( ( memo, datum ) => {
             if( datum.isNegative ) memo -= datum.value

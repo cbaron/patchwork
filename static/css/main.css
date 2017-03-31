@@ -255,6 +255,7 @@
 }
 .Transactions ol li {
   display: flex;
+  position: relative;
 }
 .Transactions ol li span {
   flex: 2;
@@ -283,6 +284,17 @@
 .Transactions ol li span:last-child {
   text-align: left;
   flex: 4;
+}
+.Transactions ol li .error-svg {
+  display: none;
+  left: 0.5rem;
+  height: 1rem;
+  position: absolute;
+  top: 0.5rem;
+  width: 1rem;
+}
+.Transactions ol li:hover .error-svg {
+  display: block;
 }
 .Transactions .add {
   border: 1px solid #000;

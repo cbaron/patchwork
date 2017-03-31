@@ -1,4 +1,4 @@
-module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('events').EventEmitter.prototype, {
+module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     Currency: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
@@ -6,11 +6,16 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
       minimumFractionDigits: 2
     } ),
 
+    Error: require('../../../lib/MyError'),
+
     Model: require('../models/__proto__'),
 
     Moment: require('moment'),
 
     OptimizedResize: require('./lib/OptimizedResize'),
+    
+    P: ( fun, args=[ ], thisArg ) =>
+        new Promise( ( resolve, reject ) => Reflect.apply( fun, thisArg || this, args.concat( ( e, ...callback ) => e ? reject(e) : resolve(callback) ) ) ),
 
     Xhr: require('../Xhr'),
 
@@ -33,7 +38,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
         if( type === "string" ) { this.bindEvent( key, this.events[key], el ) }
         else if( Array.isArray( this.events[key] ) ) {
-            this.events[ key ].forEach( eventObj => this.bindEvent( key, eventObj.event ) )
+            this.events[ key ].forEach( eventObj => this.bindEvent( key, eventObj ) )
         } else {
             this.bindEvent( key, this.events[key].event )
         }
@@ -211,7 +216,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         if( key === 'container' ) el.classList.add( this.name )
 
         this.els[ key ] = Array.isArray( this.els[ key ] )
-            ? this.els[ key ].push( el )
+            ? this.els[ key ].concat( el )
             : ( this.els[ key ] !== undefined )
                 ? [ this.els[ key ], el ]
                 : el
