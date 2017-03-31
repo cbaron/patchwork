@@ -16,7 +16,7 @@ const getDayOfWeek = ( delivery, shareId, memberId ) => {
     return delivery.groupdropoffid
         ? Postgres.query( `SELECT * FROM sharegroupdropoff WHERE shareid = ${shareId} AND groupdropoffid = ${delivery.groupdropoffid}` )
           .then( response => Promise.resolve( response.rows[0].dayofweek ) )
-        : deliveryOptionsById[ delivery.deliveryoptionid ].label === 'farm'
+        : deliveryOptionsById[ delivery.deliveryoptionid ].name === 'farm'
             ? farmRoute.dayofweek
             : Postgres.query( `SELECT dr.dayofweek FROM deliveryroute dr JOIN zipcoderoute zcr ON dr.id = zcr.routeid WHERE zcr.zipcode = ( SELECT zipcode FROM member WHERE id = ${memberId} )` )
               .then( response => Promise.resolve( response.rows.length ? response.rows[0].dayofweek : undefined ) )
@@ -48,7 +48,7 @@ const determineDates = ( share, dayOfWeek ) => {
 
 const moneyToReal = price => price.replace( /\$|,/g, "" )
 
-const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
+const addCsaTransaction = ( shareId, memberShareId, memberId, paymentMethod ) => {
     let weeklyTotal = 0,
         delivery = undefined,
         description = ''
@@ -83,7 +83,7 @@ const addCsaTransaction = ( shareId, memberShareId, memberId ) => {
             const total = weeklyTotal * ( shareDateLength - skipResult.rows.length )
             if( skipResult.rows.length ) description += `Absent: ` + skipResult.rows.map( row => row.to_char ).join(', ')
             if( !memberIdToMemberShareIds[ memberId ] ) memberIdToMemberShareIds[ memberId ] = [ ]
-            memberIdToMemberShareIds[ memberId ].push( { id: memberShareId, value: total } )
+            if( paymentMethod === 'Stripe' ) { memberIdToMemberShareIds[ memberId ].push( { id: memberShareId, value: total } ) }
             return Postgres.query(
                 `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${memberShareId}, $2 )`,
                 [ total, description ]
@@ -145,7 +145,7 @@ Promise.all( [
     return Postgres.query( `SELECT * FROM membershare WHERE shareid IN ( ${ shares.rows.map( row => row.id ).join(', ') } )` )
 } )
 .then( result =>
-    Promise.all( result.rows.map( row => addCsaTransaction( row.shareid, row.id, row.memberid ) ) )
+    Promise.all( result.rows.map( row => addCsaTransaction( row.shareid, row.id, row.memberid, row.paymentmethod ) ) )
 )
 .then( () => Postgres.query( `SELECT DISTINCT( memberid ) FROM membershare WHERE shareid IN ( ${ Object.keys( sharesById ).join(', ') } )` ) )
 .then( result => Promise.all( result.rows.map( row => addStripeTransactions( row.memberid ) ) ) )
