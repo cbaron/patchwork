@@ -285,7 +285,8 @@
   text-align: left;
   flex: 4;
 }
-.Transactions ol li .error-svg {
+.Transactions ol li .ex {
+  cursor: pointer;
   display: none;
   left: 0.5rem;
   height: 1rem;
@@ -293,7 +294,7 @@
   top: 0.5rem;
   width: 1rem;
 }
-.Transactions ol li:hover .error-svg {
+.Transactions ol li:hover .ex {
   display: block;
 }
 .Transactions .add {
