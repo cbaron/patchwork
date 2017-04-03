@@ -106,6 +106,18 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         }
     },
 
+    hideEl( el ) {
+        if( el.classList.contains('fd-hide') ) {
+            return Promise.resolve()
+        } else {
+            return new Promise( resolve => {
+                el.onHiddenProxy = e => this.onElHidden( resolve, el )
+                el.addEventListener( 'transitionend', el.onHiddenProxy )
+                el.classList.add('fd-hide')
+            } )
+        }
+    },
+
     htmlToFragment( str ) {
         let range = document.createRange();
         // make the parent of the first div in the document becomes the context node
@@ -118,6 +130,12 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
     
     isHidden() { return this.els.container.classList.contains('fd-hidden') },
+
+    onElHidden( resolve, el ) {
+        el.removeEventListener( 'transitionend', el.onHiddenProxy )
+        el.classList.add('fd-hidden')
+        resolve( this.emit( 'elHidden', el ) )
+    },
 
     onHidden( resolve ) {
         this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
@@ -133,12 +151,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this.show()
     },
 
-    onShown( resolve, el ) {
-        const node = el || this.els.container
+    onElShown( resolve, el ) {
+        el.removeEventListener( 'transitionend', el.onShownProxy )
+        resolve( this.emit( 'elShown' ) )
+    },
 
-        node.removeEventListener( 'transitionend', ( el || this ).onShownProxy )
-
-        resolve( this.emit( 'shown', el ) )
+    onShown( resolve ) {
+        this.els.container.removeEventListener( 'transitionend', this.onShownProxy )
+        resolve( this.emit( 'shown' ) )
     },
 
     showNoAccess() {
@@ -214,7 +234,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     showEl( el ) {
         if( el.classList.contains( 'fd-hidden' ) ) {
-            elcontainer.classList.remove( 'fd-hidden' )
+            el.classList.remove( 'fd-hidden' )
             
             return new Promise( resolve => {
                 window.requestAnimationFrame( () => {
@@ -235,7 +255,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
                 } )
             } )
         } else {
-            return new Promise( resolve => this.once( 'shown', el => { if( el.isEqualNode( el ) ) { resolve } } ) )
+            return new Promise.resolve()
         }
     },
 

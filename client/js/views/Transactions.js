@@ -5,9 +5,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         addBtn: 'click',
         cancelBtn: 'click',
+        confirmEmailBtn: 'click',
+        cancelEmailBtn: 'click',
+        emailBtn: 'click',
         ex: 'click',
-        list: 'click',
-        transaction: [ 'mouseenter', 'mouseleave' ]
+        list: 'click'
     },
 
     insertTransaction( transaction ) {
@@ -59,6 +61,33 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.resetState()
     },
 
+    onCancelEmailBtnClick() {
+        this.els.confirmEmail.classList.add( 'fd-hide', 'fd-hidden' )
+        this.showEl( this.els.emailBtn ).catch( this.Error )
+    },
+
+    onConfirmEmailBtnClick() {
+        this.onCancelEmailBtnClick()
+
+        this.Xhr( {
+            method: 'post',
+            resource: 'mail',
+            data: JSON.stringify( {
+                to: this.customer.person.email,
+                subject: `Patchwork Gardens ${this.share.label} Balance`,
+                body: `According to our records, you have an outstanding balance of ${this.els.balance.textContent}.\r\n\r\nPlease send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.\r\n\r\nIf you believe this is incorrect, please contact us by email or phone (937) 835-5807.\r\n\r\nThank You.`
+            } )
+        } )
+        .then( () => this.Toast.showMessage( 'success', 'Email sent.' ) )
+        .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
+    },
+
+    onEmailBtnClick() {
+        this.hideEl( this.els.emailBtn )
+        .then( () => this.showEl( this.els.confirmEmail ) )
+        .catch( this.Error )
+    },
+
     onExClick( e ) {
         if( this.markedForDeletion ) return
         
@@ -79,12 +108,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.currentSelection = el
         el.classList.add( 'selected' )
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
-    },
-
-    onTransactionMouseenter( e ) { 
-    },
-
-    onTransactionMouseleave( e ) {
     },
 
     resetState() {
@@ -121,6 +144,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         const balance = this.model.getBalance()
         this.els.balance.textContent = this.Currency.format( balance )
 
+        if( balance > 0 ) { this.showEl( this.els.emailBtn ) }
+        else { this.hideEl( this.els.emailBtn ) }
 
         return this
     }

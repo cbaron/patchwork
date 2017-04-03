@@ -25,8 +25,11 @@ return `` +
         <span data-js="balance"></span>
         <span></span>
         <span>
-            <button data-js="emailBtn" class="fd-hide fd-hidden"></button>
-            <button data-js="confirmEmailBtn" class="fd-hide fd-hidden"></button>
+            <button data-js="emailBtn" class="fd-hide fd-hidden">Send Email Reminder</button>
+            <span data-js="confirmEmail" class="fd-hide fd-hidden">
+                <button data-js="confirmEmailBtn" >Are you sure?</button>
+                <button class="cancel" data-js="cancelEmailBtn">Cancel</button>
+            </span>
         </span>
     </div>
 </div>`
