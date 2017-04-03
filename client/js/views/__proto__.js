@@ -133,10 +133,12 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this.show()
     },
 
-    onShown( resolve ) {
-        this.els.container.removeEventListener( 'transitionend', this.onShownProxy )
-        if( this.size ) this.size()
-        resolve( this.emit('shown') )
+    onShown( resolve, el ) {
+        const node = el || this.els.container
+
+        node.removeEventListener( 'transitionend', ( el || this ).onShownProxy )
+
+        resolve( this.emit( 'shown', el ) )
     },
 
     showNoAccess() {
@@ -207,6 +209,33 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
             } )
         } else {
             return new Promise( resolve => this.once( 'shown', resolve ) )
+        }
+    },
+
+    showEl( el ) {
+        if( el.classList.contains( 'fd-hidden' ) ) {
+            elcontainer.classList.remove( 'fd-hidden' )
+            
+            return new Promise( resolve => {
+                window.requestAnimationFrame( () => {
+                    el.onShownProxy = e => this.onShown( resolve, el )
+                    el.addEventListener( 'transitionend', el.onShownProxy )
+                    el.classList.remove( 'fd-hide' )
+                } )
+            } )
+        } else if( el.classList.contains( 'fd-hide' ) ) {
+            el.classList.remove( 'fd-hide' )
+            el.container.removeEventListener( 'transitionend', el.onHiddenProxy )
+            
+            return new Promise( resolve => {
+                window.requestAnimationFrame( () => {
+                    el.onShownProxy = e => this.onShown( resolve, el )
+                    el.addEventListener( 'transitionend', el.onShownProxy )
+                    el.classList.remove( 'fd-hide' )
+                } )
+            } )
+        } else {
+            return new Promise( resolve => this.once( 'shown', el => { if( el.isEqualNode( el ) ) { resolve } } ) )
         }
     },
 

@@ -262,7 +262,7 @@
   padding: 1rem;
 }
 .Transactions ol li span.cell {
-  background-color: #fff;
+  background-color: transparent;
   padding: 0.25rem;
   height: 30px;
   border: 1px solid #000;
@@ -296,6 +296,9 @@
 }
 .Transactions ol li:hover .ex {
   display: block;
+}
+.Transactions ol li.marked {
+  background-color: rgba(169,23,23,0.7);
 }
 .Transactions .add {
   border: 1px solid #000;

@@ -5,6 +5,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         addBtn: 'click',
         cancelBtn: 'click',
+        ex: 'click',
         list: 'click',
         transaction: [ 'mouseenter', 'mouseleave' ]
     },
@@ -16,7 +17,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     model: require('../models/CsaTransaction'),
 
     onAddBtnClick() {
-        if( this.state === 'confirming' ) {
+        if( this.state === 'confirmDelete' ) {
+            this.model.delete( this.markedForDeletion  )
+            .then( () => {
+                this.els.transactions.querySelector(`li[data-id="${this.markedForDeletion}"]`).remove()
+                this.updateBalance()
+                this.Toast.showMessage( 'success', 'Transaction deleted!' )
+                this.resetState()
+            } )
+        } else if( this.state === 'confirming' ) {
             this.model.post( Object.assign(
                 { memberShareId: this.share.membershareid },
                 this.model.attributes.reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } )
@@ -50,6 +59,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.resetState()
     },
 
+    onExClick( e ) {
+        if( this.markedForDeletion ) return
+        
+        const item =  e.target.closest('li')
+
+        this.markedForDeletion = item.getAttribute('data-id')
+        item.classList.add('marked')
+       
+        this.els.addBtn.textContent = 'Confirm Delete' 
+        this.els.cancelBtn.classList.remove('hidden')
+        this.state = 'confirmDelete'
+    },
+
     onListClick( e ) {
         if( this.currentSelection ) this.currentSelection.classList.remove('selected')
         
@@ -70,6 +92,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.model.attributes.forEach( attr => this.els[ attr ].value = attr === 'action' ? this.model.actions[0] : '' )
         this.els.addBtn.textContent = 'Add Transaction'
         this.els.cancelBtn.classList.add('hidden')
+        if( this.els.transactions.querySelector('.marked') ) this.els.transactions.querySelector('.marked').classList.remove('marked')
+        this.markedForDeletion = undefined
         this.state = ''
     },
 
@@ -94,7 +118,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateBalance() {
-        this.els.balance.textContent = this.Currency.format( this.model.getBalance() )
+        const balance = this.model.getBalance()
+        this.els.balance.textContent = this.Currency.format( balance )
+
+
         return this
     }
 

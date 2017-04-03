@@ -24,7 +24,10 @@ return `` +
         <h3>Balance</h3>
         <span data-js="balance"></span>
         <span></span>
-        <span></span>
+        <span>
+            <button data-js="emailBtn" class="fd-hide fd-hidden"></button>
+            <button data-js="confirmEmailBtn" class="fd-hide fd-hidden"></button>
+        </span>
     </div>
 </div>`
 }
