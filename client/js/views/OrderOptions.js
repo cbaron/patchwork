@@ -15,15 +15,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             container: this.els.container,
             seasonLabel: this.els.seasonLabel,
             options: this.els.options,
-            resetBtn: this.els.resetBtn,
-            reviewBtn: this.els.reviewBtn
+            resetBtn: this.els.resetBtn
         }
     },
 
     events: {
         options: 'change',
-        resetBtn: 'click',
-        reviewBtn: 'click'
+        resetBtn: 'click'
     },
 
     onOptionsChange( e ) {
@@ -41,38 +39,24 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } else { this.els.groupOption.disabled = false }
 
         if( this.editedFields[ shareOptionKey ].oldValue === val ) {
-            return e.target.closest('li.editable').classList.remove('edited')
+            this.editedFields[ shareOptionKey ].newValue = undefined
+            e.target.closest('li.editable').classList.remove('edited')
+            return this.showEditSummary()
         }
 
         this.editedFields[ shareOptionKey ].newValue = val
         e.target.closest('li.editable').classList.add('edited')
 
         this.els.resetBtn.classList.remove('hidden')
-        this.els.reviewBtn.classList.remove('hidden')
+
+        this.showEditSummary()
     },
 
     onResetBtnClick() {
         this.els.resetBtn.classList.add('hidden')
-        this.els.reviewBtn.classList.add('hidden')
         this.els.editSummary.classList.add('hidden')
         this.update( this.model )
         this.emit( 'reset', this.model )
-    },
-
-    onReviewBtnClick() {
-        this.els.changes.innerHTML = ''
-        
-        this.els.options.querySelectorAll('li.edited').forEach( el => {
-            const fieldName = el.getAttribute('data-name'),
-                  fieldLabel = this.capitalizeFirstLetter( fieldName ),
-                  oldValue = this.editedFields[ fieldName ].oldValue.toString(),
-                  newValue = this.editedFields[ fieldName ].newValue.toString()
-
-            this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.templates.fieldEdit( { label: fieldLabel, oldValue, newValue } ) } )
-
-        } )
-
-        this.els.editSummary.classList.remove('hidden')
     },
 
     onSelectFocus( e ) {
@@ -141,6 +125,22 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 : this.els[ selection.shareoptionid ].textContent = selection.label
         } )
 
+    },
+
+    showEditSummary() {
+        this.els.changes.innerHTML = ''
+        
+        this.els.options.querySelectorAll('li.edited').forEach( el => {
+            const fieldName = el.getAttribute('data-name'),
+                  fieldLabel = this.capitalizeFirstLetter( fieldName ),
+                  oldValue = this.editedFields[ fieldName ].oldValue.toString(),
+                  newValue = this.editedFields[ fieldName ].newValue.toString()
+
+            this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.templates.fieldEdit( { label: fieldLabel, oldValue, newValue } ) } )
+
+        } )
+
+        this.els.editSummary.classList.remove('hidden')
     },
 
     templates: {

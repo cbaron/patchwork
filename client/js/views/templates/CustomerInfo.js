@@ -18,13 +18,14 @@ module.exports = p => {
     } ).join('')
 
     return `` +
-    `<div class="fd-hide fd-hidden">
-        <h3>Customer Info</h3>
-        <button class="reset-btn hidden" data-js="resetBtn">Reset</button>
+    `<div class="fd-hide fd-hidden section">
+        <div class="section-heading">
+            <h3>Customer Info</h3>
+            <button class="reset-btn hidden" data-js="resetBtn">Reset</button>
+        </div>
         <div class="content">
             <div class="data">
                 <div data-js="infoTable" class="customer-table">${rows}</div>
-                <button class="review-btn hidden" data-js="reviewBtn">Review Changes</button>
             </div>
             <div data-js="editSummary" class="edit-summary hidden">
                 <div>Summary of Changes</div>

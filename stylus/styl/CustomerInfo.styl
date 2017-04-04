@@ -1,6 +1,7 @@
 .CustomerInfo
 
-    .content .data            
+    .content
+        .data            
             .customer-table 
                 text-align: left
                             
@@ -11,7 +12,7 @@
                     div[contenteditable=true]
                         &:focus
                             outline: 0
-                            background-color: #fce1ac
+                            background-color: $light-gold
                             color: #555
                         
                     select
@@ -20,6 +21,14 @@
                     .ms-ctn
                         padding-right: 0
                         overflow-x: visible
+                        
+                        .ms-res-item
+                            .produce-family
+                                font-weight: bold
+
+                            .produce-in-family
+                                margin-left: 1rem
+                                font-weight: normal
                         
                         .ms-sel-ctn
                             margin-left: 0
@@ -32,11 +41,4 @@
                     
                     .ms-ctn-focus
                         box-shadow: none
-                   
-    .produce-family
-        font-weight: bold
-
-    .produce-in-family
-        margin-left: 1rem
-        font-weight: normal
 

@@ -13,7 +13,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         onPaymentPlan: 'change',
         resetBtn: 'click',
-        reviewBtn: 'click',
         saveBtn: 'click'
     },
 
@@ -38,13 +37,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( el.textContent !== this.model[ field.table ].data[ field.name ] ) {
             el.classList.add('edited')
             this.editedFields[ field.name ] = el.textContent || null
+            this.showEditSummary()
         }
     },
 
-    handleEdit( e ) {
-        this.els.resetBtn.classList.remove('hidden')
-        this.els.reviewBtn.classList.remove('hidden')      
-    },
+    handleEdit( e ) { this.els.resetBtn.classList.remove('hidden') },
 
     handleOmissionChange( e, m ) {
         if( ! m.val().length ) return
@@ -52,6 +49,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.models.neverReceive.data.neverReceive !== m.val()[0].name ) {
             this.editedFields.neverReceive = m.val()
             this.emit('edited')
+            this.showEditSummary()
         }
     },
 
@@ -65,42 +63,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         el.classList.add('edited')
         this.editedFields[ 'onPaymentPlan' ] = ( el.value === "true" )
         this.emit('edited')
+        this.showEditSummary()
     },
 
     onResetBtnClick() {
         this.els.resetBtn.classList.add('hidden')
-        this.els.reviewBtn.classList.add('hidden')
         this.els.editSummary.classList.add('hidden')
         this.update( this.model )
-    },
-
-    onReviewBtnClick() {
-        this.els.changes.innerHTML = ''
-        
-        this.fields.forEach( field => {
-            if( Object.keys( this.editedFields ).indexOf( field.name ) !== -1 ) {
-                let oldValue = ( field.name === 'neverReceive' )
-                    ? this.models.neverReceive.data.neverReceive
-                    : this.model[ field.table ].data[ field.name ]
-                let newValue = ( field.name === 'neverReceive' )
-                    ? this.editedFields.neverReceive[0].name
-                    : this.editedFields[ field.name ]
-
-                if( ! oldValue && field.name !== 'onPaymentPlan' ) oldValue = 'EMPTY'
-                if( ! newValue && field.name !== 'onPaymentPlan' ) newValue = 'EMPTY'
-
-                if( field.name === 'onPaymentPlan' ) {
-                    oldValue = oldValue.toString()
-                    newValue = newValue.toString()
-                }
-
-                if( oldValue === 'EMPTY' && newValue === 'EMPTY' ) return
-
-                this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.Templates.fieldEdit( { label: field.label, oldValue, newValue } ) } )
-            }
-        } )
-
-        this.els.editSummary.classList.remove('hidden')
     },
 
     onSaveBtnClick() {
@@ -120,7 +89,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return Promise.all( resourcesToUpdate.map( resource => this[ `update${resource.charAt(0).toUpperCase() + resource.slice(1)}` ]() ) )
         .then( () => {            
             this.els.resetBtn.classList.add('hidden')
-            this.els.reviewBtn.classList.add('hidden')
             this.els.editSummary.classList.add('hidden')
             this.clearEditStyles()
 
@@ -164,6 +132,35 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.on( 'edited', e => this.handleEdit( e ) )
 
         return this
+    },
+
+    showEditSummary() {
+        this.els.changes.innerHTML = ''
+        
+        this.fields.forEach( field => {
+            if( Object.keys( this.editedFields ).indexOf( field.name ) !== -1 ) {
+                let oldValue = ( field.name === 'neverReceive' )
+                    ? this.models.neverReceive.data.neverReceive
+                    : this.model[ field.table ].data[ field.name ]
+                let newValue = ( field.name === 'neverReceive' )
+                    ? this.editedFields.neverReceive[0].name
+                    : this.editedFields[ field.name ]
+
+                if( ! oldValue && field.name !== 'onPaymentPlan' ) oldValue = 'EMPTY'
+                if( ! newValue && field.name !== 'onPaymentPlan' ) newValue = 'EMPTY'
+
+                if( field.name === 'onPaymentPlan' ) {
+                    oldValue = oldValue.toString()
+                    newValue = newValue.toString()
+                }
+
+                if( oldValue === 'EMPTY' && newValue === 'EMPTY' ) return
+
+                this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.Templates.fieldEdit( { label: field.label, oldValue, newValue } ) } )
+            }
+        } )
+
+        this.els.editSummary.classList.remove('hidden')
     },
 
     Templates: {

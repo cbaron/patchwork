@@ -1,19 +1,6 @@
 .ManageCustomer
     padding: 7rem 1.5rem 1.5rem
 
-    button
-        display: inline-block
-        font-size: .8rem
-        border: 1px solid transparent
-        padding: .25rem .8rem
-        letter-spacing: 1px
-        margin: 0
-        text-align: center
-        border-radius: .25rem
-        color: white
-        &:focus
-            outline: 0
-
     .main-search
         display:flex
         justify-content: center
@@ -26,17 +13,29 @@
                 display: inline-block
                 font-size: 1.2rem
                 padding: .75rem .5rem
-                width: 400px
+                width: 25rem
         
             .form-label
                 color: $gold
                 font-size: 1.4rem
 
+    .section
+        border-top: 1px solid #eee
+        margin-top: 2rem
+        
+    .section-heading
+        display: inline-block
+        margin: 2rem 0 1rem
+        >div, >span
+            display: inline-block
+            font-weight: bold
+            margin: 0 .5rem
+            
     h3
         display: inline-block
-        color: #c98702
+        color: $gold
         font-weight: bold
-        margin-top: 2rem
+        margin: 0
         font-size: 1.2rem
     
     ol
@@ -46,16 +45,16 @@
     .cell, .ms-ctn
         background-color: white
         padding: 3px 5px
-        height: 30px
+        height: 1.9rem
         border: 1px solid black
         font-size: .9rem
         font-weight: bold
-        width: 250px
+        width: 16rem
         overflow-x: hidden
         white-space: nowrap
         
     .edited
-        color: rgba(57, 132, 57, .8)
+        color: $edit-green
         
     button
         display: inline-block
@@ -66,23 +65,24 @@
         margin: 0
         text-align: center
         border-radius: .25rem
-        color white
+        color: #fff
         &:focus
             outline: 0
         &.reset-btn
-            background-color: #FF9D14
-            margin: .5rem
-        &.review-btn
-            background-color: #155D75
-            margin: .5rem 0 0
+            background-color: transparent
+            text-decoration: underline
+            color: $blue
+            font-size: 1rem
+            letter-spacing: 0
+            padding: 0 .5rem
         &.save-btn
-            background-color: rgba(57, 132, 57, .9)
+            background-color: $blue
             
     select:focus
         outline: 0
 
     .content
-        display:flex
+        display: flex
         
         .data
             text-align: center
@@ -114,15 +114,11 @@
                             padding: 0 1rem
                             font-weight: normal
                             &:first-child
-                                color: rgba(169, 23, 23, .7)
+                                color: $edit-red
                             &:last-child
-                                color: rgba(57, 132, 57, .8)
+                                color: $edit-green
                                 
                 &:nth-child(3)
                     border-top: 1px solid rgba(0,0,0,.1)
                     padding: .5rem
                     text-align: center
-        
-    .CustomerInfo, .Seasons, .OrderOptions, .WeekOptions, .Transactions
-        border-top: 1px solid #eee
-        margin-top: 2rem
