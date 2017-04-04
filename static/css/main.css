@@ -33,7 +33,7 @@
   flex: 1;
 }
 .AdminPlus {
-  margin-top: 105px;
+  margin-top: 7.5rem;
   text-align: center;
 }
 .AdminPlus .manage-btn {
@@ -44,9 +44,9 @@
   color: #c98702;
   display: inline-block;
   font-family: "RalewayRegular";
-  padding: 20px;
+  padding: 1.25rem;
   text-align: center;
-  width: 250px;
+  width: 16rem;
   text-transform: uppercase;
 }
 .AdminPlus .manage-btn:hover {
@@ -90,6 +90,13 @@
   padding-right: 0;
   overflow-x: visible;
 }
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-res-item .produce-family {
+  font-weight: bold;
+}
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-res-item .produce-in-family {
+  margin-left: 1rem;
+  font-weight: normal;
+}
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-sel-ctn {
   margin-left: 0;
   overflow-x: hidden;
@@ -103,29 +110,8 @@
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn-focus {
   box-shadow: none;
 }
-.CustomerInfo .produce-family {
-  font-weight: bold;
-}
-.CustomerInfo .produce-in-family {
-  margin-left: 1rem;
-  font-weight: normal;
-}
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
-}
-.ManageCustomer button {
-  display: inline-block;
-  font-size: 0.8rem;
-  border: 1px solid transparent;
-  padding: 0.25rem 0.8rem;
-  letter-spacing: 1px;
-  margin: 0;
-  text-align: center;
-  border-radius: 0.25rem;
-  color: #fff;
-}
-.ManageCustomer button:focus {
-  outline: 0;
 }
 .ManageCustomer .main-search {
   display: flex;
@@ -139,17 +125,31 @@
   display: inline-block;
   font-size: 1.2rem;
   padding: 0.75rem 0.5rem;
-  width: 400px;
+  width: 25rem;
 }
 .ManageCustomer .main-search .form-grouping .form-label {
   color: #c98702;
   font-size: 1.4rem;
 }
+.ManageCustomer .section {
+  border-top: 1px solid #eee;
+  margin-top: 2rem;
+}
+.ManageCustomer .section-heading {
+  display: inline-block;
+  margin: 2rem 0 1rem;
+}
+.ManageCustomer .section-heading >div,
+.ManageCustomer .section-heading >span {
+  display: inline-block;
+  font-weight: bold;
+  margin: 0 0.5rem;
+}
 .ManageCustomer h3 {
   display: inline-block;
   color: #c98702;
   font-weight: bold;
-  margin-top: 2rem;
+  margin: 0;
   font-size: 1.2rem;
 }
 .ManageCustomer ol {
@@ -160,11 +160,11 @@
 .ManageCustomer .ms-ctn {
   background-color: #fff;
   padding: 3px 5px;
-  height: 30px;
+  height: 1.9rem;
   border: 1px solid #000;
   font-size: 0.9rem;
   font-weight: bold;
-  width: 250px;
+  width: 16rem;
   overflow-x: hidden;
   white-space: nowrap;
 }
@@ -186,15 +186,15 @@
   outline: 0;
 }
 .ManageCustomer button.reset-btn {
-  background-color: #ff9d14;
-  margin: 0.5rem;
-}
-.ManageCustomer button.review-btn {
-  background-color: #155d75;
-  margin: 0.5rem 0 0;
+  background-color: transparent;
+  text-decoration: underline;
+  color: #155d75;
+  font-size: 1rem;
+  letter-spacing: 0;
+  padding: 0 0.5rem;
 }
 .ManageCustomer button.save-btn {
-  background-color: rgba(57,132,57,0.9);
+  background-color: #155d75;
 }
 .ManageCustomer select:focus {
   outline: 0;
@@ -244,21 +244,8 @@
   padding: 0.5rem;
   text-align: center;
 }
-.ManageCustomer .CustomerInfo,
-.ManageCustomer .Seasons,
-.ManageCustomer .OrderOptions,
-.ManageCustomer .WeekOptions,
-.ManageCustomer .Transactions {
-  border-top: 1px solid #eee;
-  margin-top: 2rem;
-}
-.OrderOptions >div:first-child >div {
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
 .OrderOptions ol {
   text-align: left;
-  padding-left: 1rem;
 }
 .OrderOptions ol li {
   display: flex;
@@ -417,10 +404,6 @@
 .Transactions .balance span:last-child {
   flex: 4;
 }
-.WeekOptions >div:first-child {
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
 .WeekOptions .content .data {
   text-align: left;
 }
@@ -432,7 +415,6 @@
   flex-wrap: wrap;
   width: 75%;
   margin-top: 1rem;
-  padding-left: 1rem;
 }
 .WeekOptions .content .data ol .delivery-date {
   width: 5rem;
@@ -484,7 +466,7 @@
   padding: 0 1rem;
 }
 .WeekOptions .content .edit-summary >div:nth-child(2) .column .added-dates {
-  color: rgba(57,132,57,0.8);
+  color: rgba(169,23,23,0.7);
 }
 .WeekOptions .content .edit-summary >div:nth-child(2) .column .removed-dates {
   color: rgba(169,23,23,0.7);
@@ -502,32 +484,6 @@
 }
 body.admin-plus {
   background-color: #f9f9f9;
-}
-.btn-ghost {
-  color: #2d2d2d;
-  background-color: #fff;
-  border-color: #2d2d2d;
-  display: inline-block;
-  min-width: 15rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 1rem 2rem;
-  border: 3px solid;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-}
-.btn-ghost:hover,
-.btn-ghost:focus {
-  background-color: #2d2d2d;
-  color: #fff;
-}
-.btn-ghost:active {
-  background-color: #626262;
-  color: #fff;
-  border-color: #626262;
 }
 .form-grouping {
   margin-bottom: 1rem;

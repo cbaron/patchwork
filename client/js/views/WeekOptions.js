@@ -8,7 +8,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         dates: 'click',
         resetBtn: 'click',
-        reviewBtn: 'click'
     },
 
     clear() {
@@ -91,7 +90,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.changedDates[ date ].editedStatus = editedStatus
             el.classList.add('edited')
             this.els.resetBtn.classList.remove('hidden')
-            this.els.reviewBtn.classList.remove('hidden')
         } else {
             this.changedDates[ date ].editedStatus = undefined
             el.classList.remove('edited')
@@ -99,13 +97,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( ! Object.keys( this.changedDates ).find( key => this.changedDates[key].editedStatus !== undefined ) ) {
             this.els.resetBtn.classList.add('hidden')
-            this.els.reviewBtn.classList.add('hidden')
+            return this.els.editSummary.classList.add('hidden')
         }
+
+        this.showEditSummary()
     },
 
     onResetBtnClick() {
         this.els.resetBtn.classList.add('hidden')
-        this.els.reviewBtn.classList.add('hidden')
         this.els.editSummary.classList.add('hidden')
 
         Object.keys( this.changedDates ).forEach( key => {
@@ -119,7 +118,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.update( this.model )
     },
 
-    onReviewBtnClick() {
+    renderDates() {
+        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( datum ), insertion: { el: this.els.dates } } ) )
+        return this
+    },
+
+    showEditSummary() {
         this.els.selectedDates.innerHTML = ''
         this.els.removedDates.innerHTML = ''
 
@@ -133,11 +137,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.els.editSummary.classList.remove('hidden')
-    },
-
-    renderDates() {
-        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( datum ), insertion: { el: this.els.dates } } ) )
-        return this
     },
 
     templates: {

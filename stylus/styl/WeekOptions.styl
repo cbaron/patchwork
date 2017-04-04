@@ -1,9 +1,5 @@
 .WeekOptions
-    
-    >div:first-child
-        font-weight: bold
-        margin-bottom: 1rem
-    
+
     .content
         .data
             text-align: left
@@ -16,14 +12,13 @@
                 flex-wrap: wrap
                 width: 75%
                 margin-top: 1rem
-                padding-left: 1rem
                 
                 .delivery-date
                     width: 5rem
                     background-color: #555
                     border: 1px solid beige
                     box-shadow: 1px 2px 5px #ccc
-                    color: darken(#c98702, 5%)
+                    color: darken($gold, 5%)
                     opacity: .7;
                     cursor: pointer
                     display: flex
@@ -35,17 +30,17 @@
                     margin: 1px
                     line-height: 1.2
                     &.edited
-                        border: 1px solid rgba(169, 23, 23, .7)
+                        border: 1px solid $edit-red
 
                     &:hover
                         background-color: lighten(#555, 5%)
                     
                     &.selected
                         background-color: rgba(201, 135, 2, .3)
-                        color: #c98702
+                        color: $gold
                         opacity: 1
                         &.edited
-                            border: 1px solid rgba(57, 132, 57, .8)
+                            border: 1px solid $edit-green
                     
                     &.unselectable
                         //background-color: rgba(85,85,85,0.1)
@@ -67,10 +62,10 @@
                     padding: 0 1rem
                     
                     .added-dates
-                        color: rgba(57, 132, 57, .8)
+                        color: $edit-red
                             
                     .removed-dates
-                        color: rgba(169, 23, 23, .7)
+                        color: $edit-red
                     
                     >div:first-child
                         font-weight: bold
