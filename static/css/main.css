@@ -18,122 +18,43 @@
 .AdminPlus .manage-btn:hover {
   background-color: #ebebeb;
 }
-.CustomerInfo button {
-  display: inline-block;
-  font-size: 0.8rem;
-  border: 1px solid transparent;
-  padding: 0.25rem 0.8rem;
-  letter-spacing: 1px;
-  margin: 0;
-  text-align: center;
-  border-radius: 0.25rem;
-  color: #fff;
+.CustomerInfo .content .data .customer-table {
+  text-align: left;
 }
-.CustomerInfo button:focus {
-  outline: 0;
-}
-.CustomerInfo button.reset-btn {
-  background-color: #ff9d14;
-  margin: 0.5rem;
-}
-.CustomerInfo button.review-btn {
-  background-color: #155d75;
-  margin: 0.5rem 0 0 37%;
-}
-.CustomerInfo button.save-btn {
-  background-color: rgba(57,132,57,0.9);
-}
-.CustomerInfo .content {
-  display: flex;
-}
-.CustomerInfo .content .customer-table .cell,
-.CustomerInfo .content .customer-table .ms-ctn {
-  background-color: #fff;
-  padding: 3px 5px;
-  height: 30px;
-  border: 1px solid #000;
-  font-size: 0.9rem;
-  font-weight: bold;
-  width: 250px;
-  overflow-x: hidden;
-  white-space: nowrap;
-}
-.CustomerInfo .content .customer-table .cell.edited,
-.CustomerInfo .content .customer-table .ms-ctn.edited {
-  color: rgba(57,132,57,0.8);
-}
-.CustomerInfo .content .customer-table .table-row {
+.CustomerInfo .content .data .customer-table .table-row {
   display: flex;
   align-items: center;
 }
-.CustomerInfo .content .customer-table .table-row div[contenteditable=true]:focus {
+.CustomerInfo .content .data .customer-table .table-row div[contenteditable=true]:focus {
   outline: 0;
   background-color: #fce1ac;
   color: #555;
 }
-.CustomerInfo .content .customer-table .table-row select {
+.CustomerInfo .content .data .customer-table .table-row select {
   padding: 5px;
 }
-.CustomerInfo .content .customer-table .table-row .ms-ctn {
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn {
   padding-right: 0;
   overflow-x: visible;
 }
-.CustomerInfo .content .customer-table .table-row .ms-ctn .ms-sel-ctn {
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-sel-ctn {
   margin-left: 0;
   overflow-x: hidden;
 }
-.CustomerInfo .content .customer-table .table-row .ms-ctn .ms-trigger {
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-trigger {
   background-color: #eee;
 }
-.CustomerInfo .content .customer-table .table-row .ms-ctn .ms-trigger .ms-trigger-ico {
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-trigger .ms-trigger-ico {
   margin-top: 12px;
 }
-.CustomerInfo .content .customer-table .table-row .ms-ctn-focus {
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn-focus {
   box-shadow: none;
-}
-.CustomerInfo .content .edit-summary {
-  margin-left: 3rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  font-weight: bold;
-}
-.CustomerInfo .content .edit-summary >div:first-child {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding: 0.5rem;
-  font-weight: bold;
-  font-family: "RalewayRegular";
-  background-color: #e7e7e7;
-  color: #666;
-}
-.CustomerInfo .content .edit-summary >div:nth-child(2) {
-  flex: 1 1 auto;
-  padding: 0.5rem;
-}
-.CustomerInfo .content .edit-summary >div:nth-child(2) >div {
-  padding-bottom: 0.25rem;
-}
-.CustomerInfo .content .edit-summary >div:nth-child(2) >div >span {
-  padding: 0 1rem;
-  font-weight: normal;
-}
-.CustomerInfo .content .edit-summary >div:nth-child(2) >div >span:first-child {
-  color: rgba(169,23,23,0.7);
-}
-.CustomerInfo .content .edit-summary >div:nth-child(2) >div >span:last-child {
-  color: rgba(57,132,57,0.8);
-}
-.CustomerInfo .content .edit-summary >div:last-child {
-  border-top: 1px solid rgba(0,0,0,0.1);
-  padding: 0.5rem;
-  text-align: center;
 }
 .CustomerInfo .produce-family {
   font-weight: bold;
 }
 .CustomerInfo .produce-in-family {
-  margin-left: 15px;
+  margin-left: 1rem;
   font-weight: normal;
 }
 .ManageCustomer {
@@ -182,6 +103,94 @@
   margin-bottom: 0;
   -webkit-padding-start: 0;
 }
+.ManageCustomer .cell,
+.ManageCustomer .ms-ctn {
+  background-color: #fff;
+  padding: 3px 5px;
+  height: 30px;
+  border: 1px solid #000;
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: 250px;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+.ManageCustomer .edited {
+  color: rgba(57,132,57,0.8);
+}
+.ManageCustomer button {
+  display: inline-block;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.8rem;
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
+  border-radius: 0.25rem;
+  color: #fff;
+}
+.ManageCustomer button:focus {
+  outline: 0;
+}
+.ManageCustomer button.reset-btn {
+  background-color: #ff9d14;
+  margin: 0.5rem;
+}
+.ManageCustomer button.review-btn {
+  background-color: #155d75;
+  margin: 0.5rem 0 0;
+}
+.ManageCustomer button.save-btn {
+  background-color: rgba(57,132,57,0.9);
+}
+.ManageCustomer select:focus {
+  outline: 0;
+}
+.ManageCustomer .content {
+  display: flex;
+}
+.ManageCustomer .content .data {
+  text-align: center;
+}
+.ManageCustomer .content .edit-summary {
+  margin-left: 3rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  font-weight: bold;
+  min-width: 30%;
+}
+.ManageCustomer .content .edit-summary >div:first-child {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 0.5rem;
+  font-weight: bold;
+  font-family: "RalewayRegular";
+  background-color: #e7e7e7;
+  color: #666;
+}
+.ManageCustomer .content .edit-summary >div:nth-child(2) {
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div {
+  padding-bottom: 0.25rem;
+}
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span {
+  padding: 0 1rem;
+  font-weight: normal;
+}
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:first-child {
+  color: rgba(169,23,23,0.7);
+}
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:last-child {
+  color: rgba(57,132,57,0.8);
+}
+.ManageCustomer .content .edit-summary >div:nth-child(3) {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding: 0.5rem;
+  text-align: center;
+}
 .ManageCustomer .CustomerInfo,
 .ManageCustomer .Seasons,
 .ManageCustomer .OrderOptions,
@@ -189,6 +198,38 @@
 .ManageCustomer .Transactions {
   border-top: 1px solid #eee;
   margin-top: 2rem;
+}
+.OrderOptions >div:first-child >div {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.OrderOptions ol {
+  text-align: left;
+  padding-left: 1rem;
+}
+.OrderOptions ol li {
+  display: flex;
+  align-items: center;
+}
+.OrderOptions ol li.editable {
+  padding: 0.25rem 0;
+}
+.OrderOptions ol li span:first-child {
+  color: #155d75;
+  width: 8rem;
+}
+.OrderOptions ol li select {
+  height: 2rem;
+  padding: 0.3rem 0.6rem;
+  background-color: #fff;
+  border-radius: 0.15rem;
+  border: 1px solid #ccc;
+}
+.OrderOptions ol li select:focus {
+  box-shadow: 0 0 3px 1px #ccc;
+}
+.OrderOptions ol li select:disabled {
+  opacity: 0.4;
 }
 .Seasons .share-label {
   margin-right: 1rem;
@@ -340,14 +381,22 @@
 }
 .WeekOptions >div:first-child {
   font-weight: bold;
+  margin-bottom: 1rem;
 }
-.WeekOptions ol {
+.WeekOptions .content .data {
+  text-align: left;
+}
+.WeekOptions .content .data .review-btn {
+  margin-left: 9rem;
+}
+.WeekOptions .content .data ol {
   display: flex;
   flex-wrap: wrap;
-  width: 35%;
+  width: 75%;
   margin-top: 1rem;
+  padding-left: 1rem;
 }
-.WeekOptions ol .delivery-date {
+.WeekOptions .content .data ol .delivery-date {
   background-color: #555;
   border: 1px solid #f5f5dc;
   box-shadow: 1px 2px 5px #ccc;
@@ -363,24 +412,47 @@
   margin: 1px;
   line-height: 1.2;
 }
-.WeekOptions ol .delivery-date:hover {
+.WeekOptions .content .data ol .delivery-date.edited {
+  border: 1px solid rgba(169,23,23,0.7);
+}
+.WeekOptions .content .data ol .delivery-date:hover {
   background-color: #5e5e5e;
 }
-.WeekOptions ol .delivery-date.selected {
+.WeekOptions .content .data ol .delivery-date.selected {
   background-color: rgba(201,135,2,0.3);
   color: #c98702;
   opacity: 1;
 }
-.WeekOptions ol .delivery-date.unselectable {
-  background-color: rgba(85,85,85,0.1);
+.WeekOptions .content .data ol .delivery-date.selected.edited {
+  border: 1px solid rgba(57,132,57,0.8);
+}
+.WeekOptions .content .data ol .delivery-date.unselectable {
   cursor: not-allowed;
   opacity: 0.3;
 }
-.WeekOptions ol .delivery-date >div {
+.WeekOptions .content .data ol .delivery-date >div {
   font-weight: bold;
 }
-.WeekOptions ol .delivery-date >div:first-child {
+.WeekOptions .content .data ol .delivery-date >div:first-child {
   font-weight: normal;
+}
+.WeekOptions .content .edit-summary >div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+}
+.WeekOptions .content .edit-summary >div:nth-child(2) .column {
+  text-align: center;
+  padding: 0 1rem;
+}
+.WeekOptions .content .edit-summary >div:nth-child(2) .column .added-dates {
+  color: rgba(57,132,57,0.8);
+}
+.WeekOptions .content .edit-summary >div:nth-child(2) .column .removed-dates {
+  color: rgba(169,23,23,0.7);
+}
+.WeekOptions .content .edit-summary >div:nth-child(2) .column >div:first-child {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 .fd-hide {
   opacity: 0;
@@ -439,87 +511,11 @@ body.admin-plus {
 }
 .input-std:focus {
   outline: 0;
-  box-shadow: 0 0 1px 1px #ccc;
+  box-shadow: 0 0 3px 1px #ccc;
 }
 .form-label {
   display: inline-block;
   font-size: 0.95rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-}
-.input-flat {
-  display: block;
-  padding: 0.5rem;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: 3px solid #2d2d2d;
-}
-.input-flat:focus {
-  background-color: #ddd;
-}
-.input-flat::-webkit-input-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-flat::-moz-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-flat:-ms-input-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-flat:-moz-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-borderless {
-  display: block;
-  background-color: #ddd;
-  padding: 0.5rem;
-  border: none;
-}
-.input-borderless:focus {
-  background-color: #eee;
-}
-.input-borderless::-webkit-input-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-borderless::-moz-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-borderless:-ms-input-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.input-borderless:-moz-placeholder {
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.valid .feedback,
-.valid .form-label {
-  color: #08703c;
-}
-.valid .form-input {
-  border-color: #075f33;
-}
-.valid .form-input,
-.valid .input-borderless,
-.valid .input-flat {
-  background-color: #dbfceb;
-}
-.error .feedback,
-.error .form-label {
-  color: #982c1f;
-}
-.error .form-input {
-  border-color: #81251a;
-}
-.error .form-input,
-.error .input-borderless,
-.error .input-flat {
-  background-color: #f9e6e4;
 }

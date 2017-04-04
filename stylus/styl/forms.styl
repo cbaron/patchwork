@@ -17,36 +17,11 @@
     border-radius: .2rem
     &:focus
         outline: 0
-        box-shadow: 0 0 1px 1px #ccc
+        box-shadow: 0 0 3px 1px #ccc
     
 .form-label
     display: inline-block
     font-size: .95rem
     font-weight: 700
     margin-bottom: .5rem
-        
-.input-flat
-    display: block
-    padding: .5rem
-    border-top: none
-    border-left: none
-    border-right: none
-    border-bottom: 3px solid $dark-gray
-    &:focus
-        background-color: #ddd
-    style-placeholder()
-        
-.input-borderless
-    display: block
-    background-color: #ddd
-    padding: .5rem
-    border: none
-    &:focus
-        background-color: #eee
-    style-placeholder()
   
-.valid
-    form-validation($valid-green)
-    
-.error
-    form-validation($error-red)  

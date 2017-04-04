@@ -22,8 +22,8 @@ module.exports = p => {
         <h3>Customer Info</h3>
         <button class="reset-btn hidden" data-js="resetBtn">Reset</button>
         <div class="content">
-            <div data-js="infoTable" class="customer-table">
-                ${rows}
+            <div class="data">
+                <div data-js="infoTable" class="customer-table">${rows}</div>
                 <button class="review-btn hidden" data-js="reviewBtn">Review Changes</button>
             </div>
             <div data-js="editSummary" class="edit-summary hidden">
