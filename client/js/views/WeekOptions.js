@@ -36,7 +36,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
        
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-            const isSkipWeek = this.SkipWeeks.data.find( week => Math.abs( this.Moment( week.date ).diff( deliveryDate, 'days' ) ) <= 2 ) ? true : false
+            const isSkipWeek = this.SkipWeeks.data.find( week => 
+                this.Moment( week.date ).week() === this.Moment( deliveryDate ).week() ) ? true : false
             
             this.dates.push( {
                 date: this.Moment( deliveryDate ),
