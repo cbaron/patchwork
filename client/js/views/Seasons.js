@@ -8,6 +8,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         list: 'click'
     },
 
+    insertShareLabels() {
+        const countPerShare = { }
+
+        this.MemberSeason.data.forEach( season => {
+            countPerShare[ season.name ] ? ++countPerShare[ season.name ] : countPerShare[ season.name ] = 1
+            if( countPerShare[ season.name ] > 1 ) season.count = countPerShare[ season.name ]
+
+            this.slurpTemplate( { template: this.templates.ShareBox( season ), insertion: { el: this.els.list } } )
+        } )
+    },
+
     onListClick( e ) {
         if( this.currentSelection ) this.currentSelection.classList.remove('selected')
         
@@ -28,7 +39,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.clear()
          
         this.MemberSeason.get( { query: { memberid: customer.member.data.id, shareid: { operation: 'join', value: { table: 'share', column: 'id' } } } } )
-        .then( () => this.MemberSeason.data.forEach( memberSeason => this.slurpTemplate( { template: this.templates.ShareBox( memberSeason ), insertion: { el: this.els.list } } ) ) )
+        .then( () => this.insertShareLabels() )
         .then( () => this.show() )
         .catch( this.Error )
     }

@@ -1,7 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     parse( response ) {
-      return response.map( row =>
+        return response.map( row =>
             Object.keys( row ).reduce(
                 ( memo, key ) => {
                     const index = key.indexOf('.'),

@@ -48,6 +48,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             } )
         } )
 
+        this.views.orderOptions.on( 'deliveryChanged', data => this.views.weekOptions.updateDelivery( data ) )
+        this.views.orderOptions.on( 'reset', model => this.views.weekOptions.update( model ) )
+
         return this
     },
 

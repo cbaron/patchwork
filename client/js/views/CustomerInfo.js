@@ -5,6 +5,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( field.type !== 'select' ) this.els[ field.name ].textContent = ''
         } )
 
+        this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
+
         this.FoodOmission.clear()
     },
 
@@ -41,7 +43,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     handleEdit( e ) {
         this.els.resetBtn.classList.remove('hidden')
-        this.els.reviewBtn.classList.remove('hidden')        
+        this.els.reviewBtn.classList.remove('hidden')      
     },
 
     handleOmissionChange( e, m ) {
@@ -66,6 +68,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onResetBtnClick() {
+        this.els.resetBtn.classList.add('hidden')
+        this.els.reviewBtn.classList.add('hidden')
+        this.els.editSummary.classList.add('hidden')
         this.update( this.model )
     },
 
@@ -117,7 +122,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els.resetBtn.classList.add('hidden')
             this.els.reviewBtn.classList.add('hidden')
             this.els.editSummary.classList.add('hidden')
-            this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
+            this.clearEditStyles()
 
             this.Toast.showMessage( 'success', 'Customer Info Updated!' )
             this.update( this.model )

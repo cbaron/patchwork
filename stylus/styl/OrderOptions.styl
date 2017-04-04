@@ -1,0 +1,31 @@
+.OrderOptions
+    
+    >div:first-child
+        >div
+            font-weight: bold
+            margin-bottom: 1rem
+    
+    ol
+        text-align: left
+        padding-left: 1rem
+        
+        li
+            display: flex
+            align-items: center
+            &.editable
+                padding: .25rem 0
+
+            span:first-child
+                color: #155D75
+                width: 8rem
+            select
+                height: 2rem
+                padding: .3rem .6rem
+                background-color: #fff
+                border-radius: .15rem
+                border: 1px solid #ccc
+                &:focus
+                    box-shadow: 0 0 3px 1px #ccc
+                &:disabled
+                    opacity: .4
+                
