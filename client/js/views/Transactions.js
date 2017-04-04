@@ -1,8 +1,23 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    Pikaday: require('pikaday'),
-
     Views: {
+        editButtons: { model: { value: {
+            hide: true,
+            states: {
+                start: [
+                    { name: 'edit', svg: require('./templates/lib/edit'), emit: true, nextState: 'onEdit' },
+                    { name: 'ex', svg: require('./templates/lib/ex'), nextState: 'onDelete' }
+                ],
+                onDelete: [
+                    { name: 'confirmDelete', text: 'Delete', class: 'link', emit: 'true' },
+                    { name: 'cancelDelete', text: 'Cancel', class: 'link', nextState: 'start', emit: true }
+                ],
+                onEdit: [
+                    { name: 'confirmEdit', text: 'Update', class: 'link', emit: 'true' },
+                    { name: 'cancelEdit', text: 'Cancel', class: 'link', nextState: 'start', emit: true }
+                ]
+            }
+        } } },
         emailButtons: { model: { value: {
             hide: true,
             states: {
@@ -13,15 +28,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 ]
             }
          } } },
-        addTransactionButtons: { model: { value: {
-            states: {
-                start: [ { name: 'addTransaction', text: 'Add Transaction', nextState: 'confirm' } ],
-                confirm: [
-                    { name: 'confirmEmail', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', text: 'Cancel', emit: true }
-                ]
-            }
-        } } }
+        addTransaction: function() { return { model: { value: this.model } } },
     },
 
     addTransaction() {
@@ -40,8 +47,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     clear() { this.els.transactions.innerHTML = '' },
 
     events: {
-        ex: 'click',
-        list: 'click'
+        list: 'click',
+        transaction: [ 'mouseenter', 'mouseleave' ]
     },
 
     appendTransaction( transaction ) {
@@ -129,19 +136,37 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
     },
 
+    onTransactionMouseenter( e ) {
+        if( this.views.editButtons.state !== 'start' ) return
+        e.target.children[0].appendChild( this.views.editButtons.els.container )
+        this.views.editButtons.els.container.classList.remove('fd-hidden', 'fd-hide')
+    },
+    
+    onTransactionMouseleave( e ) {
+        if( this.views.editButtons.state !== 'start' ) return
+        this.els.transactions.after( this.views.editButtons.els.container )
+        this.views.editButtons.els.container.classList.add('fd-hidden')
+    },
+
     postRender() {
-        this.created = new this.Pikaday( { field: this.els.created, format: 'YYYY-MM-DD' } )
 
         this.views.emailButtons.on( 'confirmEmailClicked', e => this.sendMail() )
-        this.views.addTransactionButtons.on( 'addTransactionClicked', e => this.addTransaction() )
-        this.views.addTransactionButtons.on( 'cancelClicked', e => this.onCancelAddTransaction() )
+
+        this.model.on( 'added', datum => this.onModelAdd( datum ) )
 
         return this
     },
 
-   onCancelAddTransaction() {
+    
+
+    onCancelAddTransaction() {
         this.els.addTransactionRow.classList.add('hidden')
         this.model.attributes.forEach( attr => this.els[ attr ].value = attr === 'action' ? this.model.actions[0] : '' )
+    },
+
+    onModelAdd( datum ) {
+        this.insertTransaction( datum.id )
+        this.updateBalance()
     },
 
     sendMail() {
@@ -158,9 +183,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
-    templateOpts() {
-        return { actions: this.model.actions }
-    },
+    
 
     templates: {
         Transaction: require('./templates/CsaTransaction')
@@ -176,6 +199,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => this.model.data.forEach( csaTransaction => this.appendTransaction( csaTransaction ) ) )
         .then( () => this.updateBalance().show() )
         .catch( this.Error )
+
+        this.views.addTransaction.update( share.membershareid )
     },
 
     updateBalance() {

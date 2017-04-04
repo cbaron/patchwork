@@ -1,0 +1,14 @@
+module.exports = ( p, { Moment } ) => {
+    const actions = p.opts.actions.map( action => `<option value="${action}">${action}</option>` ).join('')
+    return `` +
+`<div>
+    <form data-js="form">
+        <select data-js="action">${actions}</select>
+        <input type="text" data-js="value" placeholder="$0.00"/>
+        <input type="text" data-js="checkNumber" placeholder="1234"/>
+        <input type="text" data-js="created" value="${Moment().format('YYYY-MM-DD')}" />
+        <input type="text" data-js="description" placeholder="description"/>
+    </form>
+    <div data-view="buttonFlow"></div>
+</div>`
+}

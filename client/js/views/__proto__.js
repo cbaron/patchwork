@@ -209,7 +209,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
                 opts =
                     typeof this.Views[ key ] === "object"
                         ? this.Views[ key ]
-                        : Reflect.apply( this.Views[ key ], this )
+                        : Reflect.apply( this.Views[ key ], this, [ ] )
             }
             this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { el: this.viewEls[ key ], method: 'insertBefore' } } }, opts ) )
             this.viewEls[ key ].remove()

@@ -1,4 +1,5 @@
 module.exports={
+	AddTransaction: require('./views/templates/AddTransaction'),
 	AdminHeader: require('./views/templates/AdminHeader'),
 	AdminPlus: require('./views/templates/AdminPlus'),
 	ButtonFlow: require('./views/templates/ButtonFlow'),

@@ -1,0 +1,33 @@
+.AddTransaction
+    border: 1px solid black
+
+    form
+        display: flex
+        opacity: .25
+
+        >select, >input
+            flex: 2
+            margin: .25rem
+            
+            &:last-child
+                flex: 4
+
+        &.active
+            opacity: 1
+        
+        &:hover
+            opacity: 1
+
+    .ButtonFlow
+        >div
+            width: 100%
+
+            &.start
+                button
+                    width: 100%
+            
+            &.confirm
+                display: flex
+
+                button
+                    flex: 1

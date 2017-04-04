@@ -3,8 +3,7 @@ module.exports = ( p, format ) => {
 
 return `` +
 `<li data-js="transaction" data-id="${p.id}">
-    ${require('./lib/ex')}
-    ${require('./lib/edit')}
+    <span class="cell"></span>
     <span class="cell">${p.action}</span>
     <span class="cell ${negativeClass}">${format.currency(Math.abs(p.value))}</span>
     <span class="cell">${p.checkNumber || ''}</span>

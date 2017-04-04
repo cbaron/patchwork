@@ -1,34 +1,29 @@
 .Transactions
 
-    .buttons
-        display: flex
-        
-        button
-            flex: 1
-            border: 1px solid black
-            border-radius: 0
-
     .heading
         display: flex
 
         >h3, >span
             border: none
-            flex: 2
+            flex: 4
             font-size: 1rem
             margin: 0rem
             padding: .25rem
             line-height: 1rem
                 
             &:last-child
-                flex: 4
-
+                flex: 6
+            
+            &:first-child
+                flex: 1
+    
     ol
         li
             display: flex
             position: relative
 
             span
-                flex: 2
+                flex: 4
                 padding: 1rem
 
                 &.cell
@@ -52,40 +47,32 @@
 
                 &:last-child
                     text-align: left
-                    flex: 4
-            
-            .ex
-                left: .5rem
+                    flex: 6
+                
+                &:first-child
+                    text-align: left
+                    flex: 1
 
-            .edit
-                left: 1.5rem
+            .ButtonFlow            
+                .ex
+                    left: .5rem
 
-            .ex, .edit
-                cursor: pointer
-                display: none
-                height: 1rem
-                position: absolute
-                top: .5rem
-                width: .75rem
+                .edit
+                    left: 1.5rem
 
-            &:hover
                 .ex, .edit
+                    cursor: pointer
+                    height: 1rem
+                    position: absolute
+                    top: .5rem
+                    width: .75rem
+
+                .link
                     display: block
 
             &.marked
                 background-color: black
                 background-opacity: .5
-
-    .add
-        border: 1px solid black
-        display: flex
-
-        >select, >input
-            flex: 2
-            margin: .25rem
-            
-            &:last-child
-                flex: 4
 
     .balance
         display: flex

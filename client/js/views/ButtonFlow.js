@@ -1,5 +1,32 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    disable() {
+        Object.keys( this.model.states ).forEach( stateName =>
+           this.model.states[ stateName ].forEach( button => {
+               const el = this.els[ button.name ]
+               el.removeEventListener( 'click', button.clickListener )
+               el.classList.add('disabled')
+           } )
+        )
+    },
+
+    enable() {
+        Object.keys( this.model.states ).forEach( stateName =>
+           this.model.states[ stateName ].forEach( button => {
+               const el = this.els[ button.name ]
+               el.addEventListener( 'click', button.clickListener )
+               el.classList.remove('disabled')
+           } )
+        )
+    },
+
+    getListener( name, button ) {
+        return e => {
+            if( button.nextState ) this.onNextState( button.nextState )
+            if( button.emit ) this.emit( `${name}Clicked` )
+        }
+    },
+
     onNextState( newState ) {
         this.hideEl( this.els[ this.state ] )
         .then( () => {
@@ -14,10 +41,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         Object.keys( this.model.states ).forEach( stateName =>
            this.model.states[ stateName ].forEach( button => {
-                this.els[ button.name ].addEventListener( 'click', e => {
-                    if( button.nextState ) this.onNextState( button.nextState )
-                    if( button.emit ) this.emit( `${button.name}Clicked` )
-                } )
+               const el = this.els[ button.name ]
+                button.clickListener = this.getListener( button.name, button )
+                if( !this.model.disabled ) { el.addEventListener( 'click', button.clickListener ) }
            } )
         )
 

@@ -1,3 +1,37 @@
+.AddTransaction {
+  border: 1px solid #000;
+}
+.AddTransaction form {
+  display: flex;
+  opacity: 0.25;
+}
+.AddTransaction form >select,
+.AddTransaction form >input {
+  flex: 2;
+  margin: 0.25rem;
+}
+.AddTransaction form >select:last-child,
+.AddTransaction form >input:last-child {
+  flex: 4;
+}
+.AddTransaction form.active {
+  opacity: 1;
+}
+.AddTransaction form:hover {
+  opacity: 1;
+}
+.AddTransaction .ButtonFlow >div {
+  width: 100%;
+}
+.AddTransaction .ButtonFlow >div.start button {
+  width: 100%;
+}
+.AddTransaction .ButtonFlow >div.confirm {
+  display: flex;
+}
+.AddTransaction .ButtonFlow >div.confirm button {
+  flex: 1;
+}
 .AdminPlus {
   margin-top: 105px;
   text-align: center;
@@ -17,6 +51,25 @@
 }
 .AdminPlus .manage-btn:hover {
   background-color: #ebebeb;
+}
+.ButtonFlow button,
+.ButtonFlow svg {
+  cursor: pointer;
+}
+.ButtonFlow button.disabled,
+.ButtonFlow svg.disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.ButtonFlow button.link,
+.ButtonFlow svg.link {
+  border: none;
+  background: none;
+  color: #000;
+}
+.ButtonFlow button.link:hover,
+.ButtonFlow svg.link:hover {
+  text-decoration: underline;
 }
 .CustomerInfo .content .data .customer-table {
   text-align: left;
@@ -272,21 +325,13 @@
 .Toast >div:nth-child(2) >div:first-child {
   font-weight: bold;
 }
-.Transactions .buttons {
-  display: flex;
-}
-.Transactions .buttons button {
-  flex: 1;
-  border: 1px solid #000;
-  border-radius: 0;
-}
 .Transactions .heading {
   display: flex;
 }
 .Transactions .heading >h3,
 .Transactions .heading >span {
   border: none;
-  flex: 2;
+  flex: 4;
   font-size: 1rem;
   margin: 0rem;
   padding: 0.25rem;
@@ -294,14 +339,18 @@
 }
 .Transactions .heading >h3:last-child,
 .Transactions .heading >span:last-child {
-  flex: 4;
+  flex: 6;
+}
+.Transactions .heading >h3:first-child,
+.Transactions .heading >span:first-child {
+  flex: 1;
 }
 .Transactions ol li {
   display: flex;
   position: relative;
 }
 .Transactions ol li span {
-  flex: 2;
+  flex: 4;
   padding: 1rem;
 }
 .Transactions ol li span.cell {
@@ -325,43 +374,32 @@
 }
 .Transactions ol li span:last-child {
   text-align: left;
-  flex: 4;
+  flex: 6;
 }
-.Transactions ol li .ex {
+.Transactions ol li span:first-child {
+  text-align: left;
+  flex: 1;
+}
+.Transactions ol li .ButtonFlow .ex {
   left: 0.5rem;
 }
-.Transactions ol li .edit {
+.Transactions ol li .ButtonFlow .edit {
   left: 1.5rem;
 }
-.Transactions ol li .ex,
-.Transactions ol li .edit {
+.Transactions ol li .ButtonFlow .ex,
+.Transactions ol li .ButtonFlow .edit {
   cursor: pointer;
-  display: none;
   height: 1rem;
   position: absolute;
   top: 0.5rem;
   width: 0.75rem;
 }
-.Transactions ol li:hover .ex,
-.Transactions ol li:hover .edit {
+.Transactions ol li .ButtonFlow .link {
   display: block;
 }
 .Transactions ol li.marked {
   background-color: #000;
   background-opacity: 0.5;
-}
-.Transactions .add {
-  border: 1px solid #000;
-  display: flex;
-}
-.Transactions .add >select,
-.Transactions .add >input {
-  flex: 2;
-  margin: 0.25rem;
-}
-.Transactions .add >select:last-child,
-.Transactions .add >input:last-child {
-  flex: 4;
 }
 .Transactions .balance {
   display: flex;
