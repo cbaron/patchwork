@@ -34,7 +34,6 @@
                 &.cell
                     background-color: transparent
                     padding: .25rem
-                    height: 30px
                     border: 1px solid black
                     font-size: .9rem
                     font-weight: bold
@@ -56,20 +55,26 @@
                     flex: 4
             
             .ex
+                left: .5rem
+
+            .edit
+                left: 1.5rem
+
+            .ex, .edit
                 cursor: pointer
                 display: none
-                left: .5rem
                 height: 1rem
                 position: absolute
                 top: .5rem
-                width: 1rem
+                width: .75rem
 
             &:hover
-                .ex
+                .ex, .edit
                     display: block
 
             &.marked
-                background-color: rgba(169,23,23,0.7)                
+                background-color: black
+                background-opacity: .5
 
     .add
         border: 1px solid black

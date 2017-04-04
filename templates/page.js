@@ -7,8 +7,9 @@ module.exports = p =>
         <link rel="stylesheet" type="text/css" href="/static/css/typeahead.css">
         <link rel="stylesheet" type="text/css" href="/static/css/magicsuggest.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bundle.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/main.css">
         <link rel="stylesheet" type="text/css" href="/static/css/auto-complete.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/pikaday.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +22,6 @@ module.exports = p =>
         <script src="/static/js/babel-polyfill.js"></script>
         <script src="/static/js/bootstrap-typeahead.js"></script>
         <script src="/static/js/magicsuggest.js"></script>
-        <script src="/static/js/auto-complete.min.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=${p.googleApiKey}&libraries=places&callback=initGMap"></script>
 
         <title>${p.title}</title>

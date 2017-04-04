@@ -1,6 +1,7 @@
 module.exports={
 	AdminHeader: require('./views/templates/AdminHeader'),
 	AdminPlus: require('./views/templates/AdminPlus'),
+	ButtonFlow: require('./views/templates/ButtonFlow'),
 	CsaTransaction: require('./views/templates/CsaTransaction'),
 	CustomerInfo: require('./views/templates/CustomerInfo'),
 	DeliveryDate: require('./views/templates/DeliveryDate'),

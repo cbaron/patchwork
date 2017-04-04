@@ -3,7 +3,7 @@ module.exports = p =>
     <div class="main-search">
         <div class="form-grouping horizontal">
             <label class="form-label">Search Customers</label>  
-            <input class="input-std type="text" id="customer">
+            <input data-js="customerInput" class="input-std type="text">
         </div>
     </div>
     <div data-view="customerInfo"></div>
