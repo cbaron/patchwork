@@ -60,6 +60,20 @@
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
 }
+.ManageCustomer button {
+  display: inline-block;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.8rem;
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
+  border-radius: 0.25rem;
+  color: #fff;
+}
+.ManageCustomer button:focus {
+  outline: 0;
+}
 .ManageCustomer .main-search {
   display: flex;
   justify-content: center;
@@ -86,6 +100,7 @@
   font-size: 1.2rem;
 }
 .ManageCustomer ol {
+  margin-bottom: 0;
   -webkit-padding-start: 0;
 }
 .ManageCustomer .cell,
@@ -255,6 +270,14 @@
 .Toast >div:nth-child(2) >div:first-child {
   font-weight: bold;
 }
+.Transactions .buttons {
+  display: flex;
+}
+.Transactions .buttons button {
+  flex: 1;
+  border: 1px solid #000;
+  border-radius: 0;
+}
 .Transactions .heading {
   display: flex;
 }
@@ -264,7 +287,7 @@
   flex: 2;
   font-size: 1rem;
   margin: 0rem;
-  padding: 1rem;
+  padding: 0.25rem;
   line-height: 1rem;
 }
 .Transactions .heading >h3:last-child,
@@ -273,12 +296,78 @@
 }
 .Transactions ol li {
   display: flex;
+  position: relative;
 }
 .Transactions ol li span {
   flex: 2;
   padding: 1rem;
 }
+.Transactions ol li span.cell {
+  background-color: transparent;
+  padding: 0.25rem;
+  height: 30px;
+  border: 1px solid #000;
+  font-size: 0.9rem;
+  font-weight: bold;
+  overflow-x: auto;
+  text-align: center;
+  white-space: nowrap;
+}
+.Transactions ol li span.negative {
+  color: #f00;
+}
+.Transactions ol li span.negative:before {
+  content: '(';
+}
+.Transactions ol li span.negative:after {
+  content: ')';
+}
 .Transactions ol li span:last-child {
+  text-align: left;
+  flex: 4;
+}
+.Transactions ol li .ex {
+  cursor: pointer;
+  display: none;
+  left: 0.5rem;
+  height: 1rem;
+  position: absolute;
+  top: 0.5rem;
+  width: 1rem;
+}
+.Transactions ol li:hover .ex {
+  display: block;
+}
+.Transactions ol li.marked {
+  background-color: rgba(169,23,23,0.7);
+}
+.Transactions .add {
+  border: 1px solid #000;
+  display: flex;
+}
+.Transactions .add >select,
+.Transactions .add >input {
+  flex: 2;
+  margin: 0.25rem;
+}
+.Transactions .add >select:last-child,
+.Transactions .add >input:last-child {
+  flex: 4;
+}
+.Transactions .balance {
+  display: flex;
+}
+.Transactions .balance h3,
+.Transactions .balance span {
+  flex: 2;
+  font-size: 1rem;
+  margin: 0rem;
+  padding: 0.25rem;
+  line-height: 1rem;
+  text-align: center;
+}
+.Transactions .balance h3:last-child,
+.Transactions .balance span:last-child {
   flex: 4;
 }
 .WeekOptions >div:first-child {

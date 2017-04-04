@@ -19,4 +19,29 @@ Number.isInteger = Number.isInteger || function(value) {
     Math.floor(value) === value;
 }
 
+
+//https://gist.github.com/paulirish/1579671
+const requestAnimationFramePolyfill = (() => {
+    let clock = Date.now();
+
+    return (callback) => {
+
+        const currentTime = Date.now();
+
+        if (currentTime - clock > 16) {
+            clock = currentTime;
+            callback(currentTime);
+        } else {
+            setTimeout(() => {
+                polyfill(callback);
+            }, 0);
+        }
+    };
+})();
+
+window.requestAnimationFrame = window.requestAnimationFrame       ||
+                               window.webkitRequestAnimationFrame ||
+                               window.mozRequestAnimationFrame    ||
+                               requestAnimationFramePolyfill
+
 module.exports = true

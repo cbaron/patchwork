@@ -1,16 +1,21 @@
-module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('events').EventEmitter.prototype, {
+module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
-    Model: require('../models/__proto__'),
-
-    Moment: require('moment'),
-
-    NumberFormat: new Intl.NumberFormat( 'en-US', {
+    Currency: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2
     } ),
 
+    Error: require('../../../lib/MyError'),
+
+    Model: require('../models/__proto__'),
+
+    Moment: require('moment'),
+
     OptimizedResize: require('./lib/OptimizedResize'),
+    
+    P: ( fun, args=[ ], thisArg ) =>
+        new Promise( ( resolve, reject ) => Reflect.apply( fun, thisArg || this, args.concat( ( e, ...callback ) => e ? reject(e) : resolve(callback) ) ) ),
 
     Xhr: require('../Xhr'),
 
@@ -33,7 +38,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
 
         if( type === "string" ) { this.bindEvent( key, this.events[key], el ) }
         else if( Array.isArray( this.events[key] ) ) {
-            this.events[ key ].forEach( eventObj => this.bindEvent( key, eventObj.event ) )
+            this.events[ key ].forEach( eventObj => this.bindEvent( key, eventObj ) )
         } else {
             this.bindEvent( key, this.events[key].event )
         }
@@ -101,6 +106,18 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         }
     },
 
+    hideEl( el ) {
+        if( el.classList.contains('fd-hide') ) {
+            return Promise.resolve()
+        } else {
+            return new Promise( resolve => {
+                el.onHiddenProxy = e => this.onElHidden( resolve, el )
+                el.addEventListener( 'transitionend', el.onHiddenProxy )
+                el.classList.add('fd-hide')
+            } )
+        }
+    },
+
     htmlToFragment( str ) {
         let range = document.createRange();
         // make the parent of the first div in the document becomes the context node
@@ -113,6 +130,12 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
     },
     
     isHidden() { return this.els.container.classList.contains('fd-hidden') },
+
+    onElHidden( resolve, el ) {
+        el.removeEventListener( 'transitionend', el.onHiddenProxy )
+        el.classList.add('fd-hidden')
+        resolve( this.emit( 'elHidden', el ) )
+    },
 
     onHidden( resolve ) {
         this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
@@ -128,10 +151,14 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         return this.show()
     },
 
+    onElShown( resolve, el ) {
+        el.removeEventListener( 'transitionend', el.onShownProxy )
+        resolve( this.emit( 'elShown' ) )
+    },
+
     onShown( resolve ) {
         this.els.container.removeEventListener( 'transitionend', this.onShownProxy )
-        if( this.size ) this.size()
-        resolve( this.emit('shown') )
+        resolve( this.emit( 'shown' ) )
     },
 
     showNoAccess() {
@@ -205,13 +232,40 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject'), require('
         }
     },
 
+    showEl( el ) {
+        if( el.classList.contains( 'fd-hidden' ) ) {
+            el.classList.remove( 'fd-hidden' )
+            
+            return new Promise( resolve => {
+                window.requestAnimationFrame( () => {
+                    el.onShownProxy = e => this.onShown( resolve, el )
+                    el.addEventListener( 'transitionend', el.onShownProxy )
+                    el.classList.remove( 'fd-hide' )
+                } )
+            } )
+        } else if( el.classList.contains( 'fd-hide' ) ) {
+            el.classList.remove( 'fd-hide' )
+            el.container.removeEventListener( 'transitionend', el.onHiddenProxy )
+            
+            return new Promise( resolve => {
+                window.requestAnimationFrame( () => {
+                    el.onShownProxy = e => this.onShown( resolve, el )
+                    el.addEventListener( 'transitionend', el.onShownProxy )
+                    el.classList.remove( 'fd-hide' )
+                } )
+            } )
+        } else {
+            return new Promise.resolve()
+        }
+    },
+
     slurpEl( el ) {
         var key = el.getAttribute( this.slurp.attr ) || 'container'
 
         if( key === 'container' ) el.classList.add( this.name )
 
         this.els[ key ] = Array.isArray( this.els[ key ] )
-            ? this.els[ key ].push( el )
+            ? this.els[ key ].concat( el )
             : ( this.els[ key ] !== undefined )
                 ? [ this.els[ key ], el ]
                 : el
