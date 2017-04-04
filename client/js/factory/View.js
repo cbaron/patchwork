@@ -9,7 +9,7 @@ module.exports = Object.create( {
             Object.assign( {
                 name: { value: name },
                 factory: { value: this },
-                template: { value: this.Templates[ name ] },
+                template: { value: this.Templates[ name ] || this.Templates['__proto__'] },
                 Toast: { value: this.Toast },
                 user: { value: this.User }
             }, opts )

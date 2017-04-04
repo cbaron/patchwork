@@ -1,18 +1,20 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    AutoComplete: require('../AutoComplete'),
+
     Customer: require('../models/Customer'),
     Delivery: require('../models/Delivery'),
 
     initAutoComplete() {
-        const myAutoComplete = new autoComplete( {
-            selector: 'input#customer',
+        const myAutoComplete = new this.AutoComplete( {
+            delay: 500,
+            selector: this.els.customerInput,
             minChars: 3,
             source: ( term, suggest ) => {
-                if( this.searching ) return
-                this.searching = true
                 this.search( 'name', term, suggest )
                 .then( found => found ? Promise.resolve(true) : this.search( 'email', term, suggest ) )
                 .then( found => found ? Promise.resolve(true) : this.search( 'secondaryEmail', term, suggest ) )
+                .then( found => found ? Promise.resolve(true) : suggest([]) )
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
@@ -21,6 +23,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
 
         } )
+
+        this.els.customerInput.focus()
     },
 
     postRender() {
@@ -65,7 +69,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
    
             this.attr = attr            
             suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
-            this.searching = false
             return Promise.resolve( true )
         } )
     }

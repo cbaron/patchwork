@@ -260,6 +260,8 @@
   padding: 0.5rem;
 }
 .Toast >div:first-child svg {
+  fill: #fff;
+  stroke: #fff;
   height: 2rem;
   width: 2rem;
 }
@@ -305,7 +307,6 @@
 .Transactions ol li span.cell {
   background-color: transparent;
   padding: 0.25rem;
-  height: 30px;
   border: 1px solid #000;
   font-size: 0.9rem;
   font-weight: bold;
@@ -327,19 +328,27 @@
   flex: 4;
 }
 .Transactions ol li .ex {
+  left: 0.5rem;
+}
+.Transactions ol li .edit {
+  left: 1.5rem;
+}
+.Transactions ol li .ex,
+.Transactions ol li .edit {
   cursor: pointer;
   display: none;
-  left: 0.5rem;
   height: 1rem;
   position: absolute;
   top: 0.5rem;
-  width: 1rem;
+  width: 0.75rem;
 }
-.Transactions ol li:hover .ex {
+.Transactions ol li:hover .ex,
+.Transactions ol li:hover .edit {
   display: block;
 }
 .Transactions ol li.marked {
-  background-color: rgba(169,23,23,0.7);
+  background-color: #000;
+  background-opacity: 0.5;
 }
 .Transactions .add {
   border: 1px solid #000;

@@ -61,9 +61,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     getTemplateOptions() {
+        const modelData = this.model
+            ? this.model.data
+                ? this.model.data
+                : this.model
+            : { }
         return Object.assign(
             {},
-            (this.model) ? this.model.data : {} ,
+            modelData,
             { user: (this.user) ? this.user.data : {} },
             { opts: this.templateOpts
                 ? typeof this.templateOpts === 'function'
@@ -169,7 +174,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     postRender() { return this },
 
     render() {
-        this.slurpTemplate( { template: this.template( this.getTemplateOptions() ), insertion: this.insertion, isView: true } )
+        this.slurpTemplate( { template: this.template( this.getTemplateOptions(), { Moment: this.Moment } ), insertion: this.insertion, isView: true } )
 
         this.renderSubviews()
 
@@ -180,14 +185,33 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     renderSubviews() {
         Object.keys( this.viewEls || { } ).forEach( key => {
-            let opts = { }
-            if( this.Views && this.Views[ key ] && this.Views[ key ].opts ) {
-                opts =
-                    typeof this.Views[ key ].opts === "object"
-                        ? this.Views[ key ].opts
-                        : Reflect.apply( this.Views[ key ].opts, this, [ ] )
+
+            if( Array.isArray( this.viewEls[ key ] ) ) {
+                this.viewEls[ key ].forEach( el => {
+                    const name = el.getAttribute('data-name')
+                    let config = this.Views[ name ],
+                        opts = { }
+                    if( config ) {
+                        opts = typeof config === "object"
+                            ? config
+                            : Reflect.apply( config, this, [ ] )
+                    }
+                    this.views[ name ] = this.factory.create( key, Object.assign( { insertion: { value: { el, method: 'insertBefore' } } }, opts ) )
+                    el.remove()
+                } )
+                this.viewEls[ key ] = undefined
+                return
             }
-            this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { el: this.viewEls[ key ], method: 'insertBefore' } } }, { opts: { value: opts  } } ) )
+                
+
+            let opts = { } 
+            if( this.Views && this.Views[ key ] ) {
+                opts =
+                    typeof this.Views[ key ] === "object"
+                        ? this.Views[ key ]
+                        : Reflect.apply( this.Views[ key ], this )
+            }
+            this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { el: this.viewEls[ key ], method: 'insertBefore' } } }, opts ) )
             this.viewEls[ key ].remove()
             this.viewEls[ key ] = undefined
         } )
@@ -255,7 +279,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
                 } )
             } )
         } else {
-            return new Promise.resolve()
+            return Promise.resolve()
         }
     },
 
@@ -285,8 +309,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         fragment.querySelectorAll( `${selector}, ${viewSelector}` ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
             else if( el.hasAttribute( this.slurp.view ) ) {
+                let attr = el.getAttribute(this.slurp.view)
                 if( ! this.viewEls ) this.viewEls = { }
-                this.viewEls[ el.getAttribute(this.slurp.view) ] = el
+               
+                this.viewEls[ attr ] = this.viewEls[ attr ] === undefined
+                    ? el
+                    : Array.isArray( this.viewEls[ attr ] )
+                        ? this.viewEls[ attr ].concat( el )
+                        : [ this.viewEls[ attr ], el ]
             }
         } )
           

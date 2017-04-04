@@ -7,11 +7,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         'Season Signup'
     ],
 
-    attributes: [ 'action', 'value', 'checkNumber', 'description' ],
+    attributes: [ 'action', 'value', 'checkNumber', 'created', 'description' ],
 
     getBalance() {
         return this.data.reduce( ( memo, datum ) => {
-            if( datum.isNegative ) memo -= datum.value
+            if( datum.action === 'Payment' ) memo -= datum.value
             else memo += datum.value
             return memo
         }, 0 )
@@ -24,11 +24,23 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     parse( response ) {
+        response = response.map( row => this.parseOne( row ) )
+
+        if( this.sortAttr ) response.sort( ( a, b ) => a[ this.sortAttr ] > b[ this.sortAttr ] )
+
         return response
-            .map( row => Object.assign( row, { isNegative: this.isNegative( row ) } ) )
-            .sort( ( a, b ) => a.created > b.created )
     },
 
-    resource: 'csaTransaction'
+    parseOne( datum ) {
+        return Object.assign(
+            datum,
+            { isNegative: this.isNegative( datum ) },
+            { created: typeof datum.created === 'object' ? datum.created.raw : datum.created }
+        )
+    },
+
+    resource: 'csaTransaction',
+
+    sortAttr: 'created'
 
 } )

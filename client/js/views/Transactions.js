@@ -1,19 +1,69 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    Pikaday: require('pikaday'),
+
+    Views: {
+        emailButtons: { model: { value: {
+            hide: true,
+            states: {
+                start: [ { name: 'sendEmail', text: 'Send Email Reminder', nextState: 'confirm' } ],
+                confirm: [
+                    { name: 'confirmEmail', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', nextState: 'start', text: 'Cancel' }
+                ]
+            }
+         } } },
+        addTransactionButtons: { model: { value: {
+            states: {
+                start: [ { name: 'addTransaction', text: 'Add Transaction', nextState: 'confirm' } ],
+                confirm: [
+                    { name: 'confirmEmail', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', nextState: 'start', text: 'Cancel', emit: true }
+                ]
+            }
+        } } }
+    },
+
+    addTransaction() {
+        this.model.post( Object.assign(
+            { memberShareId: this.share.membershareid },
+            this.model.attributes.reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } )
+        ) )
+        .then( response => {
+            this.insertTransaction( response.id )
+            this.updateBalance()
+            this.Toast.showMessage( 'success', 'Transaction added!' )
+        } )
+        .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error adding transaction' ) } )
+    },
+
     clear() { this.els.transactions.innerHTML = '' },
 
     events: {
-        addBtn: 'click',
-        cancelBtn: 'click',
-        confirmEmailBtn: 'click',
-        cancelEmailBtn: 'click',
-        emailBtn: 'click',
         ex: 'click',
         list: 'click'
     },
 
-    insertTransaction( transaction ) {
-        this.slurpTemplate( { template: this.templates.Transaction( transaction, this.Currency.format ), insertion: { el: this.els.transactions } } )
+    appendTransaction( transaction ) {
+        this.slurpTemplate( {
+            template: this.templates.Transaction(
+                transaction,
+                { currency: this.Currency.format, moment: this.Moment } ),
+            insertion: { el: this.els.transactions }
+         } )
+    },
+
+    insertTransaction( transactionId ) {
+        const index = this.model.data.findIndex( datum => datum.id == transactionId ),
+            children = Array.from( this.els.transactions.children ),
+            insertion = index === 0
+                ? { el: children[0], method: 'insertBefore' }
+                : { el: children[ index - 1 ], method: 'after' }
+
+        this.slurpTemplate( {
+            template: this.templates.Transaction( this.model.data[ index ], { currency: this.Currency.format, moment: this.Moment } ),
+            insertion
+         } )
     },
 
     model: require('../models/CsaTransaction'),
@@ -32,8 +82,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 { memberShareId: this.share.membershareid },
                 this.model.attributes.reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } )
             ) )
-            .then( () => {
-                this.insertTransaction( this.model.data[ this.model.data.length - 1 ] )
+            .then( response => {
+                this.insertTransaction( response.id )
                 this.updateBalance()
                 this.Toast.showMessage( 'success', 'Transaction added!' )
                 this.resetState()
@@ -57,37 +107,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
     },
     
-    onCancelBtnClick() {
-        this.resetState()
-    },
-
-    onCancelEmailBtnClick() {
-        this.els.confirmEmail.classList.add( 'fd-hide', 'fd-hidden' )
-        this.showEl( this.els.emailBtn ).catch( this.Error )
-    },
-
-    onConfirmEmailBtnClick() {
-        this.onCancelEmailBtnClick()
-
-        this.Xhr( {
-            method: 'post',
-            resource: 'mail',
-            data: JSON.stringify( {
-                to: this.customer.person.email,
-                subject: `Patchwork Gardens ${this.share.label} Balance`,
-                body: `According to our records, you have an outstanding balance of ${this.els.balance.textContent}.\r\n\r\nPlease send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.\r\n\r\nIf you believe this is incorrect, please contact us by email or phone (937) 835-5807.\r\n\r\nThank You.`
-            } )
-        } )
-        .then( () => this.Toast.showMessage( 'success', 'Email sent.' ) )
-        .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
-    },
-
-    onEmailBtnClick() {
-        this.hideEl( this.els.emailBtn )
-        .then( () => this.showEl( this.els.confirmEmail ) )
-        .catch( this.Error )
-    },
-
     onExClick( e ) {
         if( this.markedForDeletion ) return
         
@@ -110,14 +129,33 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.id == el.getAttribute('data-id') ) } )
     },
 
-    resetState() {
+    postRender() {
+        this.created = new this.Pikaday( { field: this.els.created, format: 'YYYY-MM-DD' } )
+
+        this.views.emailButtons.on( 'confirmEmailClicked', e => this.sendMail() )
+        this.views.addTransactionButtons.on( 'addTransactionClicked', e => this.addTransaction() )
+        this.views.addTransactionButtons.on( 'cancelClicked', e => this.onCancelAddTransaction() )
+
+        return this
+    },
+
+   onCancelAddTransaction() {
         this.els.addTransactionRow.classList.add('hidden')
         this.model.attributes.forEach( attr => this.els[ attr ].value = attr === 'action' ? this.model.actions[0] : '' )
-        this.els.addBtn.textContent = 'Add Transaction'
-        this.els.cancelBtn.classList.add('hidden')
-        if( this.els.transactions.querySelector('.marked') ) this.els.transactions.querySelector('.marked').classList.remove('marked')
-        this.markedForDeletion = undefined
-        this.state = ''
+    },
+
+    sendMail() {
+        return this.Xhr( {
+            method: 'post',
+            resource: 'mail',
+            data: JSON.stringify( {
+                to: this.customer.person.email,
+                subject: `Patchwork Gardens ${this.share.label} Balance`,
+                body: `According to our records, you have an outstanding balance of ${this.els.balance.textContent}.\r\n\r\nPlease send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.\r\n\r\nIf you believe this is incorrect, please contact us by email or phone (937) 835-5807.\r\n\r\nThank You.`
+            } )
+        } )
+        .then( () => this.Toast.showMessage( 'success', 'Email sent.' ) )
+        .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
     templateOpts() {
@@ -135,7 +173,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.clear()
 
         this.model.get( { query: { memberShareId: share.membershareid } } )
-        .then( () => this.model.data.forEach( csaTransaction => this.insertTransaction( csaTransaction ) ) )
+        .then( () => this.model.data.forEach( csaTransaction => this.appendTransaction( csaTransaction ) ) )
         .then( () => this.updateBalance().show() )
         .catch( this.Error )
     },
@@ -144,8 +182,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         const balance = this.model.getBalance()
         this.els.balance.textContent = this.Currency.format( balance )
 
-        if( balance > 0 ) { this.showEl( this.els.emailBtn ) }
-        else { this.hideEl( this.els.emailBtn ) }
+        if( balance > 0 ) { this.views.emailButtons.show() }
+        else { this.views.buttonFlow.hide() }
 
         return this
     }

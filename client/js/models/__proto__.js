@@ -36,10 +36,12 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
             this.data = this.data ? this.data.concat( response ) : [ response ]
 
+            if( this.sortAttr ) this.data.sort( ( a, b ) => a[ this.sortAttr ] > b[ this.sortAttr ] )
+
             if( this.store ) Object.keys( this.store ).forEach( attr => this._store( response, attr ) )
 
             return Promise.resolve( response )
         } )
-    },
+    }
 
 } )
