@@ -22,13 +22,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     getListener( name, button ) {
         return e => {
-            if( button.nextState ) this.onNextState( button.nextState )
-            if( button.emit ) this.emit( `${name}Clicked` )
+            if( button.nextState ) e.fdNextState = this.onNextState( button.nextState )
+            if( button.emit ) this.emit( `${name}Clicked`, e )
         }
     },
 
     onNextState( newState ) {
-        this.hideEl( this.els[ this.state ] )
+        return this.hideEl( this.els[ this.state ] )
         .then( () => {
             this.showEl( this.els[ newState ] )
             return Promise.resolve( this.state = newState )
