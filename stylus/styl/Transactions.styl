@@ -30,9 +30,9 @@
                     background-color: transparent
                     padding: .25rem
                     border: 1px solid black
-                    font-size: .9rem
                     font-weight: bold
                     overflow-x: auto
+                    overflow-y: hidden
                     text-align: center
                     white-space: nowrap
 
@@ -50,29 +50,48 @@
                     flex: 6
                 
                 &:first-child
+                    padding: 0px
+                    position: relative
                     text-align: left
                     flex: 1
 
             .ButtonFlow            
+                height: 100%
+
+                .start
+                    display: flex
+                    height: 100%
+
+                    .garbage, .edit
+                        flex: 1
+                        padding: .2rem
+
+                .onDelete
+                    background-color: $edit-red
+                    height: 100%
+                
+                .onEdit
+                    background-color: $edit-green
+                    height: 100%
+
                 .ex
-                    left: .5rem
-
-                .edit
-                    left: 1.5rem
-
-                .ex, .edit
-                    cursor: pointer
-                    height: 1rem
                     position: absolute
-                    top: .5rem
-                    width: .75rem
+                    right: 0rem
+                    top: 0.1rem
+                    width: 0.5rem
 
+                    &:hover
+                        stroke: red
+                
                 .link
-                    display: block
+                    color: white
+                    font-size: .5rem
+                    padding: 0px
+                    vertical-align: sub
+                    width: 100%
 
-            &.marked
-                background-color: black
-                background-opacity: .5
+            &.confirming-delete
+                background-color: rgba( 0, 0, 0, .2 )
 
     .balance
         display: flex

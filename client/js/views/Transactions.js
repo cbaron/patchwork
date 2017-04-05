@@ -5,16 +5,16 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             hide: true,
             states: {
                 start: [
-                    { name: 'edit', svg: require('./templates/lib/edit'), emit: true, nextState: 'onEdit' },
-                    { name: 'ex', svg: require('./templates/lib/ex'), nextState: 'onDelete' }
+                    { name: 'edit', svg: require('./templates/lib/edit')(), emit: true, nextState: 'onEdit' },
+                    { name: 'garbage', svg: require('./templates/lib/garbage')(), nextState: 'onDelete', emit: true }
                 ],
                 onDelete: [
-                    { name: 'confirmDelete', text: 'Delete', class: 'link', emit: 'true' },
-                    { name: 'cancelDelete', text: 'Cancel', class: 'link', nextState: 'start', emit: true }
+                    { name: 'confirmDelete', class: 'link', 'text': 'Delete?', nextState: 'start', emit: 'true' },
+                    { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
                 ],
                 onEdit: [
-                    { name: 'confirmEdit', text: 'Update', class: 'link', emit: 'true' },
-                    { name: 'cancelEdit', text: 'Cancel', class: 'link', nextState: 'start', emit: true }
+                    { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true' },
+                    { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
                 ]
             }
         } } },
@@ -71,6 +71,25 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             template: this.templates.Transaction( this.model.data[ index ], { currency: this.Currency.format, moment: this.Moment } ),
             insertion
          } )
+    },
+
+    deleteTransaction( e ) {
+        const id = e.target.closest('li').getAttribute('data-id') 
+
+        Promise.all( [
+            this.model.delete( id ),
+            e.fdNextState
+        ] )
+        .then( () => {
+            this.moveOutEditButtons()
+            this.els.transactions.querySelector(`li[data-id="${id}"]`).remove()
+            this.updateBalance()
+            this.Toast.showMessage( 'success', 'Transaction deleted!' )
+        } )
+        .catch( e => {
+            this.Error(e);
+            this.Toast.showMessage( 'error', 'Error adding transaction' )
+        } )
     },
 
     model: require('../models/CsaTransaction'),
@@ -137,13 +156,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onTransactionMouseenter( e ) {
+        if( e.target.tagName !== "LI" ) return
         if( this.views.editButtons.state !== 'start' ) return
         e.target.children[0].appendChild( this.views.editButtons.els.container )
         this.views.editButtons.els.container.classList.remove('fd-hidden', 'fd-hide')
     },
     
     onTransactionMouseleave( e ) {
+        if( e.target.tagName !== "LI" ) return
         if( this.views.editButtons.state !== 'start' ) return
+        this.moveOutEditButtons()
+    },
+
+    moveOutEditButtons() {
         this.els.transactions.after( this.views.editButtons.els.container )
         this.views.editButtons.els.container.classList.add('fd-hidden')
     },
@@ -152,12 +177,18 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.views.emailButtons.on( 'confirmEmailClicked', e => this.sendMail() )
 
+        this.views.editButtons.on( 'garbageClicked', e => this.toggleDeleteStyle( e, true ) )
+        this.views.editButtons.on( 'cancelDeleteClicked', e => this.toggleDeleteStyle( e, false ) )
+        this.views.editButtons.on( 'confirmDeleteClicked', e => this.deleteTransaction( e ) )
+
         this.model.on( 'added', datum => this.onModelAdd( datum ) )
 
         return this
     },
 
-    
+    toggleDeleteStyle( e, value ) {
+        e.target.closest('li').classList.toggle( 'confirming-delete', value )
+    },
 
     onCancelAddTransaction() {
         this.els.addTransactionRow.classList.add('hidden')
@@ -183,8 +214,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
-    
-
     templates: {
         Transaction: require('./templates/CsaTransaction')
     },
@@ -208,7 +237,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.balance.textContent = this.Currency.format( balance )
 
         if( balance > 0 ) { this.views.emailButtons.show() }
-        else { this.views.buttonFlow.hide() }
+        else { this.views.emailButtons.hide() }
 
         return this
     }

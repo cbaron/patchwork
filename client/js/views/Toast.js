@@ -1,8 +1,8 @@
 module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
 
     Icons: {
-        error: require('./templates/lib/error'),
-        success: require('./templates/lib/checkmark')
+        error: require('./templates/lib/error')(),
+        success: require('./templates/lib/checkmark')()
     },
 
     insertion: { el: document.body },
