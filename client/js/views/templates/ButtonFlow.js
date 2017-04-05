@@ -11,5 +11,5 @@ Object.keys( p.states ).map( stateName =>
     ).join('') +
     `</div>`
 ).join('') +
-`</section`
+`</section>`
 }

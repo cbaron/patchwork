@@ -3,8 +3,40 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     DeliveryOptions: Object.create( require('../models/__proto__'), { resource: { value: 'deliveryoption' } } ),
     GroupDropoffs: Object.create( require('../models/__proto__'), { resource: { value: 'groupdropoff' } } ),
     MemberSelection: require('../models/MemberSelection'),
+    MemberShareDelivery: Object.create( require('../models/__proto__'), { resource: { value: 'membersharedelivery' } } ),
+    MemberShareOption: Object.create( require('../models/__proto__'), { resource: { value: 'membershareoption' } } ),
     OrderOption: require('../models/OrderOption'),
     OrderOptionOptions: Object.create( require('../models/__proto__'), { resource: { value: 'shareoptionoption' } } ),
+
+    calculatePriceAdjustment() {
+        const adjustment = Object.keys( this.editedFields ).reduce( ( acc, key ) => {
+            if( ! this.editedFields[ key ].newValue || key === 'groupOption' ) return acc
+
+            let oldPrice, newPrice, diff
+
+            if( key === 'deliveryOption' ) {
+                oldPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
+                newPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).price
+            } else {
+                const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
+
+                oldPrice = this.OrderOptionOptions.data.find(
+                    option => option.name === this.editedFields[ key ].oldValue && option.shareoptionid === shareOptionId
+                ).price
+
+                newPrice = this.OrderOptionOptions.data.find(
+                    option => option.name === this.editedFields[ key ].newValue && option.shareoptionid === shareOptionId
+                ).price
+            }
+
+            diff = newPrice.slice( newPrice.indexOf('$') + 1 ) - oldPrice.slice( oldPrice.indexOf('$') + 1 )
+
+            return acc + diff
+
+        }, 0 )
+
+        return Promise.resolve( adjustment )
+    },
 
     clear() {
         this.els.options.innerHTML = ''
@@ -24,6 +56,98 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         resetBtn: 'click'
     },
 
+    getDeliveryData( key ) {
+        if( this.editedFields[ key ].newValue === 'group' && ! this.editedFields.groupOption.newValue ) return
+
+        const oldDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).id,
+              newDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).id,
+              dropoffId = ( this.editedFields[ key ].newValue === 'group' )
+                ? this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
+                : null
+
+        return this.MemberShareDelivery.get( { query: { deliveryoptionid: oldDeliveryId, membershareid: this.memberShareId } } )
+        .then( () => {
+            let patchId
+            if( this.MemberShareDelivery.data.length ) patchId = this.MemberShareDelivery.data[0].id
+
+            this.deliveryData.push( {
+                id: patchId,
+                data: {
+                    deliveryoptionid: newDeliveryId,
+                    groupdropoffid: dropoffId,
+                }
+            } )
+
+            return Promise.resolve()
+        } )
+    },
+
+    getGroupData( key ) {
+        if( this.editedFields.deliveryOption.newValue ) return
+
+        const deliveryId = this.DeliveryOptions.data.find( option => option.name === this.els.deliveryOption.value ).id,
+              dropoffId = this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
+
+        return this.MemberShareDelivery.get( { query: { deliveryoptionid: deliveryId, membershareid: this.memberShareId } } )
+        .then( () => {
+            let patchId
+            if( this.MemberShareDelivery.data.length ) patchId = this.MemberShareDelivery.data[0].id
+
+            this.deliveryData.push( {
+                id: patchId,
+                data: {
+                    groupdropoffid: dropoffId
+                }
+            } )
+
+            return Promise.resolve()
+        } )
+    },
+
+    getShareOptionData( key ) {
+        const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
+
+        const shareOptionOptionId = this.OrderOptionOptions.data.find(
+            option => option.name === this.editedFields[ key ].newValue && option.shareoptionid === shareOptionId
+        ).id
+
+        return this.MemberShareOption.get( { query: { shareoptionid: shareOptionId, membershareid: this.memberShareId } } )
+        .then( () => {
+            let patchId
+            if( this.MemberShareOption.data.length ) patchId = this.MemberShareOption.data[0].id
+
+            this.shareOptionData.push( {
+                id: patchId,
+                data: {
+                    shareoptionoptionid: shareOptionOptionId
+                }
+            } )
+
+            return Promise.resolve()
+        } )
+    },
+
+    getPatchData() {
+        this.deliveryData = [ ],
+        this.shareOptionData = [ ],
+        this.memberShareId = this.model.share.membershareid
+
+        return Promise.all( Object.keys( this.editedFields ).map( key => {
+            if( ! this.editedFields[ key ].newValue ) return Promise.resolve()
+
+            return ( key === 'deliveryOption' )
+                ? this.getDeliveryData( key )
+                : ( key === 'groupOption' )
+                    ? this.getGroupData( key )
+                    : this.getShareOptionData( key )            
+        } ) )
+        .then( () => {
+            this.data = Object.assign( { }, { delivery: this.deliveryData, shareOptions: this.shareOptionData } )
+            return Promise.resolve( this.data )
+        } )
+
+    },
+
     onOptionsChange( e ) {
         const shareOptionKey = e.target.closest('li.editable').getAttribute('data-name'),
               val = e.target.value
@@ -31,12 +155,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( shareOptionKey === 'deliveryOption' && val !== 'group' ) this.emit( 'deliveryChanged', { deliveryOption: val } )
         if( shareOptionKey === 'groupOption' && val !== 'none' ) this.emit( 'deliveryChanged', { deliveryOption: 'group', groupOption: val } )
 
-        if( shareOptionKey === 'deliveryOption' && val !== 'group' ) {
-            this.els.groupOption.selectedIndex = 0
-            this.els.groupOption.disabled = true
-            this.els.groupOption.closest('li').classList.remove('edited')
-            if( this.editedFields.groupOption ) this.editedFields.groupOption.newValue = undefined
-        } else { this.els.groupOption.disabled = false }
+        if( shareOptionKey === 'deliveryOption' ) {
+            if( val !== 'group' ) {
+                this.els.groupOption.selectedIndex = 0
+                this.els.groupOption.disabled = true
+                this.els.groupOption.closest('li').classList.remove('edited')
+                this.editedFields.groupOption.newValue = undefined
+            } else { this.els.groupOption.disabled = false }
+        }
 
         if( this.editedFields[ shareOptionKey ].oldValue === val ) {
             this.editedFields[ shareOptionKey ].newValue = undefined
@@ -59,20 +185,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'reset', this.model )
     },
 
-    onSelectFocus( e ) {
-        const shareOptionKey = e.target.closest('li.editable').getAttribute('data-name')
-
-        if( ! this.editedFields[ shareOptionKey ] ) {
-            this.editedFields[ shareOptionKey ] = { }
-            this.editedFields[ shareOptionKey ].oldValue = e.target.value
-        }
-    },
-
-    postRender() {
-        this.els.options.addEventListener( 'focus', e => this.onSelectFocus( e ), true )
-        return this
-    },
-
     renderDeliveryOptions() {
         const option = this.model.delivery.data[0]
 
@@ -87,6 +199,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             )
 
             this.els.deliveryOption.querySelector(`option[value=${CSS.escape( option.deliveryoption.name )}`).selected = true
+            this.editedFields.deliveryOption = { }
+            this.editedFields.deliveryOption.oldValue = this.els.deliveryOption.value
 
             this.GroupDropoffs.data.unshift( { name: 'none', label: 'None' } )
             this.GroupDropoffs.data.forEach( option =>
@@ -97,6 +211,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 this.els.groupOption.selectedIndex = 0
                 this.els.groupOption.disabled = true
             } else this.els.groupOption.querySelector(`option[value=${CSS.escape( option.groupdropoff.name )}`).selected = true
+
+            this.editedFields.groupOption = { }
+            this.editedFields.groupOption.oldValue = this.els.groupOption.disabled ? undefined : this.els.groupOption.value
 
         } else {
             this.els.deliveryOption.textContent = option.deliveryoption.label
@@ -120,9 +237,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.MemberSelection.data.forEach( selection => {
-            this.editable
-                ? this.els[ selection.shareoptionid ].querySelector(`option[value=${CSS.escape( selection.name )}`).selected = true
-                : this.els[ selection.shareoptionid ].textContent = selection.label
+            if( this.editable ) {
+                const key = this.OrderOption.data.find( shareOption => shareOption.id === selection.shareoptionid ).key
+                this.els[ selection.shareoptionid ].querySelector(`option[value=${CSS.escape( selection.name )}`).selected = true
+                this.editedFields[ key ] = { }
+                this.editedFields[ key ].oldValue = this.els[ selection.shareoptionid ].value
+            } else { this.els[ selection.shareoptionid ].textContent = selection.label }
         } )
 
     },
@@ -133,7 +253,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.options.querySelectorAll('li.edited').forEach( el => {
             const fieldName = el.getAttribute('data-name'),
                   fieldLabel = this.capitalizeFirstLetter( fieldName ),
-                  oldValue = this.editedFields[ fieldName ].oldValue.toString(),
+                  oldValue = this.editedFields[ fieldName ].oldValue
+                    ? this.editedFields[ fieldName ].oldValue.toString()
+                    : 'none',
                   newValue = this.editedFields[ fieldName ].newValue.toString()
 
             this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.templates.fieldEdit( { label: fieldLabel, oldValue, newValue } ) } )

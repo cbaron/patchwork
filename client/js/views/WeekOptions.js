@@ -51,6 +51,23 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this
     },
 
+    getDateData() {
+        const addedDates = [ ],
+              removedDates = [ ]
+
+        Object.keys( this.changedDates ).forEach( date => {
+            const editedStatus = this.changedDates[ date ].editedStatus
+
+            if( !editedStatus ) return
+
+            const formattedDate = this.Moment( date ).format("YYYY-MM-DD")
+            if( editedStatus === 'selected' ) addedDates.push( formattedDate )
+            else removedDates.push( formattedDate )
+
+            return Promise.resolve( Object.assign( {}, { addedDates, removedDates } ) )
+        } )
+    },
+
     getDayOfWeek() {
         const delivery = this.model.delivery.data[0]
 
@@ -68,6 +85,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     } )
                   } )
                   .then( response => Promise.resolve( response[0][ 'deliveryroute.dayofweek' ] ) )
+    },
+
+    getTotalDates() {
+        return this.els.dates.querySelectorAll('li.selected').length
     },
 
     onDatesClick( e ) {
@@ -101,6 +122,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
 
         this.showEditSummary()
+        this.getDateData()
     },
 
     onResetBtnClick() {
@@ -162,7 +184,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         return this.DeliveryOption.get( { query: { name: data.deliveryOption } } )
         .then( () => {
-            modelCopy.delivery.data[0].deliveryoption = this.DeliveryOption.data[0]
+            if( this.DeliveryOption.data.length ) modelCopy.delivery.data[0].deliveryoption = this.DeliveryOption.data[0]
 
             if( ! data.groupOption ) {
                 Object.keys( modelCopy.delivery.data[0].groupdropoff ).forEach( key =>
@@ -173,7 +195,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             return ( data.groupOption )
                 ? this.GroupDropoffs.get( { query: { name: data.groupOption } } )
                   .then( () => {
-                    modelCopy.delivery.data[0].groupdropoff = this.GroupDropoffs.data[0]
+                    if( this.GroupDropoffs.data.length ) modelCopy.delivery.data[0].groupdropoff = this.GroupDropoffs.data[0]
                     this.update( modelCopy )
                   } )
                 : this.update( modelCopy )
