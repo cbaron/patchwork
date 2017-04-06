@@ -36,7 +36,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( el.textContent !== this.model[ field.table ].data[ field.name ] ) {
             el.classList.add('edited')
-            this.editedFields[ field.name ] = el.textContent || null
+            this.editedFields[ field.name ] = el.textContent.trim() || null
             this.showEditSummary()
         }
     },
@@ -66,11 +66,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.showEditSummary()
     },
 
-    onResetBtnClick() {
-        this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
-        this.update( this.model )
-    },
+    onResetBtnClick() { this.reset( this.model ) },
 
     onSaveBtnClick() {
         const resourcesToUpdate = [ ]
@@ -90,7 +86,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => {            
             this.els.resetBtn.classList.add('hidden')
             this.els.editSummary.classList.add('hidden')
-            this.clearEditStyles()
 
             this.Toast.showMessage( 'success', 'Customer Info Updated!' )
             this.update( this.model )
@@ -132,6 +127,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.on( 'edited', e => this.handleEdit( e ) )
 
         return this
+    },
+
+    reset( customer ) {
+        this.els.resetBtn.classList.add('hidden')
+        this.els.editSummary.classList.add('hidden')
+        this.update( customer )
     },
 
     showEditSummary() {

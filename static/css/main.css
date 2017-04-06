@@ -201,9 +201,11 @@
 }
 .ManageCustomer .content {
   display: flex;
+  align-items: flex-start;
 }
 .ManageCustomer .content .data {
   text-align: center;
+  width: 50%;
 }
 .ManageCustomer .content .edit-summary {
   margin-left: 3rem;
@@ -433,7 +435,7 @@
 .WeekOptions .content .data ol {
   display: flex;
   flex-wrap: wrap;
-  width: 75%;
+  width: 90%;
   margin-top: 1rem;
 }
 .WeekOptions .content .data ol .delivery-date {
@@ -486,7 +488,7 @@
   padding: 0 1rem;
 }
 .WeekOptions .content .edit-summary >div:nth-child(2) .column .added-dates {
-  color: rgba(169,23,23,0.7);
+  color: rgba(57,132,57,0.8);
 }
 .WeekOptions .content .edit-summary >div:nth-child(2) .column .removed-dates {
   color: rgba(169,23,23,0.7);

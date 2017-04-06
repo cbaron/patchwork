@@ -10,8 +10,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             delay: 500,
             selector: this.els.customerInput,
             minChars: 3,
+            cache: false,
             source: ( term, suggest ) => {
-                this.search( 'name', term, suggest )
+                this.search( 'name', term.trim(), suggest )
                 .then( found => found ? Promise.resolve(true) : this.search( 'email', term, suggest ) )
                 .then( found => found ? Promise.resolve(true) : this.search( 'secondaryEmail', term, suggest ) )
                 .then( found => found ? Promise.resolve(true) : suggest([]) )
@@ -31,8 +32,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.initAutoComplete()
 
         this.on( 'customerSelected', customer => {
-            this.views.customerInfo.update( customer )
+            this.views.customerInfo.reset( customer )
             this.views.seasons.update( customer )
+            this.views.orderOptions.hide()
+            this.views.weekOptions.hide()
+            this.views.transactions.hide()
         } )
 
         this.views.seasons.on( 'selected', data => {
@@ -66,7 +70,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
             if( ! this.Customer.data.length ) return Promise.resolve( false )
-   
+            
             this.attr = attr            
             suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
             return Promise.resolve( true )

@@ -20,6 +20,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onListClick( e ) {
+        if( ! e.target.closest('div.share-label') ) return
+            
         if( this.currentSelection ) this.currentSelection.classList.remove('selected')
         
         const el = e.target.closest('div.share-label')
