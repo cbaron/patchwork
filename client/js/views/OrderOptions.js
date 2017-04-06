@@ -145,6 +145,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.data = Object.assign( { }, { delivery: this.deliveryData, shareOptions: this.shareOptionData } )
             return Promise.resolve( this.data )
         } )
+        .catch( this.Error )
 
     },
 

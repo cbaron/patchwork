@@ -63,9 +63,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             const formattedDate = this.Moment( date ).format("YYYY-MM-DD")
             if( editedStatus === 'selected' ) addedDates.push( formattedDate )
             else removedDates.push( formattedDate )
-
-            return Promise.resolve( Object.assign( {}, { addedDates, removedDates } ) )
         } )
+
+        return Promise.resolve( Object.assign( {}, { addedDates, removedDates } ) )
     },
 
     getDayOfWeek() {
@@ -122,7 +122,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
 
         this.showEditSummary()
-        this.getDateData()
     },
 
     onResetBtnClick() {
