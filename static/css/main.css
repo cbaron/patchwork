@@ -5,14 +5,17 @@
   display: flex;
   opacity: 0.25;
 }
+.AddTransaction form >span {
+  flex: 1;
+}
 .AddTransaction form >select,
 .AddTransaction form >input {
-  flex: 2;
+  flex: 4;
   margin: 0.25rem;
 }
 .AddTransaction form >select:last-child,
 .AddTransaction form >input:last-child {
-  flex: 4;
+  flex: 6;
 }
 .AddTransaction form.active {
   opacity: 1;
@@ -338,11 +341,18 @@
   display: flex;
   position: relative;
 }
-.Transactions ol li span {
-  flex: 4;
-  padding: 1rem;
+.Transactions ol li >input,
+.Transactions ol li select {
+  margin: 0.25rem;
 }
-.Transactions ol li span.cell {
+.Transactions ol li > span,
+.Transactions ol li input,
+.Transactions ol li select {
+  flex: 4;
+}
+.Transactions ol li > span.cell,
+.Transactions ol li input.cell,
+.Transactions ol li select.cell {
   background-color: transparent;
   padding: 0.25rem;
   border: 1px solid #000;
@@ -352,20 +362,30 @@
   text-align: center;
   white-space: nowrap;
 }
-.Transactions ol li span.negative {
+.Transactions ol li > span.negative,
+.Transactions ol li input.negative,
+.Transactions ol li select.negative {
   color: #f00;
 }
-.Transactions ol li span.negative:before {
+.Transactions ol li > span.negative:before,
+.Transactions ol li input.negative:before,
+.Transactions ol li select.negative:before {
   content: '(';
 }
-.Transactions ol li span.negative:after {
+.Transactions ol li > span.negative:after,
+.Transactions ol li input.negative:after,
+.Transactions ol li select.negative:after {
   content: ')';
 }
-.Transactions ol li span:last-child {
+.Transactions ol li > span:last-child,
+.Transactions ol li input:last-child,
+.Transactions ol li select:last-child {
   text-align: left;
   flex: 6;
 }
-.Transactions ol li span:first-child {
+.Transactions ol li > span:first-child,
+.Transactions ol li input:first-child,
+.Transactions ol li select:first-child {
   padding: 0px;
   position: relative;
   text-align: left;
@@ -409,6 +429,12 @@
 }
 .Transactions ol li.confirming-delete {
   background-color: rgba(0,0,0,0.2);
+}
+.Transactions ol li.edit-transaction {
+  background-color: rgba(57,132,57,0.8);
+}
+.Transactions ol li.confirming-edit .cell:not(:first-child) {
+  opacity: 0.5;
 }
 .Transactions .balance {
   display: flex;

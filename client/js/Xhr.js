@@ -35,6 +35,7 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
         setHeaders( req, headers={} ) {
             req.setRequestHeader( "Accept", headers.accept || 'application/json' )
             req.setRequestHeader( "Content-Type", headers.contentType || 'text/plain' )
+            Object.keys( headers ).forEach( key => req.setRequestHeader( key, headers[ key ] ) )
         }
     },
 

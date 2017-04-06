@@ -38,6 +38,11 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         PATCH: function() {
+            if( this.request.headers.v2 ) {
+                this.path.shift()
+                this.veeTwo = true
+                return
+            }
             this.body = this._.omit( this.body, [ 'id', 'serverId', 'updated', 'updatedAt', 'created', 'createdAt' ] )
         },
 
@@ -55,7 +60,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     db: {
         DELETE: function() { return this.dbQuery( this.queryBuilder.deleteQuery.call( this ) ) },
         GET: function() { return this.veeTwo ? this.Db.GET( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
-        PATCH: function() { return this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
+        PATCH: function() { return this.veeTwo ? this.Db.PATCH( this ) : this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
         POST: function() { return this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
     },
 
@@ -155,7 +160,9 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         PATCH: function( result ) {
-            var payload = { body: { success: true } };
+            if( this.veeTwo ) { return this.Response.PATCH( this, result ) }
+
+            const payload = { body: { success: true } };
 
             if( this.request.headers.iosapp ) payload.body.result = { updatedAt: result.rows[0].updatedAt }
 

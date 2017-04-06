@@ -18,7 +18,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     addTransaction() {
         return this.model.post( Object.assign(
             { memberShareId: this.memberShareId },
-            this.model.attributes.reduce( ( memo, attr ) => Object.assign( memo, { [ attr ]: this.els[attr].value } ), { } )
+            this.model.attributes.reduce( ( memo, attr ) =>
+                Object.assign( memo, { [ attr ]:
+                    attr === 'created'
+                        ? this.Moment( this.els[attr].value, 'MMM D, YYYY' ).format('YYYY-MM-DD') 
+                        : this.els[attr].value
+                } ),
+                { }
+            ) 
         ) )
         .then( () => this.Toast.showMessage( 'success', 'Transaction added!' ) )
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error adding transaction' ) } )
@@ -45,7 +52,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els[ attr ].addEventListener( 'blur', e => this.onAddBlur(e) )
         } )
 
-        this.created = new this.Pikaday( { field: this.els.created, format: 'YYYY-MM-DD' } )
+        this.created = new this.Pikaday( { field: this.els.created, format: 'MMM D, YYYY' } )
 
         this.views.buttonFlow.on( 'confirmAddClicked', e => this.addTransaction() )
         this.views.buttonFlow.on( 'cancelClicked', e => this.onCancel() )
@@ -54,7 +61,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     reset() {
-        const now = this.Moment().format('YYYY-MM-DD')
+        const now = this.Moment().format('MMM D, YYYY')
         this.model.attributes.forEach( attr =>
             this.els[ attr ].value =
                 attr === 'action'

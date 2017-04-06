@@ -1,5 +1,12 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    Pikaday: require('pikaday'),
+    
+    Templates: {
+        Transaction: require('./templates/CsaTransaction'),
+        EditTransaction: require('./templates/EditCsaTransaction')
+    },
+
     Views: {
         editButtons: { model: { value: {
             hide: true,
@@ -13,7 +20,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
                 ],
                 onEdit: [
-                    { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true' },
+                    { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true', nextState: 'start' },
                     { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
                 ]
             }
@@ -53,7 +60,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     appendTransaction( transaction ) {
         this.slurpTemplate( {
-            template: this.templates.Transaction(
+            template: this.Templates.Transaction(
                 transaction,
                 { currency: this.Currency.format, moment: this.Moment } ),
             insertion: { el: this.els.transactions }
@@ -66,11 +73,44 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             insertion = index === 0
                 ? { el: children[0], method: 'insertBefore' }
                 : { el: children[ index - 1 ], method: 'after' }
-
+        
         this.slurpTemplate( {
-            template: this.templates.Transaction( this.model.data[ index ], { currency: this.Currency.format, moment: this.Moment } ),
+            template: this.Templates.Transaction( this.model.data[ index ], { currency: this.Currency.format, moment: this.Moment } ),
             insertion
          } )
+    },
+
+    editTransaction( e ) {
+        const el = e.target.closest('li'),
+            id = el.getAttribute('data-id') 
+
+        return Promise.all( [
+            this.model.patch(
+                id,
+                this.model.attributes.reduce( ( memo, attr ) =>
+                    Object.assign( memo, { [ attr ]:
+                        attr === 'created'
+                            ? this.Moment( this.els.editTransaction.querySelector(`[data-attr="created"]`).value, 'MMM D, YYYY' ).format('YYYY-MM-DD')
+                            : this.els.editTransaction.querySelector(`[data-attr="${attr}"]`).value
+                    } ),
+                    { }
+                )
+            ),
+            e.fdNextState
+        ] )
+        .then( datum => {
+            this.removeEditRow()
+            this.moveOutEditButtons()
+            el.remove()
+            this.insertTransaction(id)
+            this.updateBalance()
+            this.Toast.showMessage( 'success', 'Transaction edited!' )
+        } )
+        .catch( e => {
+            this.removeEditRow()
+            this.Error(e);
+            this.Toast.showMessage( 'error', 'Error editing transaction' )
+        } )
     },
 
     deleteTransaction( e ) {
@@ -177,6 +217,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.views.emailButtons.on( 'confirmEmailClicked', e => this.sendMail() )
 
+        this.views.editButtons.on( 'editClicked', e => this.createEditRow( e ) )
+        this.views.editButtons.on( 'cancelEditClicked', e => this.removeEditRow( e ) )
+        this.views.editButtons.on( 'confirmEditClicked', e => this.editTransaction( e ) )
+
         this.views.editButtons.on( 'garbageClicked', e => this.toggleDeleteStyle( e, true ) )
         this.views.editButtons.on( 'cancelDeleteClicked', e => this.toggleDeleteStyle( e, false ) )
         this.views.editButtons.on( 'confirmDeleteClicked', e => this.deleteTransaction( e ) )
@@ -184,6 +228,36 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.model.on( 'added', datum => this.onModelAdd( datum ) )
 
         return this
+    },
+
+    createEditRow( e ) {
+        this.editedRow = e.target.closest('li')
+        this.editedRow.classList.add('confirming-edit')
+
+        const model = this.model.data.find( datum => datum.id == this.editedRow.getAttribute('data-id') )
+
+        this.slurpTemplate( {
+            insertion: { el: this.editedRow, method: 'after' },
+            template: this.Templates.EditTransaction(
+                this.model.attributes.reduce( ( memo, attr ) =>
+                    Object.assign( memo, { [ attr ]:
+                        attr === 'created'
+                            ? this.Moment( model.created ).format('MMM D, YYYY')
+                            : model[ attr ]
+                    } ),
+                    { actions: this.model.actions }
+                )
+            )
+        } )
+
+        this.created = new this.Pikaday( { field: this.els.editTransaction.querySelector(`input[data-attr="created"]`), format: 'MMM D, YYYY' } )
+    },
+
+    removeEditRow( e ) {
+        this.editedRow.classList.remove('confirming-edit')
+        this.editedRow = undefined
+        this.els.editTransaction.remove()
+        delete this.els.editTransaction
     },
 
     toggleDeleteStyle( e, value ) {
@@ -214,9 +288,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
-    templates: {
-        Transaction: require('./templates/CsaTransaction')
-    },
+    
 
     update( { customer, share } ) {
         this.customer = customer

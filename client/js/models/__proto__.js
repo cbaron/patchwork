@@ -29,6 +29,24 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         } )
     },
 
+    patch( id, data ) {
+        return this.Xhr( { method: 'patch', id, resource: this.resource, headers: Object.assign( { v2: true }, this.headers || {} ), data: JSON.stringify( data ) } )
+        .then( response => {
+            if( this.parse ) response = this.parse( [ response ] )[0]
+
+            const oldDataIndex = this.data.findIndex( datum => datum.id == response.id )
+
+            console.log( oldDataIndex )
+            console.log( this.data )
+
+            this.data.splice( oldDataIndex, 1, response )
+            
+            if( this.sortAttr ) this.data.sort( ( a, b ) => a[ this.sortAttr ] > b[ this.sortAttr ] )
+
+            return Promise.resolve( response )
+        } )
+    },
+
     post( model ) {
         return this.Xhr( { method: 'post', resource: this.resource, headers: this.headers || {}, data: JSON.stringify( model ) } )
         .then( response => {

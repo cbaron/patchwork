@@ -3,10 +3,11 @@ module.exports = ( p, { Moment } ) => {
     return `` +
 `<div>
     <form data-js="form">
+        <span></span>
         <select data-js="action">${actions}</select>
         <input type="text" data-js="value" placeholder="$0.00"/>
         <input type="text" data-js="checkNumber" placeholder="1234"/>
-        <input type="text" data-js="created" value="${Moment().format('YYYY-MM-DD')}" />
+        <input type="text" data-js="created" value="${Moment().format('MMM D, YYYY')}" />
         <input type="text" data-js="description" placeholder="description"/>
     </form>
     <div data-view="buttonFlow"></div>

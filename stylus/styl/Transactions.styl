@@ -16,15 +16,17 @@
             
             &:first-child
                 flex: 1
-    
+
     ol
         li
             display: flex
             position: relative
 
-            span
+            >input, select
+                margin: .25rem
+
+            > span, input, select
                 flex: 4
-                padding: 1rem
 
                 &.cell
                     background-color: transparent
@@ -92,6 +94,14 @@
 
             &.confirming-delete
                 background-color: rgba( 0, 0, 0, .2 )
+            
+            &.edit-transaction
+                background-color: $edit-green
+
+            &.confirming-edit
+                .cell
+                    &:not(:first-child)
+                        opacity: .5
 
     .balance
         display: flex
