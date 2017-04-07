@@ -81,6 +81,18 @@
     select:focus
         outline: 0
 
+    .original-price
+        color: $edit-red
+    
+    .new-price
+        color: $edit-green
+
+    .price-change
+        color: $edit-green
+        
+        &.is-negative
+            color: $edit-red
+
     .content
         display: flex
         align-items: flex-start

@@ -24,6 +24,10 @@ module.exports = p =>
                     <ol data-js="removedDates" class="removed-dates"></ol>
                 </div>
             </div>
+            <div>
+                <span>Week count adjustment: </span>
+                <span class="price-change" data-js="weekChange"></span>
+            </div>
         </div>
     </div>
 </div>`

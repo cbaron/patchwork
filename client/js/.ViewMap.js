@@ -23,6 +23,7 @@ module.exports={
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),
 	ShareBox: require('./views/ShareBox'),
+	SharePatch: require('./views/SharePatch'),
 	Signup: require('./views/Signup'),
 	Toast: require('./views/Toast'),
 	Transactions: require('./views/Transactions'),

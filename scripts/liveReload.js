@@ -12,4 +12,4 @@ server = require('livereload').createServer( {
     originalPath: `https://${process.env.DOMAIN}.com`
 } )
 
-server.watch( `${__dirname}/../static` )
+server.watch( `${__dirname}/../dist` )

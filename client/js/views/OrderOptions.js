@@ -1,15 +1,22 @@
+const Model = require('../models/__proto__')
+
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    DeliveryOptions: Object.create( require('../models/__proto__'), { resource: { value: 'deliveryoption' } } ),
-    GroupDropoffs: Object.create( require('../models/__proto__'), { resource: { value: 'groupdropoff' } } ),
+    DeliveryOptions: Object.create( Model, { resource: { value: 'deliveryoption' } } ),
+    GroupDropoffs: Object.create( Model, { resource: { value: 'groupdropoff' } } ),
     MemberSelection: require('../models/MemberSelection'),
-    MemberShareDelivery: Object.create( require('../models/__proto__'), { resource: { value: 'membersharedelivery' } } ),
-    MemberShareOption: Object.create( require('../models/__proto__'), { resource: { value: 'membershareoption' } } ),
+    MemberShareDelivery: Object.create( Model, { resource: { value: 'membersharedelivery' } } ),
+    MemberShareOption: Object.create( Model, { resource: { value: 'membershareoption' } } ),
     OrderOption: require('../models/OrderOption'),
-    OrderOptionOptions: Object.create( require('../models/__proto__'), { resource: { value: 'shareoptionoption' } } ),
+    ShareOptionOption: require('../models/ShareOptionOption'),
+
+    calculateWeeklyPrice() {
+        let optionPrice = this.MemberSelection.data.reduce( ( sum, selection ) => sum + Model.moneyToReal( selection.price ), 0 )
+        return optionPrice + Model.moneyToReal( this.model.delivery.data[0].deliveryoption.price )
+    },
 
     calculatePriceAdjustment() {
-        const adjustment = Object.keys( this.editedFields ).reduce( ( acc, key ) => {
+        return Object.keys( this.editedFields ).reduce( ( acc, key ) => {
             if( ! this.editedFields[ key ].newValue || key === 'groupOption' ) return acc
 
             let oldPrice, newPrice, diff
@@ -20,22 +27,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             } else {
                 const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
 
-                oldPrice = this.OrderOptionOptions.data.find(
+                oldPrice = this.ShareOptionOption.data.find(
                     option => option.name === this.editedFields[ key ].oldValue && option.shareoptionid === shareOptionId
                 ).price
 
-                newPrice = this.OrderOptionOptions.data.find(
+                newPrice = this.ShareOptionOption.data.find(
                     option => option.name === this.editedFields[ key ].newValue && option.shareoptionid === shareOptionId
                 ).price
             }
 
-            diff = newPrice.slice( newPrice.indexOf('$') + 1 ) - oldPrice.slice( oldPrice.indexOf('$') + 1 )
+            diff = Model.moneyToReal( newPrice ) - Model.moneyToReal( oldPrice )
 
             return acc + diff
 
         }, 0 )
-
-        return Promise.resolve( adjustment )
     },
 
     clear() {
@@ -47,13 +52,28 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             container: this.els.container,
             seasonLabel: this.els.seasonLabel,
             options: this.els.options,
-            resetBtn: this.els.resetBtn
+            resetBtn: this.els.resetBtn,
+            newWeeklyPrice: this.els.newWeeklyPrice,
+            originalWeeklyPrice: this.els.originalWeeklyPrice
         }
     },
 
     events: {
         options: 'change',
         resetBtn: 'click'
+    },
+
+    getAdjustmentDescription() {
+        Array.from( this.els.options.querySelectorAll('li.edited') ).map( el => {
+            const fieldName = el.getAttribute('data-name'),
+                  fieldLabel = this.capitalizeFirstLetter( fieldName ),
+                  oldValue = this.editedFields[ fieldName ].oldValue
+                    ? this.editedFields[ fieldName ].oldValue.toString()
+                    : 'none',
+                  newValue = this.editedFields[ fieldName ].newValue.toString()
+
+            return `${fieldLabel}: ${oldValue} to ${newValue}`
+        } ).join(', ')
     },
 
     getDeliveryData( key ) {
@@ -107,7 +127,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     getShareOptionData( key ) {
         const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
 
-        const shareOptionOptionId = this.OrderOptionOptions.data.find(
+        const shareOptionOptionId = this.ShareOptionOption.data.find(
             option => option.name === this.editedFields[ key ].newValue && option.shareoptionid === shareOptionId
         ).id
 
@@ -150,8 +170,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOptionsChange( e ) {
-        const shareOptionKey = e.target.closest('li.editable').getAttribute('data-name'),
-              val = e.target.value
+        const listItemEl = e.target.closest('li.editable'),
+            shareOptionKey = listItemEl.getAttribute('data-name'),
+            val = e.target.value
 
         if( shareOptionKey === 'deliveryOption' && val !== 'group' ) this.emit( 'deliveryChanged', { deliveryOption: val } )
         if( shareOptionKey === 'groupOption' && val !== 'none' ) this.emit( 'deliveryChanged', { deliveryOption: 'group', groupOption: val } )
@@ -167,21 +188,21 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( this.editedFields[ shareOptionKey ].oldValue === val ) {
             this.editedFields[ shareOptionKey ].newValue = undefined
-            e.target.closest('li.editable').classList.remove('edited')
+            listItemEl.classList.remove('edited')
             return this.showEditSummary()
         }
 
         this.editedFields[ shareOptionKey ].newValue = val
-        e.target.closest('li.editable').classList.add('edited')
+        listItemEl.classList.add('edited')
 
-        this.els.resetBtn.classList.remove('hidden')
+        this.els.resetBtn.classList.remove('fd-hidden')
 
         this.showEditSummary()
     },
 
     onResetBtnClick() {
-        this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
+        this.els.resetBtn.classList.add('fd-hidden')
+        this.els.editSummary.classList.add('fd-hidden')
         this.update( this.model )
         this.emit( 'reset', this.model )
     },
@@ -229,7 +250,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( shareOption ), insertion: { el: this.els.options } } )
             
             if( this.editable ) {
-                this.OrderOptionOptions.data.forEach( option => {
+                this.ShareOptionOption.data.forEach( option => {
                     if( option.shareoptionid === shareOption.id ) this.slurpTemplate( {
                         template: this.templates.selectOption( option ), insertion: { el: this.els[ shareOption.id ] }
                     } )
@@ -249,9 +270,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     showEditSummary() {
+        const originalWeeklyPrice = this.calculateWeeklyPrice(),
+            priceAdjustment = this.calculatePriceAdjustment(),
+            edits = this.els.options.querySelectorAll('li.edited')
+
         this.els.changes.innerHTML = ''
+
+        if( edits.length === 0 ) {
+            this.emit( 'reset' )
+            this.els.resetBtn.classList.add('fd-hidden')
+            return this.els.editSummary.classList.add('fd-hidden')
+        }
         
-        this.els.options.querySelectorAll('li.edited').forEach( el => {
+        edits.forEach( el => {
             const fieldName = el.getAttribute('data-name'),
                   fieldLabel = this.capitalizeFirstLetter( fieldName ),
                   oldValue = this.editedFields[ fieldName ].oldValue
@@ -260,10 +291,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                   newValue = this.editedFields[ fieldName ].newValue.toString()
 
             this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.templates.fieldEdit( { label: fieldLabel, oldValue, newValue } ) } )
-
         } )
 
-        this.els.editSummary.classList.remove('hidden')
+        this.els.originalWeeklyPrice.textContent = this.Currency.format( originalWeeklyPrice )
+        this.els.newWeeklyPrice.textContent = this.Currency.format( originalWeeklyPrice + priceAdjustment )
+
+        this.els.editSummary.classList.remove('fd-hidden')
+
+        this.emit( 'adjustment', { description: this.getAdjustmentDescription(), originalWeeklyPrice, priceAdjustment } )
     },
 
     templates: {
@@ -284,14 +319,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.els.seasonLabel.textContent = share.label
 
-        this.OrderOption.get( { query: { shareid: share.id, shareoptionid: { operation: 'join', value: { table: 'shareoption', column: 'id' } } } } )
-        .then( () => this.OrderOptionOptions.get() )
+        return this.OrderOption.get( { query: { shareid: share.id, shareoptionid: { operation: 'join', value: { table: 'shareoption', column: 'id' } } } } )
+        .then( () => this.ShareOptionOption.get() )
         .then( () => this.MemberSelection.get( { query: { membershareid: share.membershareid, shareoptionoptionid: { operation: 'join', value: { table: 'shareoptionoption', column: 'id' } } } } ) )
         .then( () => this.renderShareOptions() )
         .then( () => this.DeliveryOptions.get() )
         .then( () => this.GroupDropoffs.get() )
         .then( () => this.renderDeliveryOptions().show() )
-        .catch( this.Error )
 
     }
 

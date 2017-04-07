@@ -29,6 +29,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         } )
     },
 
+    moneyToReal( price ) { return parseFloat( price.replace( /\$|,/g, "" ) ) },
+
     patch( id, data ) {
         return this.Xhr( { method: 'patch', id, resource: this.resource, headers: Object.assign( { v2: true }, this.headers || {} ), data: JSON.stringify( data ) } )
         .then( response => {

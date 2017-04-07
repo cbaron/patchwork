@@ -1,9 +1,11 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+const Super = require('./__proto__')
 
-    DeliveryOption: Object.create( require('../models/__proto__'), { resource: { value: 'deliveryoption' } } ),
-    GroupDropoffs: Object.create( require('../models/__proto__'), { resource: { value: 'groupdropoff' } } ),
-    Route: Object.create( require('../models/__proto__'), { resource: { value: 'deliveryroute' } } ),
-    SkipWeeks: Object.create( require('../models/__proto__'), { resource: { value: 'membershareskipweek' } } ),
+module.exports = Object.assign( {}, Super, {
+
+    DeliveryOption: Object.create( Super.Model, { resource: { value: 'deliveryoption' } } ),
+    GroupDropoffs: Object.create( Super.Model, { resource: { value: 'groupdropoff' } } ),
+    Route: Object.create( Super.Model, { resource: { value: 'deliveryroute' } } ),
+    SkipWeeks: Object.create( Super.Model, { resource: { value: 'membershareskipweek' } } ),
 
     events: {
         dates: 'click',
@@ -68,6 +70,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return Promise.resolve( Object.assign( {}, { addedDates, removedDates } ) )
     },
 
+    getWeeksAffected() {
+        return this.dates.filter( date => !date.unselectable ).length
+    },
+
     getDayOfWeek() {
         const delivery = this.model.delivery.data[0]
 
@@ -80,7 +86,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     method: 'get',
                     resource: 'zipcoderoute',
                     qs: JSON.stringify( {
-                        zipcode: this.model.customer.member.data.zipcode,
+                        zipcode: this.model.customer.member.zipcode,
                         routeid: { operation: 'join', value: { table: 'deliveryroute', column: 'id' } }
                     } )
                   } )
@@ -145,17 +151,32 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     showEditSummary() {
+        let result = 0,
+            added = 0,
+            removed = 0
+
         this.els.selectedDates.innerHTML = ''
         this.els.removedDates.innerHTML = ''
 
         Object.keys( this.changedDates ).forEach( date => {
             const editedStatus = this.changedDates[ date ].editedStatus
 
-            if( editedStatus ) this.slurpTemplate( {
-                insertion: { el: this.els[ `${editedStatus}Dates` ] },
-                template: this.templates.summaryColumn( { value: this.Moment( date ).format("MMM D") } )
-            } )
+            if( editedStatus ) {
+
+                editedStatus === 'selected'
+                    ? added += 1
+                    : removed += 1
+
+                this.slurpTemplate( {
+                    insertion: { el: this.els[ `${editedStatus}Dates` ] },
+                    template: this.templates.summaryColumn( { value: this.Moment( date ).format("MMM D") } )
+                } )
+            }
         } )
+
+        result = added - removed
+        this.els.weekChange.textContent = result
+        this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
         this.els.editSummary.classList.remove('hidden')
     },
@@ -171,11 +192,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.clear()
         this.changedDates = { }
 
-        this.Route.get()
+        return this.Route.get()
         .then( () => this.SkipWeeks.get( { query: { membershareid: share.membershareid } } ) )
         .then( () => this.getDayOfWeek() )
         .then( dayOfWeek => this.determineDates( dayOfWeek ).renderDates().show() )
-        .catch( this.Error )
     },
 
     updateDelivery( data ) {

@@ -15,6 +15,7 @@ module.exports={
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
+	SharePatch: require('./views/templates/SharePatch'),
 	Toast: require('./views/templates/Toast'),
 	Transactions: require('./views/templates/Transactions'),
 	WeekOptions: require('./views/templates/WeekOptions')

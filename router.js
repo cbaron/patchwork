@@ -133,7 +133,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         var path = this.url.parse( request.url ).pathname.split("/")
         request.setEncoding('utf8');
 
-        if( ( request.method === "GET" && path[1] === "static" ) || path[1] === "favicon.ico" ) return this.serveStaticFile( request, response, path )
+        if( request.method === "GET" && ( path[1] === "static" || path[1] === 'dist' || path[1] === "favicon.ico" ) ) return this.serveStaticFile( request, response, path )
 
 
         if( path[1] === "file" ) {

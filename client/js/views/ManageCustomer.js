@@ -50,14 +50,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             .then( () => {
                 //TODO:If no delivery, Toast, or some UI
                 Object.assign( data, { delivery: this.Delivery } )
-                this.views.orderOptions.update( data )
-                this.views.weekOptions.update( data )
+                this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.calculateWeeklyPrice() ) ).catch(this.Error)
+                this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 this.views.transactions.update( data )
             } )
         } )
 
         this.views.orderOptions.on( 'deliveryChanged', data => this.views.weekOptions.updateDelivery( data ) )
-        this.views.orderOptions.on( 'reset', model => this.views.weekOptions.update( model ) )
+
+        this.views.orderOptions.on( 'reset', model => {
+            this.views.weekOptions.update( model )
+            this.views.sharePatch.onOptionsReset()
+        } )
+
+        this.views.orderOptions.on( 'adjustment', data => this.views.sharePatch.onOptionsUpdate( data ) )
 
         return this
     },
