@@ -12,6 +12,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     calculateWeeklyPrice() {
         let optionPrice = this.MemberSelection.data.reduce( ( sum, selection ) => sum + Model.moneyToReal( selection.price ), 0 )
+        console.log( optionPrice )
+        console.log( this.model.delivery.data[0].deliveryoption.price )
         return optionPrice + Model.moneyToReal( this.model.delivery.data[0].deliveryoption.price )
     },
 
@@ -64,7 +66,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getAdjustmentDescription() {
-        Array.from( this.els.options.querySelectorAll('li.edited') ).map( el => {
+        return Array.from( this.els.options.querySelectorAll('li.edited') ).map( el => {
             const fieldName = el.getAttribute('data-name'),
                   fieldLabel = this.capitalizeFirstLetter( fieldName ),
                   oldValue = this.editedFields[ fieldName ].oldValue
@@ -208,6 +210,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     renderDeliveryOptions() {
+        console.log('adasd')
         const option = this.model.delivery.data[0]
 
         this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Delivery Option', id: 'deliveryOption' } ), insertion: { el: this.els.options } } )
@@ -242,6 +245,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els.groupOption.textContent = option.groupdropoff.label || 'N/A'
         }
 
+        console.log('adasd')
         return this
     },
 
@@ -325,7 +329,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => this.renderShareOptions() )
         .then( () => this.DeliveryOptions.get() )
         .then( () => this.GroupDropoffs.get() )
-        .then( () => this.renderDeliveryOptions().show() )
+        .then( () => {
+            this.renderDeliveryOptions() 
+            this.show()
+            return Promise.resolve()
+        } )
 
     }
 

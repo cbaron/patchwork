@@ -211,7 +211,7 @@
 .ManageCustomer .price-change {
   color: rgba(57,132,57,0.8);
 }
-.ManageCustomer .price-change.is-negative {
+.ManageCustomer .is-negative {
   color: rgba(169,23,23,0.7);
 }
 .ManageCustomer .content {
@@ -295,12 +295,31 @@
 .Seasons .share-label.selected {
   background-color: #fce1ac;
 }
+.SharePatch {
+  background-color: #fff;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  margin: 1rem;
+}
 .SharePatch .section-heading {
   display: block;
   text-align: center;
 }
-.SharePatch .content >div {
+.SharePatch .content {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.SharePatch .content >ul {
   margin: auto;
+}
+.SharePatch .content >ul li {
+  border-bottom: 1px solid;
+}
+.SharePatch .content >ul li .adjustment {
+  float: right;
+}
+.SharePatch .content .line-item {
+  border-bottom: 1px solid;
 }
 .Toast {
   background-color: #b13325;

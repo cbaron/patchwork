@@ -195,7 +195,10 @@ module.exports = Object.assign( {}, Super, {
         return this.Route.get()
         .then( () => this.SkipWeeks.get( { query: { membershareid: share.membershareid } } ) )
         .then( () => this.getDayOfWeek() )
-        .then( dayOfWeek => this.determineDates( dayOfWeek ).renderDates().show() )
+        .then( dayOfWeek => {
+            this.determineDates( dayOfWeek ).renderDates().show()
+            return Promise.resolve()
+        } )
     },
 
     updateDelivery( data ) {

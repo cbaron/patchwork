@@ -24,6 +24,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
+        console.log( description )
+
         this.weeklyPriceAdjustment = priceAdjustment
         this.els.shareOptionDescription.textContent = description
         
