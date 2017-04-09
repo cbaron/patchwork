@@ -259,8 +259,8 @@ module.exports = new Router( {
             'currentShare': true,
             'food': true,
             'mail': true,
+            'member-order': true,
             'never-receive': true,
-            'validate-address': true,
             'signup': true,
             'user': true
         }

@@ -19,13 +19,33 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 .catch( this.Error )
             },
             onSelect: ( e, term, item ) => {
-                this.emit( 'customerSelected', this.Customer.data.find( datum =>
-                    datum.person.data[ this.attr ] === term ) )
+                this.selectedCustomer = this.Customer.data.find( datum => datum.person.data[ this.attr ] === term )
+                this.emit( 'customerSelected', this.selectedCustomer )
             }
 
         } )
 
         this.els.customerInput.focus()
+    },
+
+    patchMemberShare() {
+        this.Xhr( {
+            method: 'patch',
+            resource: 'member-order',
+            data: JSON.stringify( {
+                orderOptions: this.views.orderOptions.getPatchData(),
+                weekOptions: this.views.weekOptions.getPatchData(),
+                adjustment: this.views.sharePatch.getPatchData()
+            } )
+        } )
+        .then( () => {
+            this.Toast.show( 'success', 'Order Updated' )
+            this.emit( 'customerSelected', this.selectedCustomer )
+        } )
+        .catch( e => {
+            console.log( e.stack || e )
+            this.Toast.show( 'error', 'Update Failed' )
+        } )
     },
 
     postRender() {
@@ -64,6 +84,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.views.orderOptions.on( 'adjustment', data => this.views.sharePatch.onOptionsUpdate( data ) )
+
+        this.views.sharePatch.on( 'patchMemberShare', () => this.patchMemberShare() )
 
         return this
     },

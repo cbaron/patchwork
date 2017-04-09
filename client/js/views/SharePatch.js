@@ -1,17 +1,30 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    Views: {
+        buttonFlow: { model: { value: {
+            states: {
+                start: [ { name: 'save', text: 'Save Changes', class:'save-btn', nextState: 'confirm' } ],
+                confirm: [
+                    { name: 'confirmBtn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', nextState: 'start', text: 'Cancel' }
+                ]
+            }
+         } } }
+    },
+
     displayTotal() {
         let total = 0
 
         total -= parseInt( this.els.weeksRemoved.textContent ) * this.originalWeeklyPrice
         
         if( this.weeklyPriceAdjustment ) {
-            total += parseInt( this.els.weeksAffected.textContent ) * this.weeklyPriceAdjustment
+            total += this.optionsAdjustment
         } else {
             total += parseInt( this.els.weeksAdded.textContent ) * this.originalWeeklyPrice
         }
         
         this.els.adjustment.textContent = this.Currency.format( total )
+        if( total < 0 ) this.els.adjustment.classList.add('is-negative')
 
         return this
     },
@@ -24,12 +37,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
-        console.log( description )
 
         this.weeklyPriceAdjustment = priceAdjustment
+        this.els.weeklyAdjustment.textContent = this.Currency.format( priceAdjustment )
         this.els.shareOptionDescription.textContent = description
         
-        this.els.newWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice + priceAdjustment )
+        this.optionsAdjustment = parseInt( this.els.weeksAffected.textContent ) * this.weeklyPriceAdjustment
+        this.els.optionsAdjustment.textContent = this.Currency.format( this.optionsAdjustment )
+        this.els.optionsAdjustment.classList.add( this.optionsAdjustment < 0 ? 'is-negative' : 'is-positive' )
 
         this.displayTotal().show()
     },
@@ -39,12 +54,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.weeksRemoved.textContent = 0
         this.els.weeksRemovedPrice.textContent = this.Currency.format( 0 )
 
+        this.views.buttonFlow.on( 'confirmBtnClicked', () => this.emit( 'patchMemberShare' ) )
+
         return this
     },
 
     setOriginalWeeklyPrice( price ) {
         this.originalWeeklyPrice = price
-        this.els.originalWeeklyPrice.textContent = this.Currency.format( price )
     },
 
     setWeeksAffected( i ) {
