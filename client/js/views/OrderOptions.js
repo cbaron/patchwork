@@ -277,7 +277,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.changes.innerHTML = ''
 
         if( edits.length === 0 ) {
-            this.emit( 'reset' )
+            this.emit( 'reset', this.model )
             this.els.resetBtn.classList.add('fd-hidden')
             return this.els.editSummary.classList.add('fd-hidden')
         }

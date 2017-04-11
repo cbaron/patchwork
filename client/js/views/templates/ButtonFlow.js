@@ -3,7 +3,7 @@ module.exports = p => {
 return `` +
 `<section class="${p.hide ? 'fd-hidden fd-hide' : ''}">` +
 Object.keys( p.states ).map( stateName =>
-    `<div data-js="${stateName}" class="${stateName} ${stateName === 'start' ? '' : 'fd-hidden fd-hide'}">` +
+    `<div data-js="${stateName}" class="state ${stateName} ${stateName === 'start' ? '' : 'fd-hidden fd-hide'}">` +
     p.states[ stateName ].map( button =>
         button.svg
             ? button.svg

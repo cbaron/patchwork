@@ -5,8 +5,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             states: {
                 start: [ { name: 'save', text: 'Save Changes', class:'save-btn', nextState: 'confirm' } ],
                 confirm: [
-                    { name: 'confirmBtn', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', text: 'Cancel' }
+                    { name: 'confirmBtn', class:'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', class:'reset-btn', nextState: 'start', text: 'Cancel' }
                 ]
             }
          } } }
@@ -29,15 +29,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this
     },
 
-    onOptionsReset( { description, originalWeeklyPrice, priceAdjustment } ) {
+    onOptionsReset() {
         this.weeklyPriceAdjustment = false
         this.els.options.classList.add('fd-hidden')
 
-        if( this.els.weeksRemoved == 0 && this.els.weeksAdded == 0 ) this.els.container.classList.add('fd-hidden')
+        this.displayTotal()
+
+        if( this.els.weeksRemoved.textContent == 0 && this.els.weeksAdded.textContent == 0 ) this.els.container.classList.add('fd-hidden')
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
 
+        this.els.options.classList.remove('fd-hidden')
+        
         this.weeklyPriceAdjustment = priceAdjustment
         this.els.weeklyAdjustment.textContent = this.Currency.format( priceAdjustment )
         this.els.shareOptionDescription.textContent = description

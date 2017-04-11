@@ -55,6 +55,12 @@
 .AdminPlus .manage-btn:hover {
   background-color: #ebebeb;
 }
+.ButtonFlow .state {
+  display: flex;
+}
+.ButtonFlow .state button {
+  flex: 1;
+}
 .ButtonFlow button,
 .ButtonFlow svg {
   cursor: pointer;
@@ -331,10 +337,8 @@
   margin: 0 0.5rem;
 }
 .SharePatch .content >div .ButtonFlow {
-  text-align: center;
-}
-.SharePatch .content >div .ButtonFlow .save-btn {
   margin: 1rem;
+  text-align: center;
 }
 .Toast {
   background-color: #b13325;

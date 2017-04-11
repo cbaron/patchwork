@@ -42,9 +42,6 @@ module.exports = p =>
                 </li>
             </ul>
             <div data-view="buttonFlow"></div>
-            <div class="button-row">
-                <button class="save-btn" data-js="saveBtn">Save Changes</button>
-            </div>
         </div>
     </div>
 </div>`
