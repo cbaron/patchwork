@@ -31,6 +31,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.membershareid == el.getAttribute('data-id') ) } )
     },
 
+    select( memberShareId ) {
+        this.els.list.querySelector(`div.share-label[data-id="${memberShareId}"]`).click()
+    },
+
     templates: {
         ShareBox: require('./templates/ShareBox')
     },

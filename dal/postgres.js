@@ -1,4 +1,6 @@
-module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').prototype, {
+const MyObject = require('../lib/MyObject').prototype
+
+module.exports = Object.create( Object.assign( {}, MyObject, {
 
     initialize() {
         return this.getTableData()
@@ -15,6 +17,10 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
             `SELECT * FROM ${name} WHERE ${whereClause}`,
             keys.map( key => where[key] )
         )
+    },
+
+    transaction( queries ) {
+        return this._factory().transaction( queries )
     },
 
     truncate() {
@@ -78,6 +84,8 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
 
     _factory( data ) {
         return Object.create( {
+            P: MyObject.P,
+
             connect() {
                 return new Promise( ( resolve, reject ) => {
                     this.pool.connect( ( err, client, done ) => {
@@ -104,6 +112,23 @@ module.exports = Object.create( Object.assign( {}, require('../lib/MyObject').pr
                     } )
                 )
             },
+
+            rollback( e ) {
+                return this.P( this.client.query, [ 'ROLLBACK' ], this.client )
+                .then( () => { this.done(); return Promise.reject(e) } )
+                .catch( error => { console.log(`Error rolling back: ${error}, ${e}`); return Promise.reject(e) } )
+            },
+
+            transaction( queries ) {
+                return this.connect().then( () => {
+                    let chain = this.P( this.client.query, [ `BEGIN` ], this.client ).catch( e => this.rollback(e) )
+
+                    queries.forEach( query => chain = chain.then( () => this.P( this.client.query, query, this.client ).catch( e => this.rollback( e ) ) ) )
+
+                    return chain.then( () => this.P( this.client.query, [ 'COMMIT' ], this.client ).then( () => Promise.resolve( this.done() ) ) )
+                } )
+            },
+
         }, { pool: { value: this.pool } } )
     },
 

@@ -6,10 +6,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         buttonFlow: { model: { value: {
             disabled: true,
             states: {
-                start: [ { name: 'addTransaction', text: 'Add Transaction', nextState: 'confirm' } ],
+                start: [ { name: 'addTransaction', class: 'save-btn', text: 'Add Transaction', nextState: 'confirm' } ],
                 confirm: [
-                    { name: 'confirmAdd', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', text: 'Cancel', emit: true }
+                    { name: 'confirmAdd', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', class: 'reset-btn', nextState: 'start', text: 'Cancel', emit: true }
                 ]
             }
         } } }

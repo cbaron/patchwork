@@ -53,7 +53,7 @@ module.exports = Object.assign( {}, Super, {
         return this
     },
 
-    getDateData() {
+    getPatchData() {
         const addedDates = [ ],
               removedDates = [ ]
 
@@ -67,7 +67,11 @@ module.exports = Object.assign( {}, Super, {
             else removedDates.push( formattedDate )
         } )
 
-        return Promise.resolve( Object.assign( {}, { addedDates, removedDates } ) )
+        return {
+            addedDates,
+            removedDates, 
+            allRemoved: Array.from( this.els.dates.querySelectorAll('li:not(.selected)') ).map( el => this.Moment( el.getAttribute('data-date'), 'YYYYMMDD' ).format('YYYY-MM-DD') )
+        }
     },
 
     getWeeksAffected() {
@@ -100,15 +104,12 @@ module.exports = Object.assign( {}, Super, {
     onDatesClick( e ) {
         const el = e.target.closest('li'),
               date = el.getAttribute('data-date')
+        
+        if( el.classList.contains('unselectable') ) return
 
         let editedStatus
 
-        if( el.classList.contains('unselectable') ) return
-
-        if( ! this.changedDates[ date ] ) {
-            this.changedDates[ date ] = { }
-            this.changedDates[ date ].initialStatus = el.classList.contains('selected') ? 'selected' : 'removed'
-        }
+        if( ! this.changedDates[ date ] ) this.changedDates[ date ] = { initialStatus: el.classList.contains('selected') ? 'selected' : 'removed' }
 
         el.classList.toggle('selected')
         editedStatus = el.classList.contains('selected') ? 'selected' : 'removed'
@@ -124,6 +125,7 @@ module.exports = Object.assign( {}, Super, {
 
         if( ! Object.keys( this.changedDates ).find( key => this.changedDates[key].editedStatus !== undefined ) ) {
             this.els.resetBtn.classList.add('hidden')
+            this.emit( 'reset', this.model )
             return this.els.editSummary.classList.add('hidden')
         }
 
@@ -143,6 +145,7 @@ module.exports = Object.assign( {}, Super, {
         } )
 
         this.update( this.model )
+        this.emit( 'reset', this.model )
     },
 
     renderDates() {
@@ -179,6 +182,8 @@ module.exports = Object.assign( {}, Super, {
         this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
         this.els.editSummary.classList.remove('hidden')
+
+        this.emit( 'adjustment', { added, removed } )
     },
 
     templates: {

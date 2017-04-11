@@ -14,12 +14,15 @@ module.exports = p =>
                         <span class="is-negative" data-js="weeksRemovedPrice"></span>
                     </span>
                 </li>
-                <li>
+                <li data-js="added">
                     <span>Weeks Added: </span>
                     <span data-js="weeksAdded"></span>
-                    <span class="fd-hidden" data-js="weeksAddedPrice"></span>
+                    <span data-js="addedAdjustment" class="adjustment fd-hidden">
+                        <span>Adjustment: </span>
+                        <span data-js="weeksAddedPrice"></span>
+                    </span>
                 </li>
-                <li data-js="options" class="line-item">
+                <li data-js="options" class="line-item fd-hidden">
                     <div>
                         <span>Options Update: </span>
                         <span data-js="shareOptionDescription"></span>

@@ -10,7 +10,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
                     return Object.assign( memo, { [ key.slice( index + 1 ) ]: row[key] } )
                 },
-                { shareoptionid: row[ 'shareoptionid.id' ] }
+                { shareoptionid: row[ 'membershareoption.shareoptionid' ], membershareoptionid: row[ 'membershareoption.id' ] }
             )
         )
     },

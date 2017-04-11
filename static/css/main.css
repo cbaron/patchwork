@@ -23,17 +23,11 @@
 .AddTransaction form:hover {
   opacity: 1;
 }
-.AddTransaction .ButtonFlow >div {
-  width: 100%;
+.AddTransaction .ButtonFlow button {
+  margin: 0.1rem 1rem;
 }
-.AddTransaction .ButtonFlow >div.start button {
-  width: 100%;
-}
-.AddTransaction .ButtonFlow >div.confirm {
-  display: flex;
-}
-.AddTransaction .ButtonFlow >div.confirm button {
-  flex: 1;
+.AddTransaction .ButtonFlow .reset-btn {
+  border: 1px solid #155d75;
 }
 .AdminPlus {
   margin-top: 7.5rem;
@@ -305,10 +299,11 @@
   background-color: #fce1ac;
 }
 .SharePatch {
-  background-color: #fff;
   padding: 0.5rem;
   border-radius: 1rem;
   margin: 1rem;
+  background-color: #f2f2f2;
+  border: 1px solid #bbb;
 }
 .SharePatch .section-heading {
   display: block;
@@ -373,6 +368,10 @@
 }
 .Toast >div:nth-child(2) >div:first-child {
   font-weight: bold;
+}
+.Transactions {
+  padding-top: 2rem;
+  margin-bottom: 4rem;
 }
 .Transactions .heading {
   display: flex;
@@ -495,6 +494,7 @@
 }
 .Transactions .balance {
   display: flex;
+  margin-top: 1rem;
 }
 .Transactions .balance h3,
 .Transactions .balance span {

@@ -28,10 +28,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         emailButtons: { model: { value: {
             hide: true,
             states: {
-                start: [ { name: 'sendEmail', text: 'Send Email Reminder', nextState: 'confirm' } ],
+                start: [ { name: 'sendEmail', class: 'save-btn', text: 'Send Email Reminder', nextState: 'confirm' } ],
                 confirm: [
-                    { name: 'confirmEmail', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', text: 'Cancel' }
+                    { name: 'confirmEmail', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                    { name: 'cancel', nextState: 'start', class: 'reset-btn', text: 'Cancel' }
                 ]
             }
          } } },

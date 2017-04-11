@@ -5,7 +5,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     DeliveryOptions: Object.create( Model, { resource: { value: 'deliveryoption' } } ),
     GroupDropoffs: Object.create( Model, { resource: { value: 'groupdropoff' } } ),
     MemberSelection: require('../models/MemberSelection'),
-    MemberShareDelivery: Object.create( Model, { resource: { value: 'membersharedelivery' } } ),
     MemberShareOption: Object.create( Model, { resource: { value: 'membershareoption' } } ),
     OrderOption: require('../models/OrderOption'),
     ShareOptionOption: require('../models/ShareOptionOption'),
@@ -76,97 +75,51 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } ).join(', ')
     },
 
-    getDeliveryData( key ) {
-        if( this.editedFields[ key ].newValue === 'group' && ! this.editedFields.groupOption.newValue ) return
+    getDeliveryData( ) {
 
-        const oldDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).id,
-              newDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).id,
-              dropoffId = ( this.editedFields[ key ].newValue === 'group' )
+        const patchId = this.model.delivery.data[0].membersharedelivery.id,
+              newDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.newValue ).id,
+              dropoffId = ( this.editedFields.deliveryOption.newValue === 'group' )
                 ? this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
                 : null
 
-        return this.MemberShareDelivery.get( { query: { deliveryoptionid: oldDeliveryId, membershareid: this.memberShareId } } )
-        .then( () => {
-            let patchId
-            if( this.MemberShareDelivery.data.length ) patchId = this.MemberShareDelivery.data[0].id
-
-            this.deliveryData.push( {
-                id: patchId,
-                data: {
-                    deliveryoptionid: newDeliveryId,
-                    groupdropoffid: dropoffId,
-                }
-            } )
-
-            return Promise.resolve()
-        } )
-    },
-
-    getGroupData( key ) {
-        if( this.editedFields.deliveryOption.newValue ) return
-
-        const deliveryId = this.DeliveryOptions.data.find( option => option.name === this.els.deliveryOption.value ).id,
-              dropoffId = this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
-
-        return this.MemberShareDelivery.get( { query: { deliveryoptionid: deliveryId, membershareid: this.memberShareId } } )
-        .then( () => {
-            let patchId
-            if( this.MemberShareDelivery.data.length ) patchId = this.MemberShareDelivery.data[0].id
-
-            this.deliveryData.push( {
-                id: patchId,
-                data: {
-                    groupdropoffid: dropoffId
-                }
-            } )
-
-            return Promise.resolve()
-        } )
+        return {
+            id: patchId,
+            deliveryoptionid: newDeliveryId,
+            groupdropoffid: dropoffId
+        }
     },
 
     getShareOptionData( key ) {
-        const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
+        const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id,
+            memberShareId = this.model.share.membershareid
 
         const shareOptionOptionId = this.ShareOptionOption.data.find(
             option => option.name === this.editedFields[ key ].newValue && option.shareoptionid === shareOptionId
         ).id
 
-        return this.MemberShareOption.get( { query: { shareoptionid: shareOptionId, membershareid: this.memberShareId } } )
-        .then( () => {
-            let patchId
-            if( this.MemberShareOption.data.length ) patchId = this.MemberShareOption.data[0].id
-
-            this.shareOptionData.push( {
-                id: patchId,
-                data: {
-                    shareoptionoptionid: shareOptionOptionId
-                }
-            } )
-
-            return Promise.resolve()
-        } )
+        return {
+            id: this.MemberSelection.data.find( memberSelection => shareOptionId == memberSelection.shareoptionid ).membershareoptionid,
+            shareoptionoptionid: shareOptionOptionId
+        }
     },
 
     getPatchData() {
-        this.deliveryData = [ ],
-        this.shareOptionData = [ ],
-        this.memberShareId = this.model.share.membershareid
 
-        return Promise.all( Object.keys( this.editedFields ).map( key => {
-            if( ! this.editedFields[ key ].newValue ) return Promise.resolve()
+        var rv = { membersharedelivery:
+            ( this.editedFields.deliveryOption.newValue || this.editedFields.groupOption.newValue )
+                ? this.getDeliveryData()
+                : { },
+            membershareoption: [ ]
+        }
 
-            return ( key === 'deliveryOption' )
-                ? this.getDeliveryData( key )
-                : ( key === 'groupOption' )
-                    ? this.getGroupData( key )
-                    : this.getShareOptionData( key )            
-        } ) )
-        .then( () => {
-            this.data = Object.assign( { }, { delivery: this.deliveryData, shareOptions: this.shareOptionData } )
-            return Promise.resolve( this.data )
+        Object.keys( this.editedFields ).forEach( key => {
+            if( !this.editedFields[ key ].newValue || key === 'deliveryOption' || key === 'groupOption' ) return
+
+            rv.membershareoption.push( this.getShareOptionData( key ) )
         } )
-        .catch( this.Error )
 
+        return rv
     },
 
     onOptionsChange( e ) {
