@@ -32,16 +32,26 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     handleBlur( e ) {
         const el = e.target,
-              field = this.fields.find( field => field.name === el.getAttribute('data-name') )
+              field = this.fields.find( field => field.name === el.getAttribute('data-name') ),
+              fieldValue = el.textContent.trim()
 
-        if( el.textContent !== this.model[ field.table ].data[ field.name ] ) {
+        if( fieldValue !== this.model[ field.table ].data[ field.name ] ) {
             el.classList.add('edited')
-            this.editedFields[ field.name ] = el.textContent.trim() || null
+            this.editedFields[ field.name ] = fieldValue || null
+            this.showEditSummary()
+            this.emit( 'edited' )
+        } else if( this.editedFields[ field.name ] !== undefined ) {
+            el.classList.remove('edited')
+            this.editedFields[ field.name ] = undefined
             this.showEditSummary()
         }
     },
 
-    handleEdit( e ) { this.els.resetBtn.classList.remove('hidden') },
+    hasEdits() {
+        return Object.keys( this.editedFields ).filter( key => this.editedFields[ key ] !== undefined ).length > 0
+    },
+
+    handleEdit( e ) { this.els.resetBtn.classList.remove('fd-hidden') },
 
     handleOmissionChange( e, m ) {
         if( ! m.val().length ) return
@@ -84,8 +94,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         return Promise.all( resourcesToUpdate.map( resource => this[ `update${resource.charAt(0).toUpperCase() + resource.slice(1)}` ]() ) )
         .then( () => {            
-            this.els.resetBtn.classList.add('hidden')
-            this.els.editSummary.classList.add('hidden')
+            this.els.resetBtn.classList.add('fd-hidden')
+            this.els.editSummary.classList.add('fd-hidden')
 
             this.Toast.showMessage( 'success', 'Customer Info Updated!' )
             this.update( this.model )
@@ -121,7 +131,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.els.infoTable.querySelectorAll('div[contenteditable=true]').forEach( el => {
             el.addEventListener( 'blur', e => this.handleBlur(e) )
-            el.addEventListener( 'input', () => this.emit('edited') )
         } )
 
         this.on( 'edited', e => this.handleEdit( e ) )
@@ -130,16 +139,18 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     reset( customer ) {
-        this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
+        this.els.resetBtn.classList.add('fd-hidden')
+        this.els.editSummary.classList.add('fd-hidden')
         this.update( customer )
     },
 
     showEditSummary() {
+        const hasEdits = this.hasEdits()
+
         this.els.changes.innerHTML = ''
         
         this.fields.forEach( field => {
-            if( Object.keys( this.editedFields ).indexOf( field.name ) !== -1 ) {
+            if( this.editedFields[ field.name ] !== undefined ) {
                 let oldValue = ( field.name === 'neverReceive' )
                     ? this.models.neverReceive.data.neverReceive
                     : this.model[ field.table ].data[ field.name ]
@@ -161,7 +172,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
         } )
 
-        this.els.editSummary.classList.remove('hidden')
+        this.els.resetBtn.classList.toggle( 'fd-hidden', !hasEdits )
+        this.els.editSummary.classList.toggle( 'fd-hidden', !hasEdits )
     },
 
     Templates: {
