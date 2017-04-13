@@ -43,7 +43,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     clear() {
+        this.els.changes.innerHTML = ''
         this.els.options.innerHTML = ''
+
+        this.els.resetBtn.classList.add('fd-hidden')
+        this.els.editSummary.classList.add('fd-hidden')
 
         this.els = {
             editSummary: this.els.editSummary,
@@ -55,6 +59,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             newWeeklyPrice: this.els.newWeeklyPrice,
             originalWeeklyPrice: this.els.originalWeeklyPrice
         }
+
     },
 
     events: {

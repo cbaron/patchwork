@@ -47,10 +47,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             method: 'patch',
             resource: 'member-order',
             data: JSON.stringify( {
+                adjustment,
                 memberShareId: this.memberShareId,
                 orderOptions: this.views.orderOptions.getPatchData(),
-                weekOptions: weekPatch.allRemoved,
-                adjustment
+                shareLabel: this.selectedShare.label,
+                weekOptions: weekPatch.allRemoved
             } )
         } )
         .then( () => {
@@ -75,7 +76,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.views.seasons.on( 'selected', data => {
-            this.memberShareId = data.share.membershareid
+            this.selectedShare = data.share
+            this.memberShareId = this.selectedShare.membershareid
 
             this.Delivery.get( {
                 query: {

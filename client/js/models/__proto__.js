@@ -38,9 +38,6 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
             const oldDataIndex = this.data.findIndex( datum => datum.id == response.id )
 
-            console.log( oldDataIndex )
-            console.log( this.data )
-
             this.data.splice( oldDataIndex, 1, response )
             
             if( this.sortAttr ) this.data.sort( ( a, b ) => a[ this.sortAttr ] > b[ this.sortAttr ] )

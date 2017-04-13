@@ -14,6 +14,9 @@ module.exports = Object.assign( {}, Super, {
 
     clear() {
         this.els.dates.innerHTML = ''
+
+        this.els.resetBtn.classList.add('hidden')
+        this.els.editSummary.classList.add('hidden')
     },
 
     determineDates( dayOfWeek ) {
@@ -75,7 +78,8 @@ module.exports = Object.assign( {}, Super, {
     },
 
     getWeeksAffected() {
-        return this.dates.filter( date => !date.unselectable ).length
+        const selectableDates = this.dates.filter( date => !date.unselectable ) 
+        return { selectable: selectableDates.length, skipped: selectableDates.filter( date => !date.selected ).length }
     },
 
     getDayOfWeek() {

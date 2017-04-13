@@ -3,6 +3,14 @@ var Base = require('./__proto__'),
 
 Object.assign( MemberOrder.prototype, Base.prototype, {
 
+    Currency: new Intl.NumberFormat( 'en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    } ),
+
+    Email: require('../lib/Email'),
+
     PATCH() {
 
         return this.slurpBody()
@@ -10,6 +18,7 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
             if( !this.user.id || !this.user.roles.includes('admin') ) throw Error("401")
             return this.Q( this.Postgres.transaction( this.gatherQueries() ) )
         } )
+        .then( () => this.notify() )
         .then( () => this.respond( { body: { } } ) )
     },
 
@@ -40,7 +49,26 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
         queries.push( [ `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Adjustment', $1, $2, $3 )`, [ adjustment.value, this.body.memberShareId, adjustment.description ] ] )
 
         return queries
-    }
+    },
+
+    notify() {
+        return this.Q(
+            this.Email.send( {
+                to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,
+                from: 'eat.patchworkgardens@gmail.com',
+                subject: `Patchwork Gardens CSA : ${this.body.shareLabel} Adjustment`,
+                body: [
+                    `You ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
+                    `Details: ${this.body.adjustment.description}`,
+                    `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
+                    this.body.adjustment.value > 0
+                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
+                        : `We will mail a check to you in the near future.`
+                    `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
+                ].join( `${this.Email.newline}${this.Email.newline}` )
+            } )
+        )
+    },
 
 } )
 
