@@ -33,9 +33,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     handleBlur( e ) {
         const el = e.target,
               field = this.fields.find( field => field.name === el.getAttribute('data-name') ),
-              fieldValue = el.textContent.trim()
+              fieldValue = el.textContent.trim(),
+              modelValue = this.model[ field.table ].data[ field.name ] || ''
 
-        if( fieldValue !== this.model[ field.table ].data[ field.name ] ) {
+        if( fieldValue !== modelValue ) {
             el.classList.add('edited')
             this.editedFields[ field.name ] = fieldValue || null
             this.showEditSummary()
@@ -60,6 +61,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.editedFields.neverReceive = m.val()
             this.emit('edited')
             this.showEditSummary()
+        } else if( this.editedFields.neverReceive !== undefined ) {
+            this.editedFields.neverReceive = undefined
+            this.showEditSummary()
         }
     },
 
@@ -68,12 +72,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOnPaymentPlanChange( e ) {
-        const el = e.target
+        const el = e.target,
+            fieldValue = Boolean( el.value === "true" ),
+            modelValue = this.model.member.data.onPaymentPlan
 
-        el.classList.add('edited')
-        this.editedFields[ 'onPaymentPlan' ] = ( el.value === "true" )
-        this.emit('edited')
-        this.showEditSummary()
+        if( modelValue !== fieldValue ) {
+            el.classList.add('edited')
+            this.editedFields[ 'onPaymentPlan' ] = Boolean( el.value === "true" )
+            this.emit('edited')
+            this.showEditSummary()
+        } else if( this.editedFields.onPaymentPlan !== undefined ) {
+            el.classList.remove('edited')
+            this.editedFields.onPaymentPlan = undefined
+            this.showEditSummary()
+        }
     },
 
     onResetBtnClick() { this.reset( this.model ) },
