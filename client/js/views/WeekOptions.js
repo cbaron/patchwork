@@ -196,22 +196,26 @@ module.exports = Object.assign( {}, Super, {
     },
 
     update( { customer, delivery, share } ) {
+        if( this.updating ) return
+
+        this.updating = true
+
         this.model = arguments[0]
 
-        this.clear()
         this.changedDates = { }
 
         return this.Route.get()
         .then( () => this.SkipWeeks.get( { query: { membershareid: share.membershareid } } ) )
         .then( () => this.getDayOfWeek() )
         .then( dayOfWeek => {
+            this.clear()
             this.determineDates( dayOfWeek ).renderDates().show()
-            return Promise.resolve()
+            return Promise.resolve( this.updating = false )
         } )
     },
 
     updateDelivery( data ) {
-        const modelCopy = JSON.parse( JSON.stringify( this.model ) )
+        const modelCopy = Object.assign( {}, this.model )
 
         return this.DeliveryOption.get( { query: { name: data.deliveryOption } } )
         .then( () => {

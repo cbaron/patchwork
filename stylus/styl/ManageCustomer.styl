@@ -43,16 +43,19 @@
         -webkit-padding-start: 0
         
     .cell, .ms-ctn
-        background-color: white
-        padding: 3px 5px
-        height: 1.9rem
-        border: 1px solid black
         font-size: .9rem
         font-weight: bold
         overflow-x: auto
-        width: 16rem
+        flex: 1
+        padding: .25rem
         white-space: nowrap
         
+        &:first-child
+            border-right: 1px solid black
+    
+    select.cell
+        margin: .25rem
+            
     .edited
         color: $edit-green
         

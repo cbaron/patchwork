@@ -1,5 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    MemberFoodOmission: require('../models/MemberFoodOmission'),
+
     clear() {
         this.fields.forEach( field => {
             if( field.type !== 'select' ) this.els[ field.name ].textContent = ''
@@ -55,20 +57,18 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     handleEdit( e ) { this.els.resetBtn.classList.remove('fd-hidden') },
 
     handleOmissionChange( e, m ) {
-        if( ! m.val().length ) return
-
-        if( this.models.neverReceive.data.neverReceive !== m.val()[0].name ) {
-            this.editedFields.neverReceive = m.val()
+        const values = m.val(),
+            name = values.length ? m.val()[0].name : '',
+            originalName = this.MemberFoodOmission.data.length ? this.MemberFoodOmission.data[0].name : ''
+       
+        if( originalName !== name ) {
+            this.editedFields.neverReceive = name
             this.emit('edited')
             this.showEditSummary()
         } else if( this.editedFields.neverReceive !== undefined ) {
             this.editedFields.neverReceive = undefined
             this.showEditSummary()
         }
-    },
-
-    models: {
-        neverReceive: require('../models/NeverReceive')
     },
 
     onOnPaymentPlanChange( e ) {
@@ -120,8 +120,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( field.type !== 'select' ) this.els[ field.name ].textContent = this.model[ field.table ].data[ field.name ]
         } )
 
-        if( this.models.neverReceive.data.neverReceive ) {
-            this.FoodOmission.setPlaceholder( this.models.neverReceive.data.neverReceive )
+        if( this.MemberFoodOmission.data.length ) {
+            const datum = this.MemberFoodOmission.data[0],
+                index = this.FoodOmission.Foods.data.findIndex( food => food.produceid === datum.produceid || food.producefamilyid === datum.producefamilyid )
+
+            if( index !== -1 ) {
+                const foodDatum = this.FoodOmission.Foods.data[ index ]
+                datum.name = foodDatum.name
+                this.FoodOmission.ms.setSelection( [ Object.assign( {}, foodDatum, { id: index } ) ] )
+            }
         }
 
         this.els.onPaymentPlan.selectedIndex = this.model.member.data.onPaymentPlan ? 0 : 1
@@ -164,11 +171,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.fields.forEach( field => {
             if( this.editedFields[ field.name ] !== undefined ) {
                 let oldValue = ( field.name === 'neverReceive' )
-                    ? this.models.neverReceive.data.neverReceive
+                    ? this.MemberFoodOmission.data.length ? this.MemberFoodOmission.data[0].name : ''
                     : this.model[ field.table ].data[ field.name ]
-                let newValue = ( field.name === 'neverReceive' )
-                    ? this.editedFields.neverReceive[0].name
-                    : this.editedFields[ field.name ]
+                let newValue = this.editedFields[ field.name ]
 
                 if( ! oldValue && field.name !== 'onPaymentPlan' ) oldValue = 'EMPTY'
                 if( ! newValue && field.name !== 'onPaymentPlan' ) newValue = 'EMPTY'
@@ -198,7 +203,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.model = customer
         this.editedFields = { }
 
-        return this.models.neverReceive.get( { resource: `never-receive/${customer.member.data.id}` } )
+        return this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
         .then( () => this.populateTable() )
         .then( () => this.show() )
         .catch( this.Error )
@@ -214,19 +219,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateMemberFoodOmission() {
-        let msData = this.memberFoodOmissionData.neverReceive[0],
-            method = this.models.neverReceive.data.id ? 'PATCH' : 'POST',
+        let msData = this.FoodOmission.Foods.data.find( datum => datum.name == this.memberFoodOmissionData.neverReceive ) || 
+            method = this.MemberFoodOmission.data[0].id ? 'PATCH' : 'POST',
             data = { memberid: this.model.member.data.id, produceid: msData.produceid, producefamilyid: msData.producefamilyid },
             opts = { method: method, resource: 'memberfoodomission', data: JSON.stringify( data ) }
 
-        if( method === 'PATCH' ) opts['id'] = this.models.neverReceive.data.id
+        if( method === 'PATCH' ) opts['id'] = this.MemberFoodOmission.data[0].id
 
         return this.Xhr( opts )
-        .then( () =>
-            Promise.resolve(
-                this.models.neverReceive.data.neverReceive = this.memberFoodOmissionData.neverReceive[0].name
-            )
-        )
     },
 
     updatePerson() {

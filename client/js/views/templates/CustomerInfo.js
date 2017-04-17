@@ -11,7 +11,7 @@ module.exports = p => {
                 : `<div data-name="${field.name}" data-js="${field.name}" class="cell" contenteditable="true"></div>`
 
         return `` +
-        `<div class="table-row">
+        `<div class="table-row ${field.name}">
             <div class="cell">${field.label}</div>
             ${rowValue}
         </div>`

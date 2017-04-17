@@ -22,12 +22,13 @@
     ol
         li
             display: flex
+            height: 2.75rem
             position: relative
 
             >input, select
                 margin: .25rem
 
-            > span, input, select
+            > span.cell, input, select
                 flex: 4
 
                 &.cell
@@ -100,6 +101,10 @@
             
             &.edit-transaction
                 background-color: $edit-green
+
+                >span
+                    &:first-child
+                        flex: 1
 
             &.confirming-edit
                 .cell
