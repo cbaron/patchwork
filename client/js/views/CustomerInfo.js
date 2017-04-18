@@ -10,6 +10,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
 
         this.FoodOmission.clear()
+
+        this.els.resetBtn.classList.add( 'fd-hidden' )
+        this.els.editSummary.classList.add( 'fd-hidden' )
     },
 
     events: {
@@ -122,7 +125,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( this.MemberFoodOmission.data.length ) {
             const datum = this.MemberFoodOmission.data[0],
-                index = this.FoodOmission.Foods.data.findIndex( food => food.produceid === datum.produceid || food.producefamilyid === datum.producefamilyid )
+                index = this.FoodOmission.Foods.data.findIndex( food =>
+                    ( food.produceid == datum.produceid && food.produceid !== null ) ||
+                    ( food.producefamilyid == datum.producefamilyid && datum.produceid === null ) )
 
             if( index !== -1 ) {
                 const foodDatum = this.FoodOmission.Foods.data[ index ]
@@ -219,14 +224,16 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateMemberFoodOmission() {
-        let msData = this.FoodOmission.Foods.data.find( datum => datum.name == this.memberFoodOmissionData.neverReceive ) || 
-            method = this.MemberFoodOmission.data[0].id ? 'PATCH' : 'POST',
-            data = { memberid: this.model.member.data.id, produceid: msData.produceid, producefamilyid: msData.producefamilyid },
-            opts = { method: method, resource: 'memberfoodomission', data: JSON.stringify( data ) }
+        const foodIdx = this.FoodOmission.Foods.data.findIndex( datum => datum.name == this.memberFoodOmissionData.neverReceive )
 
-        if( method === 'PATCH' ) opts['id'] = this.MemberFoodOmission.data[0].id
+        if( foodIdx === -1 ) return this.MemberFoodOmission.delete( this.MemberFoodOmission.data[0].id )
 
-        return this.Xhr( opts )
+        const msData = this.FoodOmission.Foods.data[ foodIdx ],
+            data = { memberid: this.model.member.data.id, produceid: msData.produceid, producefamilyid: msData.produceid ? null : msData.producefamilyid }
+
+        return this.MemberFoodOmission.data.length
+            ? this.MemberFoodOmission.patch( this.MemberFoodOmission.data[0].id, data )
+            : this.MemberFoodOmission.post( data )
     },
 
     updatePerson() {

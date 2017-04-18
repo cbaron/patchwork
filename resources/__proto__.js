@@ -46,7 +46,13 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.body = this._.omit( this.body, [ 'id', 'serverId', 'updated', 'updatedAt', 'created', 'createdAt' ] )
         },
 
-        POST: function(){}
+        POST: function() {
+            if( this.request.headers.v2 ) {
+                this.path.shift()
+                this.veeTwo = true
+                return
+            }
+        }
     },
 
     DELETE: function() {
@@ -61,7 +67,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         DELETE: function() { return this.dbQuery( this.queryBuilder.deleteQuery.call( this ) ) },
         GET: function() { return this.veeTwo ? this.Db.GET( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
         PATCH: function() { return this.veeTwo ? this.Db.PATCH( this ) : this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
-        POST: function() { return this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
+        POST: function() { return this.veeTwo ? this.Db.POST( this ) : this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
     },
 
     dbQuery( data  ) { return this.Q( this.Postgres.query( data.query, data.values ) ) },
@@ -170,6 +176,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST: function( result ) {
+            if( this.veeTwo ) { return this.Response.POST( this, result ) }
+
             var tableName = this.path[1],
                 table = this.tables[ tableName ],
                 fileColumns = this._( table.columns ).filter( column => column.dataType === 'bytea' ),

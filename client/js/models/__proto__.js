@@ -47,7 +47,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     },
 
     post( model ) {
-        return this.Xhr( { method: 'post', resource: this.resource, headers: this.headers || {}, data: JSON.stringify( model ) } )
+        return this.Xhr( { method: 'post', resource: this.resource, headers: Object.assign( { v2: true }, this.headers || {} ), data: JSON.stringify( model ) } )
         .then( response => {
             if( this.parse ) response = this.parse( [ response ] )[0]
 
