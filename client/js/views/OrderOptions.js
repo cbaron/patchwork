@@ -154,8 +154,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         listItemEl.classList.add('edited')
 
         this.els.resetBtn.classList.remove('fd-hidden')
-
+        
         this.showEditSummary()
+        
     },
 
     onResetBtnClick() {
@@ -166,7 +167,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     renderDeliveryOptions() {
-        const option = this.model.delivery.data[0]
+        const option = Object.assign( {}, this.model.delivery.data[0] )
 
         this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Delivery Option', id: 'deliveryOption' } ), insertion: { el: this.els.options } } )
            
@@ -228,8 +229,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     showEditSummary() {
-        const originalWeeklyPrice = this.calculateWeeklyPrice(),
-            priceAdjustment = this.calculatePriceAdjustment(),
+        const priceAdjustment = this.calculatePriceAdjustment(),
             edits = this.els.options.querySelectorAll('li.edited')
 
         this.els.changes.innerHTML = ''
@@ -251,12 +251,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.slurpTemplate( { insertion: { el: this.els.changes }, template: this.templates.fieldEdit( { label: fieldLabel, oldValue, newValue } ) } )
         } )
 
-        this.els.originalWeeklyPrice.textContent = this.Currency.format( originalWeeklyPrice )
-        this.els.newWeeklyPrice.textContent = this.Currency.format( originalWeeklyPrice + priceAdjustment )
+        this.els.originalWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice )
+        this.els.newWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice + priceAdjustment )
 
         this.els.editSummary.classList.remove('fd-hidden')
 
-        this.emit( 'adjustment', { description: this.getAdjustmentDescription(), originalWeeklyPrice, priceAdjustment } )
+        this.emit( 'adjustment', { description: this.getAdjustmentDescription(), originalWeeklyPrice: this.originalWeeklyPrice, priceAdjustment } )
     },
 
     templates: {
@@ -285,6 +285,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => this.GroupDropoffs.get() )
         .then( () => {
             this.renderDeliveryOptions() 
+            this.originalWeeklyPrice = this.calculateWeeklyPrice()
             this.show()
             return Promise.resolve()
         } )

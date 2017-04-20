@@ -89,7 +89,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             .then( () => {
                 //TODO:If no delivery, Toast, or some UI
                 Object.assign( data, { delivery: this.Delivery } )
-                this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.calculateWeeklyPrice() ) ).catch(this.Error)
+                this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
                 this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 this.views.transactions.update( data )
                 this.views.sharePatch.reset()

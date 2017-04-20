@@ -215,7 +215,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     updateDelivery( data ) {
-        const modelCopy = Object.assign( {}, this.model )
+        const modelCopy = JSON.parse( JSON.stringify( this.model ) ) 
 
         return this.DeliveryOption.get( { query: { name: data.deliveryOption } } )
         .then( () => {
