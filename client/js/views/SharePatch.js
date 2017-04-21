@@ -43,12 +43,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onWeeksReset() {
-        this.els.weeksRemoved.textContent = '0'
-        this.els.weeksAdded.textContent = '0'
-
-        if( this.els.options.classList.contains('fd-hidden') ) return this.els.container.classList.add('fd-hidden')
-
-        this.displayTotal()
+        this.onWeekUpdate( { added: 0, removed: 0 } )
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
@@ -67,7 +62,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onWeekUpdate( { added, removed } ) {
-        this.weeksAffected = this.originalWeeksAffected - removed - added
+        this.weeksAffected = this.originalWeeksAffected - removed
         this.els.weeksAffected.textContent = this.weeksAffected
         
         this.els.weeksRemoved.textContent = removed
@@ -76,6 +71,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( added == 0 && removed == 0 && !this.weeklyPriceAdjustment ) return this.els.container.classList.add('fd-hidden')
 
         this.weeksAddedPrice = added * ( this.originalWeeklyPrice + ( this.weeklyPriceAdjustment || 0 ) )
+
         this.els.weeksAddedPrice.textContent = this.Currency.format( this.weeksAddedPrice )
 
         this.weeksRemovedPrice = -1 * removed * this.originalWeeklyPrice
@@ -114,8 +110,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     setWeeksAffected( { selectable, skipped } ) {
-        this.originalWeeksAffected = selectable
-        this.weeksAffected = selectable - skipped
+        this.originalWeeksAffected = selectable - skipped
+        this.weeksAffected = this.originalWeeksAffected
         this.els.weeksAffected.textContent = this.weeksAffected
     },
 
