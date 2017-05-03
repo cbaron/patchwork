@@ -26,10 +26,33 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this
     },
 
+    getWhitespace( count ) {
+        let rv = ""
+
+        while( count > 0 ) { rv += " "; count-- }
+
+        return rv
+    },
+
+    getDescription() {
+        const lineWidth = 100,
+            lines = [
+                [ `Weeks Removed: ${this.els.weeksRemoved.textContent}`, `Adjustment: ${this.Currency.format(this.weeksRemovedPrice)}` ],
+                [ `Weeks Added: ${this.els.weeksAdded.textContent}`, `Adjustment: ${this.Currency.format(this.weeksAddedPrice)}` ]
+            ]
+
+        return [ `${lines[0][0]}${this.getWhitespace( lineWidth - lines[0][0].length - lines[0][1].length )}${lines[0][1]}`,
+                 `${lines[1][0]}${this.getWhitespace( lineWidth - lines[1][0].length - lines[1][1].length )}${lines[1][1]}`,
+                `Options Update: ${this.optionsDescription}`,
+                `Weekly price adjustment: ${this.Currency.format(this.weeklyPriceAdjustment)}`,
+                `Weeks affected: ${this.weeksAffected}`
+            ].join('\n')
+    },
+
     getPatchData() {
         return {
             value: this.total,
-            description: this.description
+            description: this.getDescription()
         }
     },
 
@@ -48,7 +71,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onOptionsUpdate( { description, priceAdjustment } ) {
 
-        this.description = description
+        this.optionsDescription = description
 
         this.els.options.classList.remove('fd-hidden')
 
@@ -83,7 +106,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        this.description = ''
+        this.optionsDescription = ``
         this.els.weeksAdded.textContent = 0
         this.els.weeksRemoved.textContent = 0
         this.weeksRemovedPrice = 0
@@ -97,7 +120,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     reset() {
-        this.description = ''
+        this.optionsDescription = ``
         this.els.weeksAdded.textContent = 0
         this.els.weeksRemoved.textContent = 0
         this.weeksRemovedPrice = 0

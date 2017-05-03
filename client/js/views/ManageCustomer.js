@@ -32,15 +32,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         const adjustment = this.views.sharePatch.getPatchData(),
             weekPatch = this.views.weekOptions.getPatchData()
 
+        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { adjustment.description += ` ( ` }
+
         if( weekPatch.addedDates.length ) {
             const description = weekPatch.addedDates.map( date => date.slice(5) ).join(',')
-            adjustment.description += ` -- Added Weeks: ${description}`
+            adjustment.description += `Added Weeks: ${description}`
+            if( weekPatch.removedDates.length ) { adjustment.description += `, ` }
         }
         
         if( weekPatch.removedDates.length ) {
             const description = weekPatch.removedDates.map( date => date.slice(5) ).join(',')
-            adjustment.description += ` -- Weeks Absent: ${description}`
+            adjustment.description += `Removed Weeks: ${description}`
         }
+        
+        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { adjustment.description += ` ) ` }
 
         this.Xhr( {
             id: this.memberShareId,
@@ -49,6 +54,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             data: JSON.stringify( {
                 adjustment,
                 memberShareId: this.memberShareId,
+                name: this.selectedCustomer.person.data.name,
                 orderOptions: this.views.orderOptions.getPatchData(),
                 shareLabel: this.selectedShare.label,
                 weekOptions: weekPatch.allRemoved

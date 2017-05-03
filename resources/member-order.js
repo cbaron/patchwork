@@ -58,8 +58,10 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
                 from: 'eat.patchworkgardens@gmail.com',
                 subject: `Patchwork Gardens CSA : ${this.body.shareLabel} Adjustment`,
                 body: [
-                    `You ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
-                    `Details: ${this.body.adjustment.description}`,
+                    `Hello ${this.body.name},`,
+                    `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
+                    `Details:`,
+                    `${this.body.adjustment.description}`,
                     `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
                     ( this.body.adjustment.value > 0
                         ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
