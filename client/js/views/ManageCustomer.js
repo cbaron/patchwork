@@ -79,9 +79,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.orderOptions.hide()
             this.views.weekOptions.hide()
             this.views.transactions.hide()
+            this.views.sharePatch.reset()
         } )
 
         this.views.seasons.on( 'selected', data => {
+            this.views.sharePatch.reset()
             this.selectedShare = data.share
             this.memberShareId = this.selectedShare.membershareid
 
@@ -98,7 +100,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
                 this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 this.views.transactions.update( data )
-                this.views.sharePatch.reset()
             } )
         } )
 

@@ -60,6 +60,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.weeklyPriceAdjustment = false
         this.els.options.classList.add('fd-hidden')
 
+        this.els.weeklyAdjustment.textContent = this.Currency.format( 0 )
+        this.els.shareOptionDescription.textContent = ``
+
         this.displayTotal()
 
         if( this.els.weeksRemoved.textContent == 0 && this.els.weeksAdded.textContent == 0 ) this.els.container.classList.add('fd-hidden')
@@ -125,6 +128,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.weeksRemoved.textContent = 0
         this.weeksRemovedPrice = 0
         this.els.weeksRemovedPrice.textContent = this.Currency.format( this.weeksRemovedPrice )
+        this.els.weeklyAdjustment.textContent = this.Currency.format( 0 )
+        this.els.shareOptionDescription.textContent = ``
         this.hide()
     },
 
