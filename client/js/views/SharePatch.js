@@ -94,15 +94,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.weeksRemoved.textContent = removed
         this.els.weeksAdded.textContent = added
 
-        if( added == 0 && removed == 0 && !this.weeklyPriceAdjustment ) return this.els.container.classList.add('fd-hidden')
-
         this.weeksAddedPrice = added * ( this.originalWeeklyPrice + ( this.weeklyPriceAdjustment || 0 ) )
-
         this.els.weeksAddedPrice.textContent = this.Currency.format( this.weeksAddedPrice )
 
         this.weeksRemovedPrice = -1 * removed * this.originalWeeklyPrice
         this.els.weeksRemovedPrice.textContent = this.Currency.format( this.weeksRemovedPrice )
 
+        if( added == 0 && removed == 0 && !this.weeklyPriceAdjustment ) return this.els.container.classList.add('fd-hidden')
+        
         this.updateOptionsAdjustment()
         
         this.displayTotal().show()
