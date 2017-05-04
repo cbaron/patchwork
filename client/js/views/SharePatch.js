@@ -129,6 +129,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.weeksRemovedPrice = 0
         this.els.weeksRemovedPrice.textContent = this.Currency.format( this.weeksRemovedPrice )
         this.els.weeklyAdjustment.textContent = this.Currency.format( 0 )
+        this.weeklyPriceAdjustment = false
         this.els.shareOptionDescription.textContent = ``
         this.hide()
     },

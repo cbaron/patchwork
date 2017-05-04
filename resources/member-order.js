@@ -46,7 +46,7 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
 
         this.body.weekOptions.forEach( date => queries.push( [ `INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 );`, [ this.body.memberShareId, date ] ] ) )
 
-        queries.push( [ `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Adjustment', $1, $2, $3 )`, [ adjustment.value, this.body.memberShareId, adjustment.description ] ] )
+        queries.push( [ `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Adjustment', $1, $2, $3 )`, [ adjustment.value, this.body.memberShareId, [ adjustment.description, this.body.weekDetail ].join('') ] ] )
 
         return queries
     },

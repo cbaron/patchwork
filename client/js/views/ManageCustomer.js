@@ -29,35 +29,37 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     patchMemberShare() {
-        const adjustment = this.views.sharePatch.getPatchData(),
-            weekPatch = this.views.weekOptions.getPatchData()
+        const weekPatch = this.views.weekOptions.getPatchData()
 
-        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { adjustment.description += ` ( ` }
+        let weekDetail = ``
+
+        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ( ` }
 
         if( weekPatch.addedDates.length ) {
             const description = weekPatch.addedDates.map( date => date.slice(5) ).join(',')
-            adjustment.description += `Added Weeks: ${description}`
-            if( weekPatch.removedDates.length ) { adjustment.description += `, ` }
+            weekDetail += `Added Weeks: ${description}`
+            if( weekPatch.removedDates.length ) { weekDetail += `, ` }
         }
         
         if( weekPatch.removedDates.length ) {
             const description = weekPatch.removedDates.map( date => date.slice(5) ).join(',')
-            adjustment.description += `Removed Weeks: ${description}`
+            weekDetail += `Removed Weeks: ${description}`
         }
         
-        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { adjustment.description += ` ) ` }
+        if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ) ` }
 
         this.Xhr( {
             id: this.memberShareId,
             method: 'patch',
             resource: 'member-order',
             data: JSON.stringify( {
-                adjustment,
+                adjustment: this.views.sharePatch.getPatchData(),
                 memberShareId: this.memberShareId,
                 name: this.selectedCustomer.person.data.name,
                 orderOptions: this.views.orderOptions.getPatchData(),
                 shareLabel: this.selectedShare.label,
-                weekOptions: weekPatch.allRemoved
+                weekOptions: weekPatch.allRemoved,
+                weekDetail
             } )
         } )
         .then( () => {
