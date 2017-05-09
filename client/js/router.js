@@ -92,13 +92,12 @@ module.exports = new (
         },
         
         resourceHandler( resource ) {
-            this.header = require('./views/AdminHeader')
-
-            if( this.footer ) this.footer.hide()
+            this.handleHeader( `admin/${resource}` )
+            this.handleFooter( `admin/${resource}` )
 
             this.userPromise.then( () => {
 
-                if( this.user.id ) this.header.onUser( this.user )
+                if( this.user.id ) this.adminHeader.onUser( this.user )
 
                 Object.keys( this.views ).forEach( key => this.views[key].hide() )
 

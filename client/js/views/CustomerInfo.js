@@ -16,7 +16,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     events: {
-        onPaymentPlan: 'change',
+        onpaymentplan: 'change',
         resetBtn: 'click',
         saveBtn: 'click'
     },
@@ -28,7 +28,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         { table: 'member', type: 'text', name: 'phonenumber', label: 'Phone' },
         { table: 'member', type: 'text', name: 'address', label: 'Address' },
         { table: 'memberFoodOmission', type: 'select', name: 'neverReceive', label: 'Vegetable to Never Receive' },
-        { table: 'member', type: 'select', name: 'onPaymentPlan', label: 'On Payment Plan' }
+        { table: 'member', type: 'select', name: 'onpaymentplan', label: 'On Payment Plan' }
     ],
 
     getTemplateOptions() {
@@ -74,19 +74,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
     },
 
-    onOnPaymentPlanChange( e ) {
+    onOnpaymentplanChange( e ) {
         const el = e.target,
             fieldValue = Boolean( el.value === "true" ),
-            modelValue = this.model.member.data.onPaymentPlan
+            modelValue = this.model.member.data.onpaymentplan
 
         if( modelValue !== fieldValue ) {
             el.classList.add('edited')
-            this.editedFields[ 'onPaymentPlan' ] = Boolean( el.value === "true" )
+            this.editedFields[ 'onpaymentplan' ] = Boolean( el.value === "true" )
             this.emit('edited')
             this.showEditSummary()
-        } else if( this.editedFields.onPaymentPlan !== undefined ) {
+        } else if( this.editedFields.onpaymentplan !== undefined ) {
             el.classList.remove('edited')
-            this.editedFields.onPaymentPlan = undefined
+            this.editedFields.onpaymentplan = undefined
             this.showEditSummary()
         }
     },
@@ -136,7 +136,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
         }
 
-        this.els.onPaymentPlan.selectedIndex = this.model.member.data.onPaymentPlan ? 0 : 1
+        this.els.onpaymentplan.selectedIndex = this.model.member.data.onpaymentplan ? 0 : 1
     },
 
     postRender() {
@@ -180,10 +180,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     : this.model[ field.table ].data[ field.name ]
                 let newValue = this.editedFields[ field.name ]
 
-                if( ! oldValue && field.name !== 'onPaymentPlan' ) oldValue = 'EMPTY'
-                if( ! newValue && field.name !== 'onPaymentPlan' ) newValue = 'EMPTY'
+                if( ! oldValue && field.name !== 'onpaymentplan' ) oldValue = 'EMPTY'
+                if( ! newValue && field.name !== 'onpaymentplan' ) newValue = 'EMPTY'
 
-                if( field.name === 'onPaymentPlan' ) {
+                if( field.name === 'onpaymentplan' ) {
                     oldValue = oldValue.toString()
                     newValue = newValue.toString()
                 }

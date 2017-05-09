@@ -18,6 +18,11 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             const query = require('url').parse( this.request.url ).query
             if( query === '{}' ) return this.query = { }
 
+            if( this.request.headers.v2 ) {
+                this.path.shift()
+                this.veeTwo = true
+            }
+
             if( query !== null && query.charAt(0) === "{" ) {
                 this.veeTwo = true
                 this.path.shift()
