@@ -8,7 +8,7 @@ Object.assign( Share.prototype, ListItem.prototype, {
 
         this.factory.create( 'shareBox', { insertion: { value: { el: this.templateData.shareBox.get(0) } }, model: { value: this.model } } )
 
-        if( /spring/i.test( this.model.get('name') ) || /spring/i.test( this.model.get('label') ) ) {
+        if( !this.user.isAdmin() && ( /spring/i.test( this.model.get('name') ) || /spring/i.test( this.model.get('label') ) ) ) {
             this.templateData.container.addClass('inactive').off('click')
         }
 

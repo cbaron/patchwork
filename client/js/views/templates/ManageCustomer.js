@@ -1,10 +1,7 @@
 module.exports = p =>
 `<div>
     <div class="main-search">
-        <div class="form-grouping horizontal">
-            <label class="form-label">Search Customers</label>  
-            <input data-js="customerInput" class="input-std type="text">
-        </div>
+        <div data-view="memberTypeahead"></div>
     </div>
     <div data-view="customerInfo"></div>
     <div data-view="seasons"></div>

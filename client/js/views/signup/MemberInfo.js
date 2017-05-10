@@ -182,7 +182,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         $el.siblings('.help-block').remove()
     },
 
-    template: require('../../templates/signup/memberInfo'),
+    template: require('../templates/MemberInfo'),
 
     templates: {
         csaCustomization: require('../../templates/csaCustomization')

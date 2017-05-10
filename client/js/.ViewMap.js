@@ -16,6 +16,7 @@ module.exports={
 	InstanceRow: require('./views/InstanceRow'),
 	ManageCustomer: require('./views/ManageCustomer'),
 	Markets: require('./views/Markets'),
+	MemberTypeahead: require('./views/MemberTypeahead'),
 	Members: require('./views/Members'),
 	MyView: require('./views/MyView'),
 	OrderOptions: require('./views/OrderOptions'),

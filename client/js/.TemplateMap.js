@@ -12,6 +12,8 @@ module.exports={
 	Footer: require('./views/templates/Footer'),
 	Header: require('./views/templates/Header'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),
+	MemberInfo: require('./views/templates/MemberInfo'),
+	MemberTypeahead: require('./views/templates/MemberTypeahead'),
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
