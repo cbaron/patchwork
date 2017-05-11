@@ -7,6 +7,8 @@ module.exports = Object.assign( {}, Super, {
     Route: Object.create( Super.Model, { resource: { value: 'deliveryroute' } } ),
     SkipWeeks: Object.create( Super.Model, { resource: { value: 'membershareskipweek' } } ),
 
+    Share: require('../models/Share'),
+
     events: {
         dates: 'click',
         resetBtn: 'click',
@@ -26,9 +28,7 @@ module.exports = Object.assign( {}, Super, {
         if( ! Number.isInteger( dayOfWeek ) ) return this
 
         const now = this.Moment(),
-            nextWeek = ( now.day() === 6 || ( now.day() === 5 && now.hour() > 5 ) )
-                ? this.Moment().day(15).hour(0).minute(0).second(0).millisecond(0)
-                : this.Moment().day(8).hour(0).minute(0).second(0).millisecond(0),
+            nextDeliveryCutoff = this.Share.prototype.determineNextDeliveryCutoff( now.day() ),
             endDate = this.Moment( this.model.share.enddate )
             
         let deliveryDate = this.Moment( this.model.share.startdate ),
@@ -45,7 +45,7 @@ module.exports = Object.assign( {}, Super, {
             
             this.dates.push( {
                 date: this.Moment( deliveryDate ),
-                unselectable: Boolean( deliveryDate.diff( nextWeek ) < 0 ),
+                unselectable: Boolean( deliveryDate.diff( nextDeliveryCutoff ) < 0 ),
                 selected: !isSkipWeek
             } )
 
