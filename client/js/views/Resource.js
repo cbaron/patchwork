@@ -390,7 +390,7 @@ Object.assign( Resource.prototype, Table.prototype, {
 
         this.modalView.show( {
             body: this.templates.create( {
-                fields: this.createProperties.map( property => 
+                fields: this.createProperties.map( property =>
                     this.templates[ ( property.property === "dayofweek" ) ? "DayOfWeek" : property.range ]( {
                         class: ( property.fk ) ? 'typeahead' : '',
                         name: property.property,
