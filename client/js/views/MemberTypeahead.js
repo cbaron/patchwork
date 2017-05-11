@@ -25,6 +25,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
 
         } )
+
+        return this
     },
 
     search( attr, term, suggest ) {
