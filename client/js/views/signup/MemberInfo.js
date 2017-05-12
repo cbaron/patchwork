@@ -107,6 +107,10 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     postRender() {
         var self = this;
 
+        if( this.user.isAdmin() ) {
+            this.views.memberTypeahead = this.factory.create( memberTypeaheady, Object.assign( { insertion: { value: { el: this.templateData.container, method: 'after' } } } ) )
+        }
+
         ( window.google && window.google.maps ) 
             ? this.initAutocomplete()
             : window.initGMap = () => this.initAutocomplete()

@@ -280,6 +280,22 @@
   padding: 0.5rem;
   text-align: center;
 }
+.MemberTypeahead {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.MemberTypeahead input {
+  display: inline-block;
+  font-size: 1.2rem;
+  padding: 0.75rem 0.5rem;
+  width: 25rem;
+}
+.MemberTypeahead .form-label {
+  color: #c98702;
+  font-size: 1.4rem;
+  margin-right: 1rem;
+}
 .OrderOptions ol {
   text-align: left;
 }
