@@ -84,17 +84,12 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
                 const fkTableDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor
                     fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor ),
                     fkTableName = column.fk.table,
-                    fkColumnName = column.fk.column,
-                    descTableName = fkTableDescriptorColumn.fk.table
+                    fkColumnName = column.fk.column
 
                 if( /id$/.test( fkTableDescriptor ) ) {
-                    fkFrom.push( `LEFT JOIN "${fkTableName}" ON "${fkTableName}"."${fkColumnName}" = ${this.path[1]}` )
-                    fkSelect.push( `"${descTableName}"."${this.tables[ descTableName ].meta.recorddescriptor}" AS "${descTableName}.${this.tables[ descTableName ].meta.recorddescriptor}"'` )
-                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s',
-                        fkTableDescriptorColumn.fk.table,
-                        fkTableDescriptorColumn.fk.table,
-                        "id",
-                        column.fk.table, fkTableDescriptorColumn.name ) )
+                    let descTableName = fkTableDescriptorColumn.fk.table
+                    fkFrom.push( `LEFT JOIN "${fkTableName}" ON "${fkTableName}"."${fkColumnName}" = "${this.path[1]}"."${column.name}"` )
+                    fkSelect.push( `"${descTableName}"."${this.tables[ descTableName ].meta.recorddescriptor}" AS "${descTableName}.${this.tables[ descTableName ].meta.recorddescriptor}"` )
                     fkFrom.push( `LEFT JOIN ${descTableName} ON "${descTableName}"."id" = "${fkTableName}"."${fkTableDescriptorColumn.name}"` )
                 } else {
                     if( fkTableDescriptor ) {
