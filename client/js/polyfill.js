@@ -44,4 +44,9 @@ window.requestAnimationFrame = window.requestAnimationFrame       ||
                                window.mozRequestAnimationFrame    ||
                                requestAnimationFramePolyfill
 
+if( ! window.Intl ) {
+    require('intl')
+    require('intl/locale-data/jsonp/en.js')
+}
+
 module.exports = true
