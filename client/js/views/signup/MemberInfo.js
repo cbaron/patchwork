@@ -61,13 +61,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         label: 'Password',
         type: 'password',
         error: "Password must be at least six characters.",
-        validate: val => val.length > 5
+        validate: function(val) { return this.user.isAdmin() || val.length > 5 }
     }, {
         name: 'repeatpassword',
         label: 'Repeat Password',
         type: 'password',
         error: "Passwords must match.",
-        validate: function( val ) { return val === this.templateData.password.val() }
+        validate: function( val ) { return this.user.isAdmin() || ( val === this.templateData.password.val() ) }
     }, {
         name: 'omission',
         label: 'One vegetable to never receive',
@@ -124,6 +124,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 this.templateData.phonenumber.val( customer.member.data.phonenumber )
                 this.templateData.address.val( customer.member.data.address )
                 this.templateData.extraaddress.val( customer.member.data.extraaddress )
+                this.templateData.heard.val( customer.member.data.heard )
 
                 this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
                 .then( () => {

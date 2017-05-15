@@ -19,6 +19,8 @@ module.exports = Object.assign( { }, require( './__proto__' ), {
         document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         this.user.clear()
 
+        this.user.set( this.user.defaults )
+
         this.els.name.textContent = ''
         this.els.userPanel.classList.add('hide')
 
