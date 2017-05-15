@@ -3,6 +3,8 @@ var View = require('../MyView'),
     MemberInfo = function() { return View.apply( this, arguments ) }
 
 Object.assign( MemberInfo.prototype, View.prototype, {
+                
+    MemberFoodOmission: require('../../models/MemberFoodOmission'),
 
     addressSelected() {
         var place = this.addressAutoComplete.getPlace()
@@ -108,7 +110,40 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         var self = this;
 
         if( this.user.isAdmin() ) {
-            this.views.memberTypeahead = this.factory.create( memberTypeaheady, Object.assign( { insertion: { value: { el: this.templateData.container, method: 'after' } } } ) )
+            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { value: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } } ) ) }
+            this.views.memberTypeahead.focus()
+
+            this.views.memberTypeahead.on( 'customerSelected', customer => {
+                this.selectedCustomer = customer
+                this.templateData.name.val( customer.person.data.name )
+                this.templateData.email.val(
+                    customer.person.data.secondaryEmail
+                        ? [ customer.person.data.email, customer.person.data.secondaryEmail ].join(', ')
+                        : customer.person.data.email
+                )
+                this.templateData.phonenumber.val( customer.member.data.phonenumber )
+                this.templateData.address.val( customer.member.data.address )
+                this.templateData.extraaddress.val( customer.member.data.extraaddress )
+
+                this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
+                .then( () => {
+                    if( this.MemberFoodOmission.data.length ) {
+                        const datum = this.MemberFoodOmission.data[0],
+                            index = this.FoodOmission.Foods.data.findIndex( food =>
+                                ( food.produceid == datum.produceid && food.produceid !== null ) ||
+                                ( food.producefamilyid == datum.producefamilyid && datum.produceid === null ) )
+
+                        if( index !== -1 ) {
+                            const foodDatum = this.FoodOmission.Foods.data[ index ]
+                            datum.name = foodDatum.name
+                            this.FoodOmission.ms.setSelection( [ Object.assign( {}, foodDatum, { id: index } ) ] )
+                        }
+                    } else {
+                        this.FoodOmission.clear()
+                    }
+                } )
+                .catch( e => { this.Toast.showMessage( 'error', 'Error retrieving Food Omission Data' ); this.Error } )
+            } );
         }
 
         ( window.google && window.google.maps ) 
@@ -132,7 +167,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } )
         
-        this.templateData.container.find('input')
+        this.templateData.container.find('form input')
         .on( 'blur', function() {
             var $el = self.$(this),
                 field = self._( self.fields ).find( function( field ) { return field.name === $el.attr('id') } )
@@ -209,7 +244,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } ) )
         .then( () => {
-            if( valid ) {
+            if( valid && (!this.user.isAdmin()) ) {
                 return this.Q( this.$.ajax( {
                     data: JSON.stringify( this.user.attributes ),
                     method: "PATCH",

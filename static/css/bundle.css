@@ -1021,6 +1021,10 @@ footer .future-days {
   background-color: #f7f7f7;
 }
 
+.signup-class .member-info .MemberTypeahead {
+  margin: 2rem;
+}
+
 .signup-class .member-info .produce-family {
   font-weight: bold;
 }

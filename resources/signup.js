@@ -189,9 +189,15 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     newPersonQueries() {
-        return this.dbQuery( {
-            query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
-            values: [ this.body.member.email, this.body.member.password, this.body.member.name ] } )
+        return ( this.body.isAdmin
+            ? this.dbQuery( {
+                query: "INSERT INTO person ( email, name ) VALUES ( $1, $2 ) RETURNING id",
+                values: [ this.body.member.email, this.body.member.name ]
+              } )
+            : this.dbQuery( {
+                query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
+                values: [ this.body.member.email, this.body.member.password, this.body.member.name ]
+              } ) )
         .then( result => this.insertMember( result.rows[0].id ) )
     },
 

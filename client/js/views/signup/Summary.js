@@ -22,7 +22,7 @@ Object.assign( Summary.prototype, View.prototype, {
     Spinner: require('../../plugins/spinner.js'),
 
     buildRequest() {
-        var addressModel = this.user.get('addressModel')
+        const addressModel = this.user.get('addressModel')
 
         return JSON.stringify( {
             member: Object.assign(
@@ -30,7 +30,8 @@ Object.assign( Summary.prototype, View.prototype, {
                 { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
             payment: ( this.paymentSelected === 'card' ) ? this.getFormData() : {},
             shares: this.buildShares(),
-            total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal
+            total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal,
+            isAdmin: this.user.isAdmin(),
         } )
     },
 
