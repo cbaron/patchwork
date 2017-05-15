@@ -57,6 +57,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         "date": "Date",
         "integer": "Integer",
         "money": "Float",
+        "real": "Float",
         "text": "TextArea",
         "timestamp with time zone": "DateTime",
         "time with time zone": "Time"

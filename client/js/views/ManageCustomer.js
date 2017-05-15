@@ -6,7 +6,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     patchMemberShare() {
         const weekPatch = this.views.weekOptions.getPatchData()
 
-        let weekDetail = ``
+        let weekDetail = ``,
+            emailTo = [ this.selectedCustomer.person.data.email ]
+
+        if( this.selectedCustomer.person.data.secondaryEmail ) emailTo.push( this.selectedCustomer.person.data.secondaryEmail )
 
         if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ( ` }
 
@@ -34,7 +37,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 orderOptions: this.views.orderOptions.getPatchData(),
                 shareLabel: this.selectedShare.label,
                 weekOptions: weekPatch.allRemoved,
-                weekDetail
+                weekDetail,
+                to: emailTo
             } )
         } )
         .then( () => {

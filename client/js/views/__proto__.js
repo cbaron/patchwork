@@ -306,7 +306,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        fragment.querySelectorAll( `${selector}, ${viewSelector}` ).forEach( el => {
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
             else if( el.hasAttribute( this.slurp.view ) ) {
                 let attr = el.getAttribute(this.slurp.view)

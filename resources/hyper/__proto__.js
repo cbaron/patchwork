@@ -81,39 +81,34 @@ Object.assign( HyperResource.prototype, BaseResource.prototype, {
         this._( this.tables[ this.path[1] ].columns )
             .filter( column => column.fk && this.tables[ column.fk.table ].meta )
             .forEach( column => {
-                var fkTableDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor
-                    fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor )
+                const fkTableDescriptor = this.tables[ column.fk.table ].meta.recorddescriptor
+                    fkTableDescriptorColumn = this._( this.tables[ column.fk.table ].columns ).find( column => column.name === fkTableDescriptor ),
+                    fkTableName = column.fk.table,
+                    fkColumnName = column.fk.column
 
                 if( /id$/.test( fkTableDescriptor ) ) {
-                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
-                    fkSelect.push(
-                        this.format( '%s.%s AS "%s.%s"',
-                            fkTableDescriptorColumn.fk.table,
-                            this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor,
-                            fkTableDescriptorColumn.fk.table,
-                            this.tables[ fkTableDescriptorColumn.fk.table ].meta.recorddescriptor )
-                    )
-                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s',
-                        fkTableDescriptorColumn.fk.table,
-                        fkTableDescriptorColumn.fk.table,
-                        "id",
-                        column.fk.table, fkTableDescriptorColumn.name ) )
+                    let descTableName = fkTableDescriptorColumn.fk.table
+                    fkFrom.push( `LEFT JOIN "${fkTableName}" ON "${fkTableName}"."${fkColumnName}" = "${this.path[1]}"."${column.name}"` )
+                    fkSelect.push( `"${descTableName}"."${this.tables[ descTableName ].meta.recorddescriptor}" AS "${descTableName}.${this.tables[ descTableName ].meta.recorddescriptor}"` )
+                    fkFrom.push( `LEFT JOIN ${descTableName} ON "${descTableName}"."id" = "${fkTableName}"."${fkTableDescriptorColumn.name}"` )
                 } else {
                     if( fkTableDescriptor ) {
-                        fkSelect.push( this.format( '%s.%s AS "%s.%s"', column.fk.table, fkTableDescriptor, column.fk.table, fkTableDescriptor ) )
+                        fkSelect.push( `"${fkTableName}"."${fkTableDescriptor}" AS "${fkTableName}.${fkTableDescriptor}"` )
                     }
-                    fkFrom.push( this.format( 'LEFT JOIN %s ON %s.%s = %s.%s', column.fk.table, column.fk.table, column.fk.column, this.path[1], column.name ) )
+                    fkFrom.push( `LEFT JOIN "${fkTableName}" ON "${fkTableName}"."${fkColumnName}" = "${this.path[1]}"."${column.name}"` )
                 }
             } )
 
-        return this.format( "Select %s %s FROM %s %s", this.getSelect(), ( fkSelect.length ) ? ", " + fkSelect.join(', ') : "", this.path[1], fkFrom.join(' ') )
+        return `Select ${this.getSelect()} ${this.getFkSelect(fkSelect)} FROM "${this.path[1]}" ${fkFrom.join(' ')}`
     },
+
+    getFkSelect( fkSelect ) { return fkSelect.length ? ", " + fkSelect.join(', ') : "" },
 
     getSelect() {
         var tableName = this.path[1], rv = [ ]
 
         this.tables[ tableName ].columns.forEach( column => {
-            if( column.dataType !== 'bytea' ) rv.push( this.format( '%s.%s', tableName, column.name ) )
+            if( column.dataType !== 'bytea' ) rv.push( `"${tableName}"."${column.name}"` )
         } )
 
         return rv.join(', ')

@@ -8,15 +8,17 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
 
     dayOfWeekMap: require('./DeliveryRoute').prototype.dayOfWeekMap,
 
+    determineNextDeliveryCutoff( dayOfWeek ) {
+        return this.moment().day( dayOfWeek === 0 ? 1 : 8 ).hour(0).minute(0).second(0).millisecond(0)
+    },
+
     getDeliveryDates() {
         var dates = [ ],
             now = this.moment(),
             deliveryDay = this.get('selectedDelivery').dayofweek,
             deliveryDate = this.moment( this.get('startdate') ),
             endDate = this.moment( this.get('enddate') ),
-            nextWeek = ( now.day() === 6 || ( now.day() === 5 && now.hour() > 5 ) )
-                ? this.moment().day(15).hour(0).minute(0).second(0).millisecond(0)
-                : this.moment().day(8).hour(0).minute(0).second(0).millisecond(0),
+            nextDeliveryCutoff = this.determineNextDeliveryCutoff( now.day() ),
             startDay = startDay = deliveryDate.day()
 
         if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])
@@ -28,7 +30,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
             var model = new this.DeliveryDate( deliveryDate, { parse: true } )
-            if( deliveryDate.diff( nextWeek ) < 0 ) model.set( { unselectable: true } )
+            if( deliveryDate.diff( nextDeliveryCutoff ) < 0 ) model.set( { unselectable: true } )
             dates.push( model )
             deliveryDate.add( 7, 'days' )
         }
