@@ -8,8 +8,9 @@ Object.assign( Home.prototype, CustomContent.prototype, {
     },
 
     postRender() {
-        CustomContent.prototype.postRender.call(this)
-        this.templateData.carousel.carousel()
+        const result = CustomContent.prototype.postRender.call(this)
+
+        if( result && result.then ) result.then( () => this.templateData.carousel.carousel() ).catch( e => console.log( e.stack || e ) )
     },
 
     requiresLogin: false,

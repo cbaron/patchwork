@@ -6,7 +6,7 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
     loadImageTable( table, model ) {
         return new Promise( ( resolve, reject ) => {
             var imageEl = new Image();
-            imageEl.src = this.util.format( '/file/%s/image/%s', table.name, model.id )
+            imageEl.src = `/file/${table.name}/image/${model.id}`
             imageEl.onload = () => {
                 model.set( 'tableName', table.name )
                 if( table.name === "carousel" && model.get('position') === 1 ) model.set( 'first', true )
@@ -22,8 +22,9 @@ Object.assign( CustomContent.prototype, MyView.prototype, {
         this.collections[ table.name ].fetch().then( () => {
 
             if( table.image ) {
-                var promiseChain = new Promise( ( resolve, reject ) => resolve() )
-                this.collections[ table.name ].forEach( model => promiseChain = promiseChain.then( () => this.loadImageTable( table, model ) ) )
+                let promise = Promise.resolve()
+                this.collections[ table.name ].forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
+                return promise
             } else {
                 this.collections[ table.name ].forEach( model =>
                     this.slurpTemplate( {
