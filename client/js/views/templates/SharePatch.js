@@ -44,6 +44,9 @@ module.exports = p =>
                     <span data-js="adjustment"></span>
                 </li>
             </ul>
+            <div class="email">
+                <label><input data-js="sendEmail" type="checkbox">Send Email</label>
+            </div>
             <div data-view="buttonFlow"></div>
         </div>
     </div>

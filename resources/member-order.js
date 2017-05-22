@@ -52,6 +52,8 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     },
 
     notify() {
+        if( !this.body.adjustment.sendEmail ) return this.Q()
+
         return this.Q(
             this.Email.send( {
                 to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,

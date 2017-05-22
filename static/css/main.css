@@ -363,6 +363,13 @@
 .SharePatch .content >div li span {
   margin: 0 0.5rem;
 }
+.SharePatch .content >div .email {
+  margin-top: 1rem;
+  text-align: center;
+}
+.SharePatch .content >div .email input {
+  margin: 0 0.5rem;
+}
 .SharePatch .content >div .ButtonFlow {
   margin: 1rem;
   text-align: center;

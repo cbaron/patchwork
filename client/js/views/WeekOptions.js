@@ -28,7 +28,7 @@ module.exports = Object.assign( {}, Super, {
         if( ! Number.isInteger( dayOfWeek ) ) return this
 
         const now = this.Moment(),
-            nextDeliveryCutoff = this.Share.prototype.determineNextDeliveryCutoff( now.day() ),
+            nextDeliveryCutoff = now,
             endDate = this.Moment( this.model.share.enddate )
             
         let deliveryDate = this.Moment( this.model.share.startdate ),

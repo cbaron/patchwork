@@ -26,6 +26,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         { table: 'person', type: 'text', name: 'email', label: 'Email' },
         { table: 'person', type: 'text', name: 'secondaryEmail', label: 'Secondary Email' },
         { table: 'member', type: 'text', name: 'phonenumber', label: 'Phone' },
+        { table: 'member', type: 'text', name: 'zipcode', label: 'Zip Code' },
         { table: 'member', type: 'text', name: 'address', label: 'Address' },
         { table: 'memberFoodOmission', type: 'select', name: 'neverReceive', label: 'Vegetable to Never Receive' },
         { table: 'member', type: 'select', name: 'onpaymentplan', label: 'On Payment Plan' }

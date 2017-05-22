@@ -52,7 +52,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     getPatchData() {
         return {
             value: this.total,
-            description: this.getDescription()
+            description: this.getDescription(),
+            sendEmail: this.els.sendEmail.checked
         }
     },
 
@@ -122,6 +123,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     reset() {
+        this.els.sendEmail.checked = false
         this.optionsDescription = ``
         this.els.weeksAdded.textContent = 0
         this.els.weeksRemoved.textContent = 0
