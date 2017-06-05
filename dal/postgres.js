@@ -107,7 +107,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
 
                             if( err ) { console.log( query, args ); return reject( err ) }
 
-                            resolve( result )
+                            resolve( opts.rowsOnly ? result.rows : result )
                         } )
                     } )
                 )

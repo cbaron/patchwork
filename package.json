@@ -40,7 +40,7 @@
     "jquery": "^2.1.4",
     "livereload": "git://github.com/cbaron/node-livereload.git#master",
     "path": "^0.12.7",
-    "pikaday": "git://github.com/dbushell/Pikaday#1.5.1",
+    "pikaday": "git://github.com/dbushell/Pikaday.git#1.5.1",
     "strictify": "^0.2.0",
     "stylus": "0.54.0",
     "vinyl-source-stream": "^1.1.0",

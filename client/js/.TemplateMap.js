@@ -15,6 +15,7 @@ module.exports={
 	MemberInfo: require('./views/templates/MemberInfo'),
 	MemberTypeahead: require('./views/templates/MemberTypeahead'),
 	OrderOptions: require('./views/templates/OrderOptions'),
+	Reporting: require('./views/templates/Reporting'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
 	SharePatch: require('./views/templates/SharePatch'),

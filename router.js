@@ -262,6 +262,7 @@ module.exports = new Router( {
             'mail': true,
             'member-order': true,
             'never-receive': true,
+            'report': true,
             'signup': true,
             'user': true
         }

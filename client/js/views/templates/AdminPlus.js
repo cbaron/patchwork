@@ -1,4 +1,5 @@
 module.exports = p =>
 `<div>
-    <button data-js="manageBtn" class="manage-btn">Manage Customers</button>  
+    <button data-js="manageBtn">Manage Customers</button>  
+    <button data-js="reportingBtn">~_~ Reporting ~_~</button>  
 </div>`

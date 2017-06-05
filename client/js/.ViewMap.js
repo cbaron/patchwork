@@ -20,6 +20,7 @@ module.exports={
 	Members: require('./views/Members'),
 	MyView: require('./views/MyView'),
 	OrderOptions: require('./views/OrderOptions'),
+	Reporting: require('./views/Reporting'),
 	Resource: require('./views/Resource'),
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),
