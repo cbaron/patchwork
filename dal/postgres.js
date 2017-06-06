@@ -7,7 +7,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
     },
 
     query( query, args, opts = { } ) {
-        return this._factory( opts ).query( query, args )
+        return this._factory( opts ).query( query, args, opts )
     },
 
     select( name, where, opts = { } ) {
@@ -17,6 +17,10 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
             `SELECT * FROM ${name} WHERE ${whereClause}`,
             keys.map( key => where[key] )
         )
+    },
+
+    stream( query, pipe, opts ) {
+        return this._factory( opts ).stream( query, pipe )
     },
 
     transaction( queries ) {
@@ -84,6 +88,8 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
 
     _factory( data ) {
         return Object.create( {
+            CopyTo: require('pg-copy-streams').to,
+
             P: MyObject.P,
 
             connect() {
@@ -99,7 +105,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
                 } )
             },
 
-            query( query, args ) {
+            query( query, args, opts={} ) {
                 return this.connect().then( () =>
                     new Promise( ( resolve, reject ) => {
                         this.client.query( query, args, ( err, result ) => {
@@ -109,6 +115,17 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
 
                             resolve( opts.rowsOnly ? result.rows : result )
                         } )
+                    } )
+                )
+            },
+
+            stream( query, pipe ) {
+                return this.connect().then( () =>
+                    new Promise( ( resolve, reject ) => {
+                        const stream = this.client.query( this.CopyTo( query ) )
+                        stream.pipe( pipe )
+                        stream.on( 'end', () => { resolve(); this.done() } )
+                        stream.on( 'error', e => { reject(e); this.done() } )
                     } )
                 )
             },

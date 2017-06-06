@@ -24,3 +24,5 @@ Promise.all( [
     console.log( "Secure server spinning" )
 } )
 .catch( e => console.log( e.stack || e ) )
+
+process.on( 'unhandledRejection' , e => console.log( e.stack || e ) )

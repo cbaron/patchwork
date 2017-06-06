@@ -45,7 +45,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
                 if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
 
-                instance[ request.method ]().catch( err => reject( err ) )
+                instance[ request.method ]()
+                .catch( err => {
+                    if( err && err.message === "Handled" ) return
+                    reject(err)
+                } )
             } )
         } )
     },
@@ -149,7 +153,9 @@ Object.assign( Router.prototype, MyObject.prototype, {
             }
         }
 
-        if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
+        if( /text\/html/.test( request.headers.accept ) && request.method === "GET" && path[1] === "report" ) {
+            return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
+        } else if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
                    ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {

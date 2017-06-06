@@ -9,7 +9,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'navigate', 'admin-plus/manage-customer' )
     },
 
-    onReporgingBtnClick() {
+    onReportingBtnClick() {
         this.emit( 'navigate', 'admin-plus/reporting' )
     },
 

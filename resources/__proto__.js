@@ -11,6 +11,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     
     Response: require('./lib/Response'),
 
+    badRequest() { return this.respond( { stopChain: true, code: 400, body: 'BadRequest' } ) },
+
     context: {
         DELETE:function(){},
 
@@ -76,6 +78,11 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     },
 
     dbQuery( data  ) { return this.Q( this.Postgres.query( data.query, data.values ) ) },
+
+    getQs() {
+        const query = require('url').parse( this.request.url ).query
+        return this.query = JSON.parse( decodeURIComponent( query ) )
+    },
 
     GET: function() {
         return [
@@ -158,6 +165,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         data.body = JSON.stringify( data.body );
         this.response.writeHead( data.code || 200, this._.extend( this.getHeaders( data.body ), data.headers || {} ) )
         this.response.end( data.body );
+        if( data.stopChain ) { this.handled = true; throw new Error("Handled") }
     },
 
     responses: {

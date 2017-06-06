@@ -33,7 +33,7 @@
   margin-top: 7.5rem;
   text-align: center;
 }
-.AdminPlus .button {
+.AdminPlus button {
   background-color: #f2f2f2;
   border: 1px solid #bbb;
   border-radius: 10px;
@@ -46,7 +46,7 @@
   width: 16rem;
   text-transform: uppercase;
 }
-.AdminPlus .button:hover {
+.AdminPlus button:hover {
   background-color: #ebebeb;
 }
 .ButtonFlow .state {
@@ -322,6 +322,39 @@
 }
 .OrderOptions ol li select:disabled {
   opacity: 0.4;
+}
+.Reporting {
+  padding: 7rem 1.5rem 1.5rem;
+}
+.Reporting h4 {
+  text-align: center;
+}
+.Reporting form {
+  display: flex;
+  text-align: center;
+}
+.Reporting form >* {
+  flex: 1;
+}
+.Reporting form >* button {
+  margin: 0rem 1rem;
+}
+.Reporting .results {
+  overflow: auto;
+  padding: 1rem;
+}
+.Reporting .results .columns {
+  text-align: center;
+}
+.Reporting .results .columns,
+.Reporting .results .rows > ol {
+  display: flex;
+}
+.Reporting .results .columns li,
+.Reporting .results .rows > ol li {
+  border: 1px solid;
+  flex: 1;
+  padding: 0.5rem;
 }
 .Seasons .share-label {
   margin-right: 1rem;
@@ -632,6 +665,11 @@
 }
 body.admin-plus {
   background-color: #f9f9f9;
+}
+ol {
+  -webkit-margin-before: 0rem;
+  -webkit-margin-after: 0rem;
+  -webkit-padding-start: 0rem;
 }
 .form-grouping {
   margin-bottom: 1rem;
