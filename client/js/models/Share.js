@@ -9,7 +9,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     dayOfWeekMap: require('./DeliveryRoute').prototype.dayOfWeekMap,
 
     determineNextDeliveryCutoff( dayOfWeek ) {
-        return this.moment().day( dayOfWeek === 0 ? 1 : 8 ).hour(0).minute(0).second(0).millisecond(0)
+        const nextDeliveryDay = dayOfWeek > 4 ? 15 : 8
+        return this.moment().day( nextDeliveryDay ).hour(0).minute(0).second(0).millisecond(0)
     },
 
     getDeliveryDates() {
