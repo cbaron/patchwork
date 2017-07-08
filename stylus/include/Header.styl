@@ -1,0 +1,45 @@
+.Header
+    font-family: "RalewayRegular"
+    
+    >div:first-child img
+        width: 100%
+        height: 15rem
+        margin: 0
+        
+    >div:nth-child(2)
+        background-color: black
+        color: white
+        padding: .5rem
+        line-height: 1
+        
+        >div:first-child
+            text-align: center
+            
+            >span
+                font-size: 6rem
+                text-transform: uppercase
+                cursor: pointer
+                
+                &:hover
+                    opacity: .9
+            
+        ul
+            display: flex
+            justify-content: center
+            align-items: center
+            flex-wrap: wrap
+            line-height: 1.3
+            
+            li
+                margin: 0 1.75rem
+                font-size: 2rem
+                cursor: pointer
+                
+                &:hover
+                    opacity: .9
+                    
+    @media only screen and (min-width: 768px)
+
+        ul >li:first-child
+            display: none
+            

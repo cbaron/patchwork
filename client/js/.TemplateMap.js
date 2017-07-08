@@ -11,6 +11,7 @@ module.exports={
 	FoodOmission: require('./views/templates/FoodOmission'),
 	Footer: require('./views/templates/Footer'),
 	Header: require('./views/templates/Header'),
+	Home: require('./views/templates/Home'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),
 	MemberInfo: require('./views/templates/MemberInfo'),
 	MemberTypeahead: require('./views/templates/MemberTypeahead'),
