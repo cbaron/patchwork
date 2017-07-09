@@ -1,5 +1,5 @@
-module.exports =
-`<div class="get-involved-class client-view" data-js="container">
+module.exports = p =>
+`<div class="get-involved-class client-view">
     <div class="employment clearfix">
         <h2>Employment Opportunities</h2>
         <p data-js="openPositions">We have the following positions open. Please click the PDF icon for a detailed description.</p>

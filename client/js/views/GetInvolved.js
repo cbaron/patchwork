@@ -1,29 +1,25 @@
-var CustomContent = require('./util/CustomContent'),
-    GetInvolved = function() { return CustomContent.apply( this, arguments ) }
+module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
-Object.assign( GetInvolved.prototype, CustomContent.prototype, {
+    events: {
+        pdf: 'click'
+    },
 
     onPdfClick( e ) {
         window.open( `/file/employment/jobdescription/${ e.target.getAttribute('data-id') }` )
     },
 
-    events: {
-        pdf: { method: 'onPdfClick' }
-    },
-
     postRender() {
-        CustomContent.prototype.postRender.call(this)
+        require('./util/CustomContent').postRender.call(this)
 
         this.on( 'insertedemploymentTemplate', () => {
-            if( this.templateData.employmentTable.children().length === 1 ) {
-                this.templateData.employmentTable.remove()
-                this.templateData.openPositions.text( 'We currently have no positions open. Stay Tuned!' )
+            if( this.els.employmentTable.children.length === 1 ) {
+                this.els.employmentTable.remove()
+                this.els.openPositions.textContent = 'We currently have no positions open. Stay Tuned!'
             }
         } )
-        
-    },
 
-    requiresLogin: false,
+        return this        
+    },
 
     tables: [
         { name: 'employment', el: 'employmentTable', template: 'employmentRow' },
@@ -32,13 +28,9 @@ Object.assign( GetInvolved.prototype, CustomContent.prototype, {
         { name: 'internshipcompensation', comparator: 'position', el: 'compensationList', template: 'listItem' }
     ],
 
-    template: () => require('../templates/getInvolved'),
-
     templates: {
         employmentRow: require('../templates/employmentRow'),
         listItem: require('../templates/listItem')( require('handlebars') )
     }
 
 } )
-
-module.exports = GetInvolved

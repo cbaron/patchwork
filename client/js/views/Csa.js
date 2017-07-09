@@ -1,14 +1,11 @@
-var CustomContent = require('./util/CustomContent'),
-    CSA = function() { return CustomContent.apply( this, arguments ) }
-
-Object.assign( CSA.prototype, CustomContent.prototype, {
+module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
     Models: {
         DeliveryRoute: require('../models/DeliveryRoute') 
     },
 
     events: {
-        signupBtn: { method: 'routeToSignup' }
+        signupBtn: 'click'
     },
 
     hashToElement: {
@@ -17,22 +14,23 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
     parseDeliveryInfo: require('../models/DeliveryRoute').prototype.parse,
 
-    postRender() {
-        CustomContent.prototype.postRender.call(this)
+    onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
-        if( window.location.hash ) {
-            this.$('body').animate( {
-                scrollTop: this.templateData[ this.hashToElement[ window.location.hash.slice(1) ] ].position().top }, 1000 )
-        }
+    postRender() {
+        require('./util/CustomContent').postRender.call(this)
 
         this.on( 'insertedcsainfoTemplate', () => {
+
+            if( window.location.hash ) {
+                this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
+            }
 
             this.Xhr( { method: 'get', resource: 'currentGroupDelivery' } )
             .then( data =>
                 data.forEach( datum =>
                     this.slurpTemplate( {
                         template: this.templates.groupDeliveryOption( ( new this.Models.DeliveryRoute( datum, { parse: true } ) ).attributes ),
-                        insertion: { $el: this.templateData.groupDeliveryOptions }
+                        insertion: { el: this.els.groupDeliveryOptions }
                     } )
                 )
             )
@@ -42,7 +40,7 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
             .then( data => 
                 this.slurpTemplate( {
                     template: this.templates.farmDeliveryOption( ( new this.Models.DeliveryRoute( data, { parse: true } ) ).attributes ),
-                    insertion: { $el: this.templateData.farmPickupOption }
+                    insertion: { el: this.els.farmPickupOption }
                 } )
             )
             .catch( e => new this.Error(e) )
@@ -52,23 +50,23 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
 
                 this.slurpTemplate( {
                     template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
-                    insertion: { $el: this.templateData.deliveryMatrix }
+                    insertion: { el: this.els.deliveryMatrix }
                 } )
 
                 this.slurpTemplate( {
                     template: this.templates.nonSizeOptions( { options: produceOptions.filter( option => (!/size/i.test( option.prompt )) && option.label === "1" ) } ),
-                    insertion: { $el: this.templateData.nonSizeOptions }
+                    insertion: { el: this.els.nonSizeOptions }
                 } )
 
                 const homeDelivery = deliveryOptions.find( option => option.name === 'home' )
-                if( homeDelivery ) this.templateData.homeDeliveryIntro.text( this.templateData.homeDeliveryIntro.text().replace( /\$[\d\.]*/, `${homeDelivery.price}` ) )
+                if( homeDelivery ) this.els.homeDeliveryIntro.textContent = this.els.homeDeliveryIntro.textContent.replace( /\$[\d\.]*/, `${homeDelivery.price}` )
             
             } )
             .catch( e => new this.Error(e) )
         } )
-    },
 
-    requiresLogin: false,
+        return this
+    },
 
     tables: [
         { name: 'csacustomization', el: 'customize', template: 'csaCustomization' },
@@ -76,10 +74,6 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
         { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItemTwoCol' },
     ],
-    
-    routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
-
-    template: () => require('../templates/csa'),
 
     templates: {
         csaCustomization: require('../templates/csaCustomization'),
@@ -93,5 +87,3 @@ Object.assign( CSA.prototype, CustomContent.prototype, {
     }
 
 } )
-
-module.exports = CSA

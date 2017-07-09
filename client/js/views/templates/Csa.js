@@ -1,5 +1,5 @@
-module.exports =
-`<div data-js="container" class="csa-class client-view">
+module.exports = p =>
+`<div class="csa-class client-view">
     <h3>
         <button data-js="signupBtn" class="btn btn-link signup-btn">Join our CSA!</button>
     </h3>

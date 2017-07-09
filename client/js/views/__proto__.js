@@ -8,6 +8,8 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     Error: require('../../../lib/MyError'),
 
+    Format: require('../Format'),
+
     Model: require('../models/__proto__'),
 
     Moment: require('moment'),

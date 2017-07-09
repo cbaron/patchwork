@@ -61,7 +61,7 @@ module.exports = new (
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
 
                 if( this.views[ resource ] ) this.views[ resource ].show()
-                else this.views[ resource ] = resource === "admin-plus"
+                else this.views[ resource ] = ['admin-plus','about','csa','markets','get-involved','contact'].includes(resource)
                     ? this.ViewFactory.create( resource, {
                         insertion: { value: { el: this.content } },
                         user: { value: this.user } } )
@@ -153,13 +153,7 @@ module.exports = new (
                 }
             },
             home: { view: require('./views/Home'), options: { } },
-            csa: { view: require('./views/CSA'), options: { } },
-            about: { view: require('./views/About'), options: { } },
-            markets: { view: require('./views/Markets'), options: { } },
             "sign-up": { view: require('./views/Signup'), options: { } },
-            members: { view: require('./views/Members'), options: { } },
-            "get-involved": { view: require('./views/GetInvolved'), options: { } },
-            contact: { view: require('./views/Contact'), options: { } }
         },
 
         routes: {

@@ -72,8 +72,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         if( this.requiresLogin && ! this.user.id ) {
             require('./Login').show().once( "success", e => {
-                console.log(this)
-                console.log(this.router)
                 this.router.onUser( this.user )
 
                 if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {

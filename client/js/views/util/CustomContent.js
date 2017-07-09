@@ -1,51 +1,54 @@
-var MyView = require('../MyView'),
-    CustomContent = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( CustomContent.prototype, MyView.prototype, {
+module.exports = {
 
     loadImageTable( table, model ) {
         return new Promise( ( resolve, reject ) => {
-            var imageEl = new Image();
-            imageEl.src = `/file/${table.name}/image/${model.id}`
+            const imageEl = new Image()
+            imageEl.src = this.Format.ImageSrc( `${table.name}-${model.id}` )
             imageEl.onload = () => {
-                model.set( 'tableName', table.name )
-                if( table.name === "carousel" && model.get('position') === 1 ) model.set( 'first', true )
-                this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )
+                model.tableName = table.name
+
+                this.slurpTemplate( {
+                    insertion: { el: this.els[ table.el ] },
+                    template: this.templates[ table.template ]( model )
+                } )
+
                 this.emit( `inserted${table.name}Template` )
+
                 resolve()
             }
         } )     
     },
 
     loadTableData( table ) {
-        this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: `/${table.name}` } ) )()
-        this.collections[ table.name ].fetch().then( () => {
-
+        this.models[ table.name ] = Object.create( require('../../models/__proto__'), { resource: { value: table.name } } )
+        
+        this.models[ table.name ].get().then( () => {
             if( table.image ) {
                 let promise = Promise.resolve()
-                this.collections[ table.name ].forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
+                this.models[ table.name ].data.forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
                 return promise
             } else {
-                this.collections[ table.name ].forEach( model =>
+                this.models[ table.name ].data.forEach( model =>
                     this.slurpTemplate( {
-                        insertion: { $el: this.templateData[ table.el ] },
-                        template: this.templates[ table.template ]( model.attributes )
+                        insertion: { el: this.els[ table.el ] },
+                        template: this.templates[ table.template ]( model )
                     } )
                 )
+
                 this.emit( `inserted${table.name}Template` )
             }
 
         } )
-        .fail( err => new this.Error(err) )       
+        .catch( this.Error )       
     },
 
     postRender() {
-        this.collections = { }
+        this.models = { }
         this.tables.forEach( table => this.loadTableData( table ) )
+
+        return this
     },
 
     tables: [ ]
 
-} )
-
-module.exports = CustomContent
+}
