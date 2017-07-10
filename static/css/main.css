@@ -125,6 +125,111 @@
 .CustomerInfo .content .data .customer-table .table-row.neverReceive {
   white-space: inherit;
 }
+.Footer {
+  flex: 1;
+  background-color: #000;
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+}
+.Footer a {
+  color: #76bf56;
+}
+.Footer p,
+.Footer a {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.Header {
+  font-family: "RalewayRegular";
+}
+.Header >div:first-child img {
+  width: 100%;
+  height: 15rem;
+  margin: 0;
+}
+.Header >div:nth-child(2) {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem;
+  line-height: 1;
+}
+.Header >div:nth-child(2) >div:first-child {
+  text-align: center;
+}
+.Header >div:nth-child(2) >div:first-child >span {
+  font-size: 6rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.Header >div:nth-child(2) >div:first-child >span:hover {
+  opacity: 0.9;
+}
+.Header >div:nth-child(2) ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height: 1.3;
+}
+.Header >div:nth-child(2) ul li {
+  margin: 0 1.75rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.Header >div:nth-child(2) ul li:hover {
+  opacity: 0.9;
+}
+@media only screen and (min-width: 768px) {
+  .Header ul >li:first-child {
+    display: none;
+  }
+}
+.Home {
+  height: 43rem;
+  font-family: "RalewayRegular";
+  position: relative;
+}
+.Home.bg-loaded {
+  background-color: rgba(0,0,0,0.5);
+}
+.Home.bg-loaded::before {
+  content: '';
+  display: block;
+  background-image: url("https://storage.googleapis.com/double-quill-3243/cornucopia.jpg");
+  background-size: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  animation: fadeIn 0.5s ease-in-out;
+}
+.Home >div:first-child {
+  text-align: center;
+  padding: 9rem 0 7rem;
+  line-height: 1.1;
+}
+.Home >div:first-child >span {
+  color: #fff;
+  font-size: 2.8rem;
+}
+.Home >div:nth-child(2) {
+  text-align: center;
+}
+.Home >div:nth-child(2) >button {
+  background-color: #ffc502;
+  color: #000;
+  width: 19rem;
+  padding: 1.9rem 0;
+  font-size: 2.25rem;
+  border-radius: 0.8rem;
+  border: none;
+}
+.Home >div:nth-child(2) >button:hover {
+  opacity: 0.95;
+}
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
 }
@@ -656,12 +761,9 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
-.fd-hide {
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
-}
-.fd-hidden {
-  display: none !important;
+div.container-fluid {
+  display: flex;
+  flex-direction: column;
 }
 body.admin-plus {
   background-color: #f9f9f9;
@@ -670,6 +772,92 @@ ol {
   -webkit-margin-before: 0rem;
   -webkit-margin-after: 0rem;
   -webkit-padding-start: 0rem;
+}
+img {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+img[data-src] {
+  opacity: 0;
+}
+.fd-hidden {
+  display: none !important;
+}
+.animate-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+.animate-out {
+  animation: fadeOut 0.3s ease-in-out;
+}
+.animate-in-slow {
+  animation: fadeIn 3s ease-in-out;
+}
+.animate-out-slow {
+  animation: fadeOut 3s ease-in-out;
+}
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .form-grouping {
   margin-bottom: 1rem;

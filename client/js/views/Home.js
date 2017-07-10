@@ -1,32 +1,22 @@
-var CustomContent = require('./util/CustomContent'),
-    Home = function() { return CustomContent.apply( this, arguments ) }
-
-Object.assign( Home.prototype, CustomContent.prototype, {
+module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
-        signupBtn: { method: 'routeToSignup' }
+        joinBtn: 'click'
     },
+
+    loadBgImage() {
+        const img = new Image()
+
+        img.onload = () => this.els.container.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( 'cornucopia.jpg' )
+    },
+
+    onJoinBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
     postRender() {
-        const result = CustomContent.prototype.postRender.call(this)
+        this.loadBgImage()
 
-        if( result && result.then ) result.then( () => this.templateData.carousel.carousel() ).catch( e => console.log( e.stack || e ) )
-    },
-
-    requiresLogin: false,
-
-    tables: [
-        { name: 'carousel', comparator: 'position', el: 'carouselInner', image: true, template: 'carouselImage' }
-    ],
-
-    routeToSignup() { this.router.navigate( "sign-up", { trigger: true } ) },
-
-    template: require('../templates/home'),
-
-    templates: {
-        carouselImage: require('../templates/carouselImage')( require('handlebars') ),
+        return this
     }
 
 } )
-
-module.exports = Home

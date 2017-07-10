@@ -1,0 +1,40 @@
+div.container-fluid
+    display: flex
+    flex-direction: column
+    
+body.admin-plus
+    background-color: #f9f9f9
+
+ol
+    -webkit-margin-before: 0rem
+    -webkit-margin-after: 0rem
+    -webkit-padding-start: 0rem
+
+img
+    opacity: 1
+    transition: opacity .5s
+    &[data-src]
+        opacity: 0
+        
+.fd-hidden
+    display: none !important
+    
+.animate-in
+    animation: fadeIn .3s ease-in-out
+
+.animate-out
+    animation: fadeOut .3s ease-in-out
+
+.animate-in-slow
+    animation: fadeIn 3s ease-in-out
+
+.animate-out-slow
+    animation: fadeOut 3s ease-in-out
+
+@keyframes fadeIn
+    from { opacity: 0; }
+    to { opacity: 1; }
+
+@keyframes fadeOut
+    from { opacity: 1; }
+    to { opacity: 0; }
