@@ -5,7 +5,7 @@ module.exports = p =>
     <p>${p.groupdeliveryintro}</p>
     <ul class="group-deliveries" data-js="groupDeliveryOptions"></ul>
     <div data-js="farmPickupOption"></div>
-    <div class="row delivery-martrix" data-js="deliveryMatrix"></div>
+    <div class="row delivery-matrix" data-js="deliveryMatrix"></div>
     <div class="non-size-options" data-js="nonSizeOptions"></div>
     <h2>Payment</h2>
     <div>${p.payment || ''}</div>`

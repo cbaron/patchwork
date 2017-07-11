@@ -1,0 +1,179 @@
+.Csa
+
+    margin: 5rem 20% 0
+        
+    h2
+        color: $sun-red
+        margin-bottom: 1.5rem
+    
+    h3
+        text-align: center
+
+    .csa-fit
+        >p
+            margin: 0 
+        ul
+            display: inline-block
+            margin-bottom: 4rem
+            
+            li
+                list-style-type: disc
+                list-style-position: inside
+
+    .csa-contents
+        .share-examples
+            display: flex
+            
+            >div
+                text-align: center
+                
+                h4
+                    color: $sun-red
+                    
+                >div img
+                    height: 5rem
+                    
+
+    .how
+
+        img
+            display: block
+            margin: 25px auto
+            max-height: 400px
+            max-width: 100%
+
+        .farmpickup,
+        .group-deliveries
+            margin-bottom: 40px
+
+            span:first-child
+                font-weight: bold
+            
+        .delivery-matrix
+            margin-bottom: 40px
+            text-align: center
+
+            >div:first-child
+                border-bottom: 1px solid black
+                border-right: 1px solid black
+            
+            .row:first-child
+                background-color: $sun-red
+                color: white
+                font-weight: bold
+            
+            .row:not(:first-child)
+                > div:first-child
+                    background-color: white
+                    color: $sun-red
+                    font-weight: bold            
+
+            .cell
+                border-top: 1px solid black
+                border-left: 1px solid black
+                padding: 15px 0px
+                    
+        .non-size-options
+            margin-bottom: 40px
+
+            ul
+                margin-left: 30px
+            
+            .option
+                padding: 30px 0px
+            
+            .add-on-table
+                border: 1px solid black
+                width: 70%
+                margin: 30px 15%
+
+                .add-on-row
+                    display: flex
+                    align-items: center
+                    flex-wrap: wrap
+                    width: 100%
+                    border-bottom: 1px solid black
+
+                    &:last-child
+                        border-bottom: none
+                    
+                    .add-on-name
+                       font-weight: bold
+                       color: $sun-yellow
+                       width: 15%
+                       text-align: center
+                    
+                    .add-on-details
+                        display: flex
+                        align-items: center
+                        justify-content: space-between
+                        border-left: 1px solid black
+                        width: 85%
+
+                        div
+                            padding-left: 10px
+                        
+                        .add-on-price
+                            font-weight: bold
+                            width: 15%
+                            text-align: center
+                        
+                        .add-on-paragraph
+                            width: 55%
+                        
+                        .add-on-image
+                            width: 30%
+                            padding-right: 10px
+                        
+    @media only screen and (max-width: 375px)
+        .first-column
+            margin-bottom: 0
+        
+        .second-column
+            margin-top: 0
+
+    @media only screen and (max-width: 900px)
+        .how .non-size-options .add-on-table
+            width: 100%
+            margin: 30px 0
+        
+    @media only screen and (max-width: 650px)
+        .how .non-size-options .add-on-table
+            display: block
+            border: none
+            width: 100%
+            margin: 15px 0
+
+            .add-on-row
+                display: block
+                border-bottom: none
+
+                .add-on-name
+                    width: auto
+                    text-align: left
+                
+                .add-on-details
+                    display: block
+                    border-left: none
+                    width: auto
+
+                    div
+                        padding-left: 0
+                    
+                    .add-on-price
+                        width: auto
+                        text-align: left
+                        margin-bottom: 10px
+                    
+                    .add-on-paragraph
+                        width: auto
+                    
+                    .add-on-image
+                        width: auto
+                        padding-right: 0
+                    
+                
+            
+        
+    
+    

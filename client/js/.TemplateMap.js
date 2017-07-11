@@ -25,6 +25,7 @@ module.exports={
 	Reporting: require('./views/templates/Reporting'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
+	ShareExample: require('./views/templates/ShareExample'),
 	SharePatch: require('./views/templates/SharePatch'),
 	StaffProfile: require('./views/templates/StaffProfile'),
 	Toast: require('./views/templates/Toast'),

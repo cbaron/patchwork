@@ -45,7 +45,7 @@ body {
   font-weight: 400;
   line-height: 1.5em;
   text-align: left;
-  color: #666;
+  color: black;
 }
 body > div.container {
   width: 100%;
@@ -124,9 +124,9 @@ div.header {
   cursor: pointer;
 }
 hr {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #666;
   height: 0;
-  margin: 2em auto;
+  margin: 4rem -0.75rem;
 }
 .glyphicon-ok {
   color: green;

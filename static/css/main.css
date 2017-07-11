@@ -74,6 +74,178 @@
 .ButtonFlow svg.link:hover {
   text-decoration: underline;
 }
+.Csa {
+  margin: 5rem 20% 0;
+}
+.Csa h2 {
+  color: #a20903;
+  margin-bottom: 1.5rem;
+}
+.Csa h3 {
+  text-align: center;
+}
+.Csa .csa-fit >p {
+  margin: 0;
+}
+.Csa .csa-fit ul {
+  display: inline-block;
+  margin-bottom: 4rem;
+}
+.Csa .csa-fit ul li {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+.Csa .csa-contents .share-examples {
+  display: flex;
+}
+.Csa .csa-contents .share-examples >div {
+  text-align: center;
+}
+.Csa .csa-contents .share-examples >div h4 {
+  color: #a20903;
+}
+.Csa .csa-contents .share-examples >div >div img {
+  height: 5rem;
+}
+.Csa .how img {
+  display: block;
+  margin: 25px auto;
+  max-height: 400px;
+  max-width: 100%;
+}
+.Csa .how .farmpickup,
+.Csa .how .group-deliveries {
+  margin-bottom: 40px;
+}
+.Csa .how .farmpickup span:first-child,
+.Csa .how .group-deliveries span:first-child {
+  font-weight: bold;
+}
+.Csa .how .delivery-matrix {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.Csa .how .delivery-matrix >div:first-child {
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
+}
+.Csa .how .delivery-matrix .row:first-child {
+  background-color: #a20903;
+  color: #fff;
+  font-weight: bold;
+}
+.Csa .how .delivery-matrix .row:not(:first-child) > div:first-child {
+  background-color: #fff;
+  color: #a20903;
+  font-weight: bold;
+}
+.Csa .how .delivery-matrix .cell {
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  padding: 15px 0px;
+}
+.Csa .how .non-size-options {
+  margin-bottom: 40px;
+}
+.Csa .how .non-size-options ul {
+  margin-left: 30px;
+}
+.Csa .how .non-size-options .option {
+  padding: 30px 0px;
+}
+.Csa .how .non-size-options .add-on-table {
+  border: 1px solid #000;
+  width: 70%;
+  margin: 30px 15%;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row:last-child {
+  border-bottom: none;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-name {
+  font-weight: bold;
+  color: #ffc502;
+  width: 15%;
+  text-align: center;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 1px solid #000;
+  width: 85%;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+  padding-left: 10px;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+  font-weight: bold;
+  width: 15%;
+  text-align: center;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+  width: 55%;
+}
+.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+  width: 30%;
+  padding-right: 10px;
+}
+@media only screen and (max-width: 375px) {
+  .Csa .first-column {
+    margin-bottom: 0;
+  }
+  .Csa .second-column {
+    margin-top: 0;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .Csa .how .non-size-options .add-on-table {
+    width: 100%;
+    margin: 30px 0;
+  }
+}
+@media only screen and (max-width: 650px) {
+  .Csa .how .non-size-options .add-on-table {
+    display: block;
+    border: none;
+    width: 100%;
+    margin: 15px 0;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row {
+    display: block;
+    border-bottom: none;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-name {
+    width: auto;
+    text-align: left;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-details {
+    display: block;
+    border-left: none;
+    width: auto;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+    padding-left: 0;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+    width: auto;
+    text-align: left;
+    margin-bottom: 10px;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+    width: auto;
+  }
+  .Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+    width: auto;
+    padding-right: 0;
+  }
+}
 .CustomerInfo .content .data .customer-table {
   text-align: left;
 }

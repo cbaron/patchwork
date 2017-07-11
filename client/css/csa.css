@@ -1,176 +1,176 @@
-.csa-class p {
+.csa-classss p {
   margin: 0 0 20px;
 }
-.csa-class h2 {
+.csa-classss h2 {
   color: #c98702;
 }
-.csa-class h3 {
+.csa-classss h3 {
   text-align: center;
 }
-.csa-class h3 .signup-btn {
+.csa-classss h3 .signup-btn {
   color: #398439;
   font-size: 2rem;
   font-weight: 700;
 }
-.csa-class figure {
+.csa-classss figure {
   margin: 0 auto;
   padding: 20px 0;
 }
-.csa-class figure img {
+.csa-classss figure img {
   height: auto;
   width: 100%;
   margin: 0 auto;
 }
-.csa-class figure figcaption {
+.csa-classss figure figcaption {
   text-align: center;
   font-style: italic;
 }
-.csa-class ul {
+.csa-classss ul {
   display: inline-block;
   margin-left: 20px;
   margin-bottom: 10px;
 }
-.csa-class ul li {
+.csa-classss ul li {
   margin-bottom: 3px;
   color: #155D75;
   list-style-type: circle;
 }
-.csa-class .csa-contents .csa-customization .intro {
+.csa-classss .csa-contents .csa-customization .intro {
   font-weight: bold;
 }
-.csa-class .how img {
+.csa-classss .how img {
   display: block;
   margin: 25px auto;
   max-height: 400px;
   max-width: 100%;
 }
-.csa-class .how .farmpickup,
-.csa-class .how .group-deliveries {
+.csa-classss .how .farmpickup,
+.csa-classss .how .group-deliveries {
   margin-bottom: 40px;
 }
-.csa-class .how .farmpickup span:first-child,
-.csa-class .how .group-deliveries span:first-child {
+.csa-classss .how .farmpickup span:first-child,
+.csa-classss .how .group-deliveries span:first-child {
   font-weight: bold;
 }
-.csa-class .how .delivery-martrix {
+.csa-classss .how .delivery-martrix {
   margin-bottom: 40px;
   text-align: center;
 }
-.csa-class .how .delivery-martrix > div:first-child {
+.csa-classss .how .delivery-martrix > div:first-child {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
-.csa-class .how .delivery-martrix .row:first-child {
+.csa-classss .how .delivery-martrix .row:first-child {
   color: #c98702;
   font-weight: bold;
 }
-.csa-class .how .delivery-martrix .row:not(:first-child) > div:first-child {
+.csa-classss .how .delivery-martrix .row:not(:first-child) > div:first-child {
   color: #155D75;
   font-weight: bold;
 }
-.csa-class .how .delivery-martrix .cell {
+.csa-classss .how .delivery-martrix .cell {
   border-top: 1px solid black;
   border-left: 1px solid black;
   padding: 15px 0px;
 }
-.csa-class .how .non-size-options {
+.csa-classss .how .non-size-options {
   margin-bottom: 40px;
 }
-.csa-class .how .non-size-options ul {
+.csa-classss .how .non-size-options ul {
   margin-left: 30px;
 }
-.csa-class .how .non-size-options .option {
+.csa-classss .how .non-size-options .option {
   padding: 30px 0px;
 }
-.csa-class .how .non-size-options .add-on-table {
+.csa-classss .how .non-size-options .add-on-table {
   border: 1px solid black;
   width: 70%;
   margin: 30px 15%;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row {
+.csa-classss .how .non-size-options .add-on-table .add-on-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
   border-bottom: 1px solid black;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row:last-child {
+.csa-classss .how .non-size-options .add-on-table .add-on-row:last-child {
   border-bottom: none;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-name {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-name {
   font-weight: bold;
   color: #155D75;
   width: 15%;
   text-align: center;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-left: 1px solid black;
   width: 85%;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details div {
   padding-left: 10px;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
   font-weight: bold;
   width: 15%;
   text-align: center;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
   width: 55%;
 }
-.csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+.csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
   width: 30%;
   padding-right: 10px;
 }
 @media only screen and (max-width: 375px) {
-  .csa-class .first-column {
+  .csa-classss .first-column {
     margin-bottom: 0;
   }
-  .csa-class .second-column {
+  .csa-classss .second-column {
     margin-top: 0;
   }
 }
 @media only screen and (max-width: 900px) {
-  .csa-class .how .non-size-options .add-on-table {
+  .csa-classss .how .non-size-options .add-on-table {
     width: 100%;
     margin: 30px 0;
   }
 }
 @media only screen and (max-width: 650px) {
-  .csa-class .how .non-size-options .add-on-table {
+  .csa-classss .how .non-size-options .add-on-table {
     display: block;
     border: none;
     width: 100%;
     margin: 15px 0;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row {
     display: block;
     border-bottom: none;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-name {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-name {
     width: auto;
     text-align: left;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details {
     display: block;
     border-left: none;
     width: auto;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details div {
     padding-left: 0;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
     width: auto;
     text-align: left;
     margin-bottom: 10px;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
     width: auto;
   }
-  .csa-class .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+  .csa-classss .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
     width: auto;
     padding-right: 0;
   }
