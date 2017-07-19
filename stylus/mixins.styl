@@ -1,8 +1,16 @@
-// Forms
-
-
-        
-// Buttons
+fadeBgImg( path, duration=.5s )
+    $url = 'https://storage.googleapis.com/double-quill-3243/' + path
+    content: ''
+    display: block
+    background-image: url( $url )
+    background-size: cover
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    z-index: -1
+    animation: fadeIn duration ease-in-out
 
 
     

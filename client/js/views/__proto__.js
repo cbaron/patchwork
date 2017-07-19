@@ -57,9 +57,9 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     events: {},
 
     fadeInImage( img ) {
-        img.setAttribute( 'src', img.getAttribute('data-src') )
-
         img.onload = () => img.removeAttribute('data-src')
+
+        img.setAttribute( 'src', img.getAttribute('data-src') )
     },
 
     getData() {
@@ -139,12 +139,19 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } )
+        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
     },
     
     isHidden( el ) {
         const element = el || this.els.container
         return element.classList.contains('fd-hidden')
+    },
+
+    loadBgImage( name ) {
+        const img = new Image()
+
+        img.onload = () => this.els.container.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( name )
     },
 
     onLogin() {
@@ -265,12 +272,15 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
+            imgSelector = `[${this.slurp.img}]`,
+            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, img[data-src]` ) ).forEach( el => {
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
-            else if( el.hasAttribute( 'data-src' ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el.getAttribute('data-bg') )
             else if( el.hasAttribute( this.slurp.view ) ) {
                 let attr = el.getAttribute(this.slurp.view)
                 if( ! this.viewEls ) this.viewEls = { }

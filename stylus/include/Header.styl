@@ -21,7 +21,7 @@
                 cursor: pointer
                 
                 &:hover
-                    opacity: .9
+                    color: $sun-yellow
             
         ul
             display: flex
@@ -36,10 +36,23 @@
                 cursor: pointer
                 
                 &:hover
-                    opacity: .9
+                    opacity: .85
                     
     @media only screen and (min-width: 768px)
 
         ul >li:first-child
             display: none
+            
+    @media only screen and (max-width: 1250px)
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 4.5rem
+                
+            ul li
+                font-size: 1.5rem
+                
+    @media only screen and (max-width: 900px)
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 4rem
             

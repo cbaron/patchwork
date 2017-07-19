@@ -31,7 +31,7 @@ module.exports = new (
                 }
             } else {
                 if( this.adminHeader ) { this.adminHeader.hide() }
-                if( this.header ) { return this.header.size() }
+                if( this.header ) { return }
                 else {
                     this.header =
                         this.ViewFactory.create( 'header', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )

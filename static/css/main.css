@@ -30,8 +30,10 @@
   border: 1px solid #155d75;
 }
 .AdminPlus {
-  margin-top: 7.5rem;
+  padding-top: 7.5rem;
   text-align: center;
+  height: 100vh;
+  background-color: #f9f9f9;
 }
 .AdminPlus button {
   background-color: #f2f2f2;
@@ -162,7 +164,7 @@
   cursor: pointer;
 }
 .Header >div:nth-child(2) >div:first-child >span:hover {
-  opacity: 0.9;
+  color: #ffc502;
 }
 .Header >div:nth-child(2) ul {
   display: flex;
@@ -177,11 +179,24 @@
   cursor: pointer;
 }
 .Header >div:nth-child(2) ul li:hover {
-  opacity: 0.9;
+  opacity: 0.85;
 }
 @media only screen and (min-width: 768px) {
   .Header ul >li:first-child {
     display: none;
+  }
+}
+@media only screen and (max-width: 1250px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 4.5rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1.5rem;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 4rem;
   }
 }
 .Home {
@@ -231,6 +246,8 @@
 }
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 }
 .ManageCustomer .main-search {
   display: flex;
@@ -762,9 +779,6 @@
 }
 .fd-hidden {
   display: none !important;
-}
-body.admin-plus {
-  background-color: #f9f9f9;
 }
 ol {
   -webkit-margin-before: 0rem;
