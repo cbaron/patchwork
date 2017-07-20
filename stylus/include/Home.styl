@@ -2,16 +2,16 @@
     height: 43rem
     font-family: "RalewayRegular"
     position: relative
+    background-color: rgba(0,0,0,.5)
     
-    &.bg-loaded
-        background-color: rgba(0,0,0,.5)
-    
+    &.bg-loaded        
         &::before
-            fadeBgImg( 'cornucopia.jpg' )
+            fadeBgImg('cornucopia.jpg')
+            background-size: cover
     
     >div:first-child
         text-align: center
-        padding: 9rem 0 7rem
+        padding: 9rem 2rem 7rem
         line-height: 1.1
         
         >span
@@ -32,3 +32,43 @@
             
             &:hover
                 opacity: .95
+
+    @media only screen and (max-width: 1250px)
+        >div:first-child
+            >span
+                font-size: 2.4rem
+                
+        >div:nth-child(2) >button
+            width: 15rem
+            font-size: 1.75rem
+            padding: 1.5rem 0
+            
+    @media only screen and (max-width: 767px)
+        >div:first-child
+            >span
+                font-size: 2rem
+                
+        >div:nth-child(2) >button
+            width: 13rem
+            font-size: 1.5rem
+            padding: 1.35rem 0
+            
+    @media only screen and (max-width: 550px)
+        >div:first-child
+            >span
+                font-size: 1.75rem
+                
+        >div:nth-child(2) >button
+            width: 10rem
+            font-size: 1.25rem
+            padding: 1.15rem 0
+            
+    @media only screen and (max-width: 400px)
+        >div:first-child
+            >span
+                font-size: 1.5rem
+                
+        >div:nth-child(2) >button
+            width: 10rem
+            font-size: 1rem
+            padding: 1rem 0

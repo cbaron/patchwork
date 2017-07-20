@@ -1,9 +1,11 @@
-fadeBgImg( path, duration=.5s )
-    $url = 'https://storage.googleapis.com/double-quill-3243/' + path
+bgImg( name )
+    $url = $bucket + name
+    background-image: url( $url )
+
+fadeBgImg( name, duration=.4s )
     content: ''
     display: block
-    background-image: url( $url )
-    background-size: cover
+    bgImg( name )
     position: absolute
     left: 0
     top: 0
@@ -11,6 +13,8 @@ fadeBgImg( path, duration=.5s )
     height: 100%
     z-index: -1
     animation: fadeIn duration ease-in-out
+    
+
 
 
     

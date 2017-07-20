@@ -69,21 +69,17 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     getTemplateOptions() {
-        const modelData = this.model
-            ? this.model.data
-                ? this.model.data
-                : this.model
-            : { }
-        return Object.assign(
-            {},
-            modelData,
-            { user: (this.user) ? this.user.data : {} },
-            { opts: this.templateOpts
-                ? typeof this.templateOpts === 'function'
-                    ? this.templateOpts()
-                    : this.templateOpts
-                 : {} }
-        )
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format )
+
+        if( this.model ) {
+            rv.model = this.model.data
+
+            if( this.model.meta ) rv.meta = this.model.meta
+        }
+
+        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts
+
+        return rv
     },
 
     isAllowed( user ) {
@@ -105,7 +101,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ).then( () => this.emit('hidden') ) },
+    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ) },
 
     _hideEl( el, klass, resolve, hash ) {
         el.removeEventListener( 'animationend', this[ hash ] )
@@ -147,11 +143,11 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return element.classList.contains('fd-hidden')
     },
 
-    loadBgImage( name ) {
+    loadBgImage( el ) {
         const img = new Image()
 
-        img.onload = () => this.els.container.classList.add('bg-loaded')
-        img.src = this.Format.ImageSrc( name )
+        img.onload = () => el.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( el.getAttribute('data-bg') )
     },
 
     onLogin() {
@@ -225,7 +221,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ).then( () => this.emit('shown') ) },
+    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ) },
 
     _showEl( el, klass, resolve, hash ) {
         el.removeEventListener( 'animationend', this[hash] )
@@ -280,7 +276,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
             else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
-            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el.getAttribute('data-bg') )
+            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
             else if( el.hasAttribute( this.slurp.view ) ) {
                 let attr = el.getAttribute(this.slurp.view)
                 if( ! this.viewEls ) this.viewEls = { }

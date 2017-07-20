@@ -1,27 +1,36 @@
 .Header
     font-family: "RalewayRegular"
     
-    >div:first-child img
+    >div:first-child
         width: 100%
-        height: 15rem
+        height: 10rem
         margin: 0
+        background-size: 100% 100%
+        
+        &.bg-loaded
+            bgImg('red-sun.jpg')
+            animation: fadeIn .4s ease-in-out
         
     >div:nth-child(2)
         background-color: black
         color: white
-        padding: .5rem
+        padding: 1rem
         line-height: 1
         
         >div:first-child
             text-align: center
+                        
+            >svg
+                display: none
             
             >span
-                font-size: 6rem
+                font-size: 5rem
                 text-transform: uppercase
                 cursor: pointer
                 
                 &:hover
                     color: $sun-yellow
+                    transition: color .4s ease-in-out
             
         ul
             display: flex
@@ -31,19 +40,28 @@
             line-height: 1.3
             
             li
-                margin: 0 1.75rem
-                font-size: 2rem
+                margin: .1rem 1.75rem
+                font-size: 1.75rem
                 cursor: pointer
                 
                 &:hover
                     opacity: .85
-                    
-    @media only screen and (min-width: 768px)
 
-        ul >li:first-child
-            display: none
+    @media only screen and (min-width: 1700px)
+        >div:first-child
+            height: 13rem
             
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 5.5rem
+                
+            ul li
+                font-size: 2rem
+        
     @media only screen and (max-width: 1250px)
+        >div:first-child
+            height: 9rem
+            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 4.5rem
@@ -52,7 +70,74 @@
                 font-size: 1.5rem
                 
     @media only screen and (max-width: 900px)
+        >div:first-child
+            height: 8rem
+            
         >div:nth-child(2)
             >div:first-child >span
-                font-size: 4rem
+                font-size: 3.75rem
+                
+            ul li
+                font-size: 1.35rem
+                
+    @media only screen and (max-width: 767px)
+        >div:first-child
+            height: 6rem
+            
+        >div:nth-child(2)
+            position: relative
+            
+            >div:first-child
+                display: flex
+                align-items: center
+                justify-content: center
+                
+                svg
+                    display: block
+                    cursor: pointer
+                    height: 1.5rem
+                    stroke: white
+                    padding-right: 1.5rem
+
+                >span
+                    font-size: 2.5rem
+                
+            ul
+                text-align: center
+                margin-top: 1rem
+                position: absolute
+                left: -18rem
+                width: 18rem
+                transition: transform .4s ease-in-out
+                z-index: 1000
+                
+                li
+                    font-size: 1.25rem
+                    width: 100%
+                    padding: .75rem
+                    margin: 0
+                    border: 1px solid $sun-yellow
+                    background-color: black
+                    
+                &.mobile-menu-show
+                    transform: translateX(18rem)
+                    
+    @media only screen and (max-width: 550px)
+        >div:first-child
+            height: 5rem
+            
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 1.75rem
+                
+    @media only screen and (max-width: 400px)
+        >div:first-child
+            height: 4rem
+            
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 1.3rem
+        
+                    
+
             
