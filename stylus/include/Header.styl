@@ -1,15 +1,10 @@
 .Header
     font-family: "RalewayRegular"
     
-    >div:first-child
+    >div:first-child img
         width: 100%
-        height: 10rem
+        height: auto
         margin: 0
-        background-size: 100% 100%
-        
-        &.bg-loaded
-            bgImg('red-sun.jpg')
-            animation: fadeIn .4s ease-in-out
         
     >div:nth-child(2)
         background-color: black
@@ -48,9 +43,6 @@
                     opacity: .85
 
     @media only screen and (min-width: 1700px)
-        >div:first-child
-            height: 13rem
-            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 5.5rem
@@ -59,9 +51,6 @@
                 font-size: 2rem
         
     @media only screen and (max-width: 1250px)
-        >div:first-child
-            height: 9rem
-            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 4.5rem
@@ -70,9 +59,6 @@
                 font-size: 1.5rem
                 
     @media only screen and (max-width: 900px)
-        >div:first-child
-            height: 8rem
-            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 3.75rem
@@ -81,9 +67,6 @@
                 font-size: 1.35rem
                 
     @media only screen and (max-width: 767px)
-        >div:first-child
-            height: 6rem
-            
         >div:nth-child(2)
             position: relative
             
@@ -123,17 +106,11 @@
                     transform: translateX(18rem)
                     
     @media only screen and (max-width: 550px)
-        >div:first-child
-            height: 5rem
-            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 1.75rem
                 
     @media only screen and (max-width: 400px)
-        >div:first-child
-            height: 4rem
-            
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 1.3rem

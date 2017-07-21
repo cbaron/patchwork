@@ -3,7 +3,9 @@ module.exports = p => {
 
 return `` +
 `<div class="row">
-    <div data-bg="red-sun.jpg"></div>
+    <div>
+        <img data-src="${p.ImageSrc( 'red-sun.jpg' )}" />
+    </div>
     <div>
         <div>
             ${require('./lib/justify')}
