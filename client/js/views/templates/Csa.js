@@ -13,24 +13,37 @@ module.exports = p =>
     </section>
     <section class="csa-contents">
         <h2>What does a typical box contain and what size share is best?</h2>
-        <div data-js="shareExamples" class="share-examples">
+        <p>The quantity and variety of each box depends on the type of share you purchase.</p>
+        <div class="share-examples">
             <div>
                 <h4>Typical Large Share Box</h4>
                 <div><img src="/static/img/cornucopia.jpg" /></div>
                 <div>Sample Contents:</div>
-                <ul data-js="shareExample"></ul>
+                <ul data-js="shareExampleLg"></ul>
             </div>
             <div>
                 <h4>Typical Small Share Box</h4>
                 <div><img src="/static/img/cornucopia.jpg" /></div>
                 <div>Sample Contents:</div>
-                <ul data-js="shareExample"></ul>
+                <ul data-js="shareExampleSm"></ul>
             </div>
         </div>
-        <p>This box has a retail value of about $30. Small shares will receive a smaller variety of fruits and vegetables. We try to do our best to have plenty of everything we grow to provide a satisfying box for all of our members. However, in the event that particular fruits or vegetables are in limited supply, large shares will receive preference.  This is one reason to consider a Large share if appropriate for your eating habits.</p>
-        <div class="csa-customization">
-            <h2>New this year: customize your box!</h2>
-            <div data-js="customize"></div>
+        <div class="share-descriptions">
+            <div>
+                <div>
+                    <span>Large Share Box</span><span>|</span><span>$27.50 - $30.00</span>
+                </div>
+                <p>Simply the best bang for your buck. A Large Share will include a wide variety of seasonal fruits and vegetables, the perfect weekly amount for a single family or two vegetarians. Get ready for veggie nirvana! <span class="sign-up">sign up</span></p>
+            </div>
+            <div>
+                <div>
+                    <span>Small Share Box</span><span>|</span><span>$17.50 - $20.00</span>
+                </div>
+                <p>Think of a Small Share as the Large Share's kid sister - same great variety of seasonal produce but on a slightly reduced scale. We recommend one Small Share per individual or two each for the vegetarians in the house. If your diet is lacking vegetables and you're serious about eating more, a Small Share is a great introduction to the CSA lifestyle. <span class="sign-up">sign up</span></p>
+            </div>
+        </div>
+        <div>
+            <button type="button">Sign Up Now!</button>
         </div>
     </section>
     <hr>

@@ -21,18 +21,71 @@
                 list-style-position: inside
 
     .csa-contents
+        
+        >h2
+            margin-bottom: 0.5rem
+            
         .share-examples
             display: flex
+            flex-wrap: wrap
+            justify-content: center
+            margin: 2rem -15%
             
             >div
                 text-align: center
+                width: 20rem
+                margin: 1rem 2rem
                 
                 h4
                     color: $sun-red
+                    font-size: 1.4rem
                     
                 >div img
-                    height: 5rem
+                    height: 7.5rem
                     
+                >div:nth-child(3)
+                    color: $orange
+                    font-size: 1.2rem
+                    margin: .5rem 0
+                    
+                >ul
+                    display: flex
+                    flex-wrap: wrap
+                    
+                    li
+                        width: 50%
+                        color: #666
+                        text-align: center
+                        
+        .share-descriptions
+            margin: 3rem 0 4rem
+            
+            >div
+                &:first-child
+                    margin-bottom: 2rem
+                    
+                >div
+                    font-size: 1.4rem
+                    margin-bottom: .25rem
+                    
+                    >span:first-child
+                        color: $sun-red
+
+                    >span:nth-child(2)
+                        padding: 0 .25rem
+        
+        >div:last-child
+            display: flex
+            justify-content: center
+            
+            >button
+                background-color: $sun-yellow
+                box-shadow: 3px 3px 5px #888
+                font-size: 1.6rem
+                padding: 1.2rem 1.6rem
+                border-radius: .6rem
+                border: 1px solid transparent
+                font-family: "RalewayRegular"
 
     .how
 

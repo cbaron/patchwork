@@ -1,5 +1,19 @@
 module.exports = p => {
-    const colWidth = Math.floor( 12 / ( p.sizeOptions.length + 1 ) )
+    const sizeOptions = p.sizeOptions.map( option => `<div class="cell">${option.label} Size</div>` ).join(''),
+          rows = p.deliveryOptions.map( deliveryOption =>
+              `<div class="">` +
+                  `<div class="cell">${deliveryOption.label}</div>` +
+                  p.sizeOptions.map( sizeOption => {
+                      const price = ( parseFloat(sizeOption.price.replace('$','')) + parseFloat(deliveryOption.price.replace('$','')) ).toFixed(2)
+                      return `<div class="cell">$${price} / box</div>` } ).join('') +
+              `</div>`
+          ).join('')
+
+return `<div>`
+
+}
+
+/*    const colWidth = Math.floor( 12 / ( p.sizeOptions.length + 1 ) )
     const sizeOptions = p.sizeOptions.map( option => `<div class="cell col-xs-${colWidth}">${option.label} Size</div>` ).join(''),
           rows = p.deliveryOptions.map( deliveryOption =>
               `<div class="row">` +
@@ -16,4 +30,4 @@ module.exports = p => {
         </div>
         ${rows}
     </div>`
-}
+}*/

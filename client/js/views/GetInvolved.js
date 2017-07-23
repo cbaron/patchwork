@@ -30,7 +30,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
 
     templates: {
         employmentRow: require('../templates/employmentRow'),
-        listItem: require('../templates/listItem')( require('handlebars') )
+        listItem: require('./templates/ListItem')
     }
 
 } )

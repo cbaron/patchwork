@@ -71,8 +71,9 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
     tables: [
         { name: 'csacustomization', el: 'customize', template: 'csaCustomization' },
         { name: 'csainfo', el: 'how', template: 'csaHow' },
-        { name: 'csastatements', comparator: 'position', el: 'csaStatements', template: 'listItem'},
-        { name: 'largeshareexample', comparator: 'position', el: 'shareExample', template: 'listItem' },
+        { name: 'csastatements', el: 'csaStatements', template: 'listItem'},
+        { name: 'largeshareexample', el: 'shareExampleLg', template: 'listItem' },
+        { name: 'smallShareExample', el: 'shareExampleSm', template: 'listItem' },
     ],
 
     templates: {
@@ -81,8 +82,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
         deliveryMatrix: require('../templates/deliveryMatrix'),
         farmDeliveryOption: require('../templates/farmDeliveryOption'),
         groupDeliveryOption: require('../templates/groupDeliveryOption'),
-        listItem: require('../templates/listItem')( require('handlebars') ),
-        //listItemTwoCol: require('../templates/listItemTwoCol')( require('handlebars') ),
+        listItem: require('./templates/ListItem'),
         nonSizeOptions: require('../templates/nonSizeOptions'),
         shareExample: require('./templates/ShareExample')
     }

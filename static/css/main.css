@@ -95,17 +95,69 @@
   list-style-type: disc;
   list-style-position: inside;
 }
+.Csa .csa-contents >h2 {
+  margin-bottom: 0.5rem;
+}
 .Csa .csa-contents .share-examples {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 2rem -15%;
 }
 .Csa .csa-contents .share-examples >div {
   text-align: center;
+  width: 20rem;
+  margin: 1rem 2rem;
 }
 .Csa .csa-contents .share-examples >div h4 {
   color: #a20903;
+  font-size: 1.4rem;
 }
 .Csa .csa-contents .share-examples >div >div img {
-  height: 5rem;
+  height: 7.5rem;
+}
+.Csa .csa-contents .share-examples >div >div:nth-child(3) {
+  color: #f49521;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+.Csa .csa-contents .share-examples >div >ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+.Csa .csa-contents .share-examples >div >ul li {
+  width: 50%;
+  color: #666;
+  text-align: center;
+}
+.Csa .csa-contents .share-descriptions {
+  margin: 3rem 0 4rem;
+}
+.Csa .csa-contents .share-descriptions >div:first-child {
+  margin-bottom: 2rem;
+}
+.Csa .csa-contents .share-descriptions >div >div {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+.Csa .csa-contents .share-descriptions >div >div >span:first-child {
+  color: #a20903;
+}
+.Csa .csa-contents .share-descriptions >div >div >span:nth-child(2) {
+  padding: 0 0.25rem;
+}
+.Csa .csa-contents >div:last-child {
+  display: flex;
+  justify-content: center;
+}
+.Csa .csa-contents >div:last-child >button {
+  background-color: #ffc502;
+  box-shadow: 3px 3px 5px #888;
+  font-size: 1.6rem;
+  padding: 1.2rem 1.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid transparent;
+  font-family: "RalewayRegular";
 }
 .Csa .how img {
   display: block;
