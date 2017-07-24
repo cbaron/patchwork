@@ -89,8 +89,8 @@
                 text-align: center
                 margin-top: 1rem
                 position: absolute
-                left: -18rem
-                width: 18rem
+                left: -16rem
+                width: 16rem
                 transition: transform .4s ease-in-out
                 z-index: 1000
                 
@@ -102,13 +102,26 @@
                     border: 1px solid $sun-yellow
                     background-color: black
                     
-                &.mobile-menu-show
-                    transform: translateX(18rem)
+                    &:hover
+                        opacity: 1
+                    
+                &.is-mobile
+                    transform: translateX(16rem)
                     
     @media only screen and (max-width: 550px)
         >div:nth-child(2)
             >div:first-child >span
                 font-size: 1.75rem
+                
+            ul
+                left: -12rem
+                width: 12rem
+                
+                li
+                    font-size: 1rem
+                    
+                &.is-mobile
+                    transform: translateX(12rem)
                 
     @media only screen and (max-width: 400px)
         >div:nth-child(2)

@@ -13,7 +13,7 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
 
     showMessage( type, message ) {
         return new Promise( ( resolve, reject )  => {
-            if( /show/.test( this.status ) ) return
+            if( /show/.test( this.status ) ) return resolve()
 
             this.resolution = resolve
 

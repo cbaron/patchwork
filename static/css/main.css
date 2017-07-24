@@ -239,8 +239,8 @@
     text-align: center;
     margin-top: 1rem;
     position: absolute;
-    left: -18rem;
-    width: 18rem;
+    left: -16rem;
+    width: 16rem;
     transition: transform 0.4s ease-in-out;
     z-index: 1000;
   }
@@ -252,13 +252,26 @@
     border: 1px solid #ffc502;
     background-color: #000;
   }
-  .Header >div:nth-child(2) ul.mobile-menu-show {
-    transform: translateX(18rem);
+  .Header >div:nth-child(2) ul li:hover {
+    opacity: 1;
+  }
+  .Header >div:nth-child(2) ul.is-mobile {
+    transform: translateX(16rem);
   }
 }
 @media only screen and (max-width: 550px) {
   .Header >div:nth-child(2) >div:first-child >span {
     font-size: 1.75rem;
+  }
+  .Header >div:nth-child(2) ul {
+    left: -12rem;
+    width: 12rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1rem;
+  }
+  .Header >div:nth-child(2) ul.is-mobile {
+    transform: translateX(12rem);
   }
 }
 @media only screen and (max-width: 400px) {

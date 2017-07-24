@@ -8,7 +8,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         title: 'click'
     },
 
-    onJustifyClick() { this.els.nav.classList.toggle('mobile-menu-show') },
+    onJustifyClick() { this.els.nav.classList.toggle('is-mobile') },
 
     onNavClick( e ) {
         const el = e.target.closest('li'),
@@ -16,7 +16,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.emit( 'navigate', name )
 
-        if( this.els.nav.classList.contains('mobile-menu-show') ) this.els.nav.classList.toggle('mobile-menu-show')
+        if( this.els.nav.classList.contains('is-mobile') ) this.els.nav.classList.remove('is-mobile')
     },
 
     onTitleClick() { this.emit( 'navigate', '/' ) },
