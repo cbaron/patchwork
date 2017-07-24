@@ -69,13 +69,13 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     getTemplateOptions() {
-        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format )
+        const modelData = this.model
+            ? this.model.data
+                ? this.model.data
+                : this.model
+            : { }
 
-        if( this.model ) {
-            rv.model = this.model.data
-
-            if( this.model.meta ) rv.meta = this.model.meta
-        }
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format, modelData )
 
         if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts
 
