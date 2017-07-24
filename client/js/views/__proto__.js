@@ -57,9 +57,9 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     events: {},
 
     fadeInImage( img ) {
-        img.setAttribute( 'src', img.getAttribute('data-src') )
-
         img.onload = () => img.removeAttribute('data-src')
+
+        img.setAttribute( 'src', img.getAttribute('data-src') )
     },
 
     getData() {
@@ -74,16 +74,12 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
                 ? this.model.data
                 : this.model
             : { }
-        return Object.assign(
-            {},
-            modelData,
-            { user: (this.user) ? this.user.data : {} },
-            { opts: this.templateOpts
-                ? typeof this.templateOpts === 'function'
-                    ? this.templateOpts()
-                    : this.templateOpts
-                 : {} }
-        )
+
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format, modelData )
+
+        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts
+
+        return rv
     },
 
     isAllowed( user ) {
@@ -105,7 +101,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ).then( () => this.emit('hidden') ) },
+    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ) },
 
     _hideEl( el, klass, resolve, hash ) {
         el.removeEventListener( 'animationend', this[ hash ] )
@@ -139,12 +135,19 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } )
+        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
     },
     
     isHidden( el ) {
         const element = el || this.els.container
         return element.classList.contains('fd-hidden')
+    },
+
+    loadBgImage( el ) {
+        const img = new Image()
+
+        img.onload = () => el.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( el.getAttribute('data-bg') )
     },
 
     onLogin() {
@@ -218,7 +221,7 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ).then( () => this.emit('shown') ) },
+    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ) },
 
     _showEl( el, klass, resolve, hash ) {
         el.removeEventListener( 'animationend', this[hash] )
@@ -265,12 +268,15 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
+            imgSelector = `[${this.slurp.img}]`,
+            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, img[data-src]` ) ).forEach( el => {
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
-            else if( el.hasAttribute( 'data-src' ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
             else if( el.hasAttribute( this.slurp.view ) ) {
                 let attr = el.getAttribute(this.slurp.view)
                 if( ! this.viewEls ) this.viewEls = { }
