@@ -8,6 +8,8 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     Error: require('../../../lib/MyError'),
 
+    Format: require('../Format'),
+
     Model: require('../models/__proto__'),
 
     Moment: require('moment'),
@@ -54,6 +56,12 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     events: {},
 
+    fadeInImage( img ) {
+        img.onload = () => img.removeAttribute('data-src')
+
+        img.setAttribute( 'src', img.getAttribute('data-src') )
+    },
+
     getData() {
         if( !this.model ) this.model = Object.create( this.Model, { resource: { value: this.name } } )
 
@@ -66,16 +74,12 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
                 ? this.model.data
                 : this.model
             : { }
-        return Object.assign(
-            {},
-            modelData,
-            { user: (this.user) ? this.user.data : {} },
-            { opts: this.templateOpts
-                ? typeof this.templateOpts === 'function'
-                    ? this.templateOpts()
-                    : this.templateOpts
-                 : {} }
-        )
+
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format, modelData )
+
+        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts
+
+        return rv
     },
 
     isAllowed( user ) {
@@ -97,30 +101,30 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    hide() {
-        if( !this.els || !document.body.contains(this.els.container) || this.isHidden() ) {
-            return Promise.resolve()
-        } else if( this.els.container.classList.contains('fd-hide') ) {
-            return new Promise( resolve => this.once( 'fd-hidden', resolve ) )
-        } else {
-            return new Promise( resolve => {
-                this.onHiddenProxy = e => this.onHidden(resolve)
-                this.els.container.addEventListener( 'transitionend', this.onHiddenProxy )
-                this.els.container.classList.add('fd-hide')
-            } )
-        }
+    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ) },
+
+    _hideEl( el, klass, resolve, hash ) {
+        el.removeEventListener( 'animationend', this[ hash ] )
+        el.classList.add('fd-hidden')
+        el.classList.remove( klass )
+        delete this[hash]
+        resolve()
     },
 
-    hideEl( el ) {
-        if( el.classList.contains('fd-hide') ) {
-            return Promise.resolve()
-        } else {
-            return new Promise( resolve => {
-                el.onHiddenProxy = e => this.onElHidden( resolve, el )
-                el.addEventListener( 'transitionend', el.onHiddenProxy )
-                el.classList.add('fd-hide')
-            } )
-        }
+    hideEl( el, isSlow, animate=true ) {
+        if( this.isHidden( el ) ) return Promise.resolve()
+
+        const time = new Date().getTime(),
+            hash = `${time}Hide`
+        
+        return new Promise( resolve => {
+            if( !animate ) return resolve( el.classList.add('fd-hidden') )
+
+            const klass = `animate-out${ isSlow ? '-slow' : ''}`
+            this[ hash ] = e => this._hideEl( el, klass, resolve, hash )
+            el.addEventListener( 'animationend', this[ hash ] )
+            el.classList.add( klass )
+        } )
     },
 
     htmlToFragment( str ) {
@@ -131,21 +135,19 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } )
+        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
     },
     
-    isHidden() { return this.els.container.classList.contains('fd-hidden') },
-
-    onElHidden( resolve, el ) {
-        el.removeEventListener( 'transitionend', el.onHiddenProxy )
-        el.classList.add('fd-hidden')
-        resolve( this.emit( 'elHidden', el ) )
+    isHidden( el ) {
+        const element = el || this.els.container
+        return element.classList.contains('fd-hidden')
     },
 
-    onHidden( resolve ) {
-        this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
-        this.els.container.classList.add('fd-hidden')
-        resolve( this.emit('fd-hidden') )
+    loadBgImage( el ) {
+        const img = new Image()
+
+        img.onload = () => el.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( el.getAttribute('data-bg') )
     },
 
     onLogin() {
@@ -154,16 +156,6 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     onNavigation( path ) {
         return this.show()
-    },
-
-    onElShown( resolve, el ) {
-        el.removeEventListener( 'transitionend', el.onShownProxy )
-        resolve( this.emit( 'elShown' ) )
-    },
-
-    onShown( resolve ) {
-        this.els.container.removeEventListener( 'transitionend', this.onShownProxy )
-        resolve( this.emit( 'shown' ) )
     },
 
     showNoAccess() {
@@ -229,58 +221,31 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    show() {
-        if( this.els.container.classList.contains( 'fd-hidden' ) ) {
-            this.els.container.classList.remove( 'fd-hidden' )
-            
-            return new Promise( resolve => {
-                setTimeout( () => {
-                    this.onShownProxy = e => this.onShown(resolve)
-                    this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'fd-hide' )
-                }, 10 ) 
-            } )
-        } else if( this.els.container.classList.contains( 'fd-hide' ) ) {
-            this.els.container.classList.remove( 'fd-hide' )
-            this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
-            
-            return new Promise( resolve => {
-                setTimeout( () => {
-                    this.onShownProxy = e => this.onShown(resolve)
-                    this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'fd-hide' )
-                }, 10 ) 
-            } )
-        } else {
-            return new Promise( resolve => this.once( 'shown', resolve ) )
-        }
+    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ) },
+
+    _showEl( el, klass, resolve, hash ) {
+        el.removeEventListener( 'animationend', this[hash] )
+        el.classList.remove( klass )
+        delete this[ hash ]
+        resolve()
     },
 
-    showEl( el ) {
-        if( el.classList.contains( 'fd-hidden' ) ) {
-            el.classList.remove( 'fd-hidden' )
-            
-            return new Promise( resolve => {
-                window.requestAnimationFrame( () => {
-                    el.onShownProxy = e => this.onShown( resolve, el )
-                    el.addEventListener( 'transitionend', el.onShownProxy )
-                    el.classList.remove( 'fd-hide' )
-                } )
-            } )
-        } else if( el.classList.contains( 'fd-hide' ) ) {
-            el.classList.remove( 'fd-hide' )
-            el.container.removeEventListener( 'transitionend', el.onHiddenProxy )
-            
-            return new Promise( resolve => {
-                window.requestAnimationFrame( () => {
-                    el.onShownProxy = e => this.onShown( resolve, el )
-                    el.addEventListener( 'transitionend', el.onShownProxy )
-                    el.classList.remove( 'fd-hide' )
-                } )
-            } )
-        } else {
-            return Promise.resolve()
-        }
+    showEl( el, isSlow, animate=true ) {
+        if( !this.isHidden( el ) ) return Promise.resolve()
+
+        const time = new Date().getTime(),
+            hash = `${time}Show`
+
+        return new Promise( resolve => {
+            el.classList.remove('fd-hidden')
+
+            if( !animate ) return resolve()
+
+            const klass = `animate-in${ isSlow ? '-slow' : ''}`
+            this[ hash ] = e => this._showEl( el, klass, resolve, hash )
+            el.addEventListener( 'animationend', this[ hash ] )            
+            el.classList.add( klass )
+        } )        
     },
 
     slurpEl( el ) {
@@ -303,11 +268,15 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
+            imgSelector = `[${this.slurp.img}]`,
+            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}` ) ).forEach( el => {
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
+            else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
             else if( el.hasAttribute( this.slurp.view ) ) {
                 let attr = el.getAttribute(this.slurp.view)
                 if( ! this.viewEls ) this.viewEls = { }

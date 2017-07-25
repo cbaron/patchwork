@@ -1,0 +1,148 @@
+.Header
+    font-family: "RalewayRegular"
+    
+    >div:first-child img
+        width: 100%
+        height: auto
+        margin: 0
+        
+    >div:nth-child(2)
+        background-color: black
+        color: white
+        padding: 1rem
+        line-height: 1
+        
+        >div:first-child
+            text-align: center
+                        
+            >svg
+                display: none
+            
+            >span
+                font-size: 5rem
+                text-transform: uppercase
+                cursor: pointer
+                
+                &:active
+                    color: $sun-yellow
+                
+                html.non-touch &
+                    &:hover
+                        color: $sun-yellow
+                        transition: color .4s ease-in-out
+            
+        ul
+            display: flex
+            justify-content: center
+            align-items: center
+            flex-wrap: wrap
+            line-height: 1.3
+            
+            li
+                margin: .1rem 1.75rem
+                font-size: 1.75rem
+                cursor: pointer
+                
+                &:active
+                    opacity: .85
+                
+                html.non-touch &
+                    &:hover
+                        opacity: .85
+
+    @media only screen and (min-width: 1700px)
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 5.5rem
+                
+            ul li
+                font-size: 2rem
+        
+    @media only screen and (max-width: 1250px)
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 4.5rem
+                
+            ul li
+                font-size: 1.5rem
+                
+    @media only screen and (max-width: 900px)
+        >div:nth-child(2)
+            >div:first-child >span
+                font-size: 3.75rem
+                
+            ul li
+                font-size: 1.35rem
+                
+    @media only screen and (max-width: 767px)
+        >div:nth-child(2)
+            position: relative
+            
+            >div:first-child
+                display: flex
+                align-items: center
+                
+                svg
+                    display: block
+                    cursor: pointer
+                    height: 1.5rem
+                    stroke: white
+                    padding: 0 .5rem
+
+                >span
+                    font-size: 2.5rem
+                    text-align: center
+                    flex: 1
+                
+            ul
+                text-align: center
+                margin-top: 1rem
+                position: absolute
+                left: -16rem
+                width: 16rem
+                transition: transform .4s ease-in-out
+                z-index: 1000
+                
+                li
+                    font-size: 1.25rem
+                    width: 100%
+                    padding: .75rem
+                    margin: 0
+                    border: 1px solid $sun-yellow
+                    background-color: black
+                        
+                    &:active
+                        background-color: $sun-yellow
+                        color: black
+                    
+                &.is-mobile
+                    transform: translateX(16rem)
+                    
+    @media only screen and (max-width: 550px)
+        >div:nth-child(2)
+            >div:first-child
+                >span
+                    font-size: 1.75rem
+                
+            ul
+                left: -12rem
+                width: 12rem
+                
+                li
+                    font-size: 1rem
+                    
+                &.is-mobile
+                    transform: translateX(12rem)
+                
+    @media only screen and (max-width: 400px)
+        >div:nth-child(2)
+            >div:first-child
+                svg
+                    height: 1.25rem
+
+                >span
+                    font-size: 1.3rem
+        
+                    
+
+            
