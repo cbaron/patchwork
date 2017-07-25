@@ -173,7 +173,10 @@
   text-transform: uppercase;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >div:first-child >span:hover {
+.Header >div:nth-child(2) >div:first-child >span:active {
+  color: #ffc502;
+}
+html.non-touch .Header >div:nth-child(2) >div:first-child >span:hover {
   color: #ffc502;
   transition: color 0.4s ease-in-out;
 }
@@ -189,7 +192,10 @@
   font-size: 1.75rem;
   cursor: pointer;
 }
-.Header >div:nth-child(2) ul li:hover {
+.Header >div:nth-child(2) ul li:active {
+  opacity: 0.85;
+}
+html.non-touch .Header >div:nth-child(2) ul li:hover {
   opacity: 0.85;
 }
 @media only screen and (min-width: 1700px) {
@@ -223,17 +229,18 @@
   .Header >div:nth-child(2) >div:first-child {
     display: flex;
     align-items: center;
-    justify-content: center;
   }
   .Header >div:nth-child(2) >div:first-child svg {
     display: block;
     cursor: pointer;
     height: 1.5rem;
     stroke: #fff;
-    padding-right: 1.5rem;
+    padding: 0 0.5rem;
   }
   .Header >div:nth-child(2) >div:first-child >span {
     font-size: 2.5rem;
+    text-align: center;
+    flex: 1;
   }
   .Header >div:nth-child(2) ul {
     text-align: center;
@@ -252,8 +259,9 @@
     border: 1px solid #ffc502;
     background-color: #000;
   }
-  .Header >div:nth-child(2) ul li:hover {
-    opacity: 1;
+  .Header >div:nth-child(2) ul li:active {
+    background-color: #ffc502;
+    color: #000;
   }
   .Header >div:nth-child(2) ul.is-mobile {
     transform: translateX(16rem);
@@ -275,6 +283,9 @@
   }
 }
 @media only screen and (max-width: 400px) {
+  .Header >div:nth-child(2) >div:first-child svg {
+    height: 1.25rem;
+  }
   .Header >div:nth-child(2) >div:first-child >span {
     font-size: 1.3rem;
   }

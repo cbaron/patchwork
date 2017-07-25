@@ -23,9 +23,13 @@
                 text-transform: uppercase
                 cursor: pointer
                 
-                &:hover
+                &:active
                     color: $sun-yellow
-                    transition: color .4s ease-in-out
+                
+                html.non-touch &
+                    &:hover
+                        color: $sun-yellow
+                        transition: color .4s ease-in-out
             
         ul
             display: flex
@@ -39,8 +43,12 @@
                 font-size: 1.75rem
                 cursor: pointer
                 
-                &:hover
+                &:active
                     opacity: .85
+                
+                html.non-touch &
+                    &:hover
+                        opacity: .85
 
     @media only screen and (min-width: 1700px)
         >div:nth-child(2)
@@ -73,17 +81,18 @@
             >div:first-child
                 display: flex
                 align-items: center
-                justify-content: center
                 
                 svg
                     display: block
                     cursor: pointer
                     height: 1.5rem
                     stroke: white
-                    padding-right: 1.5rem
+                    padding: 0 .5rem
 
                 >span
                     font-size: 2.5rem
+                    text-align: center
+                    flex: 1
                 
             ul
                 text-align: center
@@ -101,17 +110,19 @@
                     margin: 0
                     border: 1px solid $sun-yellow
                     background-color: black
-                    
-                    &:hover
-                        opacity: 1
+                        
+                    &:active
+                        background-color: $sun-yellow
+                        color: black
                     
                 &.is-mobile
                     transform: translateX(16rem)
                     
     @media only screen and (max-width: 550px)
         >div:nth-child(2)
-            >div:first-child >span
-                font-size: 1.75rem
+            >div:first-child
+                >span
+                    font-size: 1.75rem
                 
             ul
                 left: -12rem
@@ -125,8 +136,12 @@
                 
     @media only screen and (max-width: 400px)
         >div:nth-child(2)
-            >div:first-child >span
-                font-size: 1.3rem
+            >div:first-child
+                svg
+                    height: 1.25rem
+
+                >span
+                    font-size: 1.3rem
         
                     
 
