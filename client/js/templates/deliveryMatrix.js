@@ -9,7 +9,14 @@ module.exports = p => {
               `</div>`
           ).join('')
 
-return `<div>`
+return `` +
+`<div class="">
+    <div class="">
+        <div class="cell">Delivery Option</div>
+        ${sizeOptions}
+    </div>
+    ${rows}
+</div>`
 
 }
 

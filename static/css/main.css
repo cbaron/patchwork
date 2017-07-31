@@ -30,8 +30,10 @@
   border: 1px solid #155d75;
 }
 .AdminPlus {
-  margin-top: 7.5rem;
+  padding-top: 7.5rem;
   text-align: center;
+  height: 100vh;
+  background-color: #f9f9f9;
 }
 .AdminPlus button {
   background-color: #f2f2f2;
@@ -133,6 +135,11 @@
 .Csa .csa-contents .share-descriptions {
   margin: 3rem 0 4rem;
 }
+.Csa .csa-contents .share-descriptions .sign-up {
+  color: #f49521;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 .Csa .csa-contents .share-descriptions >div:first-child {
   margin-bottom: 2rem;
 }
@@ -174,27 +181,24 @@
   font-weight: bold;
 }
 .Csa .how .delivery-matrix {
-  margin-bottom: 40px;
-  text-align: center;
-}
-.Csa .how .delivery-matrix >div:first-child {
-  border-bottom: 1px solid #000;
-  border-right: 1px solid #000;
-}
-.Csa .how .delivery-matrix .row:first-child {
-  background-color: #a20903;
-  color: #fff;
-  font-weight: bold;
-}
-.Csa .how .delivery-matrix .row:not(:first-child) > div:first-child {
-  background-color: #fff;
-  color: #a20903;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 .Csa .how .delivery-matrix .cell {
-  border-top: 1px solid #000;
-  border-left: 1px solid #000;
-  padding: 15px 0px;
+  min-width: 10rem;
+  border: 1px solid #a20903;
+  padding: 0.25rem 0.75rem;
+  margin: 0.05rem;
+  color: #a20903;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.Csa .how .delivery-matrix >div >div {
+  display: flex;
+}
+.Csa .how .delivery-matrix >div >div:first-child .cell {
+  color: #fff;
+  background-color: #a20903;
 }
 .Csa .how .non-size-options {
   margin-bottom: 40px;
@@ -364,30 +368,43 @@
   font-size: 1.5rem;
   font-weight: 300;
 }
+@media only screen and (max-width: 550px) {
+  .Footer p,
+  .Footer a {
+    font-size: 1.25rem;
+  }
+}
 .Header {
   font-family: "RalewayRegular";
 }
 .Header >div:first-child img {
   width: 100%;
-  height: 15rem;
+  height: auto;
   margin: 0;
 }
 .Header >div:nth-child(2) {
   background-color: #000;
   color: #fff;
-  padding: 0.5rem;
+  padding: 1rem;
   line-height: 1;
 }
 .Header >div:nth-child(2) >div:first-child {
   text-align: center;
 }
+.Header >div:nth-child(2) >div:first-child >svg {
+  display: none;
+}
 .Header >div:nth-child(2) >div:first-child >span {
-  font-size: 6rem;
+  font-size: 5rem;
   text-transform: uppercase;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >div:first-child >span:hover {
-  opacity: 0.9;
+.Header >div:nth-child(2) >div:first-child >span:active {
+  color: #ffc502;
+}
+html.non-touch .Header >div:nth-child(2) >div:first-child >span:hover {
+  color: #ffc502;
+  transition: color 0.4s ease-in-out;
 }
 .Header >div:nth-child(2) ul {
   display: flex;
@@ -397,42 +414,130 @@
   line-height: 1.3;
 }
 .Header >div:nth-child(2) ul li {
-  margin: 0 1.75rem;
-  font-size: 2rem;
+  margin: 0.1rem 1.75rem;
+  font-size: 1.75rem;
   cursor: pointer;
 }
-.Header >div:nth-child(2) ul li:hover {
-  opacity: 0.9;
+.Header >div:nth-child(2) ul li:active {
+  opacity: 0.85;
 }
-@media only screen and (min-width: 768px) {
-  .Header ul >li:first-child {
-    display: none;
+html.non-touch .Header >div:nth-child(2) ul li:hover {
+  opacity: 0.85;
+}
+@media only screen and (min-width: 1700px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 5.5rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 2rem;
+  }
+}
+@media only screen and (max-width: 1250px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 4.5rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1.5rem;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 3.75rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1.35rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .Header >div:nth-child(2) {
+    position: relative;
+  }
+  .Header >div:nth-child(2) >div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  .Header >div:nth-child(2) >div:first-child svg {
+    display: block;
+    cursor: pointer;
+    height: 1.5rem;
+    stroke: #fff;
+    padding: 0 0.5rem;
+  }
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 2.5rem;
+    text-align: center;
+    flex: 1;
+  }
+  .Header >div:nth-child(2) ul {
+    text-align: center;
+    margin-top: 1rem;
+    position: absolute;
+    left: -16rem;
+    width: 16rem;
+    transition: transform 0.4s ease-in-out;
+    z-index: 1000;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0;
+    border: 1px solid #ffc502;
+    background-color: #000;
+  }
+  .Header >div:nth-child(2) ul li:active {
+    background-color: #ffc502;
+    color: #000;
+  }
+  .Header >div:nth-child(2) ul.is-mobile {
+    transform: translateX(16rem);
+  }
+}
+@media only screen and (max-width: 550px) {
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 1.75rem;
+  }
+  .Header >div:nth-child(2) ul {
+    left: -12rem;
+    width: 12rem;
+  }
+  .Header >div:nth-child(2) ul li {
+    font-size: 1rem;
+  }
+  .Header >div:nth-child(2) ul.is-mobile {
+    transform: translateX(12rem);
+  }
+}
+@media only screen and (max-width: 400px) {
+  .Header >div:nth-child(2) >div:first-child svg {
+    height: 1.25rem;
+  }
+  .Header >div:nth-child(2) >div:first-child >span {
+    font-size: 1.3rem;
   }
 }
 .Home {
   height: 43rem;
   font-family: "RalewayRegular";
   position: relative;
-}
-.Home.bg-loaded {
   background-color: rgba(0,0,0,0.5);
 }
 .Home.bg-loaded::before {
   content: '';
   display: block;
   background-image: url("https://storage.googleapis.com/double-quill-3243/cornucopia.jpg");
-  background-size: cover;
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.4s ease-in-out;
+  background-size: cover;
 }
 .Home >div:first-child {
   text-align: center;
-  padding: 9rem 0 7rem;
+  padding: 9rem 2rem 7rem;
   line-height: 1.1;
 }
 .Home >div:first-child >span {
@@ -454,8 +559,50 @@
 .Home >div:nth-child(2) >button:hover {
   opacity: 0.95;
 }
+@media only screen and (max-width: 1250px) {
+  .Home >div:first-child >span {
+    font-size: 2.4rem;
+  }
+  .Home >div:nth-child(2) >button {
+    width: 15rem;
+    font-size: 1.75rem;
+    padding: 1.5rem 0;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .Home >div:first-child >span {
+    font-size: 2rem;
+  }
+  .Home >div:nth-child(2) >button {
+    width: 13rem;
+    font-size: 1.5rem;
+    padding: 1.35rem 0;
+  }
+}
+@media only screen and (max-width: 550px) {
+  .Home >div:first-child >span {
+    font-size: 1.75rem;
+  }
+  .Home >div:nth-child(2) >button {
+    width: 10rem;
+    font-size: 1.25rem;
+    padding: 1.15rem 0;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .Home >div:first-child >span {
+    font-size: 1.5rem;
+  }
+  .Home >div:nth-child(2) >button {
+    width: 10rem;
+    font-size: 1rem;
+    padding: 1rem 0;
+  }
+}
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 }
 .ManageCustomer .main-search {
   display: flex;
@@ -747,7 +894,6 @@
   padding: 1rem;
   right: 2rem;
   top: 2rem;
-  transition: all 3s ease-in-out;
   z-index: 200;
 }
 .Toast.success {
@@ -988,9 +1134,6 @@
 div.container-fluid {
   display: flex;
   flex-direction: column;
-}
-body.admin-plus {
-  background-color: #f9f9f9;
 }
 ol {
   -webkit-margin-before: 0rem;

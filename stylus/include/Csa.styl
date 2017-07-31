@@ -60,6 +60,11 @@
         .share-descriptions
             margin: 3rem 0 4rem
             
+            .sign-up
+                color: $orange
+                text-transform: uppercase
+                cursor: pointer
+            
             >div
                 &:first-child
                     margin-bottom: 2rem
@@ -103,28 +108,35 @@
                 font-weight: bold
             
         .delivery-matrix
-            margin-bottom: 40px
-            text-align: center
-
-            >div:first-child
-                border-bottom: 1px solid black
-                border-right: 1px solid black
+            display: flex
+            justify-content: center
             
-            .row:first-child
-                background-color: $sun-red
-                color: white
-                font-weight: bold
-            
-            .row:not(:first-child)
-                > div:first-child
-                    background-color: white
-                    color: $sun-red
-                    font-weight: bold            
-
             .cell
-                border-top: 1px solid black
-                border-left: 1px solid black
-                padding: 15px 0px
+                min-width: 10rem
+                //width: 115px
+                border: 1px solid $sun-red
+                padding: .25rem .75rem
+                margin: .05rem
+                color: $sun-red
+                font-size: 1.1rem
+                text-align: center
+            
+            >div
+                //display: flex
+                
+                >div
+                    //min-width: 800px
+                    display: flex
+                    
+                    &:first-child
+                        .cell
+                            color: white
+                            background-color: $sun-red
+
+
+         
+
+
                     
         .non-size-options
             margin-bottom: 40px
