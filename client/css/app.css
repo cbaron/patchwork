@@ -39,13 +39,13 @@ html {
   height: 100%;
 }
 body {
-  font-family: "Lato";
+  font-family: "RalewayRegular";
   height: 100%;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5em;
   text-align: left;
-  color: black;
+  color: #666;
 }
 body > div.container {
   width: 100%;
@@ -57,9 +57,6 @@ body > div.container {
 }
 body.admin {
   padding-top: 5rem;
-}
-.client-view {
-  margin: 15px 5% 25px;
 }
 h1,
 h2,

@@ -76,52 +76,99 @@
 .ButtonFlow svg.link:hover {
   text-decoration: underline;
 }
-.Csa {
-  margin: 5rem 20% 0;
+.Csa section {
+  margin: 2.5rem 20% 0;
+}
+.Csa h1,
+.Csa h2 {
+  color: #ed1c24;
+  letter-spacing: 0;
+}
+.Csa h1 {
+  margin: 3rem 20%;
+  font-weight: bold;
+  font-size: 1.7rem;
 }
 .Csa h2 {
-  color: #a20903;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.15rem;
+  font-size: 1.3rem;
 }
 .Csa h3 {
   text-align: center;
 }
+.Csa .bg-image {
+  margin: 3rem 0 4rem;
+  height: 15rem;
+  width: 100%;
+  background-color: #ed1c24;
+}
+.Csa .button-row {
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
+}
+.Csa .button-row >button {
+  color: #000;
+  background-color: #ffc502;
+  box-shadow: 3px 3px 5px #666;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  font-family: "RalewayRegular";
+}
+.Csa .link {
+  color: #ed1c24;
+  cursor: pointer;
+}
+.Csa .item-detail {
+  margin-bottom: 1rem;
+}
+.Csa .item-detail >div {
+  font-size: 1rem;
+}
+.Csa .item-detail >div >span:first-child {
+  color: #ed1c24;
+}
+.Csa .item-detail >div >span:nth-child(2) {
+  padding: 0 0.2rem;
+}
 .Csa .csa-fit >p {
-  margin: 0;
+  margin-bottom: 0.2rem;
 }
 .Csa .csa-fit ul {
-  display: inline-block;
-  margin-bottom: 4rem;
+  list-style: none;
 }
-.Csa .csa-fit ul li {
-  list-style-type: disc;
-  list-style-position: inside;
-}
-.Csa .csa-contents >h2 {
-  margin-bottom: 0.5rem;
+.Csa .csa-fit ul li::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.35rem;
+  background-color: #ed1c24;
+  float: left;
+  margin: 0.5rem 0.85rem 0;
+  border-radius: 50%;
 }
 .Csa .csa-contents .share-examples {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 2rem -15%;
+  margin: 1rem -15% 2rem;
 }
 .Csa .csa-contents .share-examples >div {
   text-align: center;
   width: 20rem;
-  margin: 1rem 2rem;
+  margin: 0 2rem;
 }
 .Csa .csa-contents .share-examples >div h4 {
-  color: #a20903;
-  font-size: 1.4rem;
+  color: #ed1c24;
+  font-size: 1.1rem;
 }
 .Csa .csa-contents .share-examples >div >div img {
   height: 7.5rem;
 }
 .Csa .csa-contents .share-examples >div >div:nth-child(3) {
-  color: #f49521;
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
+  color: #ed1c24;
+  margin: 0.25rem 0;
 }
 .Csa .csa-contents .share-examples >div >ul {
   display: flex;
@@ -131,124 +178,107 @@
   width: 50%;
   color: #666;
   text-align: center;
+  font-size: 0.85rem;
 }
 .Csa .csa-contents .share-descriptions {
-  margin: 3rem 0 4rem;
+  margin: 2rem 0;
 }
-.Csa .csa-contents .share-descriptions .sign-up {
-  color: #f49521;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-.Csa .csa-contents .share-descriptions >div:first-child {
-  margin-bottom: 2rem;
-}
-.Csa .csa-contents .share-descriptions >div >div {
-  font-size: 1.4rem;
-  margin-bottom: 0.25rem;
-}
-.Csa .csa-contents .share-descriptions >div >div >span:first-child {
-  color: #a20903;
-}
-.Csa .csa-contents .share-descriptions >div >div >span:nth-child(2) {
-  padding: 0 0.25rem;
-}
-.Csa .csa-contents >div:last-child {
-  display: flex;
-  justify-content: center;
-}
-.Csa .csa-contents >div:last-child >button {
-  background-color: #ffc502;
-  box-shadow: 3px 3px 5px #888;
-  font-size: 1.6rem;
-  padding: 1.2rem 1.6rem;
-  border-radius: 0.6rem;
-  border: 1px solid transparent;
-  font-family: "RalewayRegular";
-}
-.Csa .how img {
+.Csa .delivery img {
   display: block;
   margin: 25px auto;
   max-height: 400px;
   max-width: 100%;
 }
-.Csa .how .farmpickup,
-.Csa .how .group-deliveries {
+.Csa .delivery .farmpickup,
+.Csa .delivery .group-deliveries {
   margin-bottom: 40px;
 }
-.Csa .how .farmpickup span:first-child,
-.Csa .how .group-deliveries span:first-child {
+.Csa .delivery .farmpickup span:first-child,
+.Csa .delivery .group-deliveries span:first-child {
   font-weight: bold;
 }
-.Csa .how .delivery-matrix {
+.Csa .delivery .delivery-matrix {
   display: flex;
   justify-content: center;
+  margin-top: 2.5rem;
 }
-.Csa .how .delivery-matrix .cell {
-  min-width: 10rem;
-  border: 1px solid #a20903;
-  padding: 0.25rem 0.75rem;
-  margin: 0.05rem;
-  color: #a20903;
-  font-size: 1.1rem;
+.Csa .delivery .delivery-matrix .cell {
+  min-width: 12rem;
+  padding: 0.4rem 0.85rem;
+  margin: 0.085rem;
+  color: #fff;
+  background-color: #ed1c24;
   text-align: center;
 }
-.Csa .how .delivery-matrix >div >div {
+.Csa .delivery .delivery-matrix >div >div {
   display: flex;
 }
-.Csa .how .delivery-matrix >div >div:first-child .cell {
-  color: #fff;
-  background-color: #a20903;
+.Csa .delivery .delivery-matrix >div >div:first-child .cell {
+  border: 1px solid #ed1c24;
+  color: #ed1c24;
+  background-color: #fff;
 }
-.Csa .how .non-size-options {
+.Csa .delivery .delivery-matrix >div >div >div:nth-child(2) {
+  order: 3;
+}
+.Csa .delivery .delivery-matrix >div >div >div:nth-child(3) {
+  order: 2;
+}
+.Csa .add-ons {
+  margin: 1rem 3.5rem 0;
+}
+.Csa .contact {
+  margin: 1rem 0;
+}
+.Csa .contact .non-size-options {
   margin-bottom: 40px;
 }
-.Csa .how .non-size-options ul {
+.Csa .contact .non-size-options ul {
   margin-left: 30px;
 }
-.Csa .how .non-size-options .option {
+.Csa .contact .non-size-options .option {
   padding: 30px 0px;
 }
-.Csa .how .non-size-options .add-on-table {
+.Csa .contact .non-size-options .add-on-table {
   border: 1px solid #000;
   width: 70%;
   margin: 30px 15%;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row {
+.Csa .contact .non-size-options .add-on-table .add-on-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
   border-bottom: 1px solid #000;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row:last-child {
+.Csa .contact .non-size-options .add-on-table .add-on-row:last-child {
   border-bottom: none;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-name {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-name {
   font-weight: bold;
   color: #ffc502;
   width: 15%;
   text-align: center;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-details {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-left: 1px solid #000;
   width: 85%;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details div {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-details div {
   padding-left: 10px;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-details .add-on-price {
   font-weight: bold;
   width: 15%;
   text-align: center;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-details .add-on-paragraph {
   width: 55%;
 }
-.Csa .how .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
+.Csa .contact .non-size-options .add-on-table .add-on-row .add-on-details .add-on-image {
   width: 30%;
   padding-right: 10px;
 }
@@ -357,22 +387,16 @@
   flex: 1;
   background-color: #000;
   color: #fff;
-  padding: 1.5rem;
+  padding: 1.25rem 0 0.75rem;
   text-align: center;
 }
 .Footer a {
-  color: #76bf56;
+  color: #ed1c24;
 }
 .Footer p,
 .Footer a {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 300;
-}
-@media only screen and (max-width: 550px) {
-  .Footer p,
-  .Footer a {
-    font-size: 1.25rem;
-  }
 }
 .Header {
   font-family: "RalewayRegular";
