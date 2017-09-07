@@ -56,10 +56,13 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     events: {},
 
-    fadeInImage( img ) {
-        img.onload = () => img.removeAttribute('data-src')
+    fadeInImage( el ) {
+        el.onload = () => {
+            this.emit( 'imgLoaded', el )
+            el.removeAttribute('data-src')
+        }
 
-        img.setAttribute( 'src', img.getAttribute('data-src') )
+        el.setAttribute( 'src', el.getAttribute('data-src') )
     },
 
     getData() {
@@ -101,29 +104,28 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    hide( isSlow, animate=true ) { return this.hideEl( this.els.container, isSlow, animate ) },
+    hide( isSlow ) { return this.hideEl( this.els.container, isSlow ) },
+    
+    hideSync() { this.els.container.classList.add('fd-hidden'); return this },
 
-    _hideEl( el, klass, resolve, hash ) {
+    _hideEl( el, resolve, hash, isSlow ) {
         el.removeEventListener( 'animationend', this[ hash ] )
         el.classList.add('fd-hidden')
-        el.classList.remove( klass )
+        el.classList.remove(`animate-out${ isSlow ? '-slow' : ''}`)
         delete this[hash]
         resolve()
     },
 
-    hideEl( el, isSlow, animate=true ) {
-        if( this.isHidden( el ) ) return Promise.resolve()
+    hideEl( el, isSlow ) {
+        if( this.isHidden() ) return Promise.resolve()
 
         const time = new Date().getTime(),
             hash = `${time}Hide`
         
         return new Promise( resolve => {
-            if( !animate ) return resolve( el.classList.add('fd-hidden') )
-
-            const klass = `animate-out${ isSlow ? '-slow' : ''}`
-            this[ hash ] = e => this._hideEl( el, klass, resolve, hash )
+            this[ hash ] = e => this._hideEl( el, resolve, hash, isSlow )
             el.addEventListener( 'animationend', this[ hash ] )
-            el.classList.add( klass )
+            el.classList.add(`animate-out${ isSlow ? '-slow' : ''}`)
         } )
     },
 
@@ -221,30 +223,28 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    show( isSlow, animate=true ) { return this.showEl( this.els.container, isSlow, animate ) },
+    show( isSlow ) {
+        return this.showEl( this.els.container, isSlow )
+    },
 
-    _showEl( el, klass, resolve, hash ) {
+    showSync() { this.els.container.classList.remove('fd-hidden'); return this },
+
+    _showEl( el, resolve, hash, isSlow ) {
         el.removeEventListener( 'animationend', this[hash] )
-        el.classList.remove( klass )
+        el.classList.remove(`animate-in${ isSlow ? '-slow' : ''}`)
         delete this[ hash ]
         resolve()
     },
 
-    showEl( el, isSlow, animate=true ) {
-        if( !this.isHidden( el ) ) return Promise.resolve()
-
+    showEl( el, isSlow ) {
         const time = new Date().getTime(),
             hash = `${time}Show`
 
         return new Promise( resolve => {
+            this[ hash ] = e => this._showEl( el, resolve, hash, isSlow )
+            el.addEventListener( 'animationend', this[ hash ] )
             el.classList.remove('fd-hidden')
-
-            if( !animate ) return resolve()
-
-            const klass = `animate-in${ isSlow ? '-slow' : ''}`
-            this[ hash ] = e => this._showEl( el, klass, resolve, hash )
-            el.addEventListener( 'animationend', this[ hash ] )            
-            el.classList.add( klass )
+            el.classList.add(`animate-in${ isSlow ? '-slow' : ''}`)
         } )        
     },
 

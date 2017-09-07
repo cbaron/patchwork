@@ -11,10 +11,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     onJustifyClick() { this.els.nav.classList.toggle('is-mobile') },
 
     onNavClick( e ) {
-        const el = e.target.closest('li'),
-            name = el.getAttribute('data-name')
+        const el = e.target.closest('li')
 
-        this.emit( 'navigate', name )
+        if( !el ) return
+
+        this.emit( 'navigate', el.getAttribute('data-name') )
 
         if( this.els.nav.classList.contains('is-mobile') ) this.els.nav.classList.remove('is-mobile')
     },
@@ -22,7 +23,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     onTitleClick() { this.emit( 'navigate', '/' ) },
 
     templateOpts() {
-        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', name: 'home' } }
     }
 
 } )

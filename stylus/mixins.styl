@@ -2,19 +2,12 @@ bgImg( name )
     $url = $bucket + name
     background-image: url( $url )
 
-fadeBgImg( name, duration=.4s )
-    content: ''
-    display: block
-    bgImg( name )
+listCircle( color )
+    content: ""
     position: absolute
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
-    z-index: -1
-    animation: fadeIn duration ease-in-out
-    
-
-
-
-    
+    width: .375rem
+    height: .35rem
+    background-color: color
+    top: .5rem
+    left: -1rem
+    border-radius: 50%

@@ -1,11 +1,16 @@
 module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
     events: {
+        link: 'click',
         signupBtn: 'click'
     },
 
     hashToElement: {
         'how-do-i-know': 'howDoIKnow',
+    },
+
+    onLinkClick( e ) {
+        this.emit( 'navigate', e.target.getAttribute('data-name') )
     },
 
     onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
@@ -30,22 +35,14 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
     },
 
     tables: [
-        //{ name: 'csacustomization', el: 'customize', template: 'csaCustomization' },
-        //{ name: 'csainfo', el: 'how', template: 'csaHow' },
         //{ name: 'csastatements', el: 'csaStatements', template: 'listItem'},
         { name: 'largeshareexample', el: 'shareExampleLg', template: 'listItem' },
         { name: 'smallShareExample', el: 'shareExampleSm', template: 'listItem' },
     ],
 
     templates: {
-        //csaCustomization: require('../templates/csaCustomization'),
-        //csaHow: require('../templates/csaHow'),
         deliveryMatrix: require('../templates/deliveryMatrix'),
-        //farmDeliveryOption: require('../templates/farmDeliveryOption'),
-        //groupDeliveryOption: require('../templates/groupDeliveryOption'),
-        listItem: require('./templates/ListItem'),
-        //nonSizeOptions: require('../templates/nonSizeOptions'),
-        shareExample: require('./templates/ShareExample')
+        listItem: require('./templates/ListItem')
     }
 
 } )

@@ -18,16 +18,16 @@
     h3
         text-align: center
         
-    .bg-image
-        margin: 3rem 0 4rem
-        height: 15rem
-        width: 100%
-        background-color: $sun-red
+    >div        
+        >img
+            height: auto
+            width: 100%
+            margin: 3rem 0
         
     .button-row
         display: flex
         justify-content: center
-        margin: 4rem 0
+        margin: 3rem 0
         
         >button
             color: black
@@ -38,10 +38,15 @@
             border-radius: .5rem
             border: 1px solid transparent
             font-family: "RalewayRegular"
+            
+            &:hover
+                background-color: lighten($sun-yellow, 15%)
         
     .link
         color: $sun-red
         cursor: pointer
+        &:hover
+            text-decoration: underline
     
     .item-detail
         margin-bottom: 1rem
@@ -62,14 +67,12 @@
         ul
             list-style: none
             
-            li::before
-                content: ""
-                width: .375rem
-                height: .35rem
-                background-color: $sun-red
-                float: left
-                margin: .5rem .85rem 0
-                border-radius: 50%
+            >li
+                position: relative
+                margin-left: 1.25rem
+            
+                &::before
+                    listCircle($sun-red)
 
     .csa-contents
             
@@ -82,7 +85,7 @@
             >div
                 text-align: center
                 width: 20rem
-                margin: 0 2rem
+                margin: 0 2rem 1rem
                 
                 h4
                     color: $sun-red
@@ -90,6 +93,7 @@
                     
                 >div img
                     height: 7.5rem
+                    margin: 0
                     
                 >div:nth-child(3)
                     color: $sun-red
@@ -115,13 +119,6 @@
             margin: 25px auto
             max-height: 400px
             max-width: 100%
-
-        .farmpickup,
-        .group-deliveries
-            margin-bottom: 40px
-
-            span:first-child
-                font-weight: bold
             
         .delivery-matrix
             display: flex
@@ -153,116 +150,35 @@
                             order: 2
                             
     .add-ons
-        margin: 1rem 3.5rem 0
+        margin: 1rem 1.5rem 0
         
     .contact
         margin: 1rem 0
-            
-
-
-         
-
-
-                    
-        .non-size-options
-            margin-bottom: 40px
-
-            ul
-                margin-left: 30px
-            
-            .option
-                padding: 30px 0px
-            
-            .add-on-table
-                border: 1px solid black
-                width: 70%
-                margin: 30px 15%
-
-                .add-on-row
-                    display: flex
-                    align-items: center
-                    flex-wrap: wrap
-                    width: 100%
-                    border-bottom: 1px solid black
-
-                    &:last-child
-                        border-bottom: none
-                    
-                    .add-on-name
-                       font-weight: bold
-                       color: $sun-yellow
-                       width: 15%
-                       text-align: center
-                    
-                    .add-on-details
-                        display: flex
-                        align-items: center
-                        justify-content: space-between
-                        border-left: 1px solid black
-                        width: 85%
-
-                        div
-                            padding-left: 10px
-                        
-                        .add-on-price
-                            font-weight: bold
-                            width: 15%
-                            text-align: center
-                        
-                        .add-on-paragraph
-                            width: 55%
-                        
-                        .add-on-image
-                            width: 30%
-                            padding-right: 10px
-                        
-    @media only screen and (max-width: 375px)
-        .first-column
-            margin-bottom: 0
         
-        .second-column
-            margin-top: 0
-
-    @media only screen and (max-width: 900px)
-        .how .non-size-options .add-on-table
-            width: 100%
-            margin: 30px 0
-        
-    @media only screen and (max-width: 650px)
-        .how .non-size-options .add-on-table
-            display: block
-            border: none
-            width: 100%
-            margin: 15px 0
-
-            .add-on-row
-                display: block
-                border-bottom: none
-
-                .add-on-name
-                    width: auto
-                    text-align: left
-                
-                .add-on-details
-                    display: block
-                    border-left: none
-                    width: auto
-
-                    div
-                        padding-left: 0
+    @media only screen and (max-width: 767px)
+    
+        section
+            margin: 2.5rem 10% 0
+        h1
+            margin: 3rem 10%
+    
+        .delivery
+            .delivery-matrix
+                .cell
+                    min-width: 8rem
+                    padding: .3rem .6rem
+                    font-size: .9rem
                     
-                    .add-on-price
-                        width: auto
-                        text-align: left
-                        margin-bottom: 10px
-                    
-                    .add-on-paragraph
-                        width: auto
-                    
-                    .add-on-image
-                        width: auto
-                        padding-right: 0
-                    
+    @media only screen and (max-width: 425px)
+        .csa-contents .share-examples >div
+            margin: 0 1rem 1rem
+            
+        .delivery
+            .delivery-matrix
+                .cell
+                    min-width: 101px
+                    padding: .25rem .4rem
+                    font-size: .75rem
                 
             
         

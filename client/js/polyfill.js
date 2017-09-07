@@ -55,4 +55,6 @@ if (!touchsupport){ // browser doesn't support touch
     document.documentElement.classList.add("non-touch")
 }
 
+require('smoothscroll-polyfill').polyfill()
+
 module.exports = true

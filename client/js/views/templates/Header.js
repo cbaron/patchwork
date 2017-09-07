@@ -4,16 +4,14 @@ module.exports = ( { opts, ImageSrc } ) => {
 return `` +
 `<div class="row">
     <div>
-        <img data-src="${ImageSrc( 'red-sun.jpg' )}" />
+        <img data-src="${ImageSrc('header_sun')}" />
     </div>
     <div>
         <div>
             ${require('./lib/justify')}
-            <span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span>
+            <div data-js="title" data-name="${opts.home.name}">${opts.home.label}</div>
         </div>
-        <ul data-js="nav">
-            ${fields}
-        </ul>
+        <ul data-js="nav">${fields}</ul>
     </div>
     <div>
 </div>`

@@ -81,15 +81,6 @@ img {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-a {
-  color: #398439;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.2rem;
-}
-a:hover {
-  color: #398439;
-}
 a[href^="mailto:"] {
   font-size: 1rem;
 }
