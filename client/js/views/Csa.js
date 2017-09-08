@@ -1,5 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
+    CurrentShare: require('../models/CurrentShare'),
+
     events: {
         link: 'click',
         signupBtn: 'click'
@@ -22,10 +24,13 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
             this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
         }
 
-        this.Xhr( { method: 'get', resource: 'currentShare' } )
-        .then( ( { deliveryOptions, produceOptions } ) =>
+        this.CurrentShare.get()
+        .then( () =>
             this.slurpTemplate( {
-                template: this.templates.deliveryMatrix( { deliveryOptions, sizeOptions: produceOptions.filter( option => /size/i.test( option.prompt ) ) } ),
+                template: this.templates.deliveryMatrix( {
+                    deliveryOptions: this.CurrentShare.data.deliveryOptions,
+                    sizeOptions: this.CurrentShare.getSizeOptions()
+                } ),
                 insertion: { el: this.els.deliveryMatrix }
             } )
         )
