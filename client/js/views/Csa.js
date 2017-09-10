@@ -46,7 +46,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
     ],
 
     templates: {
-        deliveryMatrix: require('../templates/deliveryMatrix'),
+        deliveryMatrix: require('./templates/deliveryMatrix'),
         listItem: require('./templates/ListItem')
     }
 

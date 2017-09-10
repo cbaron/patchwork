@@ -76,6 +76,32 @@
 .ButtonFlow svg.link:hover {
   text-decoration: underline;
 }
+.Contact {
+  margin: 0 20% 5rem;
+}
+.Contact h1,
+.Contact h2 {
+  color: #ed1c24;
+  letter-spacing: 0;
+}
+.Contact h1 {
+  margin: 3rem 0;
+  font-weight: bold;
+  font-size: 1.7rem;
+}
+.Contact h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+.Contact a {
+  color: #ed1c24;
+  cursor: pointer;
+}
+@media only screen and (max-width: 767px) {
+  .Contact {
+    margin: 2.5rem 10% 5rem;
+  }
+}
 .Csa section {
   margin: 2.5rem 20% 0;
 }
@@ -151,8 +177,8 @@
 .Csa .csa-fit ul >li::before {
   content: "";
   position: absolute;
-  width: 0.375rem;
-  height: 0.35rem;
+  width: 5px;
+  height: 5px;
   background-color: #ed1c24;
   top: 0.5rem;
   left: -1rem;
@@ -321,6 +347,87 @@
 .Footer a {
   font-size: 1rem;
 }
+.GetInvolved section {
+  padding: 2.5rem 20%;
+}
+.GetInvolved section:nth-child(even) {
+  color: #e7e7e7;
+  background-color: #ed1c24;
+}
+.GetInvolved section:nth-child(even) >h2 {
+  color: #fff;
+}
+.GetInvolved section:nth-child(even) a {
+  color: #fff;
+}
+.GetInvolved h1,
+.GetInvolved h2,
+.GetInvolved h3 {
+  color: #ed1c24;
+  letter-spacing: 0;
+}
+.GetInvolved h1 {
+  margin: 3rem 20%;
+  font-weight: bold;
+  font-size: 1.7rem;
+}
+.GetInvolved h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1.3rem;
+}
+.GetInvolved h3 {
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+}
+.GetInvolved a {
+  color: #ed1c24;
+  cursor: pointer;
+  font-weight: bold;
+}
+.GetInvolved a:hover {
+  text-decoration: underline;
+}
+.GetInvolved .positions >div {
+  margin: 1.5rem 0;
+  font-weight: bold;
+}
+.GetInvolved .positions >div:last-child {
+  margin-bottom: 0;
+}
+.GetInvolved .internship-description {
+  margin: 2rem 0;
+}
+.GetInvolved .internship-description >div {
+  margin: 1rem 2rem;
+}
+.GetInvolved .internship-description ul {
+  list-style: none;
+}
+.GetInvolved .internship-description ul >li {
+  position: relative;
+  margin-left: 1.25rem;
+}
+.GetInvolved .internship-description ul >li::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: #ed1c24;
+  top: 0.5rem;
+  left: -1rem;
+  border-radius: 50%;
+}
+@media only screen and (max-width: 767px) {
+  .GetInvolved section {
+    padding: 2.5rem 10%;
+  }
+  .GetInvolved h1 {
+    margin: 3rem 10%;
+  }
+  .GetInvolved .internship-description >div {
+    margin: 1rem;
+  }
+}
 .Header {
   font-family: "RalewayRegular";
 }
@@ -362,6 +469,7 @@ html.non-touch .Header >div:nth-child(2) >div:first-child >div:hover {
 }
 .Header >div:nth-child(2) ul li {
   padding: 0.5rem 0.75rem;
+  margin: 0 0.25rem;
   font-size: 1.2rem;
   cursor: pointer;
 }

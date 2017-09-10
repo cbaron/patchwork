@@ -17,6 +17,7 @@ module.exports={
 	Header: require('./views/templates/Header'),
 	Home: require('./views/templates/Home'),
 	ListItem: require('./views/templates/ListItem'),
+	Location: require('./views/templates/Location'),
 	Locations: require('./views/templates/Locations'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),
 	MemberInfo: require('./views/templates/MemberInfo'),
@@ -30,5 +31,6 @@ module.exports={
 	StaffProfile: require('./views/templates/StaffProfile'),
 	Toast: require('./views/templates/Toast'),
 	Transactions: require('./views/templates/Transactions'),
-	WeekOptions: require('./views/templates/WeekOptions')
+	WeekOptions: require('./views/templates/WeekOptions'),
+	deliveryMatrix: require('./views/templates/deliveryMatrix')
 }
