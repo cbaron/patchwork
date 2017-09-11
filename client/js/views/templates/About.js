@@ -1,14 +1,23 @@
 module.exports = p =>
-`<div class="about-class client-view">
-    <div class="about-statement">
-        <h2>About Us</h2>
-        <p>Patchwork Gardens is a chemical-free farm located in Dayton, Ohio.  Every spring, we plant a large vegetable garden: 11 acres in the widest variety we can manage.  We try to cover all the garden favorites: from salad greens in spring, to summer-time tomatoes, autumn's root crops and everything in between.  If you've ever had a home garden and enjoyed its fresh foods, then you may be familiar with the crops we cultivate.  If you cherish a fondness for any vegetable at all, the chances are good that we are growing this now.<p>
-        <p>It is our goal to spread good food and good farming practices within our community.  The farm is in its seventh year now, and growing more productive every year we learn from our experience.  We grow our food without the use of any chemical fertilizers, pesticides, or herbicides.  Our approach to agriculture favors hard work (diligent cultivation) and the culture of a healthy soil biology.  These make for healthy plants.  We plant cover-crops in the off-season and monitor our progress through yearly soil testing.</p>
-        <p>Most of what we grow gets directly distributed to our favorite folks -- the hungry, healthy membership of our Community Supported Agriculture (CSA) program.  Members of this program receive the lion's share of each week's harvest, a box of produce picked and packed according to what's most-ready in the garden.  The CSA runs mid-May -January and showcases all the variety of foods that we produce.  We also attend farmer's markets and contract with local restaurants.  We’re proud to be growing great vegetables and are eager to share them.  Check us out at farmer's market or consider becoming a part of our CSA today.</p>
-    </div>
-    <hr>    
-    <div class="staff-bios">
-        <h2>Meet Our Staff</h2>
-        <div data-js="staffProfile"></div>
-    </div>
+`<div>
+    <h1>About</h1>
+    <section>
+        <h2>We are purveyors of veggie variety</h2>
+        <p>Patchwork Gardens is a chemical-free farm located in Dayton, Ohio. Every spring, we plant an 11 acre vegetable garden with the widest variety of produce we can manage.  We cover all the garden favorites: spring salad greens, summertime tomatoes, autumn's root crops, and everything in between.</p>
+        <p>If you've ever had a home garden and enjoyed its bounty, you may be familiar with the crops we cultivate. If you cherish a fondness for any vegetable at all, the chances are good that we've grown it before.</p>
+    </section>
+    <section>
+        <h2>We are the keepers of chemical-free goodness</h2>
+        <p>We grow our food without the use of any chemical fertilizers, pesticides, or herbicides. Our approach to agriculture favors hard work through diligent cultivation and a culture of healthy soil biology. These make for healthy plants. We plant cover-crops in the off-season and monitor our progress through yearly soil testing.</p>
+        <p>Our goal is to spread good food and good farming practices within our community. The farm is in its seventh year now, and growing more productive every year as we learn from our collective experiences.</p>
+    </section>
+    <section>
+        <h2>We are constantly growing our membership</h2>
+        <p>Most of what we grow gets directly distributed to our favorite folks &mdash; the hungry, healthy membership of our <span data-name="csa" data-js="link" class="link">Community Supported Agriculture (CSA) program</span>. CSA members receive the lion's share of each week's harvest, a box of produce picked and packed according to what's most ready in the garden. The CSA runs mid-May to January and showcases all the variety of foods that we produce. We also attend farmer's markets and contract with local restaurants. See a map and list locations <span data-name="locations" data-js="link" class="link">here</span>.</p>
+        <p>We’re proud to be growing great vegetables and are eager to share them. Check us out at a farmer's market or consider joining our CSA today. <span data-name="sign-up" data-js="link" class="link">Sign Up</span></p>
+    </section>
+    <section>
+        <h2>We are your friends and neighbors</h2>
+        <div class="bios" data-js=staffBios></div>
+    </section>
 </div>`
