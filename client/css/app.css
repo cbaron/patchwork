@@ -81,9 +81,6 @@ img {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-a[href^="mailto:"] {
-  font-size: 1rem;
-}
 div.btn-row {
   text-align: center;
 }

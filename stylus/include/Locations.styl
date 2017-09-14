@@ -1,13 +1,69 @@
 .Locations
-    .business, .restaurants span a
-        font-family: "RalewayRegular"
-        font-size: 16px
-        line-height: 1.2em
-        letter-spacing: 1px
-        color: #c98702
 
-    ul
-        margin-top: 20px
+    section
+        &:not(:nth-child(2)), &:nth-child(2) >p
+            padding: 2rem 20%
+
+        &:nth-child(odd)
+            color: #e7e7e7
+            background-color: $sun-red
+            
+            >h2
+                color: white
+            
+            >ul .location >div:first-child
+                color: white
+                font-weight: bold
         
-        li
-            margin: 5px 0
+    h1, h2
+        color: $sun-red
+        letter-spacing: 0
+      
+    h1
+        margin: 3rem 20%
+        font-weight: bold
+        font-size: 1.7rem
+        
+    h2
+        margin-bottom: .25rem
+        font-size: 1.3rem
+        font-weight: bold
+        
+    ul
+        display: flex
+        flex-wrap: wrap
+        
+        .location
+            margin: .75rem 0
+            width: 50%
+
+            >div
+                &:first-child
+                    color: $sun-red
+                >a
+                    color: inherit
+
+    .map-wrap
+        height: 20rem
+        background-color: #e7e7e7
+
+        div:first-child
+            height: 100%
+            
+    .button-row
+        display: flex
+        justify-content: center
+        margin: 3rem 0
+        
+        >button
+            color: black
+            background-color: $sun-yellow
+            box-shadow: 3px 3px 5px #666
+            font-size: 1.25rem
+            padding: .75rem 1.3rem
+            border-radius: .5rem
+            border: 1px solid transparent
+            font-family: "RalewayRegular"
+            
+            &:hover
+                background-color: lighten($sun-yellow, 15%)
