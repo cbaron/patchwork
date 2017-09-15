@@ -17,7 +17,7 @@ module.exports = Object.create( {
             selects = { [table]: true },
             where = [ ],
             params = [ ]
-        console.log( queryKeys )
+
         queryKeys.forEach( key => {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
@@ -65,10 +65,9 @@ module.exports = Object.create( {
         console.log( '_getColumns' )
         console.log( name )
         return this.Postgres.tables[ name ].columns.map( column => {
-            console.log( column )
-            if( column.name === 'location' ) return `ST_AsGeoJSON(location) as location`
-                
-            return `"${name}"."${column.name}"` + ( opts.extend ? ` as "${name}.${column.name}"` : '' )
+            return column.name === 'location'
+                ? `ST_AsGeoJSON(location) as location`
+                : `"${name}"."${column.name}"` + ( opts.extend ? ` as "${name}.${column.name}"` : '' )
         }
         ).join(', ')
     },

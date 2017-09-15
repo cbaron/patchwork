@@ -16,6 +16,7 @@ module.exports={
 	GetInvolved: require('./views/templates/GetInvolved'),
 	Header: require('./views/templates/Header'),
 	Home: require('./views/templates/Home'),
+	InfoWindow: require('./views/templates/InfoWindow'),
 	ListItem: require('./views/templates/ListItem'),
 	Location: require('./views/templates/Location'),
 	Locations: require('./views/templates/Locations'),

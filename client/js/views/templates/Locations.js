@@ -4,6 +4,13 @@ module.exports = p =>
     <section>
         <div class="map-wrap">
             <div data-js="map"></div>
+            <div class="legend" data-js="legend">
+                <div class="farmer-market">Farmer's Market</div>
+                <div class="retail-outlet">Retail Outlet</div>
+                <div class="restaurant">Restaurant</div>
+                <div class="group-location">Group Location</div>
+                <div class="delivery-range">Delivery Range</div>
+            </div>
         </div>
         <p>Patchwork Gardens has a truly local presence, and chances are our veggies are closer than you think. Use the interactive map above or read below to find locations where we sell and distribute our chemical-free produce.</p>
     </section>

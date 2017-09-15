@@ -42,7 +42,7 @@
                     color: $sun-red
                 >a
                     color: inherit
-
+        
     .map-wrap
         height: 20rem
         background-color: #e7e7e7
@@ -50,6 +50,61 @@
         div:first-child
             height: 100%
             
+            .info-window
+                font-family: "RalewayRegular"
+                height: auto
+                
+                >div:first-child
+                    color: black
+                    font-size: 1.1rem
+                    font-weight: 300
+                    border-bottom: 2px solid $sun-red
+                    padding-bottom: .25rem
+                
+                >div:nth-child(2)
+                    color: #666
+                    font-size: .8rem
+                    text-transform: uppercase
+                    margin: .5rem 0 1rem
+                    
+                >div:last-child >div >a
+                    color: $sun-red
+            
+        .legend
+            background-color: #fff
+            padding: .75rem
+            margin: .75rem
+            border: 1px solid #000
+            
+            >div
+                margin-bottom: .25rem
+                position: relative
+                margin-left: 1.25rem
+                font-size: .8rem
+                
+                &.farmer-market
+                    &::before
+                        listCircle($sun-red, 10px, .15rem)
+                &.retail-outlet
+                    &::before
+                        listCircle($yellow, 10px, .15rem)
+                &.restaurant
+                    &::before
+                        listCircle($dark-blue, 10px, .15rem)
+                &.group-location
+                    &::before
+                        listCircle($orange, 10px, .15rem)
+                &.delivery-range
+                    &::before
+                        content: ""
+                        position: absolute
+                        width: .75rem
+                        height: .75rem
+                        background-color: $sun-red
+                        opacity: .5
+                        top: .1rem
+                        left: -1rem
+                       
     .button-row
         display: flex
         justify-content: center

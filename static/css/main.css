@@ -764,6 +764,88 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .Locations .map-wrap div:first-child {
   height: 100%;
 }
+.Locations .map-wrap div:first-child .info-window {
+  font-family: "RalewayRegular";
+  height: auto;
+}
+.Locations .map-wrap div:first-child .info-window >div:first-child {
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 300;
+  border-bottom: 2px solid #ed1c24;
+  padding-bottom: 0.25rem;
+}
+.Locations .map-wrap div:first-child .info-window >div:nth-child(2) {
+  color: #666;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin: 0.5rem 0 1rem;
+}
+.Locations .map-wrap div:first-child .info-window >div:last-child >div >a {
+  color: #ed1c24;
+}
+.Locations .map-wrap .legend {
+  background-color: #fff;
+  padding: 0.75rem;
+  margin: 0.75rem;
+  border: 1px solid #000;
+}
+.Locations .map-wrap .legend >div {
+  margin-bottom: 0.25rem;
+  position: relative;
+  margin-left: 1.25rem;
+  font-size: 0.8rem;
+}
+.Locations .map-wrap .legend >div.farmer-market::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #ed1c24;
+  top: 0.15rem;
+  left: -1rem;
+  border-radius: 50%;
+}
+.Locations .map-wrap .legend >div.retail-outlet::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #ffdd14;
+  top: 0.15rem;
+  left: -1rem;
+  border-radius: 50%;
+}
+.Locations .map-wrap .legend >div.restaurant::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #231f20;
+  top: 0.15rem;
+  left: -1rem;
+  border-radius: 50%;
+}
+.Locations .map-wrap .legend >div.group-location::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f8941e;
+  top: 0.15rem;
+  left: -1rem;
+  border-radius: 50%;
+}
+.Locations .map-wrap .legend >div.delivery-range::before {
+  content: "";
+  position: absolute;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #ed1c24;
+  opacity: 0.5;
+  top: 0.1rem;
+  left: -1rem;
+}
 .Locations .button-row {
   display: flex;
   justify-content: center;

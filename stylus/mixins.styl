@@ -2,12 +2,12 @@ bgImg( name )
     $url = $bucket + name
     background-image: url( $url )
 
-listCircle( color )
+listCircle( color, size=5px, top=.5rem )
     content: ""
     position: absolute
-    width: 5px
-    height: 5px
+    width: size
+    height: size
     background-color: color
-    top: .5rem
+    top: top
     left: -1rem
     border-radius: 50%
