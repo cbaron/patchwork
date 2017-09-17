@@ -62,8 +62,6 @@ module.exports = Object.create( {
     },
 
     _getColumns( name, opts={} ) {
-        console.log( '_getColumns' )
-        console.log( name )
         return this.Postgres.tables[ name ].columns.map( column => {
             return column.name === 'location'
                 ? `ST_AsGeoJSON(location) as location`

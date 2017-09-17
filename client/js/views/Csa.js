@@ -26,7 +26,6 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
 
         this.CurrentShare.get()
         .then( () => {
-            console.log( this.CurrentShare.data )
             this.slurpTemplate( {
                 template: this.templates.deliveryMatrix( {
                     deliveryOptions: this.CurrentShare.data.deliveryOptions,

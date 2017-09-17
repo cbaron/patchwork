@@ -1,5 +1,5 @@
 module.exports = p => {
-    const name = p.url ? `<div><a href="${p.url}">${p.name || ''}</a></div>` : `<div>${p.name || ''}</div>`
+    const name = p.url ? `<div><a target="_blank" href="${p.url}">${p.name || ''}</a></div>` : `<div>${p.name || ''}</div>`
     const hours = p.hours ? p.hours.split(',').map( item => `<div>${item}</div>` ).join('') : ``
 
 return `` +

@@ -15,6 +15,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                         name: groupDropoff.name,
                         venue: groupDropoff.venue,
                         street: groupDropoff.street,
+                        cityStateZip: groupDropoff.cityStateZip,
                         location: groupDropoff.location,
                         hours: `${sgdDatum.dayofweek} ${sgdDatum.starttime} - ${sgdDatum.endtime}`
                     } ) )
