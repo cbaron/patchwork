@@ -1,7 +1,7 @@
 .Locations
 
     section
-        &:not(:nth-child(2)), &:nth-child(2) >p
+        &:not(:first-of-type), &:first-of-type >p
             padding: 2rem 20%
 
         &:nth-child(odd)
@@ -29,14 +29,18 @@
         font-size: 1.3rem
         font-weight: bold
         
-    ul
+    ul:not(.legend)
         columns: 2
         margin-top: 1rem
         
         .location
             margin-bottom: .75rem
-            display: inline-block
-            //break-inside: avoid
+            -webkit-column-break-inside: avoid
+            page-break-inside: avoid
+            break-inside: avoid
+            
+            &:first-child:last-child //fix for when firefox breaks a solitary list item into columns
+                display: inline-block
 
             >div
                 &:first-child
@@ -72,23 +76,53 @@
             
         .legend
             background-color: #fff
-            padding: .75rem
+            padding: .5rem .75rem .25rem
             margin: .75rem
             border: 1px solid #000
             
-            >div
-                position: relative
+            >li
                 margin-bottom: .25rem
                 font-size: .8rem
+                font-family: "RalewayRegular"
+
+                input
+                    display: none
+
+                input + span:first-of-type
+                    position: relative
+                    
+                    &::before
+                        position: absolute
+                        bottom: 0
+                        left: -4px
+                        right: 1rem
+                        border: 1px solid black
+                        content: "\00a0"
+                        color: white
+                        background-color: #e7e7e7
+                        font: 14px/.9em sans-serif
+                        height: 14px
+                        width: 14px
+                        cursor: pointer
                 
-                >input
-                    position: absolute
-                    bottom: 0
-                
-                >span
+                input:checked + span:first-of-type::before            
+                    color: black
+                    content: "\2713"
+                    text-align: center
+                    
+                span:last-child
                     position: relative
                     margin-left: 2.1rem
                     
+                    &.patchwork
+                        &::before
+                            content: ""
+                            position: absolute
+                            width: .75rem
+                            height: .75rem
+                            //background-image: url('/static/img/favicon.png')
+                            top: .1rem
+                            left: -1.05rem
                     &.farmer-market
                         &::before
                             listCircle($sun-red, 10px, .15rem)
@@ -110,7 +144,7 @@
                             background-color: $sun-red
                             opacity: .5
                             top: .1rem
-                            left: -1rem
+                            left: -1.05rem
                        
     .button-row
         display: flex
@@ -133,12 +167,12 @@
     @media only screen and (max-width: 767px)
     
         section
-            &:not(:nth-child(2)), &:nth-child(2) >p
+            &:not(:first-of-type), &:first-of-type >p
                 padding: 2rem 10%
 
         h1
             margin: 3rem 10%
             
     @media only screen and (max-width: 575px)
-        ul .location
-            width: 100%
+        ul:not(.legend)
+            columns: 1

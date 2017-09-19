@@ -1,11 +1,12 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     attributes: [
-        { name: 'farmerMarket', klass: 'farmer-market', label: "Farmer's Market" },
-        { name: 'retailOutlet', klass: 'retail-outlet', label: 'Retail Outlet' },
-        { name: 'restaurant', klass: 'restaurant', label: 'Restaurant' },
-        { name: 'groupLocation', klass: 'group-location', label: 'Group Location' },
-        { name: 'deliveryRange', klass: 'delivery-range', label: 'Delivery Range' }
+        { name: 'farmerMarket', el: 'farmerMarkets', klass: 'farmer-market', label: "Farmer's Market", color: '#ed1c24' },
+        { name: 'retailOutlet', el: 'retailOutlets', klass: 'retail-outlet', label: 'Retail Outlet', color: '#ffdd14' },
+        { name: 'restaurant', el: 'restaurants', klass: 'restaurant', label: 'Restaurant', color: '#231f20' },
+        { name: 'groupLocation', el: 'groupLocations', klass: 'group-location', label: 'Group Location', color: '#f8941e' },
+        { name: 'deliveryRange', klass: 'delivery-range', label: 'Delivery Range', color: '#ed1c24' },
+        { name: 'farmPickup', el: 'groupLocations', klass: 'patchwork', label: 'Patchwork Gardens'}
     ],
 
     data: {

@@ -713,8 +713,8 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
     padding: 0.8rem 1.25rem;
   }
 }
-.Locations section:not(:nth-child(2)),
-.Locations section:nth-child(2) >p {
+.Locations section:not(:first-of-type),
+.Locations section:first-of-type >p {
   padding: 2rem 20%;
 }
 .Locations section:nth-child(odd) {
@@ -743,18 +743,23 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   font-size: 1.3rem;
   font-weight: bold;
 }
-.Locations ul {
+.Locations ul:not(.legend) {
   columns: 2;
   margin-top: 1rem;
 }
-.Locations ul .location {
+.Locations ul:not(.legend) .location {
   margin-bottom: 0.75rem;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.Locations ul:not(.legend) .location:first-child:last-child {
   display: inline-block;
 }
-.Locations ul .location >div:first-child {
+.Locations ul:not(.legend) .location >div:first-child {
   color: #ed1c24;
 }
-.Locations ul .location >div >a {
+.Locations ul:not(.legend) .location >div >a {
   color: inherit;
 }
 .Locations .map-wrap {
@@ -785,24 +790,53 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 }
 .Locations .map-wrap .legend {
   background-color: #fff;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem 0.25rem;
   margin: 0.75rem;
   border: 1px solid #000;
 }
-.Locations .map-wrap .legend >div {
-  position: relative;
+.Locations .map-wrap .legend >li {
   margin-bottom: 0.25rem;
   font-size: 0.8rem;
+  font-family: "RalewayRegular";
 }
-.Locations .map-wrap .legend >div >input {
+.Locations .map-wrap .legend >li input {
+  display: none;
+}
+.Locations .map-wrap .legend >li input + span:first-of-type {
+  position: relative;
+}
+.Locations .map-wrap .legend >li input + span:first-of-type::before {
   position: absolute;
   bottom: 0;
+  left: -4px;
+  right: 1rem;
+  border: 1px solid #000;
+  content: "\00a0";
+  color: #fff;
+  background-color: #e7e7e7;
+  font: 14px/0.9em sans-serif;
+  height: 14px;
+  width: 14px;
+  cursor: pointer;
 }
-.Locations .map-wrap .legend >div >span {
+.Locations .map-wrap .legend >li input:checked + span:first-of-type::before {
+  color: #000;
+  content: "\2713";
+  text-align: center;
+}
+.Locations .map-wrap .legend >li span:last-child {
   position: relative;
   margin-left: 2.1rem;
 }
-.Locations .map-wrap .legend >div >span.farmer-market::before {
+.Locations .map-wrap .legend >li span:last-child.patchwork::before {
+  content: "";
+  position: absolute;
+  width: 0.75rem;
+  height: 0.75rem;
+  top: 0.1rem;
+  left: -1.05rem;
+}
+.Locations .map-wrap .legend >li span:last-child.farmer-market::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -812,7 +846,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >div >span.retail-outlet::before {
+.Locations .map-wrap .legend >li span:last-child.retail-outlet::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -822,7 +856,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >div >span.restaurant::before {
+.Locations .map-wrap .legend >li span:last-child.restaurant::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -832,7 +866,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >div >span.group-location::before {
+.Locations .map-wrap .legend >li span:last-child.group-location::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -842,7 +876,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >div >span.delivery-range::before {
+.Locations .map-wrap .legend >li span:last-child.delivery-range::before {
   content: "";
   position: absolute;
   width: 0.75rem;
@@ -850,7 +884,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-color: #ed1c24;
   opacity: 0.5;
   top: 0.1rem;
-  left: -1rem;
+  left: -1.05rem;
 }
 .Locations .button-row {
   display: flex;
@@ -871,8 +905,8 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-color: #ffce28;
 }
 @media only screen and (max-width: 767px) {
-  .Locations section:not(:nth-child(2)),
-  .Locations section:nth-child(2) >p {
+  .Locations section:not(:first-of-type),
+  .Locations section:first-of-type >p {
     padding: 2rem 10%;
   }
   .Locations h1 {
@@ -880,8 +914,8 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   }
 }
 @media only screen and (max-width: 575px) {
-  .Locations ul .location {
-    width: 100%;
+  .Locations ul:not(.legend) {
+    columns: 1;
   }
 }
 .ManageCustomer {
