@@ -73,6 +73,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getIcon( name ) {
+        if( name === 'farmPickup' ) return '/static/img/favicon.png'
+
         const color = this.model.attributes.find( attr => name === attr.name ).color
 
         return {

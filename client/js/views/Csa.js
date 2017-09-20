@@ -25,7 +25,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
         }
 
         this.CurrentShare.get()
-        .then( () => {
+        .then( () =>
             this.slurpTemplate( {
                 template: this.templates.deliveryMatrix( {
                     deliveryOptions: this.CurrentShare.data.deliveryOptions,
@@ -33,7 +33,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
                 } ),
                 insertion: { el: this.els.deliveryMatrix }
             } )
-        })
+        )
         .catch( this.Error )
 
         return this

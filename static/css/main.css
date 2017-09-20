@@ -831,10 +831,11 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .Locations .map-wrap .legend >li span:last-child.patchwork::before {
   content: "";
   position: absolute;
-  width: 0.75rem;
-  height: 0.75rem;
-  top: 0.1rem;
-  left: -1.05rem;
+  width: 1rem;
+  height: 1rem;
+  background-image: url("/static/img/favicon.png");
+  background-size: contain;
+  left: -1.15rem;
 }
 .Locations .map-wrap .legend >li span:last-child.farmer-market::before {
   content: "";
