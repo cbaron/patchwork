@@ -44,30 +44,30 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( !this.models[ attr.name ] ) return
 
             const category = attr.name,
-                data = this.models[ category ].data.groupDropoffs || this.models[ category ].data
+                data = category === 'groupLocation' ? this.models[ category ].data.groupDropoffs : this.models[ category ].data
 
                 this.icons[ category ] = this.getIcon( category )
                 this.markers[ category ] = [ ]
 
                 data.forEach( datum => {
-                    if( datum.location ) {
-                        const infowindow = new google.maps.InfoWindow( {
-                            content: this.templates.infoWindow( datum ),
-                        } )
+                    if( !datum.location ) return
 
-                        const marker = new google.maps.Marker( {
-                            position: { lat: datum.location[0], lng: datum.location[1] },
-                            map: this.map,
-                            draggable: false,
-                            icon: this.icons[ category ],
-                            title: datum.name
-                        } )
+                    const infowindow = new google.maps.InfoWindow( {
+                        content: this.templates.infoWindow( datum ),
+                    } )
 
-                        this.markers[ category ].push( marker )
+                    const marker = new google.maps.Marker( {
+                        position: { lat: datum.location[0], lng: datum.location[1] },
+                        map: this.map,
+                        draggable: false,
+                        icon: this.icons[ category ],
+                        title: datum.name
+                    } )
 
-                        marker.addListener( 'click', () => infowindow.open( this.map, marker ) )
+                    this.markers[ category ].push( marker )
 
-                    }
+                    marker.addListener( 'click', () => infowindow.open( this.map, marker ) )
+
                 } )
         } )
     },
@@ -98,9 +98,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             mapTypeControl: false
         }
 
-        this.map = new google.maps.Map( this.els.map, Object.assign( {
-          disableDefaultUI: false,
-        }, mapOpts ) )
+        this.map = new google.maps.Map( this.els.map, mapOpts )
 
         this.createDeliveryRange()
         this.createMarkers()
@@ -112,7 +110,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.model.attributes.forEach( attr => {
             if( !attr.el ) return
 
-            const data = this.models[ attr.name ].data.groupDropoffs || this.models[ attr.name ].data,
+            const data = attr.name === 'groupLocation' ? this.models[ attr.name ].data.groupDropoffs : this.models[ attr.name ].data,
                 el = this.els[ attr.el ]
 
             data.forEach( datum =>
