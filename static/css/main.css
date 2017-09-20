@@ -1,3 +1,88 @@
+.About section {
+  padding: 2.5rem 20%;
+}
+.About section:nth-child(even) {
+  color: #e7e7e7;
+  background-color: #ed1c24;
+}
+.About section:nth-child(even) >h2 {
+  color: #fff;
+}
+.About h1,
+.About h2 {
+  color: #ed1c24;
+  letter-spacing: 0;
+}
+.About h1 {
+  margin: 3rem 20%;
+  font-weight: bold;
+  font-size: 1.7rem;
+}
+.About h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+.About .link {
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.About .link:hover {
+  text-decoration: underline;
+}
+.About .bios {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+.About .bios .bio {
+  margin: 0 4rem 2rem 0;
+}
+.About .bios .bio >div:first-child {
+  position: relative;
+}
+.About .bios .bio >div:first-child:hover .overlay {
+  opacity: 1;
+}
+.About .bios .bio >div:first-child >img {
+  border-radius: 50%;
+  border: 1px solid transparent;
+  width: 9rem;
+  height: 9rem;
+  margin: 0;
+}
+.About .bios .bio >div:first-child .overlay {
+  border-radius: 50%;
+  border: 1px solid transparent;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(0,0,0,0.6);
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  opacity: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+.About .bios .bio >div:last-child {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+}
+@media only screen and (max-width: 767px) {
+  .About section {
+    padding: 2.5rem 10%;
+  }
+  .About h1 {
+    margin: 3rem 10%;
+  }
+}
 .AddTransaction {
   border: 1px solid #000;
 }
