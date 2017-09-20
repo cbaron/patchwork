@@ -49,7 +49,7 @@
                     color: inherit
         
     .map-wrap
-        height: 22rem
+        height: 24rem
 
         div:first-child
             height: 100%
@@ -69,7 +69,7 @@
                     color: #666
                     font-size: .8rem
                     text-transform: uppercase
-                    margin: .5rem 0 1rem
+                    margin: .5rem 0 .75rem
                     
                 >div:last-child >div >a
                     color: $sun-red
@@ -114,7 +114,7 @@
                     position: relative
                     margin-left: 2.1rem
                     
-                    &.patchwork
+                    &.farmPickup
                         &::before
                             content: ""
                             position: absolute
@@ -123,19 +123,19 @@
                             background-image: url('/static/img/favicon.png')
                             background-size: contain
                             left: -1.15rem
-                    &.farmer-market
+                    &.farmerMarket
                         &::before
                             listCircle($sun-red, 10px, .15rem)
-                    &.retail-outlet
+                    &.retailOutlet
                         &::before
                             listCircle($yellow, 10px, .15rem)
                     &.restaurant
                         &::before
                             listCircle($dark-blue, 10px, .15rem)
-                    &.group-location
+                    &.groupLocation
                         &::before
                             listCircle($orange, 10px, .15rem)
-                    &.delivery-range
+                    &.deliveryRange
                         &::before
                             content: ""
                             position: absolute

@@ -3,12 +3,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     DeliveryRoute: require('./DeliveryRoute'),
 
     getHours() {
-        const farmPickup = new ( this.DeliveryRoute.extend( { parse: response => this.DeliveryRoute.prototype.parse( response[0] ) } ) )()
-        
-        farmPickup.fetch( { data: { label: 'farm' } } ).then( () => {
-            this.data[0].hours = `${farmPickup.get('dayOfWeek')} ${farmPickup.get('starttime')} - ${farmPickup.get('endtime')}`
+        return new Promise( ( resolve, reject ) => {
+            const farmPickup = new ( this.DeliveryRoute.extend( { parse: response => this.DeliveryRoute.prototype.parse( response[0] ) } ) )()
+            
+            farmPickup.fetch( { data: { label: 'farm' } } ).then( () => {
+                this.data[0].hours = `${farmPickup.get('dayOfWeek')} ${farmPickup.get('starttime')} - ${farmPickup.get('endtime')}`
+                return resolve()
+            } )
+            .fail( e => reject( e ) )
         } )
-        .fail( e => console.log( e.stack || e ) )
     },
 
     parse( response ) {

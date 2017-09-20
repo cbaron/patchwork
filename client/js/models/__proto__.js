@@ -61,6 +61,11 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
             return Promise.resolve( response )
         } )
+    },
+
+    set( attr, value ) {
+        this.data[ attr ] = value
+        this.emit( `${attr}Changed` )
     }
 
 } )

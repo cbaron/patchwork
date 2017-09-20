@@ -1,4 +1,4 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+module.exports = {
 
     parse( response ) {
         return response.map( row => row.location
@@ -7,4 +7,4 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         )
     }
 
-} )
+}

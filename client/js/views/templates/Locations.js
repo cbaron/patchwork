@@ -4,7 +4,7 @@ module.exports = p => {
             <label>
                 <input data-name="${attr.name}" type="checkbox" checked />
                 <span></span>
-                <span class="${attr.klass}">${attr.label}</span>
+                <span class="${attr.name}">${attr.label}</span>
             </label>
         </li>`
     ).join('')
