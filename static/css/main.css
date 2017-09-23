@@ -187,22 +187,8 @@
     margin: 2.5rem 10% 5rem;
   }
 }
-.Csa section {
-  margin: 2.5rem 20% 0;
-}
-.Csa h1,
-.Csa h2 {
-  color: #ed1c24;
-  letter-spacing: 0;
-}
-.Csa h1 {
-  margin: 3rem 20%;
-  font-weight: bold;
-  font-size: 1.7rem;
-}
 .Csa h2 {
   margin-bottom: 0.15rem;
-  font-size: 1.3rem;
 }
 .Csa h3 {
   text-align: center;
@@ -210,7 +196,7 @@
 .Csa >div >img {
   height: auto;
   width: 100%;
-  margin: 3rem 0;
+  margin: 0;
 }
 .Csa .button-row {
   display: flex;
@@ -229,13 +215,6 @@
 }
 .Csa .button-row >button:hover {
   background-color: #ffce28;
-}
-.Csa .link {
-  color: #ed1c24;
-  cursor: pointer;
-}
-.Csa .link:hover {
-  text-decoration: underline;
 }
 .Csa .item-detail {
   margin-bottom: 1rem;
@@ -346,10 +325,10 @@
 }
 @media only screen and (max-width: 767px) {
   .Csa section {
-    margin: 2.5rem 10% 0;
+    padding: 2.5rem 10% 0;
   }
   .Csa h1 {
-    margin: 3rem 10%;
+    padding: 3rem 10%;
   }
   .Csa .delivery .delivery-matrix .cell {
     min-width: 8rem;
@@ -417,6 +396,193 @@
 }
 .CustomerInfo .content .data .customer-table .table-row.neverReceive {
   white-space: inherit;
+}
+.DateSelection {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+.DateSelection .signup-header {
+  margin: 15px auto;
+}
+.DateSelection .subheader {
+  text-align: center;
+}
+.DateSelection .share-dates {
+  border-top: 1px solid;
+  padding: 35px 0 35px 15px;
+}
+.DateSelection .share-dates.has-error .error {
+  text-align: center;
+}
+.DateSelection .share-dates .pickup-date {
+  background-color: #555;
+  border: 1px solid #f5f5dc;
+  box-shadow: 1px 2px 5px #ccc;
+  color: #bf8002;
+  opacity: 0.7;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 1px;
+  text-align: center;
+  line-height: 1.2;
+}
+.DateSelection .share-dates .pickup-date:hover {
+  background-color: #5e5e5e;
+}
+.DateSelection .share-dates .pickup-date.selected {
+  background-color: rgba(201,135,2,0.3);
+  color: #c98702;
+  opacity: 1;
+}
+.DateSelection .share-dates .pickup-date.unselectable {
+  background-color: rgba(85,85,85,0.1);
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+.DateSelection .share-dates .pickup-date >div {
+  font-weight: bold;
+}
+.DateSelection .share-dates .pickup-date >div:first-child {
+  font-weight: normal;
+}
+@media only screen and (max-width: 767px) {
+  .DateSelection .date-selection .share-dates {
+    padding: 0 0 35px;
+  }
+  .DateSelection .date-selection .share-dates .share-label {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 35px auto;
+  }
+  .DateSelection .date-selection .share-dates .pickup-date {
+    padding: 8px;
+    margin: 0;
+  }
+}
+.Delivery {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+.Delivery .has-error .error {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.Delivery .signup-header {
+  margin: 15px 0;
+}
+.Delivery .subheader {
+  text-align: center;
+  margin-bottom: 5px;
+}
+.Delivery .delivery-options {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  border-top: 1px solid;
+}
+.Delivery .delivery-options .feedback-message {
+  font-weight: 600;
+}
+.Delivery .delivery-options .share-label .option-total {
+  color: #000;
+}
+.Delivery .delivery-options .options {
+  margin: 0 auto;
+  text-align: center;
+}
+.Delivery .delivery-options .delivery-option {
+  background-color: #f0f0f0;
+  box-shadow: 1px 2px 5px #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+.Delivery .delivery-options .delivery-option >div:first-child {
+  color: #c98702;
+}
+.Delivery .delivery-options .delivery-option >div:nth-child(2) {
+  color: #155d75;
+}
+.Delivery .delivery-options .delivery-option:hover {
+  background-color: rgba(201,135,2,0.1);
+}
+.Delivery .delivery-options .delivery-option.selected {
+  background-color: rgba(201,135,2,0.3);
+}
+.Delivery .delivery-options .feedback-messages {
+  text-align: center;
+  font-weight: bold;
+}
+.Delivery .delivery-options .feedback-messages .message {
+  margin-left: 16%;
+  text-align: left;
+}
+.Delivery .delivery-options .feedback-messages .dropoff-message {
+  text-align: left;
+}
+.Delivery .dropoff {
+  background-color: #f0f0f0;
+  box-shadow: 1px 2px 5px #ccc;
+  border: 1px solid;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 5px;
+}
+.Delivery .dropoff >div:first-child {
+  color: #c98702;
+}
+.Delivery .dropoff >div:nth-child(2) {
+  color: #155d75;
+}
+.Delivery .dropoff:hover {
+  background-color: rgba(201,135,2,0.1);
+}
+.Delivery .dropoff.selected {
+  background-color: rgba(201,135,2,0.3);
+}
+@media only screen and (max-width: 800px) {
+  .Delivery .delivery .delivery-options .share-label {
+    width: 148px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .Delivery .delivery .delivery-options .share-label {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 0 auto 30px;
+    width: 100%;
+  }
+  .Delivery .delivery .delivery-options .delivery-option {
+    display: block;
+    border: 1px solid #ccc;
+    width: 95%;
+    text-align: center;
+    margin: 10px auto;
+    background-color: rgba(201,135,2,0.1);
+  }
+  .Delivery .delivery .delivery-options .feedback-messages .message {
+    margin-left: 0;
+    text-align: center;
+  }
+  .Delivery .delivery .delivery-options .feedback-messages .dropoff-message {
+    text-align: center;
+    margin: 15px auto 5px;
+  }
+  .Delivery .delivery .dropoff {
+    margin: 5px auto;
+    width: 90%;
+  }
 }
 .Footer {
   flex: 1;
@@ -1076,6 +1242,60 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   padding: 0.5rem;
   text-align: center;
 }
+.MemberInfo >p {
+  margin-bottom: 2rem;
+}
+.MemberInfo .MemberTypeahead {
+  margin: 2rem;
+}
+.MemberInfo .produce-family {
+  font-weight: bold;
+}
+.MemberInfo .produce-in-family {
+  margin-left: 15px;
+}
+.MemberInfo .help-block {
+  text-align: center;
+  font-size: 0.75rem;
+}
+.MemberInfo .form-group {
+  display: flex;
+  align-items: center;
+}
+.MemberInfo .form-group.has-error {
+  align-items: baseline;
+}
+.MemberInfo .form-group label {
+  font-weight: 300;
+  color: #ed1c24;
+  text-align: right;
+  margin-right: 1rem;
+  flex: 2;
+}
+.MemberInfo .form-group >div {
+  flex: 5;
+  position: relative;
+}
+.MemberInfo .form-group >div .help-block {
+  margin-bottom: 0;
+}
+.MemberInfo .control-label[for="omission"] {
+  position: relative;
+}
+.MemberInfo .control-label[for="omission"] .glyphicon-info-sign {
+  position: absolute;
+  right: -7px;
+  cursor: pointer;
+  color: #155d75;
+}
+@media only screen and (max-width: 767px) {
+  .MemberInfo .member-info .form-control {
+    margin-bottom: 15px;
+  }
+  .MemberInfo .member-info .form-group .ms-helper {
+    top: -14px;
+  }
+}
 .MemberTypeahead {
   display: flex;
   justify-content: center;
@@ -1159,6 +1379,69 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .Seasons .share-label.selected {
   background-color: #fce1ac;
 }
+.share-label {
+  background-color: #ffc502;
+  border-radius: 0.35rem;
+  box-shadow: 2px 2px 5px #666;
+  color: #000;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  font-size: 1rem;
+  padding: 0.75rem;
+  text-align: center;
+  width: 10.5rem;
+  margin-right: 1rem;
+}
+.share-label >div:first-child {
+  font-size: 1.25rem;
+}
+.share-label >div:nth-child(2) {
+  color: #fff;
+  margin: 0.65rem 0;
+}
+.inactive .share-label >div:nth-child(2) {
+  color: #666;
+}
+.inactive .share-label {
+  background-color: #ccc;
+  color: #666;
+}
+.ShareOptions >ul >li {
+  padding: 3rem 0;
+}
+.ShareOptions >ul >li:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+.ShareOptions >ul >li >div:last-child {
+  text-align: center;
+  font-weight: bold;
+}
+.ShareOptions >ul >li .total {
+  font-size: 0.75rem;
+  text-align: right;
+}
+.ShareOptions >ul >li .single-share {
+  display: flex;
+  align-items: center;
+}
+.ShareOptions >ul >li .single-share .options .share-option:not(:first-child) {
+  margin-top: 0.5rem;
+}
+.ShareOptions >ul >li .single-share .options .share-option .option-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #ed1c24;
+}
+.ShareOptions >ul >li .single-share .options .share-option .option-title >div:last-child {
+  min-width: 3.5rem;
+  margin-left: 1rem;
+}
+.ShareOptions >ul >li .single-share .options .share-option .glyphicon {
+  top: 2px;
+  left: 5px;
+  cursor: pointer;
+}
 .SharePatch {
   padding: 0.5rem;
   border-radius: 1rem;
@@ -1202,6 +1485,317 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .SharePatch .content >div .ButtonFlow {
   margin: 1rem;
   text-align: center;
+}
+.Shares >h2 {
+  margin: 2rem 0;
+}
+.Shares .share {
+  cursor: pointer;
+  margin-bottom: 1.9rem;
+  padding: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+}
+.Shares .share:hover {
+  border-color: rgba(201,135,2,0.7);
+}
+.Shares .share:hover.inactive {
+  border-color: transparent;
+}
+.Shares .share.selected {
+  background-color: rgba(255,197,2,0.3);
+}
+.Shares .share.inactive {
+  cursor: default;
+}
+.Shares .share >div {
+  display: flex;
+  align-items: center;
+}
+@media only screen and (max-width: 550px) {
+  .Shares .share >div {
+    display: block;
+  }
+  .Shares .share >div >div {
+    display: flex;
+    justify-content: center;
+  }
+  .Shares .share >div >div .share-label {
+    margin-bottom: 1rem;
+  }
+}
+.Signup >h2 {
+  padding: 0 20%;
+}
+.Signup .walkthrough-container {
+  min-height: 500px;
+}
+.Signup .walkthrough-container >div:first-child {
+  z-index: 3;
+  position: relative;
+}
+.Signup .nav {
+  color: #ed1c24;
+  margin: 2rem 0;
+  position: relative;
+}
+.Signup .nav >div {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.Signup .nav >div:first-child {
+  float: left;
+  margin-left: 10%;
+}
+.Signup .nav >div:last-child {
+  float: right;
+  margin-right: 10%;
+}
+.Signup .nav >div .glyphicon {
+  font-size: 2rem;
+}
+.Signup .nav >div >span {
+  margin: 0 0.25rem;
+}
+@media only screen and (max-width: 767px) {
+  .Signup >h2 {
+    padding: 0 5%;
+  }
+}
+.error {
+  color: #a94442;
+  display: none;
+  margin-top: 30px;
+}
+.has-error .error {
+  display: block;
+}
+.addresses >div:first-child {
+  color: #c98702;
+  font-family: RalewayRegular;
+}
+.addresses .list-container {
+  border: 1px solid #000;
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.addresses .address {
+  color: #155d75;
+  cursor: pointer;
+  padding: 10px;
+}
+.addresses .address:hover {
+  border-color: #ccc;
+  -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 3;
+}
+.addresses .address.selected {
+  background-color: rgba(201,135,2,0.3);
+}
+.addresses .address+.address {
+  border-top: 1px solid #000;
+}
+.Summary .share-summary {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+  margin-bottom: 5px;
+  padding: 0 15px;
+}
+.Summary .share-summary .signup-header {
+  margin: 0;
+  padding: 15px 0;
+}
+.Summary .share-summary .share-label-wrapper {
+  margin: 0 auto;
+  text-align: center;
+  border-top: 1px solid #666;
+  padding-top: 20px;
+}
+.Summary .share-summary .share-label-wrapper .share-label {
+  width: 155px;
+  background-color: #f2f2f2;
+  color: #c98702;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 20px auto;
+  text-align: center;
+}
+.Summary .share-summary .share-label-wrapper .share-label >div:first-child {
+  font-size: 1.25rem;
+}
+.Summary .share-summary .share-label-wrapper .share-label >div:nth-child(2) {
+  color: #155d75;
+  font-size: 0.75rem;
+}
+.Summary .share-summary .section-title {
+  color: #c98702;
+  font-size: 1.1rem;
+  margin-top: 35px;
+  margin-bottom: 10px;
+}
+.Summary .share-summary .item-label {
+  color: #155d75;
+  margin-bottom: 5px;
+}
+.Summary .share-summary .date {
+  color: #155d75;
+  display: inline-block;
+}
+.Summary .share-summary .date:not(:last-child):after {
+  content: ", ";
+}
+.Summary .share-summary .total {
+  color: #000;
+  margin-top: 15px;
+  font-weight: bold;
+}
+.Summary .share-summary .share-total {
+  margin: 20px 0 35px;
+}
+.Summary .grand-total {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 25px auto;
+  color: #000;
+}
+.Summary .payment {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+  padding: 0 20px;
+}
+.Summary .payment .signup-header {
+  border: none;
+  padding: 25px 0;
+  margin: 0;
+}
+.Summary .payment .payment-options {
+  margin: 0 auto 10px;
+  text-align: center;
+}
+.Summary .payment .payment-options .payment-option {
+  background-color: #f2f2f2;
+  color: #c98702;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px #ccc;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "RalewayRegular";
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+  width: 40%;
+}
+.Summary .payment .payment-options .payment-option:hover {
+  background-color: rgba(201,135,2,0.1);
+}
+.Summary .payment .payment-options .payment-option.selected {
+  background-color: rgba(201,135,2,0.3);
+}
+.Summary .payment .payment-options .payment-option >div:nth-child(2) {
+  color: #000;
+  font-size: 0.75rem;
+}
+.Summary .payment .payment-options .payment-option .method-total {
+  font-weight: bold;
+}
+.Summary .payment form .credit-card-info {
+  margin-top: 25px;
+}
+.Summary .payment form .credit-card-info input {
+  width: 300px;
+}
+.Summary .payment form .credit-card-info .form-control-feedback {
+  left: 275px;
+}
+.Summary .payment form .number {
+  margin-bottom: 3px;
+}
+.Summary .payment form .expiration input {
+  display: inline-block;
+}
+.Summary .payment form .expiration #exp_month {
+  width: 100px;
+}
+.Summary .payment form .expiration #exp_year {
+  width: 125px;
+}
+.Summary .payment form .expiration .form-control-feedback:nth-child(2) {
+  left: 75px;
+}
+.Summary .payment form .expiration .form-control-feedback:nth-child(5) {
+  left: 200px;
+}
+.Summary .payment form .cvc input {
+  width: 110px;
+  display: inline-block;
+}
+.Summary .payment form .cvc .form-control-feedback:nth-child(2) {
+  left: 85px;
+}
+.Summary .payment button {
+  position: relative;
+  margin-bottom: 20px;
+}
+.Summary .payment button.has-spinner {
+  color: #5cb85c;
+}
+.Summary .payment button.has-spinner:focus,
+.Summary .payment button.has-spinner:hover {
+  color: #449d44;
+}
+@media only screen and (max-width: 767px) {
+  .Summary .summary .share-summary span {
+    padding-left: 0;
+    padding-right: 4px;
+  }
+  .Summary .summary .share-summary .text-center {
+    text-align: left;
+  }
+  .Summary .summary .share-summary .item-label {
+    margin: 0;
+  }
+  .Summary .summary .share-summary .date {
+    margin-right: 0;
+  }
+  .Summary .summary .share-summary .price,
+  .Summary .summary .share-summary .dropoff-location,
+  .Summary .summary .share-summary .dropoff-address {
+    margin-bottom: 5px;
+  }
+  .Summary .summary .share-summary .shareoptionlabel,
+  .Summary .summary .share-summary .price,
+  .Summary .summary .share-summary .delivery-method,
+  .Summary .summary .share-summary .dropoff-location,
+  .Summary .summary .share-summary .weeks-selected {
+    padding-left: 15px;
+  }
+  .Summary .summary .share-summary .share-total {
+    text-align: center;
+  }
+  .Summary .summary .payment .payment-options .payment-option {
+    display: block;
+    width: 95%;
+    margin-bottom: 15px;
+  }
+  .Summary .summary .payment form #number {
+    width: 95%;
+  }
+  .Summary .summary .payment form #exp_month {
+    margin-bottom: 5px;
+  }
 }
 .Toast {
   background-color: #b13325;
@@ -1455,6 +2049,26 @@ div.container-fluid {
   display: flex;
   flex-direction: column;
 }
+section {
+  padding: 2.5rem 20% 0;
+}
+section:first-of-type {
+  padding: 0 20% 2.5rem;
+}
+h1,
+h2 {
+  color: #ed1c24;
+  letter-spacing: 0;
+}
+h1 {
+  margin: 0;
+  padding: 3rem 20%;
+  font-weight: bold;
+  font-size: 1.7rem;
+}
+h2 {
+  font-size: 1.3rem;
+}
 ol {
   -webkit-margin-before: 0rem;
   -webkit-margin-after: 0rem;
@@ -1470,6 +2084,13 @@ img[data-src] {
 a {
   cursor: pointer;
 }
+.link {
+  color: #ed1c24;
+  cursor: pointer;
+}
+.link:hover {
+  text-decoration: underline;
+}
 .fd-hidden {
   display: none !important;
 }
@@ -1484,6 +2105,17 @@ a {
 }
 .animate-out-slow {
   animation: fadeOut 3s ease-in-out;
+}
+@media only screen and (max-width: 767px) {
+  section {
+    padding: 2.5rem 5% 0;
+  }
+  section:first-of-type {
+    padding: 0 5% 2.5rem;
+  }
+  h1 {
+    padding: 3rem 5%;
+  }
 }
 @-moz-keyframes fadeIn {
   from {

@@ -1,7 +1,18 @@
-module.exports = function(Handlebars) {
-
-return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div data-js=\"container\" class=\"signup-class col-sm-12\"><div data-js=\"intro\" class=\"row intro\">Welcome to our CSA Sign-up Page</div><hr><div class=\"walkthrough-container\"><div data-js=\"walkthrough\" class=\"row\"></div><div class=\"row nav\"><div class=\"col-xs-6 text-center\"><span data-js=\"leftBtn\" class=\"glyphicon glyphicon-chevron-left\"></span></div><div class=\"col-xs-6 text-center\"><span data-js=\"rightBtn\" class=\"glyphicon glyphicon-chevron-right\"></span></div></div></div></div>";
-},"useData":true});
-
-};
+module.exports = p =>
+`<div data-js="container" class="Signup">
+    <h1>Sign Up</h1>
+    <h2 data-js="intro">Welcome to our CSA Sign Up Page</h2>
+    <section class="walkthrough-container">
+        <div data-js="walkthrough"></div>
+        <div class="nav">
+            <div data-js="leftBtn">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <span>Back</span>
+            </div>
+            <div data-js="rightBtn">
+                <span>Next</span>
+                <span class="glyphicon glyphicon-menu-right"></span>
+            </div>
+        </div>
+    </section>
+</div>`

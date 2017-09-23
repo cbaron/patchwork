@@ -8,6 +8,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
   
     getTemplateOptions() {
+        console.log( this.model.attributes )
         return Object.assign( { }, this.model.attributes, { options: this.model.get('options').map( model => model.attributes ) } )
     },
 
@@ -30,7 +31,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
         } )
     },
 
-    template: require('../../templates/signup/shareOption')( require('handlebars') ),
+    template: require('../../templates/signup/shareOption'),
 
     updateTotal() {
         this.templateData.total.text(

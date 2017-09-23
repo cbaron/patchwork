@@ -25,7 +25,7 @@ Object.assign( ShareOptions.prototype, List.prototype, {
 
     selection: true,
 
-    template: require('../../templates/signup/shareOptions')( require('handlebars') ),
+    template: require('../../templates/signup/shareOptions'),
 
     validate() {
 

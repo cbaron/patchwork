@@ -1,0 +1,81 @@
+.Signup
+
+    >h2
+        padding: 0 20%
+
+    .walkthrough-container
+
+        >div:first-child
+            z-index: 3
+            position: relative
+
+        min-height: 500px
+
+    .nav
+        color: $sun-red
+        margin: 2rem 0
+        position: relative
+        
+        >div
+            display: flex
+            align-items: center
+            font-size: 1.3rem
+            cursor: pointer
+
+            &:first-child
+                float: left
+                margin-left: 10%
+            &:last-child
+                float: right
+                margin-right: 10%
+
+            .glyphicon
+                font-size: 2rem
+                
+            >span
+                margin: 0 .25rem
+
+
+    @media only screen and (max-width: 767px)
+        >h2
+            padding: 0 5%
+
+
+.error
+    color: #a94442
+    display: none
+    margin-top: 30px
+
+    .has-error &
+        display: block
+
+.addresses
+
+    >div:first-child
+        color: #c98702
+        font-family: RalewayRegular
+
+    .list-container
+        border: 1px solid black
+        margin-top: 15px
+        max-height: 300px
+        overflow-y: auto
+    
+    .address
+        color: #155D75
+        cursor: pointer
+        padding: 10px
+
+        &:hover
+            border-color: #ccc;
+            -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            -moz-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            -ms-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            z-index: 3
+
+        &.selected
+            background-color: rgba(201, 135, 2, .3)
+    
+    .address+.address
+        border-top: 1px solid black

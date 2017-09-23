@@ -1,0 +1,43 @@
+.ShareOptions
+
+    >ul
+        >li
+            padding: 3rem 0
+            
+            &:not(:last-child)
+                border-bottom: 1px solid #ccc
+            
+            >div:last-child
+                text-align: center
+                font-weight: bold
+            
+            .total
+                font-size: .75rem
+                text-align: right
+
+            .single-share
+                display: flex
+                align-items: center
+                
+                .options
+
+                    .share-option
+                        &:not(:first-child)
+                            margin-top: .5rem
+
+                        .option-title
+                            display: flex
+                            align-items: center
+                            justify-content: flex-end
+                            color: $sun-red
+                            
+                            >div:last-child
+                                min-width: 3.5rem
+                                margin-left: 1rem
+
+                        .glyphicon
+                            top: 2px
+                            left: 5px
+                            cursor: pointer
+                            
+    //@media only screen and (max-width: 767px)

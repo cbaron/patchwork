@@ -18,8 +18,8 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     fetch: { data: {
         display: true,
-        enddate: JSON.stringify( { operation: '>', value: require('moment')().add( 2, 'weeks' ).format('YYYY-MM-DD') } ),
-        signupcutoff: JSON.stringify( { operation: '>', value: require('moment')().format('YYYY-MM-DD') } )
+        //enddate: JSON.stringify( { operation: '>', value: require('moment')().add( 2, 'weeks' ).format('YYYY-MM-DD') } ),
+        //signupcutoff: JSON.stringify( { operation: '>', value: require('moment')().format('YYYY-MM-DD') } )
     } },
 
     getItemViewOptions() {
@@ -89,7 +89,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     showCSAInfoPageInNewTab() { window.open('/csa#how-do-i-know') },
 
-    template: require('../../templates/signup/shares')( require('handlebars') ),
+    template: require('../../templates/signup/shares'),
 
     validate() {
         var prevShareIds = this.signupData.shares.map( share => share.id ),

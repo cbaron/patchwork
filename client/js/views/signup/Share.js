@@ -17,7 +17,7 @@ Object.assign( Share.prototype, ListItem.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/share')( require('handlebars') )
+    template: require('../../templates/signup/share')
 
 } )
 

@@ -1,0 +1,56 @@
+.MemberInfo
+    
+    >p
+        margin-bottom: 2rem
+
+    .MemberTypeahead
+        margin: 2rem
+
+    .produce-family
+        font-weight: bold
+
+    .produce-in-family 
+        margin-left: 15px
+
+    .help-block
+        text-align: center
+        font-size: .75rem
+    
+    .form-group
+        display: flex
+        align-items: center
+        
+        &.has-error
+            align-items: baseline
+        
+        label
+            font-weight: 300
+            color: $sun-red
+            text-align: right
+            margin-right: 1rem
+            flex: 2
+            
+        >div
+            flex: 5
+            position: relative
+        
+            .help-block
+                margin-bottom: 0
+                
+
+    .control-label[for="omission"]
+        position: relative
+
+        .glyphicon-info-sign
+            position: absolute
+            right: -7px
+            cursor: pointer
+            color: #155D75
+    
+    @media only screen and (max-width: 767px)
+        .member-info
+            .form-control
+                margin-bottom: 15px
+
+            .form-group .ms-helper
+                top: -14px

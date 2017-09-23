@@ -2,6 +2,25 @@ div.container-fluid
     display: flex
     flex-direction: column
 
+section
+    padding: 2.5rem 20% 0
+    
+    &:first-of-type
+        padding: 0 20% 2.5rem
+        
+h1, h2
+    color: $sun-red
+    letter-spacing: 0
+
+h1
+    margin: 0
+    padding: 3rem 20%
+    font-weight: bold
+    font-size: 1.7rem
+    
+h2
+    font-size: 1.3rem
+
 ol
     -webkit-margin-before: 0rem
     -webkit-margin-after: 0rem
@@ -15,6 +34,12 @@ img
         
 a
     cursor: pointer
+    
+.link
+    color: $sun-red
+    cursor: pointer
+    &:hover
+        text-decoration: underline
         
 .fd-hidden
     display: none !important
@@ -38,3 +63,13 @@ a
 @keyframes fadeOut
     from { opacity: 1; }
     to { opacity: 0; }
+    
+@media only screen and (max-width: 767px)
+    section
+        padding: 2.5rem 5% 0
+        
+        &:first-of-type
+            padding: 0 5% 2.5rem
+            
+    h1
+        padding: 3rem 5%
