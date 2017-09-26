@@ -13,7 +13,7 @@ Object.assign( Report.prototype, Base.prototype, {
     },
 
     handleQuery( model ) {
-        return this.Postgres.query( model.query, model.id === 5 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
+        return this.Postgres.query( model.query, model.id === 5 || model.id === 6 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
 
@@ -81,6 +81,20 @@ Object.assign( Report.prototype, Base.prototype, {
                    `JOIN member m ON p.id = m.personid ` +
                    `JOIN membershare ms ON ms.memberid = m.id ` +
                    `JOIN ( select "memberShareId", SUM(value) from "csaTransaction" group by "memberShareId" HAVING sum(value) > 0 ) owes ON owes."memberShareId" = ms.id ` +
+                   `JOIN share s ON s.id = ms.shareid ` +
+                   `LEFT JOIN ( SELECT "memberShareId", value FROM "csaTransaction" WHERE action = 'Season Signup' ) ss ON ss."memberShareId" = ms.id ` +
+                   `ORDER BY owes.sum DESC`
+        },
+
+        6: {
+            id: 6,
+            name: 'get-creditors',
+            label: 'Get Creditors',
+            query: `SELECT p.name, m.onpaymentplan, s.name as "season", ss.value as "Season Signup", owes.sum as "Owes" ` +
+                   `FROM person p ` +
+                   `JOIN member m ON p.id = m.personid ` +
+                   `JOIN membershare ms ON ms.memberid = m.id ` +
+                   `JOIN ( select "memberShareId", SUM(value) from "csaTransaction" group by "memberShareId" HAVING sum(value) < 0 ) owes ON owes."memberShareId" = ms.id ` +
                    `JOIN share s ON s.id = ms.shareid ` +
                    `LEFT JOIN ( SELECT "memberShareId", value FROM "csaTransaction" WHERE action = 'Season Signup' ) ss ON ss."memberShareId" = ms.id ` +
                    `ORDER BY owes.sum DESC`
