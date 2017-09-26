@@ -5,7 +5,7 @@ Object.assign( PickupDate.prototype, ListItem.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/pickupDate')( require('handlebars') )
+    template: require('../../templates/signup/pickupDate')
 
 } )
 

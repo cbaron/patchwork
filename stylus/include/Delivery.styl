@@ -1,167 +1,87 @@
-.Delivery {
-    border: 1px solid;
-    border-radius: 10px;
-    background-color: darken(white, 3%);
+.Delivery
 
-    .has-error {
-        .error {
+    .has-error
+        .error
             text-align: center;
             margin-top: 15px;
             margin-bottom: 15px;
-        }
-    }
 
-    .signup-header {
-        margin: 15px 0
-    }
+    .delivery-options
+        padding: 3rem 0
+        
+        &:not(:first-child)
+            border-top: 1px solid #ccc
 
-    .subheader {
-        text-align: center;
-        margin-bottom: 5px;
-    }
-
-    .delivery-options {
-        padding-top: 25px;
-        padding-bottom: 25px;
-        border-top: 1px solid;
-
-        .feedback-message {
-            font-weight: 600;
-        }
-
-        .share-label {
-            .option-total {
-                color: black;
-            }
-        }
-
-        .options {
+        .options
             margin: 0 auto;
             text-align: center;
-        }
         
-        .delivery-option {
-            background-color: darken(white, 6%);
-            box-shadow: 1px 2px 5px #ccc;
-            border-radius: 10px;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "RalewayRegular";
-            padding: 10px;
-            margin: 5px;
-            text-align: center;
-            
-            >div {
-                &:first-child {
-                    color: #c98702;
-                }
+        .delivery-option
+            background-color: $sun-red
+            color: white
+            box-shadow: 1px 2px 5px #ccc
+            border-radius: .4rem
+            cursor: pointer
+            display: inline-block
+            padding: 10px
+            margin: 5px
+            text-align: center
 
-                &:nth-child(2) {
-                    color: #155D75;
-                }
-            }
-
-            &:hover {
-                background-color: rgba(201, 135, 2, .1);
-            }
-            
-            &.selected {
-                background-color: rgba(201, 135, 2, .3);
-            }
-        }
-
-        .feedback-messages {
+        .feedback-messages
             text-align: center;
             font-weight: bold;
 
-            .message {
+            .message
                 margin-left: 16%;
                 text-align: left;
 
-            }
-
-            .dropoff-message {
+            .dropoff-message
                 text-align: left;
-            }
-        }
-    }
     
-    .dropoff {
-        background-color: darken(white, 6%);
-        box-shadow: 1px 2px 5px #ccc;
-        border: 1px solid;
-        border-radius: 10px;
-        cursor: pointer;
-        display: inline-block;
-        font-family: "RalewayRegular";
-        padding: 10px;
-        margin: 5px;
-        
-        >div {
-            &:first-child {
-                color: #c98702;
-            }
-
-            &:nth-child(2) {
-                color: #155D75;
-            }
-        }
-
-        &:hover {
-            background-color: rgba(201, 135, 2, .1);
-        }
-        
-        &.selected {
-            background-color: rgba(201, 135, 2, .3);
-        }
-    }
+    .dropoff
+        background-color: $sun-red
+        color: white
+        box-shadow: 1px 2px 5px #ccc
+        border: 1px solid transparent
+        border-radius: .35rem
+        cursor: pointer
+        display: inline-block
+        padding: 10px
+        margin: 5px
     
-    @media only screen and (max-width: 800px) {
+    @media only screen and (max-width: 800px)
 
-        .delivery .delivery-options .share-label {
+        .delivery .delivery-options .share-label
             width: 148px;
-        }
-    }
     
-    @media only screen and (max-width: 767px) {
-        .delivery {
+    @media only screen and (max-width: 767px)
+        .delivery
 
-            .delivery-options {
+            .delivery-options
 
-                .share-label {
+                .share-label
                     text-align: center;
                     font-size: 1.2rem;
                     margin: 0 auto 30px;
                     width: 100%;
-                }
 
-                .delivery-option {
+                .delivery-option
                     display: block;
                     border: 1px solid #ccc;
                     width: 95%;
                     text-align: center;
                     margin: 10px auto;
                     background-color: rgba(201, 135, 2, .1);
-                }
 
-                .feedback-messages {
-                    .message {
+                .feedback-messages
+                    .message
                         margin-left: 0;
                         text-align: center;
-                    }
 
-                    .dropoff-message {
+                    .dropoff-message
                         text-align: center;
                         margin: 15px auto 5px;
-                    }
-                }
-            }
 
-            .dropoff {
+            .dropoff
                 margin: 5px auto;
                 width: 90%;
-            }
-
-        }
-    }
-}

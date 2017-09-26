@@ -18,8 +18,8 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     fetch: { data: {
         display: true,
-        //enddate: JSON.stringify( { operation: '>', value: require('moment')().add( 2, 'weeks' ).format('YYYY-MM-DD') } ),
-        //signupcutoff: JSON.stringify( { operation: '>', value: require('moment')().format('YYYY-MM-DD') } )
+        enddate: JSON.stringify( { operation: '>', value: require('moment')().add( 2, 'weeks' ).format('YYYY-MM-DD') } ),
+        signupcutoff: JSON.stringify( { operation: '>', value: require('moment')().format('YYYY-MM-DD') } )
     } },
 
     getItemViewOptions() {

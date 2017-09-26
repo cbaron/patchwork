@@ -1,5 +1,4 @@
 module.exports = p => {
-    console.log( p.options )
     const options = p.options.map( option => `<option value="${option.id}">${option.label}</option>` ).join(''),
         description = p.description ? `<span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>` : ``
 

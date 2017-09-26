@@ -3,18 +3,9 @@
     >h2
         padding: 0 20%
 
-    .walkthrough-container
-
-        >div:first-child
-            z-index: 3
-            position: relative
-
-        min-height: 500px
-
     .nav
         color: $sun-red
         margin: 2rem 0
-        position: relative
         
         >div
             display: flex
@@ -31,10 +22,19 @@
 
             .glyphicon
                 font-size: 2rem
+                position: initial
                 
             >span
                 margin: 0 .25rem
 
+
+    @media only screen and (max-width: 1050px)
+        >h2
+            padding: 0 15%
+            
+    @media only screen and (max-width: 900px)
+        >h2
+            padding: 0 10%
 
     @media only screen and (max-width: 767px)
         >h2

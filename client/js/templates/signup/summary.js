@@ -1,4 +1,145 @@
-module.exports = function(Handlebars) {
+module.exports = p => {
+
+console.log( p )
+
+const shares = p.shares.map( share => {
+
+    console.log( share )
+
+    const selectedOptions = share.selectedOptions.map( opt =>
+        `<div class="item-row">
+            <div class="item-label">${opt.optionName} :  </div>
+            <div>
+                <span>${opt.selectedOptionLabel}</span>
+                <span>${p.unit || ''}</span>
+            </div>
+            <div class="price">
+                <span>${opt.price}</span>
+                <span>per week</span>
+            </div>
+        </div>`
+    ).join('')
+
+    const groupdropoff = share.selectedDelivery.groupdropoff
+        ? `<div class="item-row">
+            <div class="item-label">Drop-off Location :  </div>
+            <div>${share.selectedDelivery.groupdropoff}</div>
+        </div>`
+        : ``
+
+    const selectedDates = share.selectedDates.map( date =>
+        `<div class="date">               
+            <span>${date.monthNum}/</span> 
+            <span>${date.dayOfMonth}</span>
+        </div>`
+    ).join('')
+
+    const skipDays = share.skipDays
+        ? `<div>
+            <div class="section-title">Dates you will not pickup</div>
+            <div class="pickup-dates">${share.skipDays.join('')}</div>
+        </div>`
+        : ``
+
+    return `` +
+    `<div class="share-summary">
+        <div class="share-label-wrapper">${share.shareBox}</div>
+        <div>
+            <div class="section-title">Share Options</div>
+            ${selectedOptions}
+        </div>
+        <div>
+            <div class="section-title">Delivery</div>
+            <div class="item-row">
+                <div class="item-label">Method :  </div>
+                <div>${share.selectedDelivery.deliveryType}</div>
+                <div class="price">
+                    <span>${share.selectedDelivery.weeklyCost}</span>
+                    <span>per week</span>
+                </div>  
+            </div>
+            ${groupdropoff}
+            <div class="item-row">
+                <div class="item-label">Address :  </div>
+                <div>${share.selectedDelivery.address}</div>
+            </div>
+            <div class="item-row">
+                <div class="item-label">Pick-up Hours :  </div>
+                <div>
+                    <span>${share.selectedDelivery.dayOfWeek} </span>
+                    <span>${share.selectedDelivery.starttime} - ${share.selectedDelivery.endtime}</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="section-title">Dates Selected for Delivery</div>
+            <div class="item-row">
+                <div class="item-label">Number of weeks selected :  </div>
+                <div>${share.weeksSelected}</div>
+            </div>
+            <div class="pickup-dates">
+                ${share.selectedDates.join('')}
+            </div>
+        </div>
+        ${skipDays}
+        <div class="total share-total">
+            <span>Share Total :  </span>
+            <span>${share.total}</span>
+        </div>
+    </div>`
+} ).join('')
+
+/*        <div class="total">
+            <span>Weekly Price :  </span>
+            <span>${share.weeklyPrice}</span>
+            <span>per week</span>
+        </div>*/
+
+return `` +
+`<div data-js="container" class="Summary ${p.containerClass}">
+    <div class="summaries">
+        <div>Summary of Shares</div>
+        ${shares}
+    </div>
+    <div data-js="grandTotal" class="grand-total text-center"></div>
+    <div class="payment">    
+        <div class="signup-header">Select a method of payment</div>
+        <div data-js="paymentOptions"></div>
+        <form data-js="paymentForm" class="hide form-horizontal">
+            <div class="credit-card-info form-group">
+                <label class="control-label number">Card Number</label>
+                <div>
+                    <input type="text" class="form-control" data-js="number" id="number">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                    <span class="accepted-cards">Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Expiration</label>
+                <div class="expiration">
+                    <input type="number" class="form-control" data-js="exp_month" maxlength="2" size="3" placeholder="mm" id="exp_month">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                    <span>&nbsp;/&nbsp;</span>
+                    <input type="number" class="form-control" data-js="exp_year" maxlength="4" size="4" placeholder="yyyy" id="exp_year">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">CVC</label>
+                <div class="cvc">
+                    <input type="number" class="form-control" data-js="cvc" maxlength="4" size="4" id="cvc">
+                    <span class="glyphicon form-control-feedback hide" aria-hidden="true"></span>
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <button data-js="signupBtn" class="btn text-center disabled">Become a Member!</button>
+        </div>
+    </div>
+</div>`
+}
+
+/*module.exports = function(Handlebars) {
 
 return Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.lambda, alias5=container.escapeExpression;
@@ -88,4 +229,4 @@ return Handlebars.template({"1":function(container,depth0,helpers,partials,data)
     + "    </div><div data-js=\"grandTotal\" class=\"grand-total text-center row\"></div><div class=\"payment\"><div class=\"signup-header\">Select a method of payment</div><div data-js=\"paymentOptions\"></div><form data-js=\"paymentForm\" class=\"hide form-horizontal\"><div class=\"credit-card-info form-group\"><label class=\"col-sm-3 control-label number\">Card Number</label><div class=\"col-sm-9\"><input type=\"text\" class=\"form-control\" data-js=\"number\" id=\"number\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span><span class=\"accepted-cards\">Visa, MasterCard, American Express, JCB, Discover, and Diners Club are accepted</span></div></div><div class=\"form-group\"><label class=\"col-sm-3 control-label\">Expiration</label><div class=\"col-sm-9 expiration\"><input type=\"number\" class=\"form-control\" data-js=\"exp_month\" maxlength=\"2\" size=\"3\" placeholder=\"mm\" id=\"exp_month\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span><span>&nbsp;/&nbsp;</span><input type=\"number\" class=\"form-control\" data-js=\"exp_year\" maxlength=\"4\" size=\"4\" placeholder=\"yyyy\" id=\"exp_year\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span></div></div><div class=\"form-group\"><label class=\"col-sm-3 control-label\">CVC</label><div class=\"col-sm-9 cvc\"><input type=\"number\" class=\"form-control\" data-js=\"cvc\" maxlength=\"4\" size=\"4\" id=\"cvc\"><span class=\"glyphicon form-control-feedback hide\" aria-hidden=\"true\"></span></div></div></form><div class=\"text-center\"><button data-js=\"signupBtn\" class=\"btn text-center disabled\">Become a Member!</button></div></div></div>";
 },"useData":true});
 
-};
+};*/

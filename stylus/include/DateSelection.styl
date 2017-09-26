@@ -1,83 +1,70 @@
-.DateSelection {
-    border: 1px solid;
-    border-radius: 10px;
-    background-color: #f7f7f7;
+.DateSelection
 
-    .signup-header {
-        margin: 15px auto;
-    }
-
-    .subheader {
-        text-align: center;
-    }
-
-    .share-dates {
-        border-top: 1px solid;
-        padding: 35px 0 35px 15px;
-
-        &.has-error {
-            .error {
-                text-align: center;
-            }
-        }
-
-        .pickup-date {
-            background-color: #555;
-            border: 1px solid beige;
-            box-shadow: 1px 2px 5px #ccc;
-            color: darken(#c98702, 5%);
-            opacity: .7;
-            cursor: pointer;
-            display: inline-block;
-            font-family: "RalewayRegular";
-            padding: 10px;
-            margin: 1px;
-            text-align: center;
-            line-height: 1.2;
-
-            &:hover {
-                background-color: lighten(#555, 5%);
-            }
+    .share-dates
+        padding: 3rem 0
+        
+        &:not(:first-child)
+            border-top: 1px solid #ccc
             
-            &.selected {
-                background-color: rgba(201, 135, 2, .3);
-                color: #c98702;
-                opacity: 1;
-            }
+        &.has-error
+            .error
+                text-align: center
             
-            &.unselectable {
-                background-color: rgba(85,85,85,0.1);
-                cursor: not-allowed;
-                opacity: .3;
-            }
+        >div:first-child
+            display: flex
+            align-items: center
+            
+            .share-label
+                margin-right: 2rem
+            
+            >div:last-child
+                flex: 1
+                display: flex
+                flex-wrap: wrap
 
-            >div {
-                font-weight: bold;
+                .pickup-date
+                    width: 5rem
+                    background-color: black
+                    box-shadow: 1px 2px 5px #666
+                    color: white
+                    cursor: pointer
+                    padding: .65rem
+                    margin: 1px
+                    text-align: center
+                    line-height: 1.2
+                    
+                    &:not(.unselectable)
+                        html.non-touch &
+                            &:hover
+                                color: #e7e7e7
+                    
+                    &.selected
+                        background-color: $sun-red
+                    
+                    &.unselectable
+                        background-color: #666
+                        color: black
+                        cursor: not-allowed
+                        opacity: .5
+                        
+                    >div:not(:first-child)
+                        font-weight: bold
 
-                &:first-child {
-                    font-weight: normal;
-                }
-            }
-        }
-    }
     
-    @media only screen and (max-width: 767px) {
-        .date-selection {
+    @media only screen and (max-width: 767px)
+        .share-dates >div:first-child >div:last-child .pickup-date
+            width: 3.5rem
+            font-size: .8rem
+            line-height: 1.05
+            
+    @media only screen and (max-width: 500px)
+        .share-dates >div:first-child
+            flex-direction: column
+            
+            .share-label
+                margin-right: 0
+                margin-bottom: 2rem
+            
+            >div:last-child
+                justify-content: center
 
-            .share-dates {
-                padding: 0 0 35px;
-
-                .share-label {
-                    text-align: center;
-                    font-size: 1.2rem;                   
-                    margin: 35px auto;                    
-                }
-
-                .pickup-date {
-                    padding: 8px;
-                    margin: 0;
-                }
-            }
-        }
-    }      
-}

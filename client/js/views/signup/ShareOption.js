@@ -8,7 +8,6 @@ Object.assign( ShareOption.prototype, View.prototype, {
     },
   
     getTemplateOptions() {
-        console.log( this.model.attributes )
         return Object.assign( { }, this.model.attributes, { options: this.model.get('options').map( model => model.attributes ) } )
     },
 

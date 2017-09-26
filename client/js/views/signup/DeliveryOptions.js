@@ -30,8 +30,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     },
     
     feedback: {
-        home: require('../../templates/signup/homeDeliveryFeedback')( require('handlebars') ),
-        farm: require('../../templates/signup/farmPickupFeedback')( require('handlebars') ),
+        home: require('../../templates/signup/homeDeliveryFeedback'),
+        farm: require('../../templates/signup/farmPickupFeedback'),
         invalidZip: function( zipcode ) {
             return this.util.format( 'Postal Code of %s is not in our delivery area.  Please contact us to discuss options.', zipcode )
         },
@@ -178,7 +178,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.templateData.feedback.html( html ).show()
     },
 
-    template: require('../../templates/signup/deliveryOptions')( require('handlebars') )
+    template: require('../../templates/signup/deliveryOptions')
 } )
 
 module.exports = DeliveryOptions
