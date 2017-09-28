@@ -1,10 +1,8 @@
-module.exports = p => {
-    const name = p.venue ? `<div>${p.name} - ${p.venue}</div>` : `<div>${p.name}</div>`
-
-return `` +
-`<div data-js="container" class="dropoff col-sm-9">
-    ${name}
+module.exports = p =>
+`<div data-js="container" class="dropoff">
+    <div>${p.label}</div>
+    <div>${p.venue || ''}</div>
     <div>${p.street}</div>
+    <div>${p.cityStateZip}</div>
     <div>${p.dayOfWeek} : ${p.starttime} - ${p.endtime}</div>
 </div>`
-}

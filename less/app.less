@@ -1,112 +1,3 @@
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url('/static/fonts/glyphicons-halflings-regular.eot');
-  src: url('/static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
-       url('/static/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
-       url('/static/fonts/glyphicons-halflings-regular.woff') format('woff'),
-       url('/static/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
-       url('/static/fonts/glyphicons-halflings-regular.svg') format('svg');
-}
-
-@font-face {
-  font-family: 'Lato';
-  font-weight: 400;
-  src: url('/static/fonts/Lato-Regular.eot');
-  src: url('/static/fonts/Lato-Regular.woff2') format('woff2'),
-       url('/static/fonts/Lato-Regular.woff') format('woff'),
-       url('/static/fonts/Lato-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Lato';
-  font-weight: 700;
-  src: url('/static/fonts/Lato-Bold.eot');
-  src: url('/static/fonts/Lato-Bold.woff2') format('woff2'),
-       url('/static/fonts/Lato-Bold.woff') format('woff'),
-       url('/static/fonts/Lato-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'LatoLight';
-  src: url('/static/fonts/Lato-Light.eot');
-  src: url('/static/fonts/Lato-Light.woff2') format('woff2'),
-       url('/static/fonts/Lato-Light.woff') format('woff'),
-       url('/static/fonts/Lato-Light.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'RalewayRegular';
-  src: url('/static/fonts/Raleway-Regular-webfont.eot');
-  src: url('/static/fonts/Raleway-Regular-webfont.woff') format('woff'),
-       url('/static/fonts/Raleway-Regular-webfont.ttf') format('truetype'),
-       url('/static/fonts/Raleway-Regular-webfont.svg') format('svg');
-}
-
-@font-face {
-  font-family: 'RalewayRegular';
-  font-weight: 700;
-  src: url('/static/fonts/Raleway-Bold-webfont.woff') format('woff'),
-       url('/static/fonts/Raleway-Bold-webfont.ttf') format('truetype');
-}
-
-.modal-backdrop {
-    bottom: 0;
-    position: fixed;
-}
-
-html {
-    font-size: 100%;
-    height: 100%;
-}
-
-body {
-    font-family: "RalewayRegular";
-    height: 100%;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.5em;
-    text-align: left;
-    color: #666;
-
-    >div.container {
-        width: 100%;
-        @media only screen and (min-width: 1224px) {
-            max-width: 1224px;
-        }
-    }
-
-    &.admin {
-        padding-top: 5rem; 
-    }
-}
-
-h1, h2, h3 {
-    font-family: "RalewayRegular";
-    font-weight: 500;
-    line-height: 1.2em;
-    letter-spacing: 1px;
-    color: #555;
-    margin: 0 0 .5em;
-}
-
-h2 {
-    font-size: 26px;
-    
-}
-
-h3 {
-    font-size: 20px;
-
-    a {
-        font-size: 2rem;
-    }
-}
-
-img {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
 div.btn-row {
   text-align: center;
 }
@@ -143,26 +34,9 @@ div.header {
     }
 }
 
-hr {
-    border-top: 1px solid #666;
-    height: 0;
-    margin: 4rem -.75rem; 
-}
-
 .glyphicon-ok {
     color: green;
     margin-left: 5px;
-}
-
-.alert {
-  padding: 5px;
-  margin: 5px 0 10px 0;
-}
-
-ul, li {
-    list-style-type: none;
-    padding:0;
-    margin:0;
 }
 
 .container-fluid {
@@ -186,12 +60,6 @@ ul, li {
     text-align: center;
 }
 
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
-
 .w10 { width: 10%; }
 .w11 { width: 11%; }
 .w14 { width: 14%; }
@@ -202,37 +70,3 @@ ul, li {
 .w33 { width: 33%; }
 .w50 { width: 50%; }
 .w70 { width: 70%; }
-
-
-.slide-in-right {
-    animation: slide-in-right 0.5s forwards;
-    -webkit-animation: slide-in-right 0.5s forwards;
-}
-
-.slide-in-left {
-    animation: slide-in-left 0.5s forwards;
-    -webkit-animation: slide-in-left 0.5s forwards;
-}
-
-@keyframes slide-in-left {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(0%); }
-}
-
-@-webkit-keyframes slide-in-left {
-    0% { -webkit-transform: translateX(-100%); }
-    100% { -webkit-transform: translateX(0%); }
-}
-
-@keyframes slide-in-right {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(0%); }
-}
-
-@-webkit-keyframes slide-in-right {
-    0% { -webkit-transform: translateX(100%); }
-    100% { -webkit-transform: translateX(0%); }
-}
-    
-@media( max-width: 768px ) {
-}

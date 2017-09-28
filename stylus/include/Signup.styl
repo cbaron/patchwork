@@ -1,11 +1,22 @@
 .Signup
+    
+    .error
+        color: #a94442
+        display: none
+        margin-top: 1rem
+        text-align: center
+
+    .has-error .error
+            display: block
 
     >h2
         padding: 0 20%
 
-    .nav
+    .nav-arrows
         color: $sun-red
-        margin: 2rem 0
+        margin: 3rem 0
+        display: flex
+        justify-content: flex-end
         
         >div
             display: flex
@@ -14,10 +25,9 @@
             cursor: pointer
 
             &:first-child
-                float: left
+                flex: 1
                 margin-left: 10%
             &:last-child
-                float: right
                 margin-right: 10%
 
             .glyphicon
@@ -39,43 +49,3 @@
     @media only screen and (max-width: 767px)
         >h2
             padding: 0 5%
-
-
-.error
-    color: #a94442
-    display: none
-    margin-top: 30px
-
-    .has-error &
-        display: block
-
-.addresses
-
-    >div:first-child
-        color: #c98702
-        font-family: RalewayRegular
-
-    .list-container
-        border: 1px solid black
-        margin-top: 15px
-        max-height: 300px
-        overflow-y: auto
-    
-    .address
-        color: #155D75
-        cursor: pointer
-        padding: 10px
-
-        &:hover
-            border-color: #ccc;
-            -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            -moz-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            -ms-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            z-index: 3
-
-        &.selected
-            background-color: rgba(201, 135, 2, .3)
-    
-    .address+.address
-        border-top: 1px solid black

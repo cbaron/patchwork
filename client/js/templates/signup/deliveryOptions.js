@@ -1,6 +1,5 @@
 module.exports = p =>
 `<li data-js="container" class="delivery-options">
-    <div class="error">Please select a valid option.</div>
     <div>
         <div class="share-label">
             <div>${p.label}</div>
@@ -11,7 +10,11 @@ module.exports = p =>
             </div>
             <div>${p.duration} weeks</div>
         </div>
-        <div data-js="options" class="options"></div>
-        <div data-js="feedback" class="feedback-messages"></div>
-    </div>   
+        <div>
+            <div data-js="options" class="options"></div>
+            <div data-js="feedback" class="feedback-messages"></div>
+        </div>
+    </div>
+    <div data-js="dropoffs"></div>
+    <div class="error">Please select a valid option.</div>
 </li>`

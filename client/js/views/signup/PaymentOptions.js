@@ -14,7 +14,7 @@ Object.assign( PaymentOptions.prototype, List.prototype, {
 
     selection: 'single',
 
-    template: require('../../templates/signup/paymentOptions')( require('handlebars') )
+    template: require('../../templates/signup/paymentOptions')
 } )
 
 module.exports = PaymentOptions

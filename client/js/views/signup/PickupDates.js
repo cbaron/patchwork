@@ -52,8 +52,6 @@ Object.assign( PickupDates.prototype, List.prototype, {
     template: require('../../templates/signup/pickupDates'),
 
     updateShare() {
-        console.log( 'updateShare' )
-        console.log( this.selectedItems )
         this.valid = ( Object.keys( this.selectedItems ).length === 0 ) ? false : true
     }
 

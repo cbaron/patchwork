@@ -1,1 +1,1 @@
-module.exports = p => `<div class="message">Home delivery available ${p.dayOfWeek} : ${p.starttime} - ${p.endtime}</div>`
+module.exports = p => `<div>Home delivery available ${p.dayOfWeek} ${p.starttime} - ${p.endtime}</div>`

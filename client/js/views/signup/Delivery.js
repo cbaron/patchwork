@@ -28,7 +28,7 @@ Object.assign( Delivery.prototype, List.prototype, {
     template: require('../../templates/signup/delivery'),
 
     templates: {
-        verifyAddress: require('../../templates/signup/verifyAddress')( require('handlebars') )
+        verifyAddress: require('../../templates/signup/verifyAddress')
     },
 
     validate() {

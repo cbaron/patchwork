@@ -1,87 +1,100 @@
 .Delivery
 
-    .has-error
-        .error
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
-
     .delivery-options
         padding: 3rem 0
         
         &:not(:first-child)
             border-top: 1px solid #ccc
-
-        .options
-            margin: 0 auto;
-            text-align: center;
+            
+        >div:first-child
+            display: flex
+            align-items: center
+            margin-bottom: 1.5rem
+            
+            .share-label
+                margin-right: 1rem
+                
+            >div:last-child
+                flex: 1
         
-        .delivery-option
-            background-color: $sun-red
-            color: white
-            box-shadow: 1px 2px 5px #ccc
-            border-radius: .4rem
-            cursor: pointer
-            display: inline-block
-            padding: 10px
-            margin: 5px
-            text-align: center
+        .options
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            
+            .delivery-option
+                width: 11rem
+                background-color: white
+                color: $sun-red
+                border: 2px solid
+                cursor: pointer
+                display: inline-block
+                padding: .5rem .75rem
+                margin: .25rem
+                text-align: center
+                transition: background-color, color .2s ease-in-out
+                
+                html.non-touch &
+                    &:hover:not(.selected)
+                        border-width: 3px
+                        
+                
+                &.selected
+                    color: white
+                    background-color: $sun-red
 
         .feedback-messages
-            text-align: center;
-            font-weight: bold;
+            text-align: center
+            font-weight: bold
+            margin-top: .25rem
 
-            .message
-                margin-left: 16%;
-                text-align: left;
 
-            .dropoff-message
-                text-align: left;
-    
-    .dropoff
-        background-color: $sun-red
-        color: white
-        box-shadow: 1px 2px 5px #ccc
-        border: 1px solid transparent
-        border-radius: .35rem
-        cursor: pointer
-        display: inline-block
-        padding: 10px
-        margin: 5px
-    
-    @media only screen and (max-width: 800px)
+    .dropoffs
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+        
+        .dropoff
+            width: 45%
+            padding: .75rem
+            margin: 3px
+            border: 1px solid
+            cursor: pointer
+            
+            >div:first-child
+                color: $sun-red
+                
+            &.selected
+                width: auto
+                background-color: $sun-red
+                color: white
+                border-color: transparent
+                box-shadow: 2px 2px 2px #666
+                transition: background-color, color .2s ease-in-out
+                
+                >div:first-child
+                    font-weight: bold
+                    color: white
+             
+            html.non-touch &    
+                &:hover
+                    box-shadow: 2px 2px 2px #666
 
-        .delivery .delivery-options .share-label
-            width: 148px;
     
     @media only screen and (max-width: 767px)
-        .delivery
-
-            .delivery-options
-
-                .share-label
-                    text-align: center;
-                    font-size: 1.2rem;
-                    margin: 0 auto 30px;
-                    width: 100%;
-
-                .delivery-option
-                    display: block;
-                    border: 1px solid #ccc;
-                    width: 95%;
-                    text-align: center;
-                    margin: 10px auto;
-                    background-color: rgba(201, 135, 2, .1);
-
-                .feedback-messages
-                    .message
-                        margin-left: 0;
-                        text-align: center;
-
-                    .dropoff-message
-                        text-align: center;
-                        margin: 15px auto 5px;
-
+        .delivery-options >div:first-child
+            flex-direction: column
+            
+            .share-label
+                margin-right: 0
+                margin-bottom: 1.5rem
+                
+            .feedback-messages
+                margin-top: 1rem
+    
+    @media only screen and (max-width: 600px)
+        .dropoffs
+            justify-content: center
+            
             .dropoff
-                margin: 5px auto;
-                width: 90%;
+                width: 100%

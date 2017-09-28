@@ -1,7 +1,7 @@
 module.exports = p =>
 `<div>
     <h1>Get Involved</h1>
-    <section>
+    <section class="striped">
         <h2>Employment Opportunities</h2>
         <p>We are currently hiring for the following positions:</p>
         <div class="positions" data-js="positions">
@@ -28,7 +28,7 @@ module.exports = p =>
         </div>
         <p>To apply, please fill out the <a href="https://docs.google.com/forms/d/1YAW7JYS4KuvWZJJf7K8Qn4RNvmjP-WtauUd3AclN09s/viewform">Patchwork Gardens Internship Application</a>.  We’ll get in touch with you once we’ve received your information.</p>
     </section>
-    <section>
+    <section class="striped">
         <h2>Volunteer</h2>
         <p>Want to help out at Patchwork Gardens? Throughout the growing season, there are a variety of opportunities for those who would like to lend a helping hand. To share your interest, please fill out the <a href="https://docs.google.com/forms/d/1GuFrGKvpzJaFY5Dhz3kBsIy_AaY6xZ3NzuqTzvOFmrw/viewform">Patchwork Gardens Volunteer Form</a>.</p>
     </section>
