@@ -20,11 +20,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     createDeliveryRange() {
-        const deliveryRangeCoords = this.model.data.deliveryRangeCoords,
-            overlayColor = this.model.attributes.find( attr => attr.name === 'deliveryRange' ).color
+        const overlayColor = this.model.attributes.find( attr => attr.name === 'deliveryRange' ).color
 
         this.deliveryRange = new google.maps.Polygon( {
-            paths: deliveryRangeCoords,
+            paths: this.model.data.deliveryRangeCoords,
             strokeColor: overlayColor,
             strokeOpacity: .3,
             strokeWeight: 1,
@@ -62,6 +61,27 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
     },
 
+    fetchAndRender() {
+        Object.keys( this.models ).forEach( name =>
+            this.models[ name ].get()
+            .then( () => {
+                return name === 'groupLocation'
+                    ? this.models.groupLocation.getCurrentGroupDropoffs()
+                    : name === 'farmPickup'
+                        ? this.models.farmPickup.getHours()
+                        : Promise.resolve()
+            } )
+            .then( dropoffData => {
+                const modelAttr = this.model.attributes.find( attr => attr.name === name ),
+                    data = dropoffData || this.models[ name ].data
+
+                this.insertListLocations( data, this.els[ modelAttr.el ] )
+                this.createMarkers( data, name )
+            } )
+            .catch( this.Error )
+        )
+    },
+
     getIcon( category ) {
         if( category === 'farmPickup' ) return '/static/img/favicon.png'
 
@@ -88,7 +108,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.markers = { }
         this.icons = { }
 
+        this.createDeliveryRange()
+
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push( this.els.legend )
+
+        this.fetchAndRender()
     },
 
     insertListLocations( data, el ) {
@@ -113,28 +137,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        if( window.google ) { this.initMap() } else { window.initMap = this.initMap }
-
-        this.createDeliveryRange()
-
-        Object.keys( this.models ).forEach( name =>
-            this.models[ name ].get()
-            .then( () => {
-                return name === 'groupLocation'
-                    ? this.models.groupLocation.getCurrentGroupDropoffs()
-                    : name === 'farmPickup'
-                        ? this.models.farmPickup.getHours()
-                        : Promise.resolve()
-            } )
-            .then( () => {
-                const modelAttr = this.model.attributes.find( attr => attr.name === name ),
-                    data = name === 'groupLocation' ? this.models[ name ].data.groupDropoffs : this.models[ name ].data
-
-                this.insertListLocations( data, this.els[ modelAttr.el ] )
-                this.createMarkers( data, name )
-            } )
-            .catch( this.Error )
-        )
+        if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
 
         return this
     },

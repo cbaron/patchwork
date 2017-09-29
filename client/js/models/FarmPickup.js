@@ -1,17 +1,14 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    DeliveryRoute: require('./DeliveryRoute'),
+    DeliveryRoute: require('./DeliveryRouteProto'),
 
     getHours() {
-        return new Promise( ( resolve, reject ) => {
-            const farmPickup = new ( this.DeliveryRoute.extend( { parse: response => this.DeliveryRoute.prototype.parse( response[0] ) } ) )()
-            
-            farmPickup.fetch( { data: { label: 'farm' } } ).then( () => {
-                this.data[0].hours = `${farmPickup.get('dayOfWeek')} ${farmPickup.get('starttime')} - ${farmPickup.get('endtime')}`
-                return resolve()
-            } )
-            .fail( e => reject( e ) )
-        } )
+        return this.DeliveryRoute.get()
+        .then( () => {
+            const farmPickup = this.DeliveryRoute.data[0]
+            this.data[0].hours = `${farmPickup.dayOfWeek} ${farmPickup.starttime} - ${farmPickup.endtime}`
+            return Promise.resolve()
+        } )         
     },
 
     parse( response ) {
