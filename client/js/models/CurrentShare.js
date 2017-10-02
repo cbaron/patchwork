@@ -1,25 +1,24 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    GroupDropoffs: require('./GroupDropoff'),
     ShareGroupDropoffs: require('./ShareGroupDropoff'),
 
     getCurrentGroupDropoffs() {
-        return Promise.all( [ this.GroupDropoffs.get(), this.ShareGroupDropoffs.get( { query: { shareid: this.data.id } } ) ] )
-        .then( () =>
-            Promise.all( this.ShareGroupDropoffs.data.map( sgdDatum => {
-                const groupDropoff = this.GroupDropoffs.data.find( datum => datum.id === sgdDatum.groupdropoffid )
-
-                return Promise.resolve( Object.assign( {
-                    name: groupDropoff.name,
-                    venue: groupDropoff.venue,
-                    street: groupDropoff.street,
-                    cityStateZip: groupDropoff.cityStateZip,
-                    location: groupDropoff.location,
-                    hours: `${sgdDatum.dayofweek} ${sgdDatum.starttime} - ${sgdDatum.endtime}`
-                } ) )
-            } ) )
-            .then( data => this.data.groupDropoffs = data )
-        )
+        return this.ShareGroupDropoffs.get( { query: {
+            shareid: this.data.id,
+            groupdropoffid: { operation: 'join', value: { table: 'groupdropoff', column: 'id' } }
+        } } )
+        .then( () => Promise.resolve(
+            this.ShareGroupDropoffs.data.map( datum =>                
+                Object.assign( {
+                    name: datum[ 'groupdropoff.name' ],
+                    venue: datum[ 'groupdropoff.venue' ],
+                    street: datum[ 'groupdropoff.street' ],
+                    cityStateZip: datum[ 'groupdropoff.cityStateZip' ],
+                    location: datum.location,
+                    hours: `${datum.dayofweek} ${datum.starttime} - ${datum.endtime}`
+                } )
+            )
+        ) )
     },
 
     getSizeOptions() {

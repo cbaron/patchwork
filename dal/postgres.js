@@ -2,6 +2,26 @@ const MyObject = require('../lib/MyObject').prototype
 
 module.exports = Object.create( Object.assign( {}, MyObject, {
 
+    Enum: require('../lib/Enum'),
+
+    enumReference: {
+        contactinfo: {
+            location: "Geography"
+        },
+        farmermarket: {
+            location: "Geography"
+        },
+        groupdropoff: {
+            location: "Geography"
+        },
+        restaurant: {
+            location: "Geography"
+        },
+        retailoutlet: {
+            location: "Geography"
+        }
+    },
+
     initialize() {
         return this.getTableData()
     },
@@ -36,6 +56,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
               range = isEnum
                 ? this.enumReference[ table.table_name ][ column.column_name ]
                 : this.dataTypeToRange[column.data_type]
+
         return {
             isEnum,
             isNullable: column.is_nullable,
@@ -43,7 +64,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
             name: column.column_name,
             range
         }
-    }, 
+    },
 
     getSelectList( table, opts={} ) {
         const tableAlias = opts.alias ? opts.alias : table

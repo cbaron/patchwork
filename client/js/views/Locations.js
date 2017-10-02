@@ -20,11 +20,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     createDeliveryRange() {
-        const deliveryRangeCoords = this.model.data.deliveryRangeCoords,
-            overlayColor = this.model.attributes.find( attr => attr.name === 'deliveryRange' ).color
+        const overlayColor = this.model.attributes.find( attr => attr.name === 'deliveryRange' ).color
 
         this.deliveryRange = new google.maps.Polygon( {
-            paths: deliveryRangeCoords,
+            paths: this.model.data.deliveryRangeCoords,
             strokeColor: overlayColor,
             strokeOpacity: .3,
             strokeWeight: 1,
@@ -36,46 +35,63 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.deliveryRange.setMap( this.map )
     },
 
-    createMarkers() {
-        this.markers = { }
-        this.icons = { }
+    createMarkers( data, category ) {
+        this.icons[ category ] = this.getIcon( category )
+        this.markers[ category ] = [ ]
 
-        this.model.attributes.forEach( attr => {
-            if( !this.models[ attr.name ] ) return
+        data.forEach( datum => {
+            if( !datum.location ) return
 
-            const category = attr.name,
-                data = category === 'groupLocation' ? this.models[ category ].data.groupDropoffs : this.models[ category ].data
+            const infowindow = new google.maps.InfoWindow( {
+                content: this.templates.infoWindow( datum ),
+            } )
 
-                this.icons[ category ] = this.getIcon( category )
-                this.markers[ category ] = [ ]
+            const marker = new google.maps.Marker( {
+                position: { lat: datum.location[0], lng: datum.location[1] },
+                map: this.map,
+                draggable: false,
+                icon: this.icons[ category ],
+                title: datum.name
+            } )
 
-                data.forEach( datum => {
-                    if( !datum.location ) return
+            this.markers[ category ].push( marker )
 
-                    const infowindow = new google.maps.InfoWindow( {
-                        content: this.templates.infoWindow( datum ),
-                    } )
+            marker.addListener( 'click', () => infowindow.open( this.map, marker ) )
 
-                    const marker = new google.maps.Marker( {
-                        position: { lat: datum.location[0], lng: datum.location[1] },
-                        map: this.map,
-                        draggable: false,
-                        icon: this.icons[ category ],
-                        title: datum.name
-                    } )
-
-                    this.markers[ category ].push( marker )
-
-                    marker.addListener( 'click', () => infowindow.open( this.map, marker ) )
-
-                } )
         } )
     },
 
-    getIcon( name ) {
-        if( name === 'farmPickup' ) return '/static/img/favicon.png'
+    fetchAndRender() {
+        let chain = Promise.resolve()
 
-        const color = this.model.attributes.find( attr => name === attr.name ).color
+        Object.keys( this.models ).forEach( name => {
+            chain = chain.then( () => 
+                this.models[ name ].get()
+                .then( () =>
+                    name === 'groupLocation'
+                        ? this.models.groupLocation.getCurrentGroupDropoffs()
+                        : name === 'farmPickup'
+                            ? this.models.farmPickup.getHours()
+                            : Promise.resolve()
+                )
+                .then( dropoffData => {
+                    const modelAttr = this.model.attributes.find( attr => attr.name === name ),
+                        data = dropoffData || this.models[ name ].data
+
+                    this.insertListLocations( data, this.els[ modelAttr.el ] )
+                    this.createMarkers( data, name )
+
+                    return Promise.resolve()
+                } )
+                .catch( e => Promise.resolve( console.log( `Failed to retrieve ${name} data.` ) ) )
+            )
+        } )
+    },
+
+    getIcon( category ) {
+        if( category === 'farmPickup' ) return '/static/img/favicon.png'
+
+        const color = this.model.attributes.find( attr => category === attr.name ).color
 
         return {
             path: google.maps.SymbolPath.CIRCLE,
@@ -84,11 +100,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             fillOpacity: 1,
             scale: 4
         }
-    },
-
-    initializeModels() {
-        return Promise.all( Object.keys( this.models ).map( name => this.models[ name ].get() ) )
-        .then( () => Promise.all( [ this.models.groupLocation.getCurrentGroupDropoffs(), this.models.farmPickup.getHours() ] ) )
     },
 
     initMap() {
@@ -100,26 +111,23 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.map = new google.maps.Map( this.els.map, mapOpts )
 
+        this.markers = { }
+        this.icons = { }
+
         this.createDeliveryRange()
-        this.createMarkers()
 
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push( this.els.legend )
+
+        this.fetchAndRender()
     },
 
-    insertListLocations() {
-        this.model.attributes.forEach( attr => {
-            if( !attr.el ) return
-
-            const data = attr.name === 'groupLocation' ? this.models[ attr.name ].data.groupDropoffs : this.models[ attr.name ].data,
-                el = this.els[ attr.el ]
-
-            data.forEach( datum =>
-                this.slurpTemplate( {
-                    template: this.templates.location( datum ),
-                    insertion: { el }
-                } )
-            )
-        } )
+    insertListLocations( data, el ) {
+        data.forEach( datum =>
+            this.slurpTemplate( {
+                template: this.templates.location( datum ),
+                insertion: { el }
+            } )
+        )
     },
 
     onLegendClick( e ) {
@@ -135,12 +143,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        this.initializeModels()
-        .then( () => {
-            this.insertListLocations()
-            if( window.google ) { this.initMap() } else { window.initMap = this.initMap }
-        } )
-        .catch( this.Error )
+        if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
 
         return this
     },

@@ -807,7 +807,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   font-weight: bold;
 }
 .Locations .map-wrap {
-  height: 22rem;
+  height: 24rem;
 }
 .Locations .map-wrap div:first-child {
   height: 100%;
@@ -827,7 +827,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   color: #666;
   font-size: 0.8rem;
   text-transform: uppercase;
-  margin: 0.5rem 0 1rem;
+  margin: 0.5rem 0 0.75rem;
 }
 .Locations .map-wrap div:first-child .info-window >div:last-child >div >a {
   color: #ed1c24;
@@ -872,7 +872,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   position: relative;
   margin-left: 2.1rem;
 }
-.Locations .map-wrap .legend >li span:last-child.patchwork::before {
+.Locations .map-wrap .legend >li span:last-child.farmPickup::before {
   content: "";
   position: absolute;
   width: 1rem;
@@ -881,7 +881,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-size: contain;
   left: -1.15rem;
 }
-.Locations .map-wrap .legend >li span:last-child.farmer-market::before {
+.Locations .map-wrap .legend >li span:last-child.farmerMarket::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -891,7 +891,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.retail-outlet::before {
+.Locations .map-wrap .legend >li span:last-child.retailOutlet::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -911,7 +911,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.group-location::before {
+.Locations .map-wrap .legend >li span:last-child.groupLocation::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -921,7 +921,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.delivery-range::before {
+.Locations .map-wrap .legend >li span:last-child.deliveryRange::before {
   content: "";
   position: absolute;
   width: 0.75rem;

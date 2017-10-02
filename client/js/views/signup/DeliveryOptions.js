@@ -75,7 +75,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                         model.pick( [ 'dayofweek', 'starttime', 'endtime' ] )
                     )
 
-                    this.showFeedback(``)
+                    this.templateData.feedback.empty()
                     
                     this.valid = true
                 } )
@@ -178,7 +178,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             this.valid = false
             this.templateData.feedback.empty()
             this.selectedDelivery = null
-            if( this.dropoffView ) { this.dropoffView.delete(); this.dropoffView = null }
+            if( this.dropoffView ) this.dropoffView.templateData.container.hide()
         } )
 
         this.groupDropoffPromise = share.getGroupDropoffs()
