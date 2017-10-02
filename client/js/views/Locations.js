@@ -83,7 +83,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
                     return Promise.resolve()
                 } )
-                .catch( this.Error )
+                .catch( e => Promise.resolve( console.log( `Failed to retrieve ${name} data.` ) ) )
             )
         } )
     },
