@@ -1,11 +1,11 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    DeliveryRoute: require('./DeliveryRouteProto'),
+    CsaDelivery: require('./CsaDelivery'),
 
     getHours() {
-        return this.DeliveryRoute.get()
+        return this.CsaDelivery.get( { query: { label: 'farm' } } )
         .then( () => {
-            const farmPickup = this.DeliveryRoute.data[0]
+            const farmPickup = this.CsaDelivery.data[0]
             this.data[0].hours = `${farmPickup.dayOfWeek} ${farmPickup.starttime} - ${farmPickup.endtime}`
             return Promise.resolve()
         } )         

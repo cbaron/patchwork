@@ -7,7 +7,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             shareid: this.data.id,
             groupdropoffid: { operation: 'join', value: { table: 'groupdropoff', column: 'id' } }
         } } )
-        .then( () =>
+        .then( () => Promise.resolve(
             this.ShareGroupDropoffs.data.map( datum =>                
                 Object.assign( {
                     name: datum[ 'groupdropoff.name' ],
@@ -18,7 +18,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     hours: `${datum.dayofweek} ${datum.starttime} - ${datum.endtime}`
                 } )
             )
-        )
+        ) )
     },
 
     getSizeOptions() {

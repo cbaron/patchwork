@@ -62,24 +62,30 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     fetchAndRender() {
-        Object.keys( this.models ).forEach( name =>
-            this.models[ name ].get()
-            .then( () => {
-                return name === 'groupLocation'
-                    ? this.models.groupLocation.getCurrentGroupDropoffs()
-                    : name === 'farmPickup'
-                        ? this.models.farmPickup.getHours()
-                        : Promise.resolve()
-            } )
-            .then( dropoffData => {
-                const modelAttr = this.model.attributes.find( attr => attr.name === name ),
-                    data = dropoffData || this.models[ name ].data
+        let chain = Promise.resolve()
 
-                this.insertListLocations( data, this.els[ modelAttr.el ] )
-                this.createMarkers( data, name )
-            } )
-            .catch( this.Error )
-        )
+        Object.keys( this.models ).forEach( name => {
+            chain = chain.then( () => 
+                this.models[ name ].get()
+                .then( () =>
+                    name === 'groupLocation'
+                        ? this.models.groupLocation.getCurrentGroupDropoffs()
+                        : name === 'farmPickup'
+                            ? this.models.farmPickup.getHours()
+                            : Promise.resolve()
+                )
+                .then( dropoffData => {
+                    const modelAttr = this.model.attributes.find( attr => attr.name === name ),
+                        data = dropoffData || this.models[ name ].data
+
+                    this.insertListLocations( data, this.els[ modelAttr.el ] )
+                    this.createMarkers( data, name )
+
+                    return Promise.resolve()
+                } )
+                .catch( this.Error )
+            )
+        } )
     },
 
     getIcon( category ) {
