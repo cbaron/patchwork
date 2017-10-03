@@ -1,52 +1,36 @@
 .Locations
 
     section
-        &:not(:first-of-type), &:first-of-type >p
-            padding: 2rem 20%
+        padding-bottom: 2.5rem
+        
+        ul
+            columns: 2
+            margin-top: 2rem
+            
+            .location
+                margin-bottom: .75rem
+                -webkit-column-break-inside: avoid
+                page-break-inside: avoid
+                break-inside: avoid
+                
+                &:first-child:last-child //fix for when firefox breaks a solitary list item into columns
+                    display: inline-block
 
-        &:nth-child(odd)
-            color: #e7e7e7
-            background-color: $sun-red
-            
-            >h2
-                color: white
-            
-            >ul .location >div:first-child
+                >div
+                    &:first-child
+                        color: $sun-red
+
+                    >a
+                        color: inherit
+                        
+        &.striped
+            ul .location >div:first-child
                 color: white
                 font-weight: bold
         
-    h1, h2
-        color: $sun-red
-        letter-spacing: 0
-      
-    h1
-        margin: 3rem 20%
-        font-weight: bold
-        font-size: 1.7rem
-        
     h2
         margin-bottom: .25rem
-        font-size: 1.3rem
         font-weight: bold
-        
-    ul:not(.legend)
-        columns: 2
-        margin-top: 1rem
-        
-        .location
-            margin-bottom: .75rem
-            -webkit-column-break-inside: avoid
-            page-break-inside: avoid
-            break-inside: avoid
-            
-            &:first-child:last-child //fix for when firefox breaks a solitary list item into columns
-                display: inline-block
-
-            >div
-                &:first-child
-                    color: $sun-red
-                >a
-                    color: inherit
         
     .map-wrap
         height: 24rem
@@ -163,16 +147,8 @@
             
             &:hover
                 background-color: lighten($sun-yellow, 15%)
-                
-    @media only screen and (max-width: 767px)
-    
-        section
-            &:not(:first-of-type), &:first-of-type >p
-                padding: 2rem 10%
 
-        h1
-            margin: 3rem 10%
             
     @media only screen and (max-width: 575px)
-        ul:not(.legend)
+        section ul
             columns: 1

@@ -5,7 +5,7 @@ Object.assign( DeliveryOption.prototype, ListItem.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/deliveryOption')( require('handlebars') )
+    template: require('../../templates/signup/deliveryOption')
 
 } )
 

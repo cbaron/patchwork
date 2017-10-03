@@ -1,0 +1,69 @@
+.DateSelection
+
+    .share-dates
+        padding: 3rem 0
+        
+        .error
+            margin-top: 2rem
+        
+        &:not(:first-child)
+            border-top: 1px solid #ccc
+            
+        >div:first-child
+            display: flex
+            align-items: center
+            
+            .share-label
+                margin-right: 2rem
+            
+            >div:last-child
+                flex: 1
+                display: flex
+                flex-wrap: wrap
+
+                .pickup-date
+                    width: 5rem
+                    background-color: black
+                    box-shadow: 1px 2px 5px #666
+                    color: white
+                    cursor: pointer
+                    padding: .65rem
+                    margin: 1px
+                    text-align: center
+                    line-height: 1.2
+                    
+                    &:not(.unselectable)
+                        html.non-touch &
+                            &:hover
+                                color: #e7e7e7
+                    
+                    &.selected
+                        background-color: $sun-red
+                    
+                    &.unselectable
+                        background-color: #666
+                        color: black
+                        cursor: not-allowed
+                        opacity: .5
+                        
+                    >div:not(:first-child)
+                        font-weight: bold
+
+    
+    @media only screen and (max-width: 767px)
+        .share-dates >div:first-child >div:last-child .pickup-date
+            width: 3.5rem
+            font-size: .8rem
+            line-height: 1.05
+            
+    @media only screen and (max-width: 500px)
+        .share-dates >div:first-child
+            flex-direction: column
+            
+            .share-label
+                margin-right: 0
+                margin-bottom: 2rem
+            
+            >div:last-child
+                justify-content: center
+

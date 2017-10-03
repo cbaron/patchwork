@@ -1,0 +1,24 @@
+.share-label
+    background-color: $sun-yellow
+    border-radius: .35rem
+    box-shadow: 2px 2px 5px #666
+    color: black
+    font-size: 1rem
+    padding: .75rem
+    text-align: center
+    width: 10.5rem
+
+    >div
+        &:first-child
+            font-size: 1.25rem
+
+        &:nth-child(2)
+            color: white
+            margin: .25rem 0
+
+            .inactive &
+                color: #666
+
+    .inactive &
+        background-color: #ccc
+        color: #666

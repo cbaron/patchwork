@@ -47,13 +47,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         validate: val => val.length > 8,
     }, {
         name: 'address',
-        label: 'Address',
+        label: 'Address 1',
         type: 'text',
         error: "Please enter a valid address.",
         validate: function(val) { return this.validateAddress( val ) }
     }, {
         name: 'extraaddress',
-        label: 'Further Address Info ( Apt, Suite )',
+        label: 'Address 2',
         type: 'text',
         validate: () => true
     }, {
@@ -70,7 +70,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         validate: function( val ) { return this.user.isAdmin() || ( val === this.templateData.password.val() ) }
     }, {
         name: 'omission',
-        label: 'One vegetable to never receive',
+        label: 'Opt-out Vegetable',
         type: 'select',
         info: true,
         validate: () => true

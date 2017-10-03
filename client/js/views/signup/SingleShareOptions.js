@@ -42,7 +42,7 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/singleShareOptions')( require('handlebars') ),
+    template: require('../../templates/signup/singleShareOptions'),
 
     updateTotal() {
         var total =

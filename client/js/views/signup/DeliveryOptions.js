@@ -30,8 +30,9 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     },
     
     feedback: {
-        home: require('../../templates/signup/homeDeliveryFeedback')( require('handlebars') ),
-        farm: require('../../templates/signup/farmPickupFeedback')( require('handlebars') ),
+        home: require('../../templates/signup/homeDeliveryFeedback'),
+        farm: require('../../templates/signup/farmPickupFeedback'),
+        group: function() { return "Please select a dropoff location below." },
         invalidZip: function( zipcode ) {
             return this.util.format( 'Postal Code of %s is not in our delivery area.  Please contact us to discuss options.', zipcode )
         },
@@ -43,14 +44,22 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     getTemplateOptions() { return this.model.attributes },
 
     groupFeedback( deliveryOption ) {
+        if( this.dropoffView ) {
+            if( !Object.keys( this.dropoffView.selectedItems ).length ) this.showFeedback( this.feedback.group() )
+            return this.dropoffView.templateData.container.show()
+        }
 
         this.groupDropoffPromise.then( () => {
 
-            this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.feedback } )
+            if( !this.selectedDelivery || ( this.selectedDelivery && !this.selectedDelivery.groupdropoffid ) ) this.showFeedback( this.feedback.group() )
+
+            this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.dropoffs } )
                 .on( 'itemUnselected', () => {
                     this.dropoffView.itemViews.forEach( view => {
                         if( view.templateData.container.is(':hidden') ) view.templateData.container.show()
-                    })
+                    } )
+
+                    this.showFeedback( this.feedback.group() )
 
                     this.valid = false 
                 } )
@@ -63,7 +72,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
                     this.selectedDelivery = Object.assign( {},
                         { deliveryoptionid: deliveryOption.id, groupdropoffid: model.id },
-                        model.pick( [ 'dayofweek', 'starttime', 'endtime' ] ) )
+                        model.pick( [ 'dayofweek', 'starttime', 'endtime' ] )
+                    )
+
+                    this.templateData.feedback.empty()
                     
                     this.valid = true
                 } )
@@ -80,9 +92,12 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             this.dropoffView.items.reset( this.model.get('groupdropoffs').models )
 
             if( this.model.get('groupdropoffs').length === 0 ) {
-                this.dropoffView.templateData.message.text("No available group dropoff locations, please select another option") }
+                this.dropoffView.templateData.container.text("No available group dropoff locations, please select another option")
+            }
 
         } )
+        .fail( e => console.log( e.stack || e ) )
+        .done()
     },
 
     homeFeedback( deliveryOption ) {
@@ -91,7 +106,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         if( !userPostalCode ) {
 
-            this.showFeedback('<div class="message">Because we could not lookup your address, we are currently unable to provide a delivery day for the week or time.  We will take care of this in the next step by having you verify your address.</div>')
+            this.showFeedback('<div>Because we could not lookup your address, we are currently unable to provide a delivery day for the week or time.  We will take care of this in the next step by having you verify your address.</div>')
 
             this.selectedDelivery = { deliveryoptionid: deliveryOption.id, isHome: true }
             
@@ -103,6 +118,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.zipRoute
             .fetch( { data: { zipcode: userPostalCode } } )
+            .fail( e => console.log( e.stack || e ) )
             .done( () => {
                 if( Object.keys( this.zipRoute.attributes ).length === 0 ) {
                     this.valid = false
@@ -110,6 +126,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 }    
                 this.homeDeliveryRoute.set( { id: this.zipRoute.get('routeid') } )
                 .fetch()
+                .fail( e => console.log( e.stack || e ) )
                 .done( () => {
                     this.showFeedback( this.feedback.home( this.homeDeliveryRoute.attributes ) )
                     
@@ -154,11 +171,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            this[ this.util.format('%sFeedback', model.get('name') ) ]( model )            
+            if( this.dropoffView && model.get('name') !== 'group' ) this.dropoffView.templateData.container.hide()
+            this[ this.util.format('%sFeedback', model.get('name') ) ]( model )        
         } )
         .on( 'itemUnselected', () => {
             this.valid = false
             this.templateData.feedback.empty()
+            this.selectedDelivery = null
+            if( this.dropoffView ) this.dropoffView.templateData.container.hide()
         } )
 
         this.groupDropoffPromise = share.getGroupDropoffs()
@@ -178,7 +198,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         this.templateData.feedback.html( html ).show()
     },
 
-    template: require('../../templates/signup/deliveryOptions')( require('handlebars') )
+    template: require('../../templates/signup/deliveryOptions')
 } )
 
 module.exports = DeliveryOptions

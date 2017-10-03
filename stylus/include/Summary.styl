@@ -1,0 +1,207 @@
+.Summary
+    
+    .share-summary
+        padding: 1rem
+        margin-bottom: 3rem
+        box-shadow: 1px 1px 2px #666
+
+        >div:first-child
+            display: flex
+            justify-content: center
+            
+            .share-label
+                margin: .5rem 0 1.5rem
+                padding: .5rem
+                border-radius: 0
+                box-shadow: none
+                
+                >div:nth-child(2)
+                    margin: .15rem 0
+                
+        .item-row
+            display: flex
+            align-items: center
+            padding: .75rem .5rem
+            &:not(:last-child)
+                border-bottom: 1px solid #ddd
+            
+            >div
+                width: 33%
+                
+                &:first-child
+                    font-weight: bold
+                    margin-right: .25rem
+                
+                &:last-child
+                    text-align: right
+                
+                &:nth-child(2)
+                    text-align: left
+
+        .section-title
+            background-color: $sun-red
+            color: white
+            font-weight: bold
+            padding: .25rem 0
+            text-align: center
+
+        .pickup-dates
+            padding: 2rem .5rem
+            display: flex
+            flex-wrap: wrap
+
+            .pickup-date
+                width: 3.5rem
+                font-size: .8rem
+                background-color: black
+                box-shadow: 1px 2px 5px #666
+                color: white
+                cursor: default
+                padding: .65rem
+                margin: 1px
+                text-align: center
+                line-height: 1.05
+                
+                &.selected
+                    background-color: $sun-red
+
+        .share-total
+            margin-bottom: 1rem
+            
+            .section-title
+                background-color: $sun-yellow
+                margin-bottom: 1rem
+                
+            >div:not(:first-child)
+                display: flex
+                justify-content: space-between           
+                margin: .05rem 30%
+                
+                &:last-child
+                    padding-top: .25rem
+                    border-top: 1px solid
+                    font-weight: bold
+                    
+                >div
+                    &:last-child
+                        text-align: right
+
+
+    .grand-total
+        font-size: 1.3rem
+        font-weight: bold
+        margin-bottom: 3rem
+        color: black
+        text-align: center
+
+    .payment
+        
+        >h2
+            text-align: center
+
+        .payment-options
+            margin: 2rem 0
+            display: flex
+            justify-content: center
+        
+            .payment-option
+                background-color: $sun-yellow
+                color: black
+                border: 1px solid transparent
+                border-radius: .5rem
+                box-shadow: 3px 3px 5px #666
+                cursor: pointer
+                padding: .5rem .75rem
+                margin: .5rem
+                text-align: center
+                width: 15rem
+
+                &:hover:not(.selected)
+                    background-color: lighten($sun-yellow, 15%)
+                
+                &.selected
+                    background-color: $sun-red
+                    color: white
+
+                >div:first-child
+                    color: white
+                    font-weight: bold
+                    
+                >div:nth-child(2)
+                    font-size: .8rem
+
+                >div:last-child
+                    font-weight: bold
+
+        form
+            margin: 3rem 0
+            
+            >div
+                margin: 1rem 0
+                
+            .credit-card-info
+                >div:first-of-type
+                    width: 18rem
+                    position: relative
+                    
+                >div:last-child
+                    margin-top: .15rem
+
+            .expiration
+                display: flex
+                
+                >div                    
+                    &:first-child
+                        margin-right: 1rem
+                        
+                    >label
+                        display: block
+                    
+                    >div
+                        display: inline-block
+                        position: relative
+                        width: 8rem
+
+
+            .cvc
+                position: relative
+                width: 7rem
+
+        .button-row
+            display: flex
+            justify-content: center
+
+            >button
+                background-color: $sun-red
+                color: white
+                border: 1px solid transparent
+                padding: .5rem .75rem
+                width: 12rem
+                
+                &.disabled
+                    background-color: #ccc
+                    color: #666
+                    cursor: not-allowed
+                
+                &.has-spinner
+                    background-color: lighten($sun-red, 15%)
+
+
+                &:hover:not(.disabled)
+                    background-color: lighten($sun-red, 15%)
+
+                
+    @media only screen and (max-width: 500px)
+        .share-summary
+            .share-total
+                >div:not(:first-child)
+                    margin: .05rem 15%
+                    
+        .payment
+                
+            .payment-options
+                flex-direction: column
+                align-items: center
+                
+                .payment-option
+                    margin: 1rem 0
