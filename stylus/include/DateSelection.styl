@@ -7,7 +7,7 @@
             margin-top: 2rem
         
         &:not(:first-child)
-            border-top: 1px solid #ccc
+            border-top: 1px solid $grey
             
         >div:first-child
             display: flex
@@ -24,7 +24,7 @@
                 .pickup-date
                     width: 5rem
                     background-color: black
-                    box-shadow: 1px 2px 5px #666
+                    box-shadow: 1px 2px 5px $dark-grey
                     color: white
                     cursor: pointer
                     padding: .65rem
@@ -35,13 +35,13 @@
                     &:not(.unselectable)
                         html.non-touch &
                             &:hover
-                                color: #e7e7e7
+                                color: $light-grey
                     
                     &.selected
                         background-color: $sun-red
                     
                     &.unselectable
-                        background-color: #666
+                        background-color: $dark-grey
                         color: black
                         cursor: not-allowed
                         opacity: .5

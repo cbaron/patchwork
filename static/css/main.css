@@ -88,7 +88,7 @@
   padding-top: 7.5rem;
   text-align: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #e7e7e7;
 }
 .AdminPlus button {
   background-color: #f2f2f2;
@@ -448,10 +448,11 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
   padding: 0.5rem 0.75rem;
   margin: 0.25rem;
   text-align: center;
-  transition: background-color, color 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.selected) {
-  border-width: 3px;
+  background-color: #ff383f;
+  color: #fff;
 }
 .Delivery .delivery-options .options .delivery-option.selected {
   color: #fff;
@@ -482,7 +483,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   background-color: #ed1c24;
   color: #fff;
   border-color: transparent;
-  box-shadow: 2px 2px 2px #666;
+  box-shadow: 1px 1px 3px #666;
   transition: background-color, color 0.2s ease-in-out;
 }
 .Delivery .dropoffs .dropoff.selected >div:first-child {
@@ -490,7 +491,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   color: #fff;
 }
 html.non-touch .Delivery .dropoffs .dropoff:hover {
-  box-shadow: 2px 2px 2px #666;
+  box-shadow: 1px 1px 2px #666;
 }
 @media only screen and (max-width: 767px) {
   .Delivery .delivery-options >div:first-child {
@@ -957,7 +958,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .ManageCustomer {
   padding: 7rem 1.5rem 1.5rem;
   min-height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #e7e7e7;
 }
 .ManageCustomer .main-search {
   display: flex;

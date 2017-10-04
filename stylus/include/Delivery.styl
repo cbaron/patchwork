@@ -4,7 +4,7 @@
         padding: 3rem 0
         
         &:not(:first-child)
-            border-top: 1px solid #ccc
+            border-top: 1px solid $grey
             
         >div:first-child
             display: flex
@@ -31,14 +31,14 @@
                 display: inline-block
                 padding: .5rem .75rem
                 margin: .25rem
-                text-align: center
-                transition: background-color, color .2s ease-in-out
+                text-align: center 
+                transition: all .15s ease-in-out               
                 
                 html.non-touch &
                     &:hover:not(.selected)
-                        border-width: 3px
-                        
-                
+                        background-color: $light-sun-red
+                        color: white
+                                        
                 &.selected
                     color: white
                     background-color: $sun-red
@@ -69,7 +69,7 @@
                 background-color: $sun-red
                 color: white
                 border-color: transparent
-                box-shadow: 2px 2px 2px #666
+                box-shadow: 1px 1px 3px $dark-grey
                 transition: background-color, color .2s ease-in-out
                 
                 >div:first-child
@@ -78,7 +78,7 @@
              
             html.non-touch &    
                 &:hover
-                    box-shadow: 2px 2px 2px #666
+                    box-shadow: 1px 1px 2px $dark-grey
 
     
     @media only screen and (max-width: 767px)
