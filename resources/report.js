@@ -13,7 +13,7 @@ Object.assign( Report.prototype, Base.prototype, {
     },
 
     handleQuery( model ) {
-        return this.Postgres.query( model.query, model.id === 5 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
+        return this.Postgres.query( model.query, model.id === 5 || model.id === 6 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
 
@@ -76,14 +76,32 @@ Object.assign( Report.prototype, Base.prototype, {
             id: 5,
             name: 'get-delinquents',
             label: 'Get Delinquents',
-            query: `SELECT p.name, m.onpaymentplan, s.name as "season", ss.value as "Season Signup", owes.sum as "Owes" ` +
+            query: `SELECT p.name, m.onpaymentplan, s.name as "season", ss.value as "Season Signup", ( COALESCE(owes.sum,0) - COALESCE(paid.sum,0) ) as "Owes" ` +
                    `FROM person p ` +
                    `JOIN member m ON p.id = m.personid ` +
                    `JOIN membershare ms ON ms.memberid = m.id ` +
-                   `JOIN ( select "memberShareId", SUM(value) from "csaTransaction" group by "memberShareId" HAVING sum(value) > 0 ) owes ON owes."memberShareId" = ms.id ` +
+                   `LEFT JOIN ( select "memberShareId", COALESCE(SUM(value),0) as sum from "csaTransaction" WHERE action != 'Payment' GROUP BY "memberShareId" ) owes ON owes."memberShareId" = ms.id ` +
+                   `LEFT JOIN ( select "memberShareId", COALESCE(SUM(value),0) as sum from "csaTransaction" WHERE action = 'Payment' GROUP BY "memberShareId" ) paid ON paid."memberShareId" = ms.id ` +
                    `JOIN share s ON s.id = ms.shareid ` +
                    `LEFT JOIN ( SELECT "memberShareId", value FROM "csaTransaction" WHERE action = 'Season Signup' ) ss ON ss."memberShareId" = ms.id ` +
-                   `ORDER BY owes.sum DESC`
+                   `WHERE ( COALESCE(owes.sum,0) - COALESCE(paid.sum,0) ) > 0 ` +
+                   `ORDER BY "Owes"`
+        },
+
+        6: {
+            id: 6,
+            name: 'get-creditors',
+            label: 'Get Creditors',
+            query: `SELECT p.name, m.onpaymentplan, s.name as "season", ss.value as "Season Signup", ( COALESCE(owes.sum,0) - COALESCE(paid.sum,0) ) as "Owes" ` +
+                   `FROM person p ` +
+                   `JOIN member m ON p.id = m.personid ` +
+                   `JOIN membershare ms ON ms.memberid = m.id ` +
+                   `LEFT JOIN ( select "memberShareId", COALESCE(SUM(value),0) as sum from "csaTransaction" WHERE action != 'Payment' GROUP BY "memberShareId" ) owes ON owes."memberShareId" = ms.id ` +
+                   `LEFT JOIN ( select "memberShareId", COALESCE(SUM(value),0) as sum from "csaTransaction" WHERE action = 'Payment' GROUP BY "memberShareId" ) paid ON paid."memberShareId" = ms.id ` +
+                   `JOIN share s ON s.id = ms.shareid ` +
+                   `LEFT JOIN ( SELECT "memberShareId", value FROM "csaTransaction" WHERE action = 'Season Signup' ) ss ON ss."memberShareId" = ms.id ` +
+                   `WHERE ( COALESCE(owes.sum,0) - COALESCE(paid.sum,0) ) < 0 ` +
+                   `ORDER BY "Owes"`
         }
 
     },
