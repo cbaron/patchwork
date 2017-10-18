@@ -6,6 +6,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     Path: require('path'),
 
+    Fs: require('fs'),
+
+    Mongo: require('./dal/Mongo'),
+
     Postgres: require('./dal/postgres'),
 
     _postgresQuery( query, args ) { return this.Postgres.query( query, args ) },
@@ -23,7 +27,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     
     applyResource( request, response, path, subPath ) {
-        var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
+        var filename = this.mongoRoutes[ path[1] ]
+            ? this.mongoRoutes[ path[1] ]
+            : ( path[1] === "" && subPath )
+                ? 'index'
+                : path[1],
             file = `./resources${subPath || ''}/${filename}`
 
         return new Promise( ( resolve, reject ) => {
@@ -41,6 +49,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
                     response,
                     path,
                     tables: this.tables,
+                    veeTwo: Boolean( this.mongoRoutes[ path[1] ] )
                 } )
 
                 if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
@@ -158,7 +167,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } else if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
-                   ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+                   ( this.routes.REST[ path[1] ] || this.mongoRoutes[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
             if( path[1] === "" ) path[1] === "index"
@@ -179,6 +188,23 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
         .then( results => {
             return Promise.resolve( this.storeForeignKeyData( results.rows ) )
+        } )
+        .then( () => this.initializeMongo() )
+    },
+
+    initializeMongo() {
+        this.mongoRoutes = { }
+
+        return this.Mongo.initialize( this.mongoRoutes )
+        .then( () => this.P( this.Fs.readdir, [ `${__dirname}/resources` ] ) )
+        .then( ( [ files ] ) => {
+            const fileHash =
+                files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
+                .reduce( ( memo, name ) => Object.assign( memo, { [name.replace('.js','')]: true } ), { } )
+
+            this.Mongo.collectionNames.forEach( table => this.mongoRoutes[ table ] = fileHash[ table ] ? table : '__proto__' )
+
+            return Promise.resolve() 
         } )
     },
 
@@ -261,9 +287,11 @@ module.exports = new Router( {
     routes: {
         REST: {
             'auth': true,
+            'Collection': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,
             'currentShare': true,
+            'document': true,
             'food': true,
             'mail': true,
             'member-order': true,

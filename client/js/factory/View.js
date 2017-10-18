@@ -7,13 +7,16 @@ module.exports = Object.create( {
         return Object.create(
             this.Views[ name ],
             Object.assign( {
+                Dragger: { value: this.Dragger },
+                Header: { value: this.Header },
+                Toast: { value: this.Toast },
                 name: { value: name },
                 factory: { value: this },
-                template: { value: this.Templates[ name ] || this.Templates['__proto__'] },
-                Toast: { value: this.Toast },
+                range: { value: this.range },
+                template: { value: this.Templates[ name ] },
                 user: { value: this.User }
-            }, opts )
-        ).constructor()
+            } )
+        ).constructor( opts )
     },
 
     _processName( name ) {
@@ -24,8 +27,10 @@ module.exports = Object.create( {
     },
 
 }, {
+    Dragger: { value: require('../views/Dragger') },
+    Header: { value: require('../views/Header') },
     Templates: { value: require('../.TemplateMap') },
     Toast: { value: require('../views/Toast') },
-    Views: { value: require('../.ViewMap') },
-    User: { value: require('../models/User') }
+    User: { value: require('../models/User') },
+    Views: { value: require('../.ViewMap') }
 } )

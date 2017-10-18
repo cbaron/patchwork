@@ -110,7 +110,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         var self = this;
 
         if( this.user.isAdmin() ) {
-            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { value: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } } ) ) }
+            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } ) ) }
             this.views.memberTypeahead.focus()
 
             this.views.memberTypeahead.on( 'customerSelected', customer => {
@@ -153,7 +153,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.templateData.address.attr( 'placeholder', '' )
         
-        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: this.templateData.omission.get(0), method: 'after' } } } )
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { el: this.templateData.omission.get(0), method: 'after' } } )
 
         this.templateData.omission.remove()
 

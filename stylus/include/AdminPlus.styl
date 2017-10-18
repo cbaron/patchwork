@@ -1,21 +1,22 @@
 .AdminPlus
-    padding-top: 7.5rem
     text-align: center
     height: 100vh
-    background-color: $light-grey
+    
+    >div:first-child
+        display: flex
+        flex-direction: column
+        align-items: center
 
-    button
-        background-color: #f2f2f2
-        border: 1px solid #bbb
-        border-radius: 10px
-        box-shadow: 1px 2px 5px #ccc
-        color: $gold
-        display: inline-block
-        font-family: "RalewayRegular"
-        padding: 1.25rem
-        text-align: center
-        width: 16rem
-        text-transform: uppercase
-
-        &:hover
-            background-color: #ebebeb
+        >button
+            width: 16rem
+            background-color: $sun-yellow
+            color: black
+            padding: 1.25rem 1.5rem
+            margin: 1.25rem
+            font-size: 1.4rem
+            border-radius: .5rem
+            border: 1px solid transparent
+            box-shadow: 1px 1px 5px
+            
+            &:hover
+                background-color: lighten($sun-yellow, 15%)

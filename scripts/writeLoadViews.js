@@ -43,6 +43,25 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
                 )
             )
         )
+        .then( () =>
+           this.P( this.FS.readdir, [ `${dir}/views/templates/lib` ] )
+            .then( ( [ files ] ) => 
+                this.P(
+                    this.FS.writeFile,
+                    [
+                        `${dir}/.IconMap.js`,
+                        `module.exports={\n\t` +
+                        files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
+                             .map( name => {
+                                 name = name.replace('.js','')
+                                 return `"${name}": require('./views/templates/lib/${name}')`
+                             } )
+                             .join(',\n\t') +
+                        `\n}`
+                    ]
+                )
+            )
+        )
         .catch( this.Error )
     }
 

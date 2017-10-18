@@ -55,7 +55,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     getTemplateOptions: () => ({}),
 
     hide() {
-        return this.Q.Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
             this.templateData.container.hide()
             resolve()
         } )
@@ -72,6 +72,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
         if( this.requiresLogin && ! this.user.id ) {
             require('./Login').show().once( "success", e => {
+                console.log( this.router )
                 this.router.onUser( this.user )
 
                 if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
@@ -94,6 +95,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
     
     moment: require('moment'),
+
+    onNavigation( path ) { return this.show() },
 
     postRender: function() {
         this.renderSubviews()

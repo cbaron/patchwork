@@ -9,7 +9,6 @@ require('bootstrap')
 require('./plugins/bootstrap-datetimepicker')
 
 window.onload = () => {
-    require('./router') 
+    require('./router').initialize()
     require('./views/modal')
-    require('backbone').history.start( { pushState: true } )
 }

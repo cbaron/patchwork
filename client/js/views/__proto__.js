@@ -1,4 +1,4 @@
-module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
+module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype, require('events').EventEmitter.prototype, {
 
     Currency: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
@@ -28,7 +28,13 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
-    constructor() {
+    constructor( opts={} ) {
+
+        if( opts.events ) { Object.assign( this.events, opts.events ); delete opts.events; }
+        Object.assign( this, opts )
+
+        this.subviewElements = [ ]
+
         if( this.requiresLogin && (!this.user.id ) ) return this.handleLogin()
         if( this.user && !this.isAllowed( this.user.attributes ) ) return this.scootAway()
 
@@ -65,6 +71,8 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         el.setAttribute( 'src', el.getAttribute('data-src') )
     },
 
+    getContainer() { return this.els.container },
+
     getData() {
         if( !this.model ) this.model = Object.create( this.Model, { resource: { value: this.name } } )
 
@@ -72,22 +80,18 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     getTemplateOptions() {
-        const modelData = this.model
-            ? this.model.data
-                ? this.model.data
-                : this.model
-            : { }
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format )
 
-        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format, modelData )
+        if( this.model ) {
+            rv.model = this.model.data
 
-        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts
+            if( this.model.meta ) rv.meta = this.model.meta
+            if( this.model.attributes ) rv.attributes = this.model.attributes
+        }
+
+        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts || {}
 
         return rv
-    },
-
-    isAllowed( user ) {
-        if( !this.requiresRole ) return true
-        return this.requiresRole && user.roles.includes( this.requiresRole )
     },
 
     handleLogin() {
@@ -137,7 +141,20 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
+        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', name: 'data-name', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
+    },
+
+    insertToDom( fragment, options ) {
+        const insertion = typeof options.insertion === 'function' ? options.insertion() : options.insertion;
+
+        insertion.method === 'insertBefore'
+            ? insertion.el.parentNode.insertBefore( fragment, insertion.el )
+            : insertion.el[ insertion.method || 'appendChild' ]( fragment )
+    },
+
+    isAllowed( user ) {
+        if( !this.requiresRole ) return true
+        return this.requiresRole && user.roles.includes( this.requiresRole )
     },
     
     isHidden( el ) {
@@ -168,7 +185,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     postRender() { return this },
 
     render() {
-        this.slurpTemplate( { template: this.template( this.getTemplateOptions(), { Moment: this.Moment } ), insertion: this.insertion, isView: true } )
+        if( this.data ) this.model = Object.create( this.Model, { } ).constructor( this.data )
+
+        this.slurpTemplate( {
+            insertion: this.insertion || { el: document.body },
+            isView: true,
+            storeFragment: this.storeFragment,
+            template: this.template( this.getTemplateOptions(), { Moment: this.Moment } )
+        } )
 
         this.renderSubviews()
 
@@ -178,37 +202,26 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     renderSubviews() {
-        Object.keys( this.viewEls || { } ).forEach( key => {
+        this.subviewElements.forEach( obj => {
+            const name = obj.name || obj.view
 
-            if( Array.isArray( this.viewEls[ key ] ) ) {
-                this.viewEls[ key ].forEach( el => {
-                    const name = el.getAttribute('data-name')
-                    let config = this.Views[ name ],
-                        opts = { }
-                    if( config ) {
-                        opts = typeof config === "object"
-                            ? config
-                            : Reflect.apply( config, this, [ ] )
-                    }
-                    this.views[ name ] = this.factory.create( key, Object.assign( { insertion: { value: { el, method: 'insertBefore' } } }, opts ) )
-                    el.remove()
-                } )
-                this.viewEls[ key ] = undefined
-                return
-            }
-                
+            let opts = { }
 
-            let opts = { } 
-            if( this.Views && this.Views[ key ] ) {
-                opts =
-                    typeof this.Views[ key ] === "object"
-                        ? this.Views[ key ]
-                        : Reflect.apply( this.Views[ key ], this, [ ] )
+            if( this.Views && this.Views[ obj.view ] ) opts = typeof this.Views[ obj.view ] === "object" ? this.Views[ obj.view ] : Reflect.apply( this.Views[ obj.view ], this, [ ] )
+            if( this.Views && this.Views[ name ] ) opts = typeof this.Views[ name ] === "object" ? this.Views[ name ] : Reflect.apply( this.Views[ name ], this, [ ] )
+
+            this.views[ name ] = this.factory.create( obj.view, Object.assign( { insertion: { el: obj.el, method: 'insertBefore' } }, opts ) )
+
+            if( this.events.views ) {
+                if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
+                else if( this.events.views[ obj.view ] ) this.events.views[ obj.view ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
             }
-            this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { el: this.viewEls[ key ], method: 'insertBefore' } } }, opts ) )
-            this.viewEls[ key ].remove()
-            this.viewEls[ key ] = undefined
+
+            if( obj.el.classList.contains('hidden') ) this.views[name].hideSync()
+            obj.el.remove()
         } )
+
+        this.subviewElements = [ ]
 
         return this
     },
@@ -268,34 +281,26 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
-            imgSelector = `[${this.slurp.img}]`,
-            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
+
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
             else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
             else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
             else if( el.hasAttribute( this.slurp.view ) ) {
-                let attr = el.getAttribute(this.slurp.view)
-                if( ! this.viewEls ) this.viewEls = { }
-               
-                this.viewEls[ attr ] = this.viewEls[ attr ] === undefined
-                    ? el
-                    : Array.isArray( this.viewEls[ attr ] )
-                        ? this.viewEls[ attr ].concat( el )
-                        : [ this.viewEls[ attr ], el ]
+                this.subviewElements.push( { el, view: el.getAttribute(this.slurp.view), name: el.getAttribute(this.slurp.name) } )
             }
         } )
-          
-        options.insertion.method === 'insertBefore'
-            ? options.insertion.el.parentNode.insertBefore( fragment, options.insertion.el )
-            : options.insertion.method === 'after'
-                ? options.insertion.el.parentNode.insertBefore( fragment, options.insertion.el.nextSibling )
-                : options.insertion.el[ options.insertion.method || 'appendChild' ]( fragment )
+   
+        if( options.storeFragment ) return Object.assign( this, { fragment } )
+
+        this.insertToDom( fragment, options )
+
+        if( options.renderSubviews ) this.renderSubviews()
 
         return this
-    }
+    },
 
 } )

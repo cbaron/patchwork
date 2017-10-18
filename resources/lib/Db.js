@@ -1,8 +1,14 @@
 module.exports = Object.create( {
 
+    Mongo: require('../../dal/Mongo'),
+
     Postgres: require('../../dal/postgres'),
 
-    apply( resource ) { return this[ resource.request.method ]( resource ) },
+    apply( resource ) {
+        if( this.Mongo.model[ resource.path[0] ] ) return this.Mongo[ resource.request.method ]( resource )
+
+        return this[ resource.request.method ]( resource )
+    },
 
     DELETE( resource ) {
         return this.Postgres.query( `DELETE FROM "${resource.path[0]}" WHERE id = $1 RETURNING id`, [ resource.path[1] ]  )
