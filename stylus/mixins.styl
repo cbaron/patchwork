@@ -1,8 +1,13 @@
-// Forms
+bgImg( name )
+    $url = $bucket + name
+    background-image: url( $url )
 
-
-        
-// Buttons
-
-
-    
+listCircle( color, size=5px, top=.5rem )
+    content: ""
+    position: absolute
+    width: size
+    height: size
+    background-color: color
+    top: top
+    left: -1rem
+    border-radius: 50%

@@ -9,19 +9,11 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
 
     name: 'Toast',
 
-    postRender() {
-
-        this.on( 'shown', () => this.status = 'shown' )
-        this.on( 'hidden', () => this.status = 'hidden' )
-
-        return this
-    },
-
     requiresLogin: false,
 
     showMessage( type, message ) {
         return new Promise( ( resolve, reject )  => {
-            if( /show/.test( this.status ) ) this.teardown()
+            if( /show/.test( this.status ) ) return resolve()
 
             this.resolution = resolve
 
@@ -33,8 +25,8 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
             
             this.status = 'showing'
 
-            this.show()
-            .then( () => this.hide() )
+            this.show( true )
+            .then( () => this.hide( true ) )
             .then( () => this.teardown() )
             .catch( reject )
         } )
@@ -45,6 +37,8 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
         this.els.message.textContent = ''
         this.els.message.title = ''
         if( this.els.icon.firstChild ) this.els.icon.removeChild( this.els.icon.firstChild )
+
+        this.status = 'hidden'
         this.resolution()
     },
 

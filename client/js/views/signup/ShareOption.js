@@ -30,7 +30,7 @@ Object.assign( ShareOption.prototype, View.prototype, {
         } )
     },
 
-    template: require('../../templates/signup/shareOption')( require('handlebars') ),
+    template: require('../../templates/signup/shareOption'),
 
     updateTotal() {
         this.templateData.total.text(

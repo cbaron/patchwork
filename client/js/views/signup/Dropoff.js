@@ -5,7 +5,7 @@ Object.assign( Dropoff.prototype, Item.prototype, {
 
     requiresLogin: false,
 
-    template: require('../../templates/signup/dropoff')( require('handlebars') )
+    template: require('../../templates/signup/dropoff')
 
 } )
 

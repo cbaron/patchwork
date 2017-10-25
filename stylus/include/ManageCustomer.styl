@@ -1,0 +1,146 @@
+.ManageCustomer
+    padding: 7rem 1.5rem 1.5rem
+    min-height: 100vh
+    background-color: $light-grey
+
+    .main-search
+        display: flex
+        justify-content: center
+        align-items: center
+        
+        .form-grouping
+            margin: 0
+        
+            input
+                display: inline-block
+                font-size: 1.2rem
+                padding: .75rem .5rem
+                width: 25rem
+        
+            .form-label
+                color: $gold
+                font-size: 1.4rem
+
+    .section
+        border-top: 1px solid #eee
+        margin-top: 2rem
+        
+    .section-heading
+        display: inline-block
+        margin: 2rem 0 1rem
+        >div, >span
+            display: inline-block
+            font-weight: bold
+            margin: 0 .5rem
+            
+    h3
+        display: inline-block
+        color: $gold
+        font-weight: bold
+        margin: 0
+        font-size: 1.2rem
+    
+    ol
+        margin-bottom: 0
+        -webkit-padding-start: 0
+        
+    .cell, .ms-ctn
+        font-size: .9rem
+        font-weight: bold
+        overflow-x: auto
+        flex: 1
+        padding: .25rem
+        white-space: nowrap
+        
+        &:first-child
+            border-right: 1px solid black
+    
+    select.cell
+        margin: .25rem
+            
+    .edited
+        color: $edit-green
+        
+    button
+        display: inline-block
+        font-size: .8rem
+        border: 1px solid transparent
+        padding: .25rem .8rem
+        letter-spacing: 1px
+        margin: 0
+        text-align: center
+        border-radius: .25rem
+        color: #fff
+        &:focus
+            outline: 0
+        &.reset-btn
+            background-color: transparent
+            text-decoration: underline
+            color: $blue
+            font-size: 1rem
+            letter-spacing: 0
+            padding: 0 .5rem
+        &.save-btn
+            background-color: $blue
+            
+    select:focus
+        outline: 0
+
+    .original-price
+        color: $edit-red
+    
+    .new-price
+        color: $edit-green
+
+    .price-change
+        color: $edit-green
+        
+    .is-negative
+        color: $negative-red
+    
+    .is-positive
+        color: green
+
+    .content
+        display: flex
+        align-items: flex-start
+        
+        .data
+            text-align: center
+            width: 50%
+                    
+        .edit-summary
+            margin-left: 3rem
+            border: 1px solid rgba(0,0,0,.1)
+            display: flex
+            flex-direction: column
+            background-color: #fff
+            font-weight: bold
+            min-width: 30%
+            
+            >div
+                &:first-child
+                    border-bottom: 1px solid rgba(0,0,0,.1)
+                    padding: .5rem
+                    font-weight: bold
+                    font-family: "RalewayRegular"
+                    background-color: $light-grey
+                    color: $dark-grey
+                    
+                &:nth-child(2)
+                    flex: 1 1 auto
+                    padding: 1rem
+                    >div
+                        padding-bottom: .25rem
+                        >span
+                            padding: 0 1rem
+                            font-weight: normal
+                            &:first-child
+                                color: $edit-red
+                            &:last-child
+                                color: $edit-green
+                                
+                &:nth-child(3)
+                    border-top: 1px solid rgba(0,0,0,.1)
+                    padding: .5rem
+                    text-align: center

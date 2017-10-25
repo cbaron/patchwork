@@ -134,7 +134,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         return this
     },
 
-    template: require('../templates/signup')( require('handlebars') ),
+    template: require('../templates/signup'),
 
     updateState( data ) {
         this.currentIndex = data.index

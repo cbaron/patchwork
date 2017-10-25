@@ -15,9 +15,7 @@ module.exports = new (
 
             this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
-            this.footer =
-                this.ViewFactory.create( 'footer', { insertion: { value: { el: this.content, method: 'after' } } } )
-                .on( 'navigate', this.onViewNavigate.bind(this) )
+            this.footer = this.ViewFactory.create( 'footer', { insertion: { value: { el: this.content, method: 'after' } } } )
 
             this.views = { }
 
@@ -30,15 +28,15 @@ module.exports = new (
                 else {
                     this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
                                        .on( 'signout', () => this.onSignout() )
-                 }
+                }
             } else {
                 if( this.adminHeader ) { this.adminHeader.hide() }
-                if( this.header ) { this.header.onNavigation( resource ) }
+                if( this.header ) { return }
                 else {
                     this.header =
                         this.ViewFactory.create( 'header', { insertion: { value: { el: this.content, method: 'insertBefore' } } } )
                         .on( 'navigate', this.onViewNavigate.bind(this) )
-                    this.header.onNavigation( resource ) }
+                }
             }
         },
 
@@ -61,7 +59,8 @@ module.exports = new (
                 Object.keys( this.views ).forEach( view => this.views[ view ].hide() )
 
                 if( this.views[ resource ] ) this.views[ resource ].show()
-                else this.views[ resource ] = resource === "admin-plus"
+
+                else this.views[ resource ] = !this.resources[ resource ]
                     ? this.ViewFactory.create( resource, {
                         insertion: { value: { el: this.content } },
                         user: { value: this.user } } )
@@ -70,12 +69,7 @@ module.exports = new (
                     : new ( this.resources[ resource ].view )( Object.assign( { factory: this.ViewFactory }, this.resources[ resource ].options ) )
                         .on( 'navigate', data => this.navigate( data.location, data.options ) )
                         
-                if( !/admin/.test( resource ) ) {  
-                    if( this.header.els.headerTitle.style.display === 'none' ) this.header.toggleLogo()
-                    this.header.els.navbarCollapse.classList.remove('in')
-                    document.body.scrollTop = 0
-                    this.footer.size()
-                }
+                if( !/admin/.test( resource ) ) document.body.scrollTop = 0
 
             } ).catch( err => new this.Error(err) )
         },
@@ -152,14 +146,7 @@ module.exports = new (
                     fetch: { headers: { accept: "application/ld+json" } }
                 }
             },
-            home: { view: require('./views/Home'), options: { } },
-            csa: { view: require('./views/CSA'), options: { } },
-            about: { view: require('./views/About'), options: { } },
-            markets: { view: require('./views/Markets'), options: { } },
             "sign-up": { view: require('./views/Signup'), options: { } },
-            members: { view: require('./views/Members'), options: { } },
-            "get-involved": { view: require('./views/GetInvolved'), options: { } },
-            contact: { view: require('./views/Contact'), options: { } }
         },
 
         routes: {

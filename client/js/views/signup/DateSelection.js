@@ -46,7 +46,7 @@ Object.assign( DateSelection.prototype, List.prototype, {
         return this
     },
 
-    template: require('../../templates/signup/dateSelection')( require('handlebars') ),
+    template: require('../../templates/signup/dateSelection'),
 
     validate() {
         var valid = true,

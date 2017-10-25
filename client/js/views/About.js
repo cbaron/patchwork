@@ -1,20 +1,19 @@
-var CustomContent = require('./util/CustomContent'),
-    About = function() { return CustomContent.apply( this, arguments ) }
+module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
-Object.assign( About.prototype, CustomContent.prototype, {
+    events: {
+        link: 'click'
+    },
 
-    requiresLogin: false,
+    onLinkClick( e ) {
+        this.emit( 'navigate', e.target.getAttribute('data-name') )
+    },
 
     tables: [ 
-        { name: 'staffprofile', comparator: 'position', el: 'staffProfile', image: true, template: 'staffProfile'}
+        { name: 'staffprofile', el: 'staffBios', image: true, template: 'staffProfile' }
     ],
 
-    template: require('../templates/about')( require('handlebars') ),
-
     templates: {
-        staffProfile: require('../templates/staffProfile')( require('handlebars') )
+        staffProfile: require('./templates/StaffProfile')
     }
 
 } )
-
-module.exports = About

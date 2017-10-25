@@ -1,0 +1,154 @@
+.Locations
+
+    section
+        padding-bottom: 2.5rem
+        
+        ul
+            columns: 2
+            margin-top: 2rem
+            
+            .location
+                margin-bottom: .75rem
+                -webkit-column-break-inside: avoid
+                page-break-inside: avoid
+                break-inside: avoid
+                
+                &:first-child:last-child //fix for when firefox breaks a solitary list item into columns
+                    display: inline-block
+
+                >div
+                    &:first-child
+                        color: $sun-red
+
+                    >a
+                        color: inherit
+                        
+        &.striped
+            ul .location >div:first-child
+                color: white
+                font-weight: bold
+        
+    h2
+        margin-bottom: .25rem
+        font-weight: bold
+        
+    .map-wrap
+        height: 24rem
+
+        div:first-child
+            height: 100%
+            
+            .info-window
+                font-family: "RalewayRegular"
+                height: auto
+                
+                >div:first-child
+                    color: black
+                    font-size: 1.1rem
+                    font-weight: 300
+                    border-bottom: 2px solid $sun-red
+                    padding-bottom: .25rem
+                
+                >div:nth-child(2)
+                    color: $dark-grey
+                    font-size: .8rem
+                    text-transform: uppercase
+                    margin: .5rem 0 .75rem
+                    
+                >div:last-child >div >a
+                    color: $sun-red
+            
+        .legend
+            background-color: #fff
+            padding: .5rem .75rem .25rem
+            margin: .75rem
+            border: 1px solid #000
+            
+            >li
+                margin-bottom: .25rem
+                font-size: .8rem
+                font-family: "RalewayRegular"
+
+                input
+                    display: none
+
+                input + span:first-of-type
+                    position: relative
+                    
+                    &::before
+                        position: absolute
+                        bottom: 0
+                        left: -4px
+                        right: 1rem
+                        border: 1px solid black
+                        content: "\00a0"
+                        color: white
+                        background-color: $light-grey
+                        font: 14px/.9em sans-serif
+                        height: 14px
+                        width: 14px
+                        cursor: pointer
+                
+                input:checked + span:first-of-type::before            
+                    color: black
+                    content: "\2713"
+                    text-align: center
+                    
+                span:last-child
+                    position: relative
+                    margin-left: 2.1rem
+                    
+                    &.farmPickup
+                        &::before
+                            content: ""
+                            position: absolute
+                            width: 1rem
+                            height: 1rem
+                            background-image: url('/static/img/favicon.png')
+                            background-size: contain
+                            left: -1.15rem
+                    &.farmerMarket
+                        &::before
+                            listCircle($sun-red, 10px, .15rem)
+                    &.retailOutlet
+                        &::before
+                            listCircle($yellow, 10px, .15rem)
+                    &.restaurant
+                        &::before
+                            listCircle($dark-blue, 10px, .15rem)
+                    &.groupLocation
+                        &::before
+                            listCircle($orange, 10px, .15rem)
+                    &.deliveryRange
+                        &::before
+                            content: ""
+                            position: absolute
+                            width: .75rem
+                            height: .75rem
+                            background-color: $sun-red
+                            opacity: .5
+                            top: .1rem
+                            left: -1.05rem
+                       
+    .button-row
+        display: flex
+        justify-content: center
+        margin: 3rem 0
+        
+        >button
+            color: black
+            background-color: $sun-yellow
+            box-shadow: 3px 3px 5px $dark-grey
+            font-size: 1.25rem
+            padding: .75rem 1.3rem
+            border-radius: .5rem
+            border: 1px solid transparent
+            font-family: "RalewayRegular"
+            
+            &:hover
+                background-color: lighten($sun-yellow, 15%)
+
+            
+    @media only screen and (max-width: 575px)
+        section ul
+            columns: 1

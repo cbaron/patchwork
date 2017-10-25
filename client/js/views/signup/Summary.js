@@ -122,6 +122,7 @@ Object.assign( Summary.prototype, View.prototype, {
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {
+
                 var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
                     groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
                         ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
@@ -188,18 +189,19 @@ Object.assign( Summary.prototype, View.prototype, {
                         weeklyCost: selectedDelivery.get('price'),
                         groupdropoff: ( groupDropoff ) ? groupDropoff.get('label') : undefined,
                         address: ( groupDropoff )
-                            ? groupDropoff.get('address')
+                            ? groupDropoff.get('street') + ', ' + groupDropoff.get('cityStateZip')
                             : ( selectedDelivery.get('name') === 'farm' )
                                 ? this.ContactInfo.data.farmpickup
                                 : this.user.get('address'),
-                        dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery') ],
+                        dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
                         starttime: times.starttime,
                         endtime: times.endtime
                     },
                     weeklyPrice: this.util.format( '$%s', weeklyTotal.toFixed(2) ),
-                    selectedDates: share.get('selectedDates').map( date => date.attributes ),
+                    selectedDates: share.get('selectedDates').map( date => this.templates.PickupDate( Object.assign( { selected: true }, date.attributes ) ) ),
                     weeksSelected: share.get('selectedDates').length,
-                    skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).attributes ) : undefined,
+                    skipDays: ( share.has('skipDays') )
+                        ? share.get('skipDays').map( skipDayId => this.templates.PickupDate( share.get('deliveryDates').get(skipDayId).attributes ) ) : undefined,
                     total: this.util.format( '$%s', share.get('total').toFixed(2) )
                 }
             } ) 
@@ -366,9 +368,10 @@ Object.assign( Summary.prototype, View.prototype, {
         ],
     },
 
-    template: require('../../templates/signup/summary')( require('handlebars') ),
+    template: require('../../templates/signup/summary'),
 
     templates: {
+        PickupDate: require('../../templates/signup/pickupDate'),
         ShareBox: require('../templates/ShareBox')
     },
 

@@ -1,0 +1,195 @@
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/static/fonts/glyphicons-halflings-regular.eot');
+  src: url('/static/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+       url('/static/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
+       url('/static/fonts/glyphicons-halflings-regular.woff') format('woff'),
+       url('/static/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+       url('/static/fonts/glyphicons-halflings-regular.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-weight: 400;
+  src: url('/static/fonts/Lato-Regular.eot');
+  src: url('/static/fonts/Lato-Regular.woff2') format('woff2'),
+       url('/static/fonts/Lato-Regular.woff') format('woff'),
+       url('/static/fonts/Lato-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-weight: 700;
+  src: url('/static/fonts/Lato-Bold.eot');
+  src: url('/static/fonts/Lato-Bold.woff2') format('woff2'),
+       url('/static/fonts/Lato-Bold.woff') format('woff'),
+       url('/static/fonts/Lato-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LatoLight';
+  src: url('/static/fonts/Lato-Light.eot');
+  src: url('/static/fonts/Lato-Light.woff2') format('woff2'),
+       url('/static/fonts/Lato-Light.woff') format('woff'),
+       url('/static/fonts/Lato-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RalewayRegular';
+  src: url('/static/fonts/Raleway-Regular-webfont.eot');
+  src: url('/static/fonts/Raleway-Regular-webfont.woff') format('woff'),
+       url('/static/fonts/Raleway-Regular-webfont.ttf') format('truetype'),
+       url('/static/fonts/Raleway-Regular-webfont.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'RalewayRegular';
+  font-weight: 700;
+  src: url('/static/fonts/Raleway-Bold-webfont.woff') format('woff'),
+       url('/static/fonts/Raleway-Bold-webfont.ttf') format('truetype');
+}
+
+.modal-backdrop
+    bottom: 0
+    position: fixed
+
+html
+    font-size: 100%
+    height: 100%
+    
+*,
+*::before,
+*::after
+    box-sizing: border-box
+    
+body
+    font-family: "RalewayRegular"
+    height: 100%
+    font-size: 15px
+    font-weight: 400
+    line-height: 1.5em
+    text-align: left
+    color: $dark-grey
+
+    &.admin
+        padding-top: 5rem
+
+div.container-fluid
+    display: flex
+    flex-direction: column
+
+section
+    padding-top: 2.5rem
+    padding-bottom: 0
+    padding-left: 20%
+    padding-right: 20%
+        
+    &.striped
+        color: $light-grey
+        background-color: $sun-red
+        
+        >h2, a
+            color: white
+      
+h1, h2, h3
+    color: $sun-red
+    margin: 0
+
+h1
+    padding: 3rem 20%
+    font-weight: bold
+    font-size: 1.7rem
+    
+h2
+    font-size: 1.3rem
+
+ol
+    -webkit-margin-before: 0rem
+    -webkit-margin-after: 0rem
+    -webkit-padding-start: 0rem
+
+img
+    opacity: 1
+    transition: opacity .5s
+    &[data-src]
+        opacity: 0
+        
+a
+    cursor: pointer
+    
+ul, li
+    list-style-type: none
+    padding: 0
+    margin: 0
+    
+input, select, button
+    &:focus
+        outline: 0
+    
+.link
+    color: $sun-red
+    cursor: pointer
+    &:hover
+        text-decoration: underline
+        
+.fd-hidden
+    display: none !important
+    
+.animate-in
+    animation: fadeIn .3s ease-in-out
+
+.animate-out
+    animation: fadeOut .3s ease-in-out
+
+.animate-in-slow
+    animation: fadeIn 3s ease-in-out
+
+.animate-out-slow
+    animation: fadeOut 3s ease-in-out
+    
+.slide-in-right
+    animation: slide-in-right 0.5s forwards
+    -webkit-animation: slide-in-right 0.5s forwards
+
+.slide-in-left
+    animation: slide-in-left 0.5s forwards
+    -webkit-animation: slide-in-left 0.5s forwards
+
+@keyframes slide-in-left
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0%); }
+
+@-webkit-keyframes slide-in-left
+    0% { -webkit-transform: translateX(-100%); }
+    100% { -webkit-transform: translateX(0%); }
+
+@keyframes slide-in-right
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0%); }
+
+@-webkit-keyframes slide-in-right
+    0% { -webkit-transform: translateX(100%); }
+    100% { -webkit-transform: translateX(0%); }
+
+@keyframes fadeIn
+    from { opacity: 0; }
+    to { opacity: 1; }
+
+@keyframes fadeOut
+    from { opacity: 1; }
+    to { opacity: 0; }
+    
+@media only screen and (max-width: 1050px)
+    section, h1
+        padding-left: 15%
+        padding-right: 15%
+        
+@media only screen and (max-width: 900px)
+    section, h1
+        padding-left: 10%
+        padding-right: 10%
+    
+@media only screen and (max-width: 767px)
+    section, h1
+        padding-left: 5%
+        padding-right: 5%

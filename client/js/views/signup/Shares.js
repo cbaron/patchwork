@@ -89,7 +89,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     showCSAInfoPageInNewTab() { window.open('/csa#how-do-i-know') },
 
-    template: require('../../templates/signup/shares')( require('handlebars') ),
+    template: require('../../templates/signup/shares'),
 
     validate() {
         var prevShareIds = this.signupData.shares.map( share => share.id ),
