@@ -68,16 +68,18 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         },
 
         documentView( model ) {
+            console.log( 'documentView' )
+            console.log( model )
             return {
                 disallowEnterKeySubmission: true,
                 insertion: { el: this.els.mainPanel },
                 model,
                 templateOpts: { heading: model.git('label') },
                 Views: {
-                    typeAhead: {
+                    /*typeAhead: {
                         Type: 'Document',
                         templateOpts: { hideSearch: true }
-                    }
+                    }*/
                 }
             }
         }
@@ -89,12 +91,12 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     createDocumentModel( data={} ) {
-        console.log( 'createDocumentModel' )
-        console.log( this.model.git('currentCollection' ) )
-        console.log( this.views.collections.collection.store.name[ this.model.git('currentCollection') ].schema )
+        const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ],
+            schema = this.model.git('currentCollection') === 'Views' ? collection.documents.find( doc => doc.name === data.label ).schema : collection.schema
+
         return Object.create( this.Model ).constructor(
             data,
-            Object.assign( { resource: this.model.git('currentCollection') }, this.views.collections.collection.store.name[ this.model.git('currentCollection') ].schema )
+            Object.assign( { resource: this.model.git('currentCollection') }, schema )
         )
     },
 
@@ -219,6 +221,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     onDocumentSelected( document ) {
+        console.log( 'onDocumentSelected' )
+        console.log( document )
         return this.clearCurrentView()
         .then( () => Promise.resolve( this.showDocumentView( document ) ) )
         .catch( this.Error )
@@ -243,10 +247,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     postRender() {
-        console.log( 'CollectionManager postRender' )
-        console.log( this.path )
-        console.log( this.reducer )
-        console.log( this )
         if( this.path.length > 0 ) this.model.set( 'currentCollection', this.path[0] )
 
         this.showProperView( true ).catch( this.Error )

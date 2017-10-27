@@ -1,4 +1,6 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+const CustomContent = require('./util/CustomContent')
+
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     events: {
         legend: 'click'
@@ -145,7 +147,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     postRender() {
         if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
 
-        return this
+        return CustomContent.postRender.call(this)
     },
 
     templateOpts() { return { categories: this.model.attributes } },

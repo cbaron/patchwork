@@ -55,6 +55,8 @@ module.exports = Object.create( {
     },
 
     handler( path ) {
+        if( path[0] === 'admin' && path[1] ) return this.resourceHandler( path[1] )
+
         let name = this.pathToView( path[0] ),
             view = this.Views[ name ] ? name : 'home'
 
@@ -132,7 +134,7 @@ module.exports = Object.create( {
         return hyphenSplit.map( item => this.capitalizeFirstLetter( item ) ).join('')
     },
     
-    /*resourceHandler( resource ) {
+    resourceHandler( resource ) {
         this.handleHeader( `admin/${resource}` )
         this.handleFooter( `admin/${resource}` )
 
@@ -147,7 +149,7 @@ module.exports = Object.create( {
             this.views.resource = new this.Resource( { resource: resource } )
 
         } ).catch( err => new this.Error(err) )
-    },*/
+    },
 
     resources: {
         admin: {

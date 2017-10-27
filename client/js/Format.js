@@ -7,6 +7,9 @@ module.exports = {
     } ),
 
     GetFormField( datum, value ) {
+        console.log( 'GetFormField' )
+        console.log( datum )
+        console.log( value )
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -44,9 +47,14 @@ module.exports = {
     },
 
     GetFormFields( data, model={} ) {
+        console.log( 'GetFormFields' )
+        console.log( data )
+        console.log( model )
+
         if( !data ) return ``
 
         return data.map( datum => this.GetFormField( datum, model && model[ datum.name ] ) ).join('')
+
     },
 
     GetIcon( name, opts ) { return Reflect.apply( this.Icons[ name ], this, [ opts ] ) },

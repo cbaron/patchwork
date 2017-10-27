@@ -31,17 +31,13 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             }
 
             if( query !== null && query.charAt(0) === "{" ) {
-                console.log( 'query not null' )
                 this.veeTwo = true
                 this.path.shift()
                 if( [ 'member', 'person' ].includes[ this.path[0] ] && !this.user.roles.includes('admin') ) throw Error("401")
                 return this.query = JSON.parse( decodeURIComponent( query ) )
             }
-            console.log( 'context get' )
-            console.log( this.veeTwo )
-            console.log( this.path )
+
             if( this.veeTwo ) this.path.shift()
-            console.log( this.path )
                 
             this.query = this.QueryString.parse( query )
 
@@ -67,6 +63,11 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             if( this.request.headers.v2 ) this.veeTwo = true
 
             if( this.veeTwo ) { this.path.shift(); return }
+        },
+
+        PUT() {
+            console.log( 'context PUT' )
+            this.path.shift()
         }
     },
 
@@ -83,6 +84,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         GET() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
         PATCH() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
         POST() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
+        PUT() { return this.Db.apply( this ) }
     },
 
     dbQuery( data  ) { return this.Q( this.Postgres.query( data.query, data.values ) ) },
@@ -165,13 +167,19 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.POST.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
+    PUT() {
+        return [
+            this.slurpBody.bind(this),
+            this.context.PUT.bind(this),
+            this.db.PUT.bind(this),
+            this.responses.PUT.bind(this) ].reduce( this.Q.when, this.Q() )        
+    },
+
     queryBuilder: require('../lib/queryBuilder'),
 
     relations: [ ],
 
     respond( data ) {
-        console.log( 'respond' )
-        console.log( data )
         data.body = JSON.stringify( data.body );
         this.response.writeHead( data.code || 200, this._.extend( this.getHeaders( data.body ), data.headers || {} ) )
         this.response.end( data.body );
@@ -229,7 +237,9 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
                 
             this.respond( { body: row } )
-        }
+        },
+
+        PUT( result ) { return this.Response.apply( this, result ) }
     },
 
     slurpBody() {
@@ -285,6 +295,13 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
         POST() {
             //if( /(auth)/.test(this.path[1]) ) return
+            
+            this.validate.Token.call(this)
+            
+            return this.validate.User.call(this)
+        },
+
+        PUT() {
             
             this.validate.Token.call(this)
             

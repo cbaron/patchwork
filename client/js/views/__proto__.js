@@ -281,11 +281,13 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
+            imgSelector = `[${this.slurp.img}]`,
+            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
 
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}` ) ).forEach( el => {
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
             else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
             else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )

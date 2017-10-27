@@ -1,4 +1,6 @@
-module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
+const CustomContent = require('./util/CustomContent')
+
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     events: {
         link: 'click'

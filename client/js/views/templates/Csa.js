@@ -56,7 +56,7 @@ module.exports = p =>
         </div>
         <p>We do our best to keep all items fully in stock to provide a satisfying box for all of our members. However, in the event that particular fruits or vegetables are in limited supply, Large Shares will receive preference, another great reason to consider this option.</p>
         <div class="button-row">
-            <button data-js="signupBtn" type="button">Sign Up Now!</button>
+            <button class="btn-yellow" data-js="signupBtn" type="button">Sign Up Now!</button>
         </div>
     </section>
     <div>
@@ -104,7 +104,7 @@ module.exports = p =>
         </div>
         <p>Please <a href="mailto:eat.patchworkgardens@gmail.com" class="link">email us</a> for information on payment plan options.</p>
         <div class="button-row">
-            <button data-js="signupBtn" type="button">Sign Up Now!</button>
+            <button class="btn-yellow" data-js="signupBtn" type="button">Sign Up Now!</button>
         </div>
     </section>
 </div>`

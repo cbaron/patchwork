@@ -105,12 +105,14 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
         .then( () => {
             this.collectionNames = Object.keys( this.model ).sort()
             this.model = { }
-            return this.P( this.Fs.readdir, [ `${__dirname}/../models` ], this.Fs )
+
+            return this.getViewModels()
+            .then( () => this.P( this.Fs.readdir, [ `${__dirname}/../models` ], this.Fs ) )
             .then( ( [ files ] ) => {
                 files.forEach( filename => {
                     const name = filename.replace('.js','')
 
-                    if( this.collectionNames.includes( name ) ) {
+                    if( this.collectionNames.includes( name ) || this.viewModelNames.includes( name ) ) {
                         this.model[ name ] = require( `${__dirname}/../models/${name}` )
                     }
                 } )
@@ -122,6 +124,16 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
                 return Promise.resolve()
             } )
         } )
+    },
+
+    getViewModels() {
+        this.viewModelNames = [ ]
+
+        return this.forEach(
+            db => db.collection( 'Views' ).find(),
+            result => Promise.resolve( this.viewModelNames.push( result.label ) ),
+            this
+        )
     },
 
     getDb() { return this.Client.connect(process.env.MONGODB) },

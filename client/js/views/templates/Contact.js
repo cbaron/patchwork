@@ -7,5 +7,5 @@ module.exports = p =>
             <div>We'd love to hear from you!</div>
         </h2>
         <div data-js="contactInfo"></div>
-    </section
+    </section>
 </div>`

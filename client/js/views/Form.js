@@ -3,6 +3,9 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     clear() { this.inputEls.forEach( el => el.value = '' ) },
 
     getElementValue( el, attribute ) {
+        console.log( 'getElementValue' )
+        console.log( el )
+        console.log( attribute )
         if( attribute === undefined || ( !attribute.fk && typeof attribute.range === 'string' && attribute.range ) ) return el.value
 
         /*
@@ -18,6 +21,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     getFormValues() {
+        console.log( 'getFormValues' )
         const attributes = this.model.attributes
 
         let data = this.reducer( Object.keys( this.els ), key =>
@@ -27,12 +31,22 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
         )
 
         attributes.forEach( attribute => {
+            console.log( attribute )
             if( attribute.fk ) { data[ attribute.fk ] = this.views[ attribute.fk ].getSelectedId() }
             else if( typeof attribute.range === "object" ) { data[ attribute.name ] = this.views[ attribute.name ].getFormValues() }
             else if( attribute.range === "List" ) {
-                data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => this.getElementValue( itemEl.querySelector('.item input'), { range: attribute.itemRange } ) ) }
+                console.log( Array.from( this.views[ attribute.name ].els.list.children ) )
+                data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
+                    console.log( itemEl )
+                    console.log( itemEl.querySelector('.item textarea') )
+                    const selector = attribute.itemRange === 'Text' ? '.item textarea' : '.item input'
+                    return this.getElementValue( itemEl.querySelector( selector ), { range: attribute.itemRange } )
+                }
+                )
+            }
         } )
-
+        console.log( 'data' )
+        console.log( data )
         return data
     },
 
@@ -43,12 +57,15 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     initTypeAheads() {
+        console.log( 'initTypeAheads' )
         this.model.attributes.forEach( attribute => {
+            console.log( attribute )
             if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.fk ) )
             else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
                     model: Object.create( this.Model ).constructor( this.model.data[ attribute.name ], { attributes: attribute.range } ),
-                    templateOptions: { hideButtonRow: true }
+                    templateOpts: { hideButtonRow: true },
+                    Views: { }
                 }
                 const el = this.els[ attribute.name ]
                 delete this.els[ attribute.name ]
@@ -56,6 +73,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                 this.renderSubviews()
             } else if( attribute.range === "List" ) {
                 const collectionData = this.model.git( attribute.name ) ? this.model.git( attribute.name ).map( datum => ( { value: datum } ) ) : [ ];
+
                 this.Views[ attribute.name ] = {
                     model: Object.create( this.model ).constructor( {
                         add: true,
@@ -75,10 +93,14 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     submit() {
+        console.log( 'submit' )
+
         if( ! this.model.validate( this.getFormValues() ) ) return Promise.resolve()
 
         const isPost = !Boolean( this.model.data[ this.key ]  )
-
+        console.log( this.key )
+        console.log( this.model.data[this.key] )
+        console.log( this.omit( this.model.data, [ this.key ] ) )
         return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
         .then( () => {
             this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
@@ -90,6 +112,8 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     postRender() {
+        console.log( 'postRender Form' )
+        console.log( this.model )
         this.inputEls = this.els.container.querySelectorAll('input, select')
 
         if( !this.disallowEnterKeySubmission ) this.els.container.addEventListener( 'keyup', e => { if( e.keyCode === 13 ) this.onSubmitBtnClick() } )

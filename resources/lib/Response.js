@@ -19,6 +19,6 @@ module.exports = Object.create( {
 
     POST( resource, result ) { resource.respond( { body: result.rows ? result.rows[0] : result[0] } ) },
 
-    PUT( resource, rows ) { resource.respond( { body: result.rows ? result.rows[0] : result[0] } ) }
+    PUT( resource, result ) { resource.respond( { body: result.rows ? result.rows[0] : result[0] } ) }
 
 }, { } )

@@ -107,6 +107,26 @@
 .AdminPlus >div:first-child >button:hover {
   background-color: #ffce28;
 }
+.btn-yellow {
+  color: #000;
+  background-color: #ffc502;
+  box-shadow: 3px 3px 5px #666;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+.btn-yellow:hover {
+  background-color: #ffce28;
+}
+.btn-yellow.submitting {
+  opacity: 0.3;
+}
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
 .ButtonFlow .state {
   display: flex;
 }
@@ -154,6 +174,7 @@
 .CollectionManager .left-panel svg {
   height: 0.75rem;
   width: 0.75rem;
+  margin-right: 0.2rem;
 }
 .CollectionManager .left-panel .side-by-side {
   display: flex;
@@ -163,9 +184,9 @@
   padding-left: 1rem;
 }
 .CollectionManager .left-panel button {
-  border: none;
-  font-size: 0.75rem;
-  padding: 0.5rem 0rem 0rem 0rem;
+  background-color: #fff;
+  font-size: 0.85rem;
+  padding: 0.5rem 0 0;
 }
 .CollectionManager .left-panel button:hover {
   font-weight: 700;
@@ -261,24 +282,6 @@
   height: auto;
   width: 100%;
   margin: 0;
-}
-.Csa .button-row {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-}
-.Csa .button-row >button {
-  color: #000;
-  background-color: #ffc502;
-  box-shadow: 3px 3px 5px #666;
-  font-size: 1.25rem;
-  padding: 0.75rem 1.3rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  font-family: "RalewayRegular";
-}
-.Csa .button-row >button:hover {
-  background-color: #ffce28;
 }
 .Csa .item-detail {
   margin-bottom: 1rem;
@@ -666,6 +669,25 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   width: 1rem;
   z-index: 1;
 }
+input {
+  background-color: #fff;
+  border: 1px solid #b5b5b5;
+  padding: 0.25rem;
+placeholder()
+}
+input,
+select {
+  line-height: 1.5rem;
+  width: 100%;
+}
+input:focus,
+select:focus {
+  border-color: #ed1c24;
+}
+select {
+  background-color: #fff;
+  padding: 0.25rem;
+}
 .Form .List .list.no-items {
   padding: 0rem;
 }
@@ -894,15 +916,9 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   text-align: center;
 }
 .Home .overlay >div:nth-child(2) >button {
-  background-color: #ffc502;
-  color: #000;
   padding: 1rem 1.6rem;
   font-size: 1.4rem;
-  border-radius: 0.5rem;
-  border: none;
-}
-.Home .overlay >div:nth-child(2) >button:hover {
-  background-color: #ffce28;
+  box-shadow: none;
 }
 @media only screen and (min-width: 1500px) {
   .Home .overlay >div:first-child {
@@ -1207,24 +1223,6 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   opacity: 0.5;
   top: 0.1rem;
   left: -1.05rem;
-}
-.Locations .button-row {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-}
-.Locations .button-row >button {
-  color: #000;
-  background-color: #ffc502;
-  box-shadow: 3px 3px 5px #666;
-  font-size: 1.25rem;
-  padding: 0.75rem 1.3rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  font-family: "RalewayRegular";
-}
-.Locations .button-row >button:hover {
-  background-color: #ffce28;
 }
 @media only screen and (max-width: 575px) {
   .Locations section ul {
@@ -2310,6 +2308,11 @@ input:focus,
 select:focus,
 button:focus {
   outline: 0;
+}
+button {
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 .link {
   color: #ed1c24;

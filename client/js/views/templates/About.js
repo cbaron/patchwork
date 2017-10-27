@@ -1,7 +1,25 @@
 module.exports = p =>
 `<div>
     <h1>About</h1>
-    <section class="striped">
+    <section data-js="sectionOne" class="striped">
+        <h2 data-js="headingOne"></h2>
+    </section>
+    <section data-js="sectionTwo">
+        <h2 data-js="headingTwo"></h2>
+    </section>
+    <section data-js="sectionThree" class="striped">
+        <h2 data-js="headingThree"></h2>
+    </section>
+    <section data-js="sectionFour">
+        <h2 data-js="headingFour"></h2>
+        <div class="bios" data-js=staffBios></div>
+    </section>
+</div>`
+
+/*module.exports = p =>
+`<div>
+    <h1>About</h1>
+    <section data-js="section1" class="striped">
         <h2>We are purveyors of veggie variety</h2>
         <p>Patchwork Gardens is a chemical-free farm located in Dayton, Ohio. Every spring, we plant an 11 acre vegetable garden with the widest variety of produce we can manage.  We cover all the garden favorites: spring salad greens, summertime tomatoes, autumn's root crops, and everything in between.</p>
         <p>If you've ever had a home garden and enjoyed its bounty, you may be familiar with the crops we cultivate. If you cherish a fondness for any vegetable at all, the chances are good that we've grown it before.</p>
@@ -20,4 +38,4 @@ module.exports = p =>
         <h2>We are your friends and neighbors</h2>
         <div class="bios" data-js=staffBios></div>
     </section>
-</div>`
+</div>`*/

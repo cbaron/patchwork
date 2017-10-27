@@ -112,6 +112,11 @@ module.exports = Object.assign( { }, Super, {
     },
 
     getItemTemplateResult( keyValue, datum ) {
+        console.log( 'getItemTemplateResult' )
+        console.log( keyValue )
+        console.log( datum )
+        console.log( this.name )
+        console.log( this.itemTemplate )
         const buttonsOnRight = this.model.git('delete') ? `<div class="buttons">${this.deleteIcon}</div>` : ``,
             selection = this.toggleSelection ? `<div class="selection"><input data-js="checkbox" type="checkbox" /></div>` : ``
 
@@ -241,13 +246,15 @@ module.exports = Object.assign( { }, Super, {
     onToggleClick() { this.els.list.classList.contains('fd-hidden') ? this.showList() : this.hideList() },
 
     populateList( data ) {
+        console.log( 'populateList' )
+        console.log( data )
         data = data || this.collection.data
 
         if( !Array.isArray( data ) ) data = [ data ]
 
         this.updateStyle()
 
-        if( this.collection.data.length === 0 ) return
+        if( data.length === 0 ) return
 
         if( this.model.git('view') ) {
             let viewName = this.model.git('view')
@@ -270,11 +277,14 @@ module.exports = Object.assign( { }, Super, {
 
             this.els.list.appendChild( fragment )
         } else {
+            console.log( 'reduce' )
             this.slurpTemplate( {
                 insertion: { el: this.els.list },
                 renderSubviews: true,
                 template: data.reduce(
                     ( memo, datum ) => {
+                        console.log( memo )
+                        console.log( datum )
                         const keyValue = datum[ this.key ]
                         this.collection.store[ this.key ][ keyValue ] = datum
                         return memo + this.getItemTemplateResult( keyValue, datum )
@@ -362,10 +372,6 @@ module.exports = Object.assign( { }, Super, {
     },
 
     unhideItems() {
-        console.log( 'unhideItems' )
-        console.log( this.els.list )
-        console.log( this.els.list.querySelectorAll('li') )
-        console.log( this.els.list.querySelectorAll(`li.fd-hidden`) )
         Promise.all( Array.from( this.els.list.querySelectorAll(`li.fd-hidden`) ).map( el => this.showEl(el) ) )
         .catch( this.Error )
 
