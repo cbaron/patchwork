@@ -23,7 +23,10 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         GET() {
             const query = require('url').parse( this.request.url ).query
 
-            if( query === '{}' ) return this.query = { }
+            if( query === '{}' ) {
+                if( this.veeTwo ) this.path.shift()
+                return this.query = { }
+            }
 
             if( this.request.headers.v2 ) {
                 this.path.shift()
@@ -31,13 +34,13 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             }
 
             if( query !== null && query.charAt(0) === "{" ) {
-                this.veeTwo = true
-                this.path.shift()
+                if( !this.request.headers.v2 ) {
+                    this.veeTwo = true
+                    this.path.shift()
+                }
                 if( [ 'member', 'person' ].includes[ this.path[0] ] && !this.user.roles.includes('admin') ) throw Error("401")
                 return this.query = JSON.parse( decodeURIComponent( query ) )
             }
-
-            if( this.veeTwo ) this.path.shift()
                 
             this.query = this.QueryString.parse( query )
 
@@ -66,7 +69,6 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         PUT() {
-            console.log( 'context PUT' )
             this.path.shift()
         }
     },
@@ -294,7 +296,6 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         },
 
         POST() {
-            //if( /(auth)/.test(this.path[1]) ) return
             
             this.validate.Token.call(this)
             

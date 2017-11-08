@@ -7,9 +7,6 @@ module.exports = {
     } ),
 
     GetFormField( datum, value ) {
-        console.log( 'GetFormField' )
-        console.log( datum )
-        console.log( value )
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -47,14 +44,9 @@ module.exports = {
     },
 
     GetFormFields( data, model={} ) {
-        console.log( 'GetFormFields' )
-        console.log( data )
-        console.log( model )
-
         if( !data ) return ``
 
         return data.map( datum => this.GetFormField( datum, model && model[ datum.name ] ) ).join('')
-
     },
 
     GetIcon( name, opts ) { return Reflect.apply( this.Icons[ name ], this, [ opts ] ) },
@@ -62,7 +54,7 @@ module.exports = {
     GetListItems( items=[], opts={} ) {
         return items.map( item => {
             const attr = opts.dataAttr ? `data-${opts.dataAttr}="${item[ opts.dataAttr ]}"` : ``
-            return `<li ${attr}>${item.label}</li>` 
+            return `<li ${attr}>${item.label || item}</li>` 
         } ).join('')
     },
 
@@ -88,6 +80,26 @@ module.exports = {
     IconDataJs( p ) { return p.name ? `data-js="${p.name}"` : `` },
 
     ImageSrc( name ) { return `https://storage.googleapis.com/double-quill-3243/${name}` },
+
+    ParseTextLinks( text ) {
+        let start = text.indexOf('{{'),
+            end, rest, target, key, value, replacement
+
+        if( start === -1 ) return text
+
+        rest = text.slice( start )
+        target = rest.slice( 0, rest.indexOf('}') + 2 )
+        key = target.slice( 2, target.indexOf(':') )
+        value = target.slice( target.indexOf(':') + 1, target.indexOf('}') )
+
+        replacement = /email/i.test( target )
+            ? `<a href="mailto:${value}" class="link">${key}</a>`
+            : /http/.test( value )
+                ? `<a href="${value}" class="link">${key}</a>`
+                : `<span data-js="link" data-name="${value}" class="link">${key}</span>`
+
+        return this.ParseTextLinks( text.replace( target, replacement ) )
+    },
 
     Range( int ) {
         return Array.from( Array( int ).keys() )

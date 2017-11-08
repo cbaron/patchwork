@@ -1,6 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
     CurrentShare: require('../models/CurrentShare'),
+    Shares: Object.create( require('../models/__proto__'), { resource: { value: 'Share' } } ),
 
     events: {
         link: 'click',
@@ -36,18 +37,39 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
         )
         .catch( this.Error )
 
+        this.Shares.get()
+        .then( () => {
+            console.log( 'shares data' )
+            console.log( this.Shares.data )
+            this.Shares.data.forEach( share => {
+                this.slurpTemplate( {
+                    template: this.templates.shareExample( share.shareExample ),
+                    insertion: { el: this.els.shareExamples }
+                } )
+
+                this.slurpTemplate( {
+                    template: this.templates.csaItem( share.shareDescription ),
+                    insertion: { el: this.els.shareDescriptions }
+                } )
+            } )
+        } )
+        .catch( this.Error )
+
         return this
     },
 
     tables: [
         //{ name: 'csastatements', el: 'csaStatements', template: 'listItem'},
-        { name: 'largeshareexample', el: 'shareExampleLg', template: 'listItem' },
-        { name: 'smallShareExample', el: 'shareExampleSm', template: 'listItem' },
+        //{ name: 'largeshareexample', el: 'shareExampleLg', template: 'listItem' },
+        //{ name: 'smallShareExample', el: 'shareExampleSm', template: 'listItem' },
+        { name: 'AddOn', el: 'addOnItems', template: 'csaItem' }
     ],
 
     templates: {
+        csaItem: require('./templates/CsaItem'),
         deliveryMatrix: require('./templates/deliveryMatrix'),
-        listItem: require('./templates/ListItem')
+        shareExample: require('./templates/ShareExample')
+        //listItem: require('./templates/ListItem')
     }
 
 } )

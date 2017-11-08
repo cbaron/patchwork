@@ -100,6 +100,7 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
     },
 
     initialize( routes ) {
+        console.log( 'mongo initialize' )
         this.routes = routes
         return this.forEach( db => db.listCollections( { name: { $ne: 'system.indexes' } } ), this.cacheCollection, this )
         .then( () => {
@@ -109,6 +110,9 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
             return this.getViewModels()
             .then( () => this.P( this.Fs.readdir, [ `${__dirname}/../models` ], this.Fs ) )
             .then( ( [ files ] ) => {
+                console.log( files )
+                console.log( 'collectionNames' )
+                console.log( this.collectionNames )
                 files.forEach( filename => {
                     const name = filename.replace('.js','')
 
@@ -121,6 +125,8 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
                     if( this.model[ name ] === false ) this.model[ name ] = this.SuperModel.create()
                 } )
 
+                console.log( this.model )
+
                 return Promise.resolve()
             } )
         } )
@@ -131,7 +137,7 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
 
         return this.forEach(
             db => db.collection( 'Views' ).find(),
-            result => Promise.resolve( this.viewModelNames.push( result.label ) ),
+            result => Promise.resolve( this.viewModelNames.push( result.label.replace( ' ', '' ) ) ),
             this
         )
     },

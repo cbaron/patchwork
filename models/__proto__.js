@@ -11,7 +11,7 @@ module.exports = {
         validate: val => ( ! /\s/.test( val ) ) && ( value.match(/^[A-Z]*$/) )
     } ],
 
-    createAttributes( attributes ) { return this.Attributes.concat( attributes ) },
+    createAttributes( attributes, opts={ concat: false } ) { return opts.concat ? this.Attributes.concat( attributes ) : attributes },
 
     create() { return { attributes: this.Attributes } }
 }

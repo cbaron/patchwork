@@ -200,6 +200,7 @@
   flex: 4;
   height: 100%;
   overflow-x: hidden;
+  padding: 0 2rem 3rem;
 }
 .CollectionManager .main-panel .List {
   display: flex;
@@ -208,16 +209,6 @@
 }
 .CollectionManager .main-panel .List ol {
   overflow-y: auto;
-}
-.CollectionManager .main-panel .List ol >li,
-.CollectionManager .main-panel .List ol >div {
-  line-height: 1.25rem;
-  margin-right: 3rem;
-  text-align: left;
-}
-.CollectionManager .main-panel .List ol >li .item,
-.CollectionManager .main-panel .List ol >div .item {
-  padding: 1rem;
 }
 .CollectionManager .main-panel .Form {
   height: 100%;
@@ -236,26 +227,42 @@
   display: flex;
   margin: 1rem 0rem;
 }
+.CollectionManager .main-panel .form-box form .form-group >.List {
+  margin: 2.5rem 0;
+}
+.CollectionManager .main-panel .form-box form .form-group >.List >.button-row {
+  position: absolute;
+  left: 3rem;
+  bottom: -2.5rem;
+  margin: 0;
+}
+.CollectionManager .main-panel .form-box form .form-group >.List >.button-row >.btn-yellow {
+  font-size: 0.9rem;
+  padding: 0.35rem 1rem 0.2rem;
+  border-radius: 0.3rem;
+  box-shadow: 1px 2px 2px #666;
+}
+.CollectionManager .main-panel .form-box form .form-group:not(.vertical) >label {
+  font-weight: bold;
+  color: inherit;
+}
 .CollectionManager .main-panel .form-box form .form-group >*:first-child {
   flex: 1;
 }
 .CollectionManager .main-panel .form-box form .form-group >*:nth-child(2) {
-  flex: 4;
+  flex: 6;
+}
+.CollectionManager .main-panel .form-box form .form-group.vertical {
+  flex-direction: column;
+  align-items: center;
+  margin: 3rem 0;
+}
+.CollectionManager .main-panel .form-box form .form-group.vertical >label {
+  text-align: center;
+  margin-right: 0;
 }
 .CollectionManager .main-panel .btn-row {
   margin-top: 1rem;
-}
-.CollectionManager .main-panel .Form,
-.CollectionManager .main-panel .Deleter {
-  padding: 1rem 0rem;
-}
-.CollectionManager .main-panel .Form form,
-.CollectionManager .main-panel .Deleter form {
-  padding: 2rem 3rem;
-}
-.CollectionManager .main-panel .Form form form,
-.CollectionManager .main-panel .Deleter form form {
-  padding: 1rem 2rem;
 }
 .Contact section {
   padding-bottom: 2.5rem;
@@ -627,13 +634,12 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   }
 }
 .Dragger {
-  background-color: #fff;
-  border: 1px solid #000;
-  color: #000;
+  background-color: #ed1c24;
+  color: #fff;
   cursor: pointer;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  line-height: 0.5rem;
+  line-height: 1;
   position: fixed;
   padding: 0.1rem 0.2rem;
 }
@@ -669,39 +675,42 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   width: 1rem;
   z-index: 1;
 }
-input {
-  background-color: #fff;
-  border: 1px solid #b5b5b5;
-  padding: 0.25rem;
-placeholder()
-}
 input,
-select {
-  line-height: 1.5rem;
-  width: 100%;
+textarea {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
 }
 input:focus,
-select:focus {
+textarea:focus {
   border-color: #ed1c24;
 }
-select {
-  background-color: #fff;
-  padding: 0.25rem;
+label {
+  font-weight: 300;
+  color: #ed1c24;
+  text-align: right;
+  margin-right: 1rem;
+  margin-bottom: 0;
+}
+.Form {
+  width: 100%;
 }
 .Form .List .list.no-items {
   padding: 0rem;
 }
-.Form .List button.floating {
+.Form button.floating {
   bottom: 0rem;
   height: 2rem;
   right: 1rem;
   width: 2rem;
 }
 .Form .form-group .List .list .form-group {
-  margin: 0.5rem 0rem;
+  margin: 0.5rem 0;
 }
 .Form .form-group .List .list .item {
-  padding: 0.5rem 1rem;
+  padding: 0 3rem;
 }
 .GetInvolved section {
   padding-bottom: 2.5rem;
@@ -722,27 +731,24 @@ select {
 .GetInvolved a:hover {
   text-decoration: underline;
 }
-.GetInvolved .positions >div {
-  margin: 1.5rem 0;
+.GetInvolved .positions {
+  margin-top: 1.5rem;
   font-weight: bold;
 }
-.GetInvolved .positions >div:last-child {
-  margin-bottom: 0;
-}
-.GetInvolved .internship-description {
+.GetInvolved .internships >div {
   margin: 2rem 0;
 }
-.GetInvolved .internship-description >div {
+.GetInvolved .internships >div >div {
   margin: 1rem 2rem;
 }
-.GetInvolved .internship-description ul {
+.GetInvolved .internships >div ul {
   list-style: none;
 }
-.GetInvolved .internship-description ul >li {
+.GetInvolved .internships >div ul >li {
   position: relative;
   margin-left: 1.25rem;
 }
-.GetInvolved .internship-description ul >li::before {
+.GetInvolved .internships >div ul >li::before {
   content: "";
   position: absolute;
   width: 5px;
@@ -956,11 +962,15 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .List .list.no-items::before {
   content: 'No Items';
 }
+.List .list.is-dragging * {
+  cursor: move;
+}
 .List .list li {
   align-items: center;
   display: flex;
   cursor: pointer;
   position: relative;
+  flex-wrap: wrap;
 }
 .List .list li >.selection {
   align-items: center;
@@ -976,7 +986,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   -webkit-transform: scale(2);
 }
 .List .list li >.item {
-  flex: 10;
+  flex: 1;
   overflow: hidden;
   position: relative;
   text-overflow: ellipsis;
@@ -986,13 +996,13 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   align-items: center;
   display: flex;
   justify-content: center;
-  flex: 1;
+  position: absolute;
+  right: 1rem;
 }
 .List .list li >.buttons svg {
   display: none;
   width: 1.25rem;
   height: 1.25rem;
-  margin: 0rem 0.5rem;
 }
 .List .list li .drag {
   bottom: 0px;
@@ -1002,23 +1012,41 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   flex: none;
   line-height: 0.25rem;
 }
-.List .list li:hover {
-  background-color: $LightGrayTransparent;
+.List .list li:hover:not(.is-dragging) {
+  background-color: #e7e7e7;
 }
-.List .list li:hover >.buttons svg {
+.List .list li:hover:not(.is-dragging) >.buttons svg {
   display: inline-block;
 }
-.List .list li:hover >.selection input {
+.List .list li:hover:not(.is-dragging) >.selection input {
   display: inherit;
 }
 .List .list li.checked {
-  background-color: $LightGrayTransparent;
+  background-color: #e7e7e7;
 }
 .List .list li.checked >.selection input {
   display: inherit;
 }
 .List .list li.is-dragging {
-  background-color: $LightGrayTransparent;
+  background-color: #e7e7e7;
+}
+.List .list li.dragover-top::before {
+  content: "Drop here to move item.";
+  border: 2px dashed #ed1c24;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.25rem;
+  margin: 0.5rem 3rem;
+}
+.List .list li.dragover-bottom::after {
+  content: "Drop here to move item.";
+  border: 2px dashed #ed1c24;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.25rem;
+  margin: 0.5rem 3rem;
 }
 .List .list.is-dragging li >.buttons svg {
   display: none;
@@ -1030,7 +1058,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-color: initial;
 }
 .List .list.is-droppable li.mouseover {
-  background-color: $LightGrayTransparent;
+  background-color: #e7e7e7;
 }
 .List >button {
   bottom: 2rem;
@@ -1066,7 +1094,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   transform: rotate(180deg);
 }
 .List .heading.toggle:hover {
-  background-color: $LightGrayTransparent;
+  background-color: #e7e7e7;
   cursor: pointer;
 }
 .Locations section {
@@ -1136,13 +1164,18 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   font-size: 0.8rem;
   font-family: "RalewayRegular";
 }
-.Locations .map-wrap .legend >li input {
+.Locations .map-wrap .legend >li >label {
+  font-weight: bold;
+  color: inherit;
+  margin: 0 0 0.25rem;
+}
+.Locations .map-wrap .legend >li >label input {
   display: none;
 }
-.Locations .map-wrap .legend >li input + span:first-of-type {
+.Locations .map-wrap .legend >li >label input + span:first-of-type {
   position: relative;
 }
-.Locations .map-wrap .legend >li input + span:first-of-type::before {
+.Locations .map-wrap .legend >li >label input + span:first-of-type::before {
   position: absolute;
   bottom: 0;
   left: -4px;
@@ -1156,16 +1189,16 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   width: 14px;
   cursor: pointer;
 }
-.Locations .map-wrap .legend >li input:checked + span:first-of-type::before {
+.Locations .map-wrap .legend >li >label input:checked + span:first-of-type::before {
   color: #000;
   content: "\2713";
   text-align: center;
 }
-.Locations .map-wrap .legend >li span:last-child {
+.Locations .map-wrap .legend >li >label span:last-child {
   position: relative;
   margin-left: 2.1rem;
 }
-.Locations .map-wrap .legend >li span:last-child.farmPickup::before {
+.Locations .map-wrap .legend >li >label span:last-child.farmPickup::before {
   content: "";
   position: absolute;
   width: 1rem;
@@ -1174,7 +1207,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-size: contain;
   left: -1.15rem;
 }
-.Locations .map-wrap .legend >li span:last-child.farmerMarket::before {
+.Locations .map-wrap .legend >li >label span:last-child.farmerMarket::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -1184,7 +1217,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.retailOutlet::before {
+.Locations .map-wrap .legend >li >label span:last-child.retailOutlet::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -1194,7 +1227,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.restaurant::before {
+.Locations .map-wrap .legend >li >label span:last-child.restaurant::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -1204,7 +1237,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.groupLocation::before {
+.Locations .map-wrap .legend >li >label span:last-child.groupLocation::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -1214,7 +1247,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.deliveryRange::before {
+.Locations .map-wrap .legend >li >label span:last-child.deliveryRange::before {
   content: "";
   position: absolute;
   width: 0.75rem;
@@ -1410,10 +1443,6 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   align-items: baseline;
 }
 .MemberInfo .form-group label {
-  font-weight: 300;
-  color: #ed1c24;
-  text-align: right;
-  margin-right: 1rem;
   flex: 2;
 }
 .MemberInfo .form-group >div {
@@ -2306,6 +2335,7 @@ li {
 }
 input:focus,
 select:focus,
+textarea:focus,
 button:focus {
   outline: 0;
 }

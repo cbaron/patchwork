@@ -8,12 +8,16 @@
 
             &::before
                 content: 'No Items'
+                
+        &.is-dragging *
+            cursor: move
 
         li
             align-items: center
             display: flex
             cursor: pointer
             position: relative
+            flex-wrap: wrap
 
             >.selection
                 align-items: center
@@ -29,7 +33,7 @@
                     -webkit-transform: scale(2)
 
             >.item
-                flex: 10
+                flex: 1
                 overflow: hidden
                 position: relative
                 text-overflow: ellipsis
@@ -40,13 +44,16 @@
                 align-items: center
                 display: flex
                 justify-content: center
-                flex: 1
+                //flex: 1
+                position: absolute
+                right: 1rem
 
                 svg
                     display: none
                     width: 1.25rem
                     height: 1.25rem
-                    margin: 0rem .5rem
+                    //margin: 0rem .5rem
+
             .drag
                 bottom: 0px
                 color: $LightGray
@@ -55,8 +62,8 @@
                 flex: none
                 line-height: 0.25rem
 
-            &:hover
-                background-color: $LightGrayTransparent
+            &:hover:not(.is-dragging)
+                background-color: $light-grey
 
                 >.buttons
                     svg
@@ -66,13 +73,33 @@
                     display: inherit
 
             &.checked 
-                background-color: $LightGrayTransparent
+                background-color: $light-grey
 
                 >.selection input
                     display: inherit
             
             &.is-dragging
-                background-color: $LightGrayTransparent
+                background-color: $light-grey
+                
+            &.dragover-top
+                &::before
+                    content: "Drop here to move item."
+                    border: 2px dashed $sun-red
+                    border-radius: .25rem
+                    font-size: .75rem
+                    width: 100%
+                    padding: .25rem
+                    margin: .5rem 3rem
+                    
+            &.dragover-bottom
+                &::after
+                    content: "Drop here to move item."
+                    border: 2px dashed $sun-red
+                    border-radius: .25rem
+                    font-size: .75rem
+                    width: 100%
+                    padding: .25rem
+                    margin: .5rem 3rem
                 
         &.is-dragging
             li
@@ -89,7 +116,7 @@
 
         &.is-droppable
             li.mouseover
-                background-color: $LightGrayTransparent
+                background-color: $light-grey
 
     >button
         bottom: 2rem
@@ -129,5 +156,5 @@
 
         &.toggle
             &:hover
-                background-color: $LightGrayTransparent
+                background-color: $light-grey
                 cursor: pointer

@@ -27,6 +27,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     
     applyResource( request, response, path, subPath ) {
+        console.log( 'applyResource' )
         var filename = this.mongoRoutes[ path[1] ]
             ? this.mongoRoutes[ path[1] ]
             : ( path[1] === "" && subPath )
@@ -43,7 +44,8 @@ Object.assign( Router.prototype, MyObject.prototype, {
                     if( err.code !== "ENOENT" ) return reject( err )
                     file = `./resources${subPath || ''}/__proto__`
                 }
-
+                console.log( path )
+                console.log( Boolean( this.mongoRoutes[ path[1] ] ) )
                 instance = new ( require(file) )( {
                     request,
                     response,

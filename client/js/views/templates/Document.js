@@ -1,4 +1,4 @@
 module.exports = datum =>
     `<div>
-        <span>${datum.label}</span>
+        <span>${datum.label || datum.name}</span>
     </div>`

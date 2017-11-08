@@ -41,16 +41,56 @@ module.exports = Object.assign( { }, Super, {
         this.itemViews[ keyValue ].els.container.scrollIntoView( { behavior: 'smooth' } )
     },
 
+    getChildRectangles( el ) {
+        return Array.from( el.children ).map( item =>
+            ( { el: item, rectangle: item.getBoundingClientRect() } )
+        )
+    },
+
     checkDrag( e ) {
         if( !this.dragging ) return
-    
-		this.Dragger.els.container.classList.remove('fd-hidden')
-		this.Dragger.els.container.style.top = `${e.clientY+5}px`
-    	this.Dragger.els.container.style.left = `${e.clientX+5}px`
+
+        e.preventDefault()
+
+        this.Dragger.els.container.classList.remove('fd-hidden')
+        this.Dragger.els.container.style.top = `${e.clientY+5}px`
+        this.Dragger.els.container.style.left = `${e.clientX+5}px`
+
+        const listItemRectangles = this.getChildRectangles( this.els.list ),
+            matchingItem = listItemRectangles.find( item =>
+                item.rectangle.right >= e.clientX && item.rectangle.left <= e.clientX && item.rectangle.bottom >= e.clientY && item.rectangle.top <= e.clientY
+        )
+
+        if( !matchingItem || ( !matchingItem && this.dragoverEl ) || ( matchingItem && this.dragoverEl && matchingItem.el.isSameNode( this.dragging.el ) ) ) {
+            if( this.dragoverEl ) this.dragoverEl.classList.remove( 'dragover-top', 'dragover-bottom' )
+            this.dragoverEl = undefined
+            return
+        }
+
+        if( matchingItem && !matchingItem.el.isSameNode( this.dragging.el ) ) {
+            if( this.dragoverEl ) this.dragoverEl.classList.remove( 'dragover-top', 'dragover-bottom' )
+            this.dragoverEl = matchingItem.el
+            const itemRect = matchingItem.el.querySelector('.item').getBoundingClientRect()
+
+            if( e.clientY < ( itemRect.bottom - itemRect.height / 2 ) ) {
+                if( this.dragoverEl.previousSibling && this.dragoverEl.previousSibling.isSameNode( this.dragging.el ) ) return
+                this.dragoverEl.classList.add('dragover-top')
+            } else {
+                if( this.dragoverEl.nextSibling && this.dragoverEl.nextSibling.isSameNode( this.dragging.el ) ) return
+                this.dragoverEl.classList.add('dragover-bottom')
+            }
+        }
+
     },
 
     checkDragEnd( e ) {
         if( !this.dragging ) return
+
+        if( this.dragoverEl ) {
+            this.els.list.insertBefore( this.dragging.el, this.dragoverEl.classList.contains('dragover-top') ? this.dragoverEl : this.dragoverEl.nextSibling )
+            this.dragoverEl.classList.remove( 'dragover-top', 'dragover-bottom' )
+            this.dragoverEl = undefined
+        }
 
         this.emit( 'dropped', { e, type: this.model.git('draggable'), model: this.dragging.model } )
         this.dragging.el.classList.remove('is-dragging')
@@ -60,20 +100,22 @@ module.exports = Object.assign( { }, Super, {
     },
 
     checkDragStart( e ) {
+        //e.preventDefault()
+
         const closestList = e.target.closest('.List')
         if( closestList === null || ( !closestList.isSameNode( this.els.container ) ) ) return
-             
-        const el = e.target.closest('.item')
 
+        const el = e.target.closest('.item')
         if( !el ) return null
 
         const model = this.collection.store[ this.key ][ el.parentNode.getAttribute('data-key') ]
+
         this.dragging = { el: el.parentNode, model }
         this.dragging.el.classList.add('is-dragging')
         this.els.list.classList.add('is-dragging')
         if( model.label ) this.Dragger.els.container.textContent = `Move ${model.label}.`
         this.emit( 'dragStart', this.model.git('draggable') )
-    
+
     },
 
     checkDrop( { e, type, model } ) {
@@ -112,15 +154,15 @@ module.exports = Object.assign( { }, Super, {
     },
 
     getItemTemplateResult( keyValue, datum ) {
-        console.log( 'getItemTemplateResult' )
-        console.log( keyValue )
-        console.log( datum )
-        console.log( this.name )
-        console.log( this.itemTemplate )
         const buttonsOnRight = this.model.git('delete') ? `<div class="buttons">${this.deleteIcon}</div>` : ``,
             selection = this.toggleSelection ? `<div class="selection"><input data-js="checkbox" type="checkbox" /></div>` : ``
 
-        return `<li data-key="${keyValue}">${selection}<div class="item">${this.itemTemplate( datum )}</div>${buttonsOnRight}</li>`
+        return `` +
+        `<li data-key="${keyValue}">
+            ${selection}
+            <div class="item">${this.itemTemplate( datum )}</div>
+            ${buttonsOnRight}
+        </li>`
     },
 
     hide() {
@@ -246,8 +288,6 @@ module.exports = Object.assign( { }, Super, {
     onToggleClick() { this.els.list.classList.contains('fd-hidden') ? this.showList() : this.hideList() },
 
     populateList( data ) {
-        console.log( 'populateList' )
-        console.log( data )
         data = data || this.collection.data
 
         if( !Array.isArray( data ) ) data = [ data ]
@@ -268,6 +308,7 @@ module.exports = Object.assign( { }, Super, {
                         this.itemViews[ keyValue ] =
                             this.factory.create( viewName, { model: Object.create( this.collection.model ).constructor( datum ), storeFragment: true } )
                                 .on( 'deleted', () => this.onDeleted( datum ) )
+                                //.on( 'dragstart', e => this.onDragStart( e ) )
 
                         while( this.itemViews[ keyValue ].fragment.firstChild ) fragment.appendChild( this.itemViews[ keyValue ].fragment.firstChild )
                         return fragment
@@ -277,14 +318,11 @@ module.exports = Object.assign( { }, Super, {
 
             this.els.list.appendChild( fragment )
         } else {
-            console.log( 'reduce' )
             this.slurpTemplate( {
                 insertion: { el: this.els.list },
                 renderSubviews: true,
                 template: data.reduce(
                     ( memo, datum ) => {
-                        console.log( memo )
-                        console.log( datum )
                         const keyValue = datum[ this.key ]
                         this.collection.store[ this.key ][ keyValue ] = datum
                         return memo + this.getItemTemplateResult( keyValue, datum )
@@ -306,8 +344,6 @@ module.exports = Object.assign( { }, Super, {
         this.collection = this.model.git('collection') || Object.create( this.Model )
         this.key = this.collection.meta.key
 
-        console.log( this.collection )
-
         if( this.collection ) this.collection.store = { [ this.key ]: { } }
 
         if( this.model.git('delete') ) {
@@ -322,13 +358,13 @@ module.exports = Object.assign( { }, Super, {
 
         if( this.model.git('fetch') ) this.fetch().catch( this.Error )
 
-        if( this.model.git('draggable') ) this.initializeDragDrop()
-
         if( this.model.git('scrollPagination') ) this.initializeScrollPagination()
 
         this.updateStyle()
 
         if( this.collection.data.length ) this.populateList()
+
+        if( this.model.git('draggable') ) this.initializeDragDrop()
 
         return this
     },

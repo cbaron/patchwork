@@ -3,21 +3,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     clear() { this.inputEls.forEach( el => el.value = '' ) },
 
     getElementValue( el, attribute ) {
-        console.log( 'getElementValue' )
-        console.log( el )
-        console.log( attribute )
-        if( attribute === undefined || ( !attribute.fk && typeof attribute.range === 'string' && attribute.range ) ) return el.value
-
-        /*
-        if( attribute.fk ) {
-            let selectedItem = this.views[ attribute.name ].selectedItem
-            return selectedItem
-                ? selectedItem._id || selectedItem.id
-                : undefined
-        } else if( typeof attribute.range === 'object' ) {
-            return el.getFormValues()
-        } else if( attribute.range === "List" ) { return Array.from( this.views[ attribute.name ].els.list.children ).map( item => this.getElementValue( item, { range: attribute.itemRange } ) ) }
-        */
+        if( attribute === undefined || ( !attribute.fk && attribute.range && typeof attribute.range === 'string' ) ) return el.value
     },
 
     getFormValues() {
@@ -31,18 +17,13 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
         )
 
         attributes.forEach( attribute => {
-            console.log( attribute )
             if( attribute.fk ) { data[ attribute.fk ] = this.views[ attribute.fk ].getSelectedId() }
             else if( typeof attribute.range === "object" ) { data[ attribute.name ] = this.views[ attribute.name ].getFormValues() }
             else if( attribute.range === "List" ) {
-                console.log( Array.from( this.views[ attribute.name ].els.list.children ) )
                 data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
-                    console.log( itemEl )
-                    console.log( itemEl.querySelector('.item textarea') )
                     const selector = attribute.itemRange === 'Text' ? '.item textarea' : '.item input'
                     return this.getElementValue( itemEl.querySelector( selector ), { range: attribute.itemRange } )
-                }
-                )
+                } )
             }
         } )
         console.log( 'data' )
@@ -57,15 +38,15 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     initTypeAheads() {
-        console.log( 'initTypeAheads' )
+        //console.log( 'initTypeAheads' )
         this.model.attributes.forEach( attribute => {
-            console.log( attribute )
+            //console.log( attribute )
             if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.fk ) )
             else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
-                    model: Object.create( this.Model ).constructor( this.model.data[ attribute.name ], { attributes: attribute.range } ),
+                    model: Object.create( this.Model ).constructor( Object.assign( this.model.data[ attribute.name ], { nested: !this.model.git('nested') } ), { attributes: attribute.range } ),
                     templateOpts: { hideButtonRow: true },
-                    Views: { }
+                    Views: { },
                 }
                 const el = this.els[ attribute.name ]
                 delete this.els[ attribute.name ]
@@ -78,7 +59,8 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                     model: Object.create( this.model ).constructor( {
                         add: true,
                         collection: Object.create( this.Model ).constructor( collectionData, { meta: { key: 'value' } } ),
-                        delete: true
+                        delete: true,
+                        draggable: true
                     } ),
                     itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value ] )
                 }
@@ -88,19 +70,16 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                 this.renderSubviews()
                 this.views[ attribute.name ].on( 'addClicked', () => this.views[ attribute.name ].add( { value: '' } ) )
                 this.views[ attribute.name ].on( 'deleteClicked', datum => this.views[ attribute.name ].remove( datum ) )
+                this.views[ attribute.name ].on( 'dragStart', draggable => console.log( 'Form dragStart ' + draggable ) )
             }
         } )
     },
 
     submit() {
-        console.log( 'submit' )
-
         if( ! this.model.validate( this.getFormValues() ) ) return Promise.resolve()
 
         const isPost = !Boolean( this.model.data[ this.key ]  )
-        console.log( this.key )
-        console.log( this.model.data[this.key] )
-        console.log( this.omit( this.model.data, [ this.key ] ) )
+
         return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
         .then( () => {
             this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
@@ -112,8 +91,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     postRender() {
-        console.log( 'postRender Form' )
-        console.log( this.model )
+        if( this.model.git('nested') ) this.els.container.closest('.form-group').classList.add('vertical')
         this.inputEls = this.els.container.querySelectorAll('input, select')
 
         if( !this.disallowEnterKeySubmission ) this.els.container.addEventListener( 'keyup', e => { if( e.keyCode === 13 ) this.onSubmitBtnClick() } )

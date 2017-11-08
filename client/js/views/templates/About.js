@@ -2,16 +2,16 @@ module.exports = p =>
 `<div>
     <h1>About</h1>
     <section data-js="sectionOne" class="striped">
-        <h2 data-js="headingOne"></h2>
+        <h2></h2>
     </section>
     <section data-js="sectionTwo">
-        <h2 data-js="headingTwo"></h2>
+        <h2></h2>
     </section>
     <section data-js="sectionThree" class="striped">
-        <h2 data-js="headingThree"></h2>
+        <h2></h2>
     </section>
     <section data-js="sectionFour">
-        <h2 data-js="headingFour"></h2>
+        <h2></h2>
         <div class="bios" data-js=staffBios></div>
     </section>
 </div>`

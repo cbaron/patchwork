@@ -58,7 +58,7 @@ module.exports = Object.create( {
         if( path[0] === 'admin' && path[1] ) return this.resourceHandler( path[1] )
 
         let name = this.pathToView( path[0] ),
-            view = this.Views[ name ] ? name : 'home'
+            view = this.Views[ name ] ? path[0] : 'home'
 
         if( this.resources[ path[0] ] ) view = path[0]
 

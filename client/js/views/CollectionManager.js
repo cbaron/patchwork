@@ -7,6 +7,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     JsonPropertyModel: require('../models/JsonProperty'),
     //WebSocket: require('../WebSocket'),
 
+    Templates: {
+        Document: require('./templates/Document')
+    },
+
     Views: {
 
         collections() {
@@ -52,10 +56,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         documentList() {
             return {
                 model: Object.create( this.Model ).constructor( {
-                    add: true,
+                    //add: true,
                     collection: Object.create( this.DocumentModel ).constructor( [ ], { resource: this.model.git('currentCollection') } ),
-                    delete: true,
-                    draggable: 'document',
+                    //delete: true,
+                    //draggable: 'document',
                     pageSize: 100,
                     skip: 0,
                     sort: { 'label': 1 },
@@ -68,13 +72,11 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         },
 
         documentView( model ) {
-            console.log( 'documentView' )
-            console.log( model )
             return {
                 disallowEnterKeySubmission: true,
                 insertion: { el: this.els.mainPanel },
                 model,
-                templateOpts: { heading: model.git('label') },
+                templateOpts: { heading: model.git('label') || model.git('name') },
                 Views: {
                     /*typeAhead: {
                         Type: 'Document',
@@ -84,53 +86,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             }
         }
 
-    },
-                
-    Templates: {
-        Document: require('./templates/Document')
-    },
-
-    createDocumentModel( data={} ) {
-        const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ],
-            schema = this.model.git('currentCollection') === 'Views' ? collection.documents.find( doc => doc.name === data.label ).schema : collection.schema
-
-        return Object.create( this.Model ).constructor(
-            data,
-            Object.assign( { resource: this.model.git('currentCollection') }, schema )
-        )
-    },
-
-    getDocument( collection, documentName ) {
-        console.log( 'getDocument' )
-        console.log( collection )
-        console.log( documentName )
-        console.log( this.path )
-        return Object.create( this.Model ).constructor( {}, { resource: this.path[0] } ).get( { query: { name: this.path[1] } } )
-    },
-    
-    clearCurrentView() {
-        const currentView = this.model.git('currentView');
-        return ( currentView !== 'documentList'
-            ? this.views[ currentView ].delete( { silent: true } )
-            : this.views[ currentView ].hide()
-        )
-    },
-
-    createDocumentList( collectionName, fetch=true ) {
-        console.log( 'createDocumentList' )
-        console.log( collectionName )
-        console.log( this.path )
-        this.createView( 'list', 'documentList' )
-        this.views.documentList.getCount().then( count => this.updateCount(count) ).catch(this.Error)
-        //this.Header.enableTypeAhead( { Type: 'Document', Resource: collectionName, templateOptions: { placeholder: `Search ${collectionName} collection.` } }, document => this.onDocumentSelected(document) )
-        return this.views.collections.unhideItems().hideItems( [ this.model.git('currentCollection') ] )
-    },
-
-    createView( type, name, model ) {
-        this.views[ name ] = this.factory.create( type, Reflect.apply( this.Views[ name ], this, [ model ] ) )
-
-        if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
-        this.model.set( 'currentView', name )
     },
 
     events: {
@@ -211,6 +166,48 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         }
     },
+    
+    clearCurrentView() {
+        console.log( 'clearCurrentView' )
+        const currentView = this.model.git('currentView');
+        console.log( currentView )
+        return ( currentView !== 'documentList'
+            ? this.views[ currentView ].delete( { silent: true } )
+            : this.views[ currentView ].hide()
+        )
+    },
+
+    createDocumentList( collectionName, fetch=true ) {
+        this.createView( 'list', 'documentList' )
+        this.views.documentList.getCount().then( count => this.updateCount(count) ).catch(this.Error)
+        //this.Header.enableTypeAhead( { Type: 'Document', Resource: collectionName, templateOptions: { placeholder: `Search ${collectionName} collection.` } }, document => this.onDocumentSelected(document) )
+        return this.views.collections.unhideItems().hideItems( [ this.model.git('currentCollection') ] )
+    },
+
+    createDocumentModel( data={} ) {
+        const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ],
+            schema = this.model.git('currentCollection') === 'Views'
+                ? collection.documents.find( doc => doc.name === data.label.replace( ' ', '' ) ).schema
+                : collection.schema
+
+        return Object.create( this.Model ).constructor(
+            data,
+            Object.assign( { resource: this.model.git('currentCollection') }, schema )
+        )
+    },
+
+    createView( type, name, model ) {
+        console.log( 'createView' )
+        console.log( name )
+        this.views[ name ] = this.factory.create( type, Reflect.apply( this.Views[ name ], this, [ model ] ) )
+
+        if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
+        this.model.set( 'currentView', name )
+    },
+
+    getDocument( collection, documentName ) {
+        return Object.create( this.Model ).constructor( {}, { resource: this.path[0] } ).get( { query: { name: this.path[1] } } )
+    },
 
     onBackBtnClick() { this.emit( 'navigate', '/admin-plus' ) },
 
@@ -239,9 +236,13 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     onResourceClick() {
+        console.log( 'onResourceClick' )
+        console.log( this.views )
+        console.log( this.model.git('currentView') )
         if( this.model.git('currentView') === 'documentList' ) return
 
         this.clearCurrentView()
+        .then( () => console.log( this.model.git('currentView') ) )
         .then( () => Promise.resolve( this.model.set('currentView', 'documentList') ) )
         .catch( this.Error )
     },
@@ -267,7 +268,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                         : ``
             
             this.emit( 'navigate', `/admin-plus/collection-manager${path}`, { silent: true } );
-           
+            console.log( 'currentViewChanged' )
+            console.log( currentView )
+            console.log( this.views.documentList.collection.data )
+            console.log( currentView === 'documentList' && this.views.documentList.collection.data.length === 0 );
             ( currentView === 'documentList' && this.views.documentList.collection.data.length === 0 ? this.views.documentList.fetch() : Promise.resolve() )
             .then( () => this.views[ currentView ].show() )
             .catch( this.Error )
@@ -283,8 +287,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     showDocumentView( document ) {
-        console.log( 'showDocumentView' )
-        console.log( document )
         this.createView(
             'form',
             'documentView',
@@ -295,6 +297,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     showProperView() {
         console.log( 'showProperView' )
         console.log( this.path )
+        console.log( this.views.documentList )
         return (this.views.documentList ? Promise.resolve() : this.createDocumentList( this.model.git('currentCollection'), this.path.length === 2 ? false : true ) )
         .then( () =>
             this.path.length === 2
@@ -315,7 +318,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     toastError(e) {
         this.Error(e);
-        this.Toast.showMessage( 'error', `Something went wrong.  Try again, or bother Mike Baron.` )
+        this.Toast.showMessage( 'error', `Something went wrong. Please try again or contact Chris.` )
     },
 
     updateCount( count ) {

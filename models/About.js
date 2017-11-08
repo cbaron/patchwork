@@ -12,8 +12,8 @@ module.exports = {
                     label: 'Heading',
                     range: 'String'
                 }, {
-                    name: 'paragraphs',
-                    label: 'Paragraphs',
+                    name: 'description',
+                    label: 'Description',
                     range: 'List',
                     itemRange: 'Text'
                 }
@@ -27,8 +27,8 @@ module.exports = {
                     label: 'Heading',
                     range: 'String'
                 }, {
-                    name: 'paragraphs',
-                    label: 'Paragraphs',
+                    name: 'description',
+                    label: 'Description',
                     range: 'List',
                     itemRange: 'Text'
                 }
@@ -42,8 +42,8 @@ module.exports = {
                     label: 'Heading',
                     range: 'String'
                 }, {
-                    name: 'paragraphs',
-                    label: 'Paragraphs',
+                    name: 'description',
+                    label: 'Description',
                     range: 'List',
                     itemRange: 'Text'
                 }

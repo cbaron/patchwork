@@ -22,7 +22,7 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.listeners = 0
 
-        this.onMouseDown = e => this.emit('mousedown', e)
+        this.onMouseDown = e => { console.log( 'onMouseDown' ); this.emit('mousedown', e) }
         this.onMouseUp = e => this.emit('mouseup', e)
         this.onMouseMove = e => this.emit('mousemove', e)
 
@@ -41,6 +41,7 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
         document.body.removeEventListener( 'mousedown', this.onMouseDown )
         document.body.removeEventListener( 'mouseup', this.onMouseUp )
         document.body.removeEventListener( 'mousemove', this.onMouseMove )
+
     }
 
-} ), { } )
+} ), { } ).constructor()

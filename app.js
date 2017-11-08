@@ -1,7 +1,7 @@
 const fs = require('fs'),
-      router = require('./router'),
-      Postgres = require('./dal/postgres'),
-      Mongo = require('./dal/Mongo')
+    router = require('./router'),
+    Postgres = require('./dal/postgres'),
+    Mongo = require('./dal/Mongo')
 
 require('node-env-file')( __dirname + '/.env' )
 
@@ -23,6 +23,10 @@ Promise.all( [
         .listen( 443 )
 
     console.log( "Secure server spinning" )
+
+    require('./socketApp')
+    console.log( `WebSocket server listening at ${process.env.WEBSOCKET_PORT}` )
+
 } )
 .catch( e => console.log( e.stack || e ) )
 

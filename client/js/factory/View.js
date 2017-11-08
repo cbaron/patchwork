@@ -1,8 +1,7 @@
 module.exports = Object.create( {
 
-    create( name, opts ) {
-        const lower = name
-        name = this._processName( name )
+    create( rawName, opts ) {
+        const name = this._processName( rawName )
 
         return Object.create(
             this.Views[ name ],
@@ -10,6 +9,7 @@ module.exports = Object.create( {
                 Dragger: { value: this.Dragger },
                 Header: { value: this.Header },
                 Toast: { value: this.Toast },
+                documentName: { value: rawName },
                 name: { value: name },
                 factory: { value: this },
                 range: { value: this.range },

@@ -1,8 +1,4 @@
 module.exports = p => {
-    console.log( 'form template' )
-    console.log( p.attributes )
-    console.log( Array.isArray( p.attributes ) )
-    console.log( p.model )
     const heading = p.opts.heading ? `<div class="heading">${p.opts.heading}</div>` : ``,
        prompt  = p.opts.prompt ?  `<div class="prompt">${p.opts.prompt}</div>` : ``,
        fields = p.GetFormFields( p.attributes, p.model ),
