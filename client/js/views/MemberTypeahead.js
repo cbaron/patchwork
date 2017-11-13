@@ -30,12 +30,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     search( attr, term, suggest ) {
-        console.log( 'search' )
-        console.log( attr )
-        console.log( term )
         return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
-            console.log( this.Customer.data )
             if( ! this.Customer.data.length ) return Promise.resolve( false )
             
             this.attr = attr            

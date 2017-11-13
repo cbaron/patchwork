@@ -46,7 +46,7 @@ module.exports = {
         ] )
     },
     clientData: {
-        add: true,
-        delete: true
+        add: false,
+        delete: false
     }
 }

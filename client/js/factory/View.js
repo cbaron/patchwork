@@ -12,7 +12,6 @@ module.exports = Object.create( {
                 documentName: { value: rawName },
                 name: { value: name },
                 factory: { value: this },
-                range: { value: this.range },
                 template: { value: this.Templates[ name ] },
                 user: { value: this.User }
             } )
