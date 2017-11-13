@@ -360,6 +360,7 @@ button.submitting {
 }
 .CollectionManager .main-panel .form-box form .form-group.vertical >label {
   margin-right: 0;
+  width: 100%;
 }
 .CollectionManager .main-panel .form-box form .form-group.has-image >div {
   text-align: center;
@@ -711,7 +712,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   background-color: #ed1c24;
   color: #fff;
   border-color: transparent;
-  box-shadow: 2px 2px 2px #666;
+  box-shadow: 1px 1px 3px #666;
   transition: background-color, color 0.2s ease-in-out;
 }
 .Delivery .dropoffs .dropoff.selected >div:first-child {
@@ -719,7 +720,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   color: #fff;
 }
 html.non-touch .Delivery .dropoffs .dropoff:hover {
-  box-shadow: 2px 2px 2px #666;
+  box-shadow: 1px 1px 2px #666;
 }
 @media only screen and (max-width: 767px) {
   .Delivery .delivery-options >div:first-child {
