@@ -1,7 +1,10 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+const CustomContent = require('./util/CustomContent')
+
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     events: {
-        legend: 'click'
+        legend: 'click',
+        signupBtn: 'click'
     },
 
     model: require('../models/Locations'),
@@ -142,10 +145,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     },
 
+    onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
+
     postRender() {
         if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
 
-        return this
+        return CustomContent.postRender.call(this)
     },
 
     templateOpts() { return { categories: this.model.attributes } },

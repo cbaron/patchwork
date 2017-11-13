@@ -8,29 +8,29 @@
   color: #fff;
   font-weight: bold;
 }
-.About .bios {
+.About .staff {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   margin: 2rem 0;
 }
-.About .bios .bio {
+.About .staff .bio {
   margin: 0 4rem 2rem 0;
 }
-.About .bios .bio >div:first-child {
+.About .staff .bio >div:first-child {
   position: relative;
 }
-.About .bios .bio >div:first-child:hover .overlay {
+.About .staff .bio >div:first-child:hover .overlay {
   opacity: 1;
 }
-.About .bios .bio >div:first-child >img {
+.About .staff .bio >div:first-child >img {
   border-radius: 50%;
   border: 1px solid transparent;
   width: 9rem;
   height: 9rem;
   margin: 0;
 }
-.About .bios .bio >div:first-child .overlay {
+.About .staff .bio >div:first-child .overlay {
   border-radius: 50%;
   border: 1px solid transparent;
   position: absolute;
@@ -48,7 +48,7 @@
   font-size: 0.7rem;
   line-height: 1.2;
 }
-.About .bios .bio >div:last-child {
+.About .staff .bio >div:last-child {
   text-align: center;
   text-transform: uppercase;
   margin-top: 0.75rem;
@@ -85,26 +85,97 @@
   border: 1px solid #155d75;
 }
 .AdminPlus {
-  padding-top: 7.5rem;
-  text-align: center;
-  height: 100vh;
-  background-color: #e7e7e7;
+  height: 100%;
+  padding-top: 80px;
 }
-.AdminPlus button {
-  background-color: #f2f2f2;
-  border: 1px solid #bbb;
-  border-radius: 10px;
-  box-shadow: 1px 2px 5px #ccc;
-  color: #c98702;
-  display: inline-block;
-  font-family: "RalewayRegular";
-  padding: 1.25rem;
+.AdminPlus >div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+}
+.AdminPlus >div:first-child >button {
+  width: 20rem;
+  background-color: #ffc502;
+  color: #000;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem;
+  font-size: 1.4rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  box-shadow: 1px 1px 5px;
+}
+.AdminPlus >div:first-child >button:hover {
+  background-color: #ffce28;
+}
+.AdminPlus .views {
+  height: 100%;
+}
+button.submitting {
+  opacity: 0.3;
+}
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+.btn-yellow {
+  color: #000;
+  background-color: #ffc502;
+  box-shadow: 3px 3px 5px #666;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+.btn-yellow:hover {
+  background-color: #ffce28;
+}
+.btn-submit {
+  width: 8rem;
+  background-color: #fff;
+  color: #ed1c24;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.5rem;
   text-align: center;
-  width: 16rem;
+  transition: all 0.15s ease-in-out;
+}
+.btn-submit:hover {
+  background-color: #ed1c24;
+  color: #fff;
+}
+.btn-cancel {
+  width: 8rem;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.5rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+}
+.btn-cancel:hover {
+  background-color: #000;
+  color: #fff;
+}
+.floating {
+  border: none;
+  background-color: #ffc502;
   text-transform: uppercase;
+  border-radius: 2rem;
+  color: #000;
+  font-size: 0.8rem;
+  line-height: 2rem;
+  height: 3rem;
+  padding: 0rem;
+  position: relative;
+  width: 3rem;
 }
-.AdminPlus button:hover {
-  background-color: #ebebeb;
+.floating:hover {
+  background-color: #ffce28;
 }
 .ButtonFlow .state {
   display: flex;
@@ -131,6 +202,180 @@
 .ButtonFlow svg.link:hover {
   text-decoration: underline;
 }
+.CollectionManager {
+  display: flex;
+  height: 100%;
+  background-color: #ed1c24;
+  padding: 0;
+}
+.CollectionManager section {
+  padding: 0;
+}
+.CollectionManager .left-panel {
+  flex: 1;
+  text-align: left;
+  background-color: #ed1c24;
+  color: #fff;
+  height: 100%;
+}
+.CollectionManager .left-panel .List .list li {
+  padding: 0.15rem 0.3rem;
+}
+.CollectionManager .left-panel .List .list li:hover {
+  background-color: #fff;
+  color: #ed1c24;
+}
+.CollectionManager .left-panel .List .list li >.buttons {
+  right: 0.3rem;
+}
+.CollectionManager .left-panel .link,
+.CollectionManager .left-panel .heading {
+  color: #fff;
+}
+.CollectionManager .left-panel >section {
+  padding: 1rem;
+}
+.CollectionManager .left-panel >section:first-child svg {
+  margin-right: 0.25rem;
+}
+.CollectionManager .left-panel >section+section,
+.CollectionManager .left-panel >section:first-child {
+  border-bottom: 1px solid #fff;
+}
+.CollectionManager .left-panel svg {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+.CollectionManager .left-panel .side-by-side {
+  display: flex;
+  align-items: center;
+}
+.CollectionManager .left-panel .side-by-side >*:last-child {
+  padding-left: 0.5rem;
+}
+.CollectionManager .left-panel .button-row {
+  margin: 0;
+}
+.CollectionManager .left-panel button {
+  background-color: #ed1c24;
+  font-size: 0.85rem;
+  padding: 0.5rem 0 0;
+}
+.CollectionManager .left-panel button.side-by-side >span:first-child {
+  font-size: 1.5rem;
+  color: #000;
+}
+.CollectionManager .left-panel button:hover {
+  font-weight: 700;
+  text-decoration: none;
+}
+.CollectionManager .left-panel .Collections li {
+  padding: 0.25rem 0rem;
+}
+.CollectionManager .main-panel {
+  background-color: #fff;
+  border-left: 1px solid #fff;
+  flex: 4;
+  height: 100%;
+  overflow-x: hidden;
+  padding: 0 1rem 2rem;
+}
+.CollectionManager .main-panel >.List {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 2rem;
+}
+.CollectionManager .main-panel >.List ol {
+  overflow-y: auto;
+  height: 100%;
+}
+.CollectionManager .main-panel >.List ol >li,
+.CollectionManager .main-panel >.List ol >div {
+  margin-right: 2rem;
+}
+.CollectionManager .main-panel >.List ol >li .item,
+.CollectionManager .main-panel >.List ol >div .item {
+  padding: 1rem 2rem;
+}
+.CollectionManager .main-panel >.List .button-row {
+  margin: 2rem 0 0;
+}
+.CollectionManager .main-panel >.List .button-row .floating {
+  margin: 0 1rem;
+}
+.CollectionManager .main-panel >.Form >.form-box >form {
+  padding: 0 1rem 0 2rem;
+}
+.CollectionManager .main-panel .Form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.CollectionManager .main-panel .form-box {
+  display: flex;
+  flex-direction: column;
+}
+.CollectionManager .main-panel .form-box form {
+  overflow-y: auto;
+}
+.CollectionManager .main-panel .form-box form .form-group {
+  align-items: center;
+  display: flex;
+  margin: 1rem 0rem;
+}
+.CollectionManager .main-panel .form-box form .form-group label {
+  text-align: center;
+}
+.CollectionManager .main-panel .form-box form .form-group >.List {
+  margin: 2.5rem 0;
+}
+.CollectionManager .main-panel .form-box form .form-group >.List >.button-row {
+  position: absolute;
+  left: 3rem;
+  bottom: -2.5rem;
+  margin: 0;
+}
+.CollectionManager .main-panel .form-box form .form-group .btn-yellow {
+  font-size: 0.9rem;
+  padding: 0.35rem 1rem 0.2rem;
+  border-radius: 0.3rem;
+  box-shadow: 1px 2px 2px #666;
+}
+.CollectionManager .main-panel .form-box form .form-group:not(.vertical) >label {
+  font-weight: bold;
+  color: inherit;
+}
+.CollectionManager .main-panel .form-box form .form-group >*:first-child {
+  flex: 1;
+}
+.CollectionManager .main-panel .form-box form .form-group >*:nth-child(2) {
+  flex: 6;
+}
+.CollectionManager .main-panel .form-box form .form-group.vertical {
+  flex-direction: column;
+  align-items: center;
+  margin: 3rem 0;
+}
+.CollectionManager .main-panel .form-box form .form-group.vertical >label {
+  margin-right: 0;
+  width: 100%;
+}
+.CollectionManager .main-panel .form-box form .form-group.has-image {
+  flex-wrap: wrap;
+}
+.CollectionManager .main-panel .form-box form .form-group.has-image >div {
+  width: 100%;
+  margin: 1rem 0;
+  text-align: center;
+}
+.CollectionManager .main-panel .form-box form .form-group.has-image >div img {
+  max-height: 6rem;
+  margin-left: 1rem;
+}
+.CollectionManager .main-panel .btn-row {
+  margin: 2rem 0;
+}
 .Contact section {
   padding-bottom: 2.5rem;
   padding-top: 0;
@@ -156,24 +401,6 @@
   height: auto;
   width: 100%;
   margin: 0;
-}
-.Csa .button-row {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-}
-.Csa .button-row >button {
-  color: #000;
-  background-color: #ffc502;
-  box-shadow: 3px 3px 5px #666;
-  font-size: 1.25rem;
-  padding: 0.75rem 1.3rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  font-family: "RalewayRegular";
-}
-.Csa .button-row >button:hover {
-  background-color: #ffce28;
 }
 .Csa .item-detail {
   margin-bottom: 1rem;
@@ -416,6 +643,14 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
     justify-content: center;
   }
 }
+.Deleter {
+  width: 100%;
+  text-align: center;
+  margin-top: 2rem;
+}
+.Deleter .button-row {
+  margin: 1rem 0;
+}
 .Delivery .delivery-options {
   padding: 3rem 0;
 }
@@ -513,6 +748,16 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
     width: 100%;
   }
 }
+.Dragger {
+  background-color: #ed1c24;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  position: fixed;
+  padding: 0.1rem 0.2rem;
+}
 .Footer {
   flex: 1;
   background-color: #000;
@@ -526,6 +771,61 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
 .Footer p,
 .Footer a {
   font-size: 1rem;
+}
+.select-wrap {
+  position: relative;
+}
+.select-wrap select {
+  background-color: transparent;
+  position: relative;
+  z-index: 2;
+}
+.select-wrap .caret-down {
+  fill: #a3a3a3;
+  stroke: #8b8b8b;
+  height: 1rem;
+  position: absolute;
+  right: 0.6rem;
+  top: 0.6rem;
+  width: 1rem;
+  z-index: 1;
+}
+input,
+textarea {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+}
+input:focus,
+textarea:focus {
+  border-color: #ed1c24;
+}
+label {
+  font-weight: 300;
+  color: #ed1c24;
+  text-align: right;
+  margin-right: 1rem;
+  margin-bottom: 0;
+}
+.Form {
+  width: 100%;
+}
+.Form .List .list.no-items {
+  padding: 0rem;
+}
+.Form button.floating {
+  bottom: 0rem;
+  height: 2rem;
+  right: 1rem;
+  width: 2rem;
+}
+.Form .form-group .List .list .form-group {
+  margin: 0.5rem 0;
+}
+.Form .form-group .List .list .item {
+  padding: 0 3rem;
 }
 .GetInvolved section {
   padding-bottom: 2.5rem;
@@ -546,27 +846,24 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
 .GetInvolved a:hover {
   text-decoration: underline;
 }
-.GetInvolved .positions >div {
-  margin: 1.5rem 0;
+.GetInvolved .positions {
+  margin-top: 1.5rem;
   font-weight: bold;
 }
-.GetInvolved .positions >div:last-child {
-  margin-bottom: 0;
-}
-.GetInvolved .internship-description {
+.GetInvolved .internships >div {
   margin: 2rem 0;
 }
-.GetInvolved .internship-description >div {
+.GetInvolved .internships >div >div {
   margin: 1rem 2rem;
 }
-.GetInvolved .internship-description ul {
+.GetInvolved .internships >div ul {
   list-style: none;
 }
-.GetInvolved .internship-description ul >li {
+.GetInvolved .internships >div ul >li {
   position: relative;
   margin-left: 1.25rem;
 }
-.GetInvolved .internship-description ul >li::before {
+.GetInvolved .internships >div ul >li::before {
   content: "";
   position: absolute;
   width: 5px;
@@ -604,10 +901,10 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   text-transform: uppercase;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >div:first-child >div:active {
+.Header >div:nth-child(2) >div:first-child >div >span:active {
   color: #ffc502;
 }
-html.non-touch .Header >div:nth-child(2) >div:first-child >div:hover {
+html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
   color: #ffc502;
   transition: color 0.3s ease-in-out;
 }
@@ -740,15 +1037,9 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   text-align: center;
 }
 .Home .overlay >div:nth-child(2) >button {
-  background-color: #ffc502;
-  color: #000;
   padding: 1rem 1.6rem;
   font-size: 1.4rem;
-  border-radius: 0.5rem;
-  border: none;
-}
-.Home .overlay >div:nth-child(2) >button:hover {
-  background-color: #ffce28;
+  box-shadow: none;
 }
 @media only screen and (min-width: 1500px) {
   .Home .overlay >div:first-child {
@@ -776,6 +1067,153 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
     font-size: 1.1rem;
     padding: 0.8rem 1.25rem;
   }
+}
+.List {
+  position: relative;
+}
+.List .list.no-items {
+  padding-top: 1rem;
+}
+.List .list.no-items::before {
+  content: 'No Items';
+}
+.List .list.is-dragging * {
+  cursor: move;
+}
+.List .list li {
+  align-items: center;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  flex-wrap: wrap;
+}
+.List .list li >.selection {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+.List .list li >.selection input {
+  display: none;
+  width: initial;
+  transform: scale(2);
+  -ms-transform: scale(2);
+  -webkit-transform: scale(2);
+}
+.List .list li >.item {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.List .list li >.buttons {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+}
+.List .list li >.buttons svg {
+  display: none;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.List .list li .drag {
+  bottom: 0px;
+  font-size: 0.5rem;
+  position: absolute;
+  flex: none;
+  line-height: 0.25rem;
+}
+.List .list li:hover:not(.is-dragging) {
+  background-color: #e7e7e7;
+}
+.List .list li:hover:not(.is-dragging) >.buttons svg {
+  display: inline-block;
+}
+.List .list li:hover:not(.is-dragging) >.selection input {
+  display: inherit;
+}
+.List .list li.checked {
+  background-color: #e7e7e7;
+}
+.List .list li.checked >.selection input {
+  display: inherit;
+}
+.List .list li.is-dragging {
+  background-color: #e7e7e7;
+}
+.List .list li.dragover-top::before {
+  content: "Drop here to move item.";
+  text-align: center;
+  border: 2px dashed #ed1c24;
+  color: #000;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.25rem;
+  margin: 0.5rem 3rem;
+}
+.List .list li.dragover-bottom::after {
+  content: "Drop here to move item.";
+  text-align: center;
+  border: 2px dashed #ed1c24;
+  color: #000;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  width: 100%;
+  padding: 0.25rem;
+  margin: 0.5rem 3rem;
+}
+.List .list.is-dragging li >.buttons svg {
+  display: none;
+}
+.List .list.is-dragging li >.selection input {
+  display: none;
+}
+.List .list.is-dragging li:not(.is-dragging):hover {
+  background-color: initial;
+}
+.List .list.is-droppable li.mouseover {
+  background-color: #e7e7e7;
+}
+.List >button {
+  bottom: 2rem;
+  right: 2rem;
+}
+.List >button+button {
+  bottom: 8rem;
+}
+.List >button+button+button {
+  bottom: 14rem;
+}
+.List .heading {
+  border-bottom: 1px solid $LightGray;
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  padding: 0.75rem 0.25rem;
+  position: relative;
+}
+.List .heading button {
+  left: 1rem;
+  position: absolute;
+  top: 0.25rem;
+}
+.List .heading.side-by-side {
+  border-bottom: none;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0;
+}
+.List .heading.is-hidden .caret-down {
+  transform: rotate(180deg);
+}
+.List .heading.toggle:hover {
+  cursor: pointer;
+  font-weight: 700;
 }
 .Locations section {
   padding-bottom: 2.5rem;
@@ -844,13 +1282,18 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   font-size: 0.8rem;
   font-family: "RalewayRegular";
 }
-.Locations .map-wrap .legend >li input {
+.Locations .map-wrap .legend >li >label {
+  font-weight: bold;
+  color: inherit;
+  margin: 0 0 0.25rem;
+}
+.Locations .map-wrap .legend >li >label input {
   display: none;
 }
-.Locations .map-wrap .legend >li input + span:first-of-type {
+.Locations .map-wrap .legend >li >label input + span:first-of-type {
   position: relative;
 }
-.Locations .map-wrap .legend >li input + span:first-of-type::before {
+.Locations .map-wrap .legend >li >label input + span:first-of-type::before {
   position: absolute;
   bottom: 0;
   left: -4px;
@@ -864,16 +1307,16 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   width: 14px;
   cursor: pointer;
 }
-.Locations .map-wrap .legend >li input:checked + span:first-of-type::before {
+.Locations .map-wrap .legend >li >label input:checked + span:first-of-type::before {
   color: #000;
   content: "\2713";
   text-align: center;
 }
-.Locations .map-wrap .legend >li span:last-child {
+.Locations .map-wrap .legend >li >label span:last-child {
   position: relative;
   margin-left: 2.1rem;
 }
-.Locations .map-wrap .legend >li span:last-child.farmPickup::before {
+.Locations .map-wrap .legend >li >label span:last-child.farmPickup::before {
   content: "";
   position: absolute;
   width: 1rem;
@@ -882,7 +1325,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   background-size: contain;
   left: -1.15rem;
 }
-.Locations .map-wrap .legend >li span:last-child.farmerMarket::before {
+.Locations .map-wrap .legend >li >label span:last-child.farmerMarket::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -892,7 +1335,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.retailOutlet::before {
+.Locations .map-wrap .legend >li >label span:last-child.retailOutlet::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -902,7 +1345,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.restaurant::before {
+.Locations .map-wrap .legend >li >label span:last-child.restaurant::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -912,7 +1355,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.groupLocation::before {
+.Locations .map-wrap .legend >li >label span:last-child.groupLocation::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -922,7 +1365,7 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   left: -1rem;
   border-radius: 50%;
 }
-.Locations .map-wrap .legend >li span:last-child.deliveryRange::before {
+.Locations .map-wrap .legend >li >label span:last-child.deliveryRange::before {
   content: "";
   position: absolute;
   width: 0.75rem;
@@ -931,24 +1374,6 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   opacity: 0.5;
   top: 0.1rem;
   left: -1.05rem;
-}
-.Locations .button-row {
-  display: flex;
-  justify-content: center;
-  margin: 3rem 0;
-}
-.Locations .button-row >button {
-  color: #000;
-  background-color: #ffc502;
-  box-shadow: 3px 3px 5px #666;
-  font-size: 1.25rem;
-  padding: 0.75rem 1.3rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
-  font-family: "RalewayRegular";
-}
-.Locations .button-row >button:hover {
-  background-color: #ffce28;
 }
 @media only screen and (max-width: 575px) {
   .Locations section ul {
@@ -1136,10 +1561,6 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   align-items: baseline;
 }
 .MemberInfo .form-group label {
-  font-weight: 300;
-  color: #ed1c24;
-  text-align: right;
-  margin-right: 1rem;
   flex: 2;
 }
 .MemberInfo .form-group >div {
@@ -1974,12 +2395,14 @@ body {
   text-align: left;
   color: #666;
 }
-body.admin {
-  padding-top: 5rem;
-}
-div.container-fluid {
+body >div:first-child {
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+body.admin div#content,
+body.admin-plus div#content {
+  height: 100%;
 }
 section {
   padding-top: 2.5rem;
@@ -2032,15 +2455,27 @@ li {
 }
 input:focus,
 select:focus,
+textarea:focus,
 button:focus {
   outline: 0;
+}
+button {
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 .link {
   color: #ed1c24;
   cursor: pointer;
 }
-.link:hover {
+.link:hover,
+.link:focus {
   text-decoration: underline;
+  color: #ed1c24;
+}
+.striped .link:hover,
+.striped .link:focus {
+  color: #fff;
 }
 .fd-hidden {
   display: none !important;

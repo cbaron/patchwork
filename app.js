@@ -1,6 +1,7 @@
 const fs = require('fs'),
-      router = require('./router'),
-      Postgres = require('./dal/postgres')
+    router = require('./router'),
+    Postgres = require('./dal/postgres'),
+    Mongo = require('./dal/Mongo')
 
 require('node-env-file')( __dirname + '/.env' )
 
@@ -22,6 +23,7 @@ Promise.all( [
         .listen( 443 )
 
     console.log( "Secure server spinning" )
+
 } )
 .catch( e => console.log( e.stack || e ) )
 

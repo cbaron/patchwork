@@ -12,9 +12,8 @@ Object.assign( Admin.prototype, Table.prototype, {
     ],
     
     onItemClick( model ) {
-        this.hide().then( () => this.router.navigate( this.util.format( "/admin/%s", model.get('name') ), { trigger: true } ) )
-        .fail( err => new this.Error( err ) )
-        .done()
+        this.hide().then( () => this.emit( 'navigate', `/admin/${model.get('name')}` ) )
+        .catch( err => new this.Error( err ) )
     },
 
     requiresRole: 'admin',

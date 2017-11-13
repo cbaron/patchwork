@@ -1,8 +1,8 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     disable() {
-        Object.keys( this.model.states ).forEach( stateName =>
-           this.model.states[ stateName ].forEach( button => {
+        Object.keys( this.model.data.states ).forEach( stateName =>
+           this.model.data.states[ stateName ].forEach( button => {
                const el = this.els[ button.name ]
                el.removeEventListener( 'click', button.clickListener )
                el.classList.add('disabled')
@@ -11,8 +11,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     enable() {
-        Object.keys( this.model.states ).forEach( stateName =>
-           this.model.states[ stateName ].forEach( button => {
+        Object.keys( this.model.data.states ).forEach( stateName =>
+           this.model.data.states[ stateName ].forEach( button => {
                const el = this.els[ button.name ]
                el.addEventListener( 'click', button.clickListener )
                el.classList.remove('disabled')
@@ -39,8 +39,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.state = 'start'
 
-        Object.keys( this.model.states ).forEach( stateName =>
-           this.model.states[ stateName ].forEach( button => {
+        Object.keys( this.model.data.states ).forEach( stateName =>
+           this.model.data.states[ stateName ].forEach( button => {
                const el = this.els[ button.name ]
                 button.clickListener = this.getListener( button.name, button )
                 if( !this.model.disabled ) { el.addEventListener( 'click', button.clickListener ) }

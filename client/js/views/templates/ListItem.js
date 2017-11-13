@@ -1,1 +1,0 @@
-module.exports = p => `<li>${p.content}</li>`

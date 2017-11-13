@@ -1,9 +1,10 @@
 module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
     CurrentShare: require('../models/CurrentShare'),
+    Shares: Object.create( require('../models/__proto__'), { resource: { value: 'Share' } } ),
+    ShareOptions: Object.create( require('../models/__proto__'), { resource: { value: 'shareoption' } } ),
 
     events: {
-        link: 'click',
         signupBtn: 'click'
     },
 
@@ -11,8 +12,45 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
         'how-do-i-know': 'howDoIKnow',
     },
 
-    onLinkClick( e ) {
-        this.emit( 'navigate', e.target.getAttribute('data-name') )
+    insertAddOnDescriptions() {
+        this.ShareOptions.data.filter( opt => opt.name !== 'Share size' ).forEach( shareOpt => {
+            const addOnInfo = this.CurrentShare.data.produceOptions.find( produceOpt => produceOpt.shareoptionid === shareOpt.id && produceOpt.name === 'one' )
+
+            this.slurpTemplate( {
+                template: this.templates.csaItem( Object.assign( addOnInfo, { heading: shareOpt.name } ) ),
+                insertion: { el: this.els.addOnItems }
+            } )
+        } )
+    },
+
+    insertDeliveryMatrix() {
+        this.slurpTemplate( {
+            template: this.templates.deliveryMatrix( {
+                deliveryOptions: this.CurrentShare.data.deliveryOptions,
+                sizeOptions: this.CurrentShare.getSizeOptions()
+            } ),
+            insertion: { el: this.els.deliveryMatrix }
+        } )
+    },
+
+    insertShareDescription( share ) {
+        const deliveryOpts = this.CurrentShare.data.deliveryOptions,
+            sharePrice = parseFloat( this.CurrentShare.data.produceOptions.find( opt => opt.prompt = 'Share size' && share.name === opt.name ).price.replace('$','') ),
+            lowPrice = sharePrice + parseFloat( this.CurrentShare.data.deliveryOptions[0].price.replace('$','') ),
+            highPrice = sharePrice + parseFloat( this.CurrentShare.data.deliveryOptions[ this.CurrentShare.data.deliveryOptions.length - 1 ].price.replace('$','') ),
+            priceRange = `$${lowPrice.toFixed(2)} - $${highPrice.toFixed(2)}`
+
+        this.slurpTemplate( {
+            template: this.templates.csaItem( Object.assign( share.shareDescription, { price: priceRange } ) ),
+            insertion: { el: this.els.shareDescriptions }
+        } )
+    },
+
+    insertShareExample( share ) {
+        this.slurpTemplate( {
+            template: this.templates.shareExample( share.shareExample ),
+            insertion: { el: this.els.shareExamples }
+        } )
     },
 
     onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
@@ -24,30 +62,26 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
             this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
         }
 
-        this.CurrentShare.get()
-        .then( () =>
-            this.slurpTemplate( {
-                template: this.templates.deliveryMatrix( {
-                    deliveryOptions: this.CurrentShare.data.deliveryOptions,
-                    sizeOptions: this.CurrentShare.getSizeOptions()
-                } ),
-                insertion: { el: this.els.deliveryMatrix }
+        Promise.all( [ this.CurrentShare.get(), this.Shares.get(), this.ShareOptions.get() ] )
+        .then( () => {
+            this.insertDeliveryMatrix()
+
+            this.Shares.data.forEach( share => {
+                this.insertShareExample( share )
+                this.insertShareDescription( share )
             } )
-        )
+
+            this.insertAddOnDescriptions()
+        } )
         .catch( this.Error )
 
         return this
     },
 
-    tables: [
-        //{ name: 'csastatements', el: 'csaStatements', template: 'listItem'},
-        { name: 'largeshareexample', el: 'shareExampleLg', template: 'listItem' },
-        { name: 'smallShareExample', el: 'shareExampleSm', template: 'listItem' },
-    ],
-
     templates: {
+        csaItem: require('./templates/CsaItem'),
         deliveryMatrix: require('./templates/deliveryMatrix'),
-        listItem: require('./templates/ListItem')
+        shareExample: require('./templates/ShareExample')
     }
 
 } )

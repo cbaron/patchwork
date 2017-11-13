@@ -1,4 +1,4 @@
 module.exports = () =>
-`<div class="row">
+`<div>
     <p>A <a href='mailto:topherbaron@gmail.com'>FutureDays</a> Site</p>
 </div>`

@@ -1,15 +1,9 @@
-module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
+const CustomContent = require('./util/CustomContent')
 
-    events: {
-        link: 'click'
-    },
-
-    onLinkClick( e ) {
-        this.emit( 'navigate', e.target.getAttribute('data-name') )
-    },
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     tables: [ 
-        { name: 'staffprofile', el: 'staffBios', image: true, template: 'staffProfile' }
+        { name: 'Staff', el: 'staff', template: 'staffProfile' }
     ],
 
     templates: {

@@ -23,13 +23,14 @@
                 text-transform: uppercase
                 cursor: pointer
                 
-                &:active
-                    color: $sun-yellow
-                
-                html.non-touch &
-                    &:hover
+                >span
+                    &:active
                         color: $sun-yellow
-                        transition: color .3s ease-in-out
+                    
+                    html.non-touch &
+                        &:hover
+                            color: $sun-yellow
+                            transition: color .3s ease-in-out
             
         ul
             display: flex

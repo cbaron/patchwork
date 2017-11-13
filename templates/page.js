@@ -28,8 +28,8 @@ module.exports = p =>
     </head>
 
     <body class="${p.bodyClass}">
-        <div class="container-fluid">
-           <div class="row" id="content"></div>
+        <div>
+           <div id="content"></div>
         </div>
     </body>
 

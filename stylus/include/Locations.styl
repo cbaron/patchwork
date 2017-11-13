@@ -68,85 +68,72 @@
                 margin-bottom: .25rem
                 font-size: .8rem
                 font-family: "RalewayRegular"
-
-                input
-                    display: none
-
-                input + span:first-of-type
-                    position: relative
-                    
-                    &::before
-                        position: absolute
-                        bottom: 0
-                        left: -4px
-                        right: 1rem
-                        border: 1px solid black
-                        content: "\00a0"
-                        color: white
-                        background-color: $light-grey
-                        font: 14px/.9em sans-serif
-                        height: 14px
-                        width: 14px
-                        cursor: pointer
                 
-                input:checked + span:first-of-type::before            
-                    color: black
-                    content: "\2713"
-                    text-align: center
-                    
-                span:last-child
-                    position: relative
-                    margin-left: 2.1rem
-                    
-                    &.farmPickup
+                >label
+                    font-weight: bold
+                    color: inherit
+                    margin: 0 0 .25rem
+
+                    input
+                        display: none
+
+                    input + span:first-of-type
+                        position: relative
+                        
                         &::before
-                            content: ""
                             position: absolute
-                            width: 1rem
-                            height: 1rem
-                            background-image: url('/static/img/favicon.png')
-                            background-size: contain
-                            left: -1.15rem
-                    &.farmerMarket
-                        &::before
-                            listCircle($sun-red, 10px, .15rem)
-                    &.retailOutlet
-                        &::before
-                            listCircle($yellow, 10px, .15rem)
-                    &.restaurant
-                        &::before
-                            listCircle($dark-blue, 10px, .15rem)
-                    &.groupLocation
-                        &::before
-                            listCircle($orange, 10px, .15rem)
-                    &.deliveryRange
-                        &::before
-                            content: ""
-                            position: absolute
-                            width: .75rem
-                            height: .75rem
-                            background-color: $sun-red
-                            opacity: .5
-                            top: .1rem
-                            left: -1.05rem
-                       
-    .button-row
-        display: flex
-        justify-content: center
-        margin: 3rem 0
-        
-        >button
-            color: black
-            background-color: $sun-yellow
-            box-shadow: 3px 3px 5px $dark-grey
-            font-size: 1.25rem
-            padding: .75rem 1.3rem
-            border-radius: .5rem
-            border: 1px solid transparent
-            font-family: "RalewayRegular"
-            
-            &:hover
-                background-color: lighten($sun-yellow, 15%)
+                            bottom: 0
+                            left: -4px
+                            right: 1rem
+                            border: 1px solid black
+                            content: "\00a0"
+                            color: white
+                            background-color: #e7e7e7
+                            font: 14px/.9em sans-serif
+                            height: 14px
+                            width: 14px
+                            cursor: pointer
+                    
+                    input:checked + span:first-of-type::before            
+                        color: black
+                        content: "\2713"
+                        text-align: center
+                        
+                    span:last-child
+                        position: relative
+                        margin-left: 2.1rem
+                        
+                        &.farmPickup
+                            &::before
+                                content: ""
+                                position: absolute
+                                width: 1rem
+                                height: 1rem
+                                background-image: url('/static/img/favicon.png')
+                                background-size: contain
+                                left: -1.15rem
+                        &.farmerMarket
+                            &::before
+                                listCircle($sun-red, 10px, .15rem)
+                        &.retailOutlet
+                            &::before
+                                listCircle($yellow, 10px, .15rem)
+                        &.restaurant
+                            &::before
+                                listCircle($dark-blue, 10px, .15rem)
+                        &.groupLocation
+                            &::before
+                                listCircle($orange, 10px, .15rem)
+                        &.deliveryRange
+                            &::before
+                                content: ""
+                                position: absolute
+                                width: .75rem
+                                height: .75rem
+                                background-color: $sun-red
+                                opacity: .5
+                                top: .1rem
+                                left: -1.05rem
 
             
     @media only screen and (max-width: 575px)
