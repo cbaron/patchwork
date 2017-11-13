@@ -108,13 +108,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         return this
     },
 
-    hide( isSlow ) {
-        if( !this.els || this.isHiding ) return Promise.resolve()
-
-        this.isHiding = true;
-        return this.hideEl( this.els.container, isSlow )
-        .then( () => Promise.resolve( this.hiding = false ) )
-    },
+    hide( isSlow ) { return this.hideEl( this.els.container, isSlow ) },
 
     hideSync() { this.els.container.classList.add('fd-hidden'); return this },
 

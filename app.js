@@ -24,9 +24,6 @@ Promise.all( [
 
     console.log( "Secure server spinning" )
 
-    require('./socketApp')
-    console.log( `WebSocket server listening at ${process.env.WEBSOCKET_PORT}` )
-
 } )
 .catch( e => console.log( e.stack || e ) )
 

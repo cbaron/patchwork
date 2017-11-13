@@ -29,5 +29,9 @@ db.Staff.insert( [
         name: "Sidekick",
         bio: "Sidekick says \"Eat your greens! They're good for you. Also, do you have a peanut butter biscuit. That sounds really good right about now.\"",
         image: "sidekick"
+    }, {
+        name: "Scape Spirit",
+        bio: "We know not where the Scape Spirit came from... only that he bundles scapes and has a robotic voice.",
+        image: "scape_spirit"
     }
 ] )

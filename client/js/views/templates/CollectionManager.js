@@ -8,10 +8,6 @@ module.exports = ( p ) => `<section>
         </section>
         <section>
             <div data-view="list" data-name="collections"></div>
-            <button class="fd-hidden" data-js="createCollectionBtn" class="side-by-side link">
-                <span>+</span>
-                <span>Create Collection</span>
-            </button>
         </section>
     </div>
     <div data-js="mainPanel" class="main-panel"></div>

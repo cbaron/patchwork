@@ -5,10 +5,6 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     events: Object.assign( Submitter.events, { previewBtn: 'click' } ),
 
     onPreviewBtnClick( e ) {
-        console.log( 'onPreviewClick' )
-        console.log( e.target )
-        console.log( e.target.nextElementSibling )
-        console.log( e.target.parentElement.previousElementSibling )
         e.target.nextElementSibling.src = this.Format.ImageSrc( e.target.parentElement.previousElementSibling.value )
     },
 
@@ -80,8 +76,6 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
                 this.renderSubviews()
                 this.views[ attribute.name ].on( 'addClicked', () => this.views[ attribute.name ].add( { value: '' } ) )
                 this.views[ attribute.name ].on( 'deleteClicked', datum => this.views[ attribute.name ].remove( datum ) )
-            } else if( attribute.range === "ImageUrl" ) {
-                console.log( 'ImageUrl' )
             }
         } )
     },
@@ -119,4 +113,5 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
         return this 
     }
+
 } )

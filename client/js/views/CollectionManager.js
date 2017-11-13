@@ -4,8 +4,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     Collection: require('../models/Collection'),
     DocumentModel: require('../models/Document'),
-    JsonPropertyModel: require('../models/JsonProperty'),
-    //WebSocket: require('../WebSocket'),
 
     Templates: {
         Document: require('./templates/Document')
@@ -186,6 +184,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     createModel( type, data={} ) {
         const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ]
 
+        if( !collection ) return
+
         if( type === 'documentList' ) return collection.clientData
 
         const schema = this.model.git('currentCollection') === 'Pages'
@@ -198,7 +198,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         )
     },
 
-    createView( type, name, model ) {
+    createView( type, name, model={} ) {
         this.views[ name ] = this.factory.create( type, Reflect.apply( this.Views[ name ], this, [ model ] ) )
 
         if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
@@ -260,10 +260,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                         : ``
             
             this.emit( 'navigate', `/admin-plus/collection-manager${path}`, { silent: true } );
-            console.log( 'currentViewChanged' )
-            console.log( currentView )
-            console.log( this.views.documentList.collection.data )
-            console.log( currentView === 'documentList' && this.views.documentList.collection.data.length === 0 );
+
             ( currentView === 'documentList' && this.views.documentList.collection.data.length === 0 ? this.views.documentList.fetch() : Promise.resolve() )
             .then( () => this.views[ currentView ].show() )
             .catch( this.Error )
@@ -281,10 +278,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     showProperView() {
-        console.log( 'showProperView' )
-        console.log( this.path )
-        console.log( this.views.documentList )
-        console.log( this.model.git('currentCollection') )
         return (this.views.documentList ? Promise.resolve() : this.createDocumentList( this.model.git('currentCollection'), this.path.length === 2 ? false : true ) )
         .then( () =>
             this.path.length === 2

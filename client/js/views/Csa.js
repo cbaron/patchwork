@@ -5,7 +5,6 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
     ShareOptions: Object.create( require('../models/__proto__'), { resource: { value: 'shareoption' } } ),
 
     events: {
-        link: 'click',
         signupBtn: 'click'
     },
 
@@ -52,11 +51,6 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
             template: this.templates.shareExample( share.shareExample ),
             insertion: { el: this.els.shareExamples }
         } )
-    },
-
-    onLinkClick( e ) {
-        console.log( 'onLinkClick' )
-        this.emit( 'navigate', e.target.getAttribute('data-name') )
     },
 
     onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },

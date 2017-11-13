@@ -6,12 +6,12 @@ return `` +
     <div>
         <img data-src="${ImageSrc('header_sun')}" />
     </div>
-    <div>
+    <div data-js="nav" class="fd-hidden">
         <div>
             ${require('./lib/justify')}
-            <div data-js="title" data-name="${opts.home.name}">${opts.home.label}</div>
+            <div><span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span></div>
         </div>
-        <ul data-js="nav">${fields}</ul>
+        <ul data-js="navLinks">${fields}</ul>
     </div>
     <div>
 </div>`

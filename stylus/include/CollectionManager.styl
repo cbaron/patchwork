@@ -116,7 +116,6 @@
                         margin: 1rem 0rem
                         
                         label
-                            width: 12%
                             text-align: center
                         
                         >.List
@@ -138,11 +137,11 @@
                         &:not(.vertical) >label
                             font-weight: bold
                             color: inherit
-                            
-                        >select, >input, >textarea, >.List
+
+                        >*:first-child
                             flex: 1
-                        //>*:nth-child(2)
-                            //flex: 6
+                        >*:nth-child(2)
+                            flex: 6
                             
                         &.vertical
                             flex-direction: column
@@ -154,29 +153,17 @@
                                 width: 100%
                                 
                         &.has-image
-                            //flex-wrap: wrap
+                            flex-wrap: wrap
                             
                             >div
-                                //width: 100%
-                                //margin: 1rem 0
-                                //flex: 3
+                                width: 100%
+                                margin: 1rem 0
                                 text-align: center
-                                button
-                                    margin: 0 1rem
 
                                 img
                                     max-height: 6rem
-                                    //margin-left: 1rem
+                                    margin-left: 1rem
 
                                 
             .btn-row
                 margin: 2rem 0
-
-/*        .Form, .Deleter
-            padding: 1rem 0rem
-
-            form
-                padding: 2rem 3rem
-
-                form
-                    padding: 1rem 2rem*/

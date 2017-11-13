@@ -41,15 +41,8 @@ module.exports = Object.assign( { }, Super, {
         this.itemViews[ keyValue ].els.container.scrollIntoView( { behavior: 'smooth' } )
     },
 
-    getChildRectangles( el ) {
-        return Array.from( el.children ).map( item =>
-            ( { el: item, rectangle: item.getBoundingClientRect() } )
-        )
-    },
-
     checkDrag( e ) {
         if( !this.dragging ) return
-        console.log( 'checkDrag' )
 
         e.preventDefault()
 
@@ -59,7 +52,7 @@ module.exports = Object.assign( { }, Super, {
 
         if( this.model.git('draggable') !== 'listItem' ) return
 
-        const listItemRectangles = this.getChildRectangles( this.els.list ),
+        const listItemRectangles = Array.from( this.els.list.children ).map( item => ( { el: item, rectangle: item.getBoundingClientRect() } ) ),
             matchingItem = listItemRectangles.find( item =>
                 item.rectangle.right >= e.clientX && item.rectangle.left <= e.clientX && item.rectangle.bottom >= e.clientY && item.rectangle.top <= e.clientY
         )
@@ -103,7 +96,6 @@ module.exports = Object.assign( { }, Super, {
     },
 
     checkDragStart( e ) {
-        console.log( 'checkDragStart' )
         const closestList = e.target.closest('.List')
         if( closestList === null || ( !closestList.isSameNode( this.els.container ) ) ) return
 
@@ -115,7 +107,7 @@ module.exports = Object.assign( { }, Super, {
         this.dragging = { el: el.parentNode, model }
         this.dragging.el.classList.add('is-dragging')
         this.els.list.classList.add('is-dragging')
-        if( model.label ) this.Dragger.els.container.textContent = `Move ${model.label}.`
+        if( model && model.label ) this.Dragger.els.container.textContent = `Move ${model.label}.`
         this.emit( 'dragStart', this.model.git('draggable') )
 
     },

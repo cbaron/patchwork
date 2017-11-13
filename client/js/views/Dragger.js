@@ -22,7 +22,7 @@ module.exports = Object.create( Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.listeners = 0
 
-        this.onMouseDown = e => { console.log( 'onMouseDown' ); this.emit('mousedown', e) }
+        this.onMouseDown = e => this.emit('mousedown', e)
         this.onMouseUp = e => this.emit('mouseup', e)
         this.onMouseMove = e => this.emit('mousemove', e)
 

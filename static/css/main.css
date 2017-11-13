@@ -325,7 +325,6 @@ button.submitting {
   margin: 1rem 0rem;
 }
 .CollectionManager .main-panel .form-box form .form-group label {
-  width: 12%;
   text-align: center;
 }
 .CollectionManager .main-panel .form-box form .form-group >.List {
@@ -347,11 +346,11 @@ button.submitting {
   font-weight: bold;
   color: inherit;
 }
-.CollectionManager .main-panel .form-box form .form-group >select,
-.CollectionManager .main-panel .form-box form .form-group >input,
-.CollectionManager .main-panel .form-box form .form-group >textarea,
-.CollectionManager .main-panel .form-box form .form-group >.List {
+.CollectionManager .main-panel .form-box form .form-group >*:first-child {
   flex: 1;
+}
+.CollectionManager .main-panel .form-box form .form-group >*:nth-child(2) {
+  flex: 6;
 }
 .CollectionManager .main-panel .form-box form .form-group.vertical {
   flex-direction: column;
@@ -362,14 +361,17 @@ button.submitting {
   margin-right: 0;
   width: 100%;
 }
-.CollectionManager .main-panel .form-box form .form-group.has-image >div {
-  text-align: center;
+.CollectionManager .main-panel .form-box form .form-group.has-image {
+  flex-wrap: wrap;
 }
-.CollectionManager .main-panel .form-box form .form-group.has-image >div button {
-  margin: 0 1rem;
+.CollectionManager .main-panel .form-box form .form-group.has-image >div {
+  width: 100%;
+  margin: 1rem 0;
+  text-align: center;
 }
 .CollectionManager .main-panel .form-box form .form-group.has-image >div img {
   max-height: 6rem;
+  margin-left: 1rem;
 }
 .CollectionManager .main-panel .btn-row {
   margin: 2rem 0;
@@ -644,6 +646,10 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
 .Deleter {
   width: 100%;
   text-align: center;
+  margin-top: 2rem;
+}
+.Deleter .button-row {
+  margin: 1rem 0;
 }
 .Delivery .delivery-options {
   padding: 3rem 0;
@@ -895,10 +901,10 @@ label {
   text-transform: uppercase;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >div:first-child >div:active {
+.Header >div:nth-child(2) >div:first-child >div >span:active {
   color: #ffc502;
 }
-html.non-touch .Header >div:nth-child(2) >div:first-child >div:hover {
+html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
   color: #ffc502;
   transition: color 0.3s ease-in-out;
 }
@@ -1115,7 +1121,6 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 }
 .List .list li .drag {
   bottom: 0px;
-  color: $LightGray;
   font-size: 0.5rem;
   position: absolute;
   flex: none;

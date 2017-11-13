@@ -7,9 +7,6 @@ module.exports = {
     } ),
 
     GetFormField( datum, value ) {
-        console.log( 'GetFormField' )
-        console.log( datum )
-        console.log( value )
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]

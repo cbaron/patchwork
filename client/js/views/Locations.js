@@ -3,7 +3,8 @@ const CustomContent = require('./util/CustomContent')
 module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     events: {
-        legend: 'click'
+        legend: 'click',
+        signupBtn: 'click'
     },
 
     model: require('../models/Locations'),
@@ -143,6 +144,8 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
         this.toggleMarkerCategory( category, checked )
 
     },
+
+    onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
     postRender() {
         if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }

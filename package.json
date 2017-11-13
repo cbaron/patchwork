@@ -6,7 +6,6 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "email": "^0.2.6",
-    "googleapis": "^22.2.0",
     "jws": "3.1.1",
     "libpq": "^1.8.5",
     "moment": "^2.10.6",
@@ -18,8 +17,7 @@
     "pg-query-stream": "^1.0.0",
     "pg-transaction": "^1.0.4",
     "q": "^1.4.1",
-    "stripe": "^4.4.0",
-    "ws": "^3.2.0"
+    "stripe": "^4.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
