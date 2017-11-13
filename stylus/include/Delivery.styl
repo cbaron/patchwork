@@ -31,17 +31,18 @@
                 display: inline-block
                 padding: .5rem .75rem
                 margin: .25rem
-                text-align: center
-                transition: background-color, color .2s ease-in-out
+                text-align: center 
+                transition: all .15s ease-in-out               
                 
                 html.non-touch &
                     &:hover:not(.selected)
-                        border-width: 3px
-                        
-                
+                        background-color: $light-sun-red
+                        color: white
+                                        
                 &.selected
                     color: white
                     background-color: $sun-red
+
 
         .feedback-messages
             text-align: center

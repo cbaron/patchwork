@@ -11,7 +11,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
     },
 
     tables: [ 
-        { name: 'staffprofile', el: 'staffBios', image: true, template: 'staffProfile' }
+        { name: 'Staff', el: 'staff', template: 'staffProfile' }
     ],
 
     templates: {

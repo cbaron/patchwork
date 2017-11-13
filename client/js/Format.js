@@ -7,6 +7,9 @@ module.exports = {
     } ),
 
     GetFormField( datum, value ) {
+        console.log( 'GetFormField' )
+        console.log( datum )
+        console.log( value )
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -27,6 +30,10 @@ module.exports = {
                 ? `<label>${datum.fk || datum.label}</label>`
                 : ``
 
+        const image = datum.range === 'ImageUrl'
+            ? `<div><button class="btn-yellow" data-js="previewBtn" type="button">Preview</button><img data-src="${this.ImageSrc( value )}" /></div>`
+            : ``
+
         const input = datum.fk
             ? `<div data-view="typeAhead" data-name="${datum.fk}"></div>`
             : datum.range === 'Text'
@@ -36,9 +43,10 @@ module.exports = {
                     : `<input type="${this.RangeToInputType[ datum.range ]}" data-js="${datum.name}" placeholder="${datum.label || ''}" value="${value}" />`
 
         return `` +
-        `<div class="form-group">
+        `<div class="form-group ${image ? `has-image` : ``}">
             ${label}
-            ${input} 
+            ${input}
+            ${image}
             ${icon}
         </div>`
     },
@@ -95,7 +103,7 @@ module.exports = {
         replacement = /email/i.test( target )
             ? `<a href="mailto:${value}" class="link">${key}</a>`
             : /http/.test( value )
-                ? `<a href="${value}" class="link">${key}</a>`
+                ? `<a target="_blank" href="${value}" class="link">${key}</a>`
                 : `<span data-js="link" data-name="${value}" class="link">${key}</span>`
 
         return this.ParseTextLinks( text.replace( target, replacement ) )
@@ -107,6 +115,7 @@ module.exports = {
 
     RangeToInputType: {
         Email: 'email',
+        ImageUrl: 'text',
         Password: 'password',
         String: 'text'
     }

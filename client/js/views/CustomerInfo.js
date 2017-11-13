@@ -142,7 +142,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     postRender() {
 
-        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: this.els.neverReceive, method: 'after' } } } )
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { el: this.els.neverReceive, method: 'after' } } )
 
         this.els.neverReceive.remove()
 

@@ -83,23 +83,11 @@
                 
             &.dragover-top
                 &::before
-                    content: "Drop here to move item."
-                    border: 2px dashed $sun-red
-                    border-radius: .25rem
-                    font-size: .75rem
-                    width: 100%
-                    padding: .25rem
-                    margin: .5rem 3rem
+                    dropzone()
                     
             &.dragover-bottom
                 &::after
-                    content: "Drop here to move item."
-                    border: 2px dashed $sun-red
-                    border-radius: .25rem
-                    font-size: .75rem
-                    width: 100%
-                    padding: .25rem
-                    margin: .5rem 3rem
+                    dropzone()
                 
         &.is-dragging
             li
@@ -156,5 +144,5 @@
 
         &.toggle
             &:hover
-                background-color: $light-grey
                 cursor: pointer
+                font-weight: 700

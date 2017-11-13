@@ -24,9 +24,16 @@ Object.assign( Collection.prototype, Base.prototype, {
         return Promise.resolve(
             this.respond( {
                 body: this.Mongo.collectionNames.map( name =>
-                    name === 'Views'
-                        ? ( { name, documents: this.Mongo.viewModelNames.map( name => ( { name, schema: this.Mongo.model[name] } ) ) } )
-                        : ( { name, schema: this.Mongo.model[name] } ) 
+                    name === 'Pages'
+                        ? ( { name,
+                              clientData: this.Mongo.model[ name ].clientData,
+                              documents: this.Mongo.viewModelNames.map( name => ( {
+                                  name, 
+                                  schema: this.Mongo.model[name].schema,
+                                  clientData: this.Mongo.model[ name ].clientData
+                              } ) )
+                          } )
+                        : ( { name, schema: this.Mongo.model[name].schema, clientData: this.Mongo.model[ name ].clientData } ) 
                 )
             } )
         )

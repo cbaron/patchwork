@@ -4,9 +4,48 @@ module.exports = {
 
     schema: {
         attributes: Super.createAttributes( [
+
             {
-                name: 'employment',
-                label: 'Employment',
+                name: 'aboutCSA',
+                label: 'About CSA',
+                range: [
+                    {
+                        name: 'heading',
+                        label: 'Heading',
+                        range: 'String'
+                    }, {
+                        name: 'description',
+                        label: 'Description',
+                        range: 'List',
+                        itemRange: 'Text'
+                    }
+                ]
+            }, {
+                name: 'dividerImageOne',
+                label: 'Divider Image One',
+                range: 'ImageUrl'
+            }, {
+                name: 'csaFit',
+                label: 'CSA Fit',
+                range: [
+                    {
+                        name: 'heading',
+                        label: 'Heading',
+                        range: 'String'
+                    }, {
+                        name: 'description',
+                        label: 'Description',
+                        range: 'String'
+                    }, {
+                        name: 'csaFitStatements',
+                        label: 'CSA Fit Statements',
+                        range: 'List',
+                        itemRange: 'String'
+                    }
+                ]
+            }, {
+                name: 'csaContents',
+                label: 'CSA Contents',
                 range: [
                     {
                         name: 'heading',
@@ -17,15 +56,46 @@ module.exports = {
                         label: 'Description',
                         range: 'Text'
                     }, {
-                        name: 'openPositions',
-                        label: 'Open Positions',
-                        range: 'List',
-                        itemRange: 'String'
+                        name: 'sharePriority',
+                        label: 'Share Priority',
+                        range: 'Text'
                     }
                 ]
             }, {
-                name: 'internships',
-                label: 'Internships',
+                name: 'dividerImageTwo',
+                label: 'Divider Image Two',
+                range: 'ImageUrl'
+            }, {
+                name: 'csaCustomization',
+                label: 'CSA Customization',
+                range: [
+                    {
+                        name: 'heading',
+                        label: 'Heading',
+                        range: 'String'
+                    }, {
+                        name: 'description',
+                        label: 'Description',
+                        range: 'Text'
+                    }
+                ]
+            }, {
+                name: 'addOns',
+                label: 'Add-Ons',
+                range: [
+                    {
+                        name: 'heading',
+                        label: 'Heading',
+                        range: 'String'
+                    }, {
+                        name: 'description',
+                        label: 'Description',
+                        range: 'Text'
+                    }
+                ]
+            }, {
+                name: 'payment',
+                label: 'Payment',
                 range: [
                     {
                         name: 'heading',
@@ -36,71 +106,17 @@ module.exports = {
                         label: 'Description',
                         range: 'Text'
                     }, {
-                        name: 'application',
-                        label: 'Application',
+                        name: 'payableTo',
+                        label: 'Payable To',
                         range: 'Text'
-                    }
-                ]
-            }, {
-                name: 'internDuties',
-                label: 'Intern Duties',
-                range: [
-                    {
-                        name: 'heading',
-                        label: 'Heading',
-                        range: 'String'
                     }, {
-                        name: 'dutyList',
-                        label: 'List',
-                        range: 'List',
-                        itemRange: 'String'
-                    }
-                ]
-            }, {
-                name: 'internQualifications',
-                label: 'Intern Qualifications',
-                range: [
-                    {
-                        name: 'heading',
-                        label: 'Heading',
-                        range: 'String'
-                    }, {
-                        name: 'qualificationList',
-                        label: 'List',
-                        range: 'List',
-                        itemRange: 'String'
-                    }
-                ]
-            }, {
-                name: 'internCompensation',
-                label: 'Intern Compensation',
-                range: [
-                    {
-                        name: 'heading',
-                        label: 'Heading',
-                        range: 'String'
-                    }, {
-                        name: 'compensationList',
-                        label: 'List',
-                        range: 'List',
-                        itemRange: 'String'
-                    }
-                ]
-            }, {
-                name: 'volunteer',
-                label: 'Volunteer',
-                range: [
-                    {
-                        name: 'heading',
-                        label: 'Heading',
-                        range: 'String'
-                    }, {
-                        name: 'description',
-                        label: 'Description',
+                        name: 'emailUs',
+                        label: 'Email Us',
                         range: 'Text'
                     }
                 ]
             }
+
         ] )
     }
 

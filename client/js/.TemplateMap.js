@@ -24,7 +24,6 @@ module.exports={
 	Home: require('./views/templates/Home'),
 	InfoWindow: require('./views/templates/InfoWindow'),
 	List: require('./views/templates/List'),
-	ListItem: require('./views/templates/ListItem'),
 	Location: require('./views/templates/Location'),
 	Locations: require('./views/templates/Locations'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),

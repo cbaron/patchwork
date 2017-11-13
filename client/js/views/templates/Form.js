@@ -5,10 +5,10 @@ module.exports = p => {
        buttonRow = p.opts.hideButtonRow
         ? ``
         : `<div class="btn-row">
-            <button data-js="submitBtn" type="button">
+            <button class="btn-submit" data-js="submitBtn" type="button">
                 <span>${p.opts.submitText || 'Submit'}</span>
             </button>
-            <button data-js="cancelBtn" type="button">
+            <button class="btn-cancel" data-js="cancelBtn" type="button">
                 <span>${p.opts.cancelText || 'Cancel'}</span>
             </button>
         </div>`

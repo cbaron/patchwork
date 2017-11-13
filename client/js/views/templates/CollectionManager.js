@@ -8,7 +8,7 @@ module.exports = ( p ) => `<section>
         </section>
         <section>
             <div data-view="list" data-name="collections"></div>
-            <button data-js="createCollectionBtn" class="side-by-side link">
+            <button class="fd-hidden" data-js="createCollectionBtn" class="side-by-side link">
                 <span>+</span>
                 <span>Create Collection</span>
             </button>

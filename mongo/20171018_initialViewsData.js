@@ -1,6 +1,6 @@
-db.createCollection("Views")
+db.createCollection("Pages")
 
-db.Views.insert( {
+db.Pages.insert( {
     name: "about",
     label: "About",
     sectionOne: {

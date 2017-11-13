@@ -68,8 +68,6 @@ module.exports = Object.create( {
         this.userPromise.then( () => {
             if( this.user.id && /admin/.test( path[0] ) ) this.adminHeader.onUser( this.user )
 
-            //this.Views.Header.disableTypeAhead()
-
             if( view === this.currentView ) return this.views[ view ].onNavigation( path.slice(1) )
 
             Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
@@ -98,15 +96,12 @@ module.exports = Object.create( {
     },
 
     navigate( location, options={} ) {
-        //if( this.Views.Header.displayingTypeAhead ) this.Views.Header.removeTypeAhead()
-
         if( options.replace || options.up ) {
             let path = `${window.location.pathname}`.split('/')
             path.pop()
             if( options.replace ) path.push( location )
             location = path.join('/')
-        }
-        else if( options.append ) { location = `${window.location.pathname}/${location}` }
+        } else if( options.append ) { location = `${window.location.pathname}/${location}` }
 
         if( location !== window.location.pathname ) history.pushState( {}, '', location )
         if( !options.silent ) this.handle()

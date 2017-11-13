@@ -8,34 +8,42 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     Views: {
-        editButtons: { model: { value: {
-            hide: true,
-            states: {
-                start: [
-                    { name: 'edit', svg: require('./templates/lib/edit')(), emit: true, nextState: 'onEdit' },
-                    { name: 'garbage', svg: require('./templates/lib/garbage')(), nextState: 'onDelete', emit: true }
-                ],
-                onDelete: [
-                    { name: 'confirmDelete', class: 'link', 'text': 'Delete?', nextState: 'start', emit: 'true' },
-                    { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
-                ],
-                onEdit: [
-                    { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true', nextState: 'start' },
-                    { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
-                ]
+        editButtons() {
+            return {
+                model: Object.create( this.Model ).constructor( {
+                    hide: true,
+                    states: {
+                        start: [
+                            { name: 'edit', svg: require('./templates/lib/edit')(), emit: true, nextState: 'onEdit' },
+                            { name: 'garbage', svg: require('./templates/lib/garbage')(), nextState: 'onDelete', emit: true }
+                        ],
+                        onDelete: [
+                            { name: 'confirmDelete', class: 'link', 'text': 'Delete?', nextState: 'start', emit: 'true' },
+                            { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
+                        ],
+                        onEdit: [
+                            { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true', nextState: 'start' },
+                            { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
+                        ]
+                    }
+                } )
             }
-        } } },
-        emailButtons: { model: { value: {
-            hide: true,
-            states: {
-                start: [ { name: 'sendEmail', class: 'save-btn', text: 'Send Email Reminder', nextState: 'confirm' } ],
-                confirm: [
-                    { name: 'confirmEmail', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', class: 'reset-btn', text: 'Cancel' }
-                ]
+        },
+        emailButtons() {
+            return {
+                model: Object.create( this.Model ).constructor( {
+                    hide: true,
+                    states: {
+                        start: [ { name: 'sendEmail', class: 'save-btn', text: 'Send Email Reminder', nextState: 'confirm' } ],
+                        confirm: [
+                            { name: 'confirmEmail', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                            { name: 'cancel', nextState: 'start', class: 'reset-btn', text: 'Cancel' }
+                        ]
+                    }
+                } )
             }
-         } } },
-        addTransaction: function() { return { model: { value: this.model } } },
+        },
+        addTransaction: function() { return { model: this.model } },
     },
 
     addTransaction() {

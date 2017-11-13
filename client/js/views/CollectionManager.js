@@ -20,8 +20,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                 },
                 model: Object.create( this.Model ).constructor( {
                     collection: Object.create( this.Collection ),
-                    delete: true,
-                    droppable: 'document',
+                    delete: false,
                     fetch: true
                 } ),
                 itemTemplate: collection => `<span>${collection.name}</span>`,
@@ -29,7 +28,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             }
         },
 
-        createCollection() {
+        /*createCollection() {
             return {
                 insertion: { el: this.els.mainPanel },
                 model: Object.create( this.Collection ).constructor(),
@@ -41,30 +40,28 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             return {
                 insertion: { el: this.els.mainPanel },
                 model: Object.create( this.Collection ).constructor( model ),
-                templateOpts: { message: `Delete '${model.name}' Collection?` }
+                templateOpts: { message: `Delete "${model.name}" Collection?` }
             }
-        },
+        },*/
 
         deleteDocument( document ) {
             return {
                 insertion: { el: this.els.mainPanel },
                 model: Object.create( this.DocumentModel ).constructor( document, { resource: this.model.git('currentCollection') } ),
-                templateOpts: { message: `Delete '${document.label}' ${this.model.git('currentCollection')}?` }
+                templateOpts: { message: `Delete "${document.label || document.name}" from ${this.model.git('currentCollection')}?` }
             }
         },
 
-        documentList() {
+        documentList( model ) {
             return {
-                model: Object.create( this.Model ).constructor( {
-                    //add: true,
+                model: Object.create( this.Model ).constructor( Object.assign( model, {
                     collection: Object.create( this.DocumentModel ).constructor( [ ], { resource: this.model.git('currentCollection') } ),
-                    //delete: true,
-                    //draggable: 'document',
+                    isDocumentList: true,
                     pageSize: 100,
                     skip: 0,
                     sort: { 'label': 1 },
                     scrollPagination: true
-                } ),
+                } ) ),
                 events: { list: 'click' },
                 insertion: { el: this.els.mainPanel },
                 itemTemplate: this.Templates.Document
@@ -77,12 +74,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                 insertion: { el: this.els.mainPanel },
                 model,
                 templateOpts: { heading: model.git('label') || model.git('name') },
-                Views: {
-                    /*typeAhead: {
-                        Type: 'Document',
-                        templateOpts: { hideSearch: true }
-                    }*/
-                }
+                Views: { }
             }
         }
 
@@ -102,7 +94,11 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                       .catch( this.Error )
                   }
                 ],
-                [ 'fetched', function() { this.views.collections.hideItems( [ this.model.git('currentCollection') ] ) } ],
+                [ 'fetched', function() {
+                    this.showProperView( true )
+                    .then( () => this.views.collections.hideItems( [ this.model.git('currentCollection') ] ) )
+                    .catch( this.Error )
+                } ],
                 [ 'itemClicked', function( model ) {
                     this.clearCurrentView()
                     .then( () => Promise.resolve( this.model.set( 'currentCollection', model.name ) ) )
@@ -113,17 +109,20 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                     .catch( this.toastError.bind(this) )
                 } ]
             ],
-            createCollection: [
+            /*createCollection: [
                 [ 'deleted', function() { this.model.set( 'currentView', 'documentList' ) } ],
                 [ 'posted', function( collection ) { this.views.collections.add( collection ) } ]
             ],
             deleteCollection: [
                 [ 'deleted', function() { this.model.set('currentView', 'documentList' ) } ],
                 [ 'modelDeleted', function( model ) { this.views.collections.remove( model ) } ]
-            ],
+            ],*/
             deleteDocument: [
                 [ 'deleted', function() { this.model.set('currentView', 'documentList' ) } ],
-                [ 'modelDeleted', function( model ) { this.views.documentList.remove( model ) } ]
+                [ 'modelDeleted', function( model ) {
+                    this.views.documentList.remove( model )
+                    this.views.documentList.getCount().then( count => this.updateCount(count) ).catch(this.Error)
+                } ]
             ],
             documentList: [
                 [ 'addClicked', function() {
@@ -133,7 +132,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                             this.createView(
                                 'form',
                                 'documentView',
-                                this.createDocumentModel()
+                                this.createModel( 'documentView' )
                             )
                         )
                     )
@@ -141,8 +140,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                   }
                 ],
                 [ 'itemClicked', function( document ) { this.onDocumentSelected( document ) } ],
-                [ 'dragStart', function( type ) { this.views.collections.showDroppable( type ) } ],
-                [ 'dropped', function( data ) { this.views.collections.hideDroppable(); this.views.collections.checkDrop( data ) } ],
+                //[ 'dragStart', function( type ) { this.views.collections.showDroppable( type ) } ],
+                //[ 'dropped', function( data ) { this.views.collections.hideDroppable(); this.views.collections.checkDrop( data ) } ],
                 [ 'deleteClicked',
                   function( document ) { 
                     this.clearCurrentView()
@@ -154,7 +153,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             documentView: [
                 [ 'deleted', function( model ) { this.model.set( 'currentView', 'documentList' ) } ],
                 [ 'put', function( model ) {
-                    if( this.views.documentList.fetched ) this.views.documentList.updateItem( this.createDocumentModel( model ) )
+                    if( this.views.documentList.fetched ) this.views.documentList.updateItem( this.createModel( 'documentView', model ) )
                     this.clearCurrentView().then( () => Promise.resolve( this.model.set('currentView', 'documentList') ) ).catch(this.Catch)
 
                 } ],
@@ -168,9 +167,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
     
     clearCurrentView() {
-        console.log( 'clearCurrentView' )
         const currentView = this.model.git('currentView');
-        console.log( currentView )
+
         return ( currentView !== 'documentList'
             ? this.views[ currentView ].delete( { silent: true } )
             : this.views[ currentView ].hide()
@@ -178,15 +176,19 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     createDocumentList( collectionName, fetch=true ) {
-        this.createView( 'list', 'documentList' )
+        const model = this.createModel( 'documentList' )
+
+        this.createView( 'list', 'documentList', model )
         this.views.documentList.getCount().then( count => this.updateCount(count) ).catch(this.Error)
-        //this.Header.enableTypeAhead( { Type: 'Document', Resource: collectionName, templateOptions: { placeholder: `Search ${collectionName} collection.` } }, document => this.onDocumentSelected(document) )
         return this.views.collections.unhideItems().hideItems( [ this.model.git('currentCollection') ] )
     },
 
-    createDocumentModel( data={} ) {
-        const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ],
-            schema = this.model.git('currentCollection') === 'Views'
+    createModel( type, data={} ) {
+        const collection = this.views.collections.collection.store.name[ this.model.git('currentCollection') ]
+
+        if( type === 'documentList' ) return collection.clientData
+
+        const schema = this.model.git('currentCollection') === 'Pages'
                 ? collection.documents.find( doc => doc.name === data.label.replace( ' ', '' ) ).schema
                 : collection.schema
 
@@ -197,8 +199,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     createView( type, name, model ) {
-        console.log( 'createView' )
-        console.log( name )
         this.views[ name ] = this.factory.create( type, Reflect.apply( this.Views[ name ], this, [ model ] ) )
 
         if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
@@ -218,8 +218,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     onDocumentSelected( document ) {
-        console.log( 'onDocumentSelected' )
-        console.log( document )
         return this.clearCurrentView()
         .then( () => Promise.resolve( this.showDocumentView( document ) ) )
         .catch( this.Error )
@@ -236,21 +234,15 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     onResourceClick() {
-        console.log( 'onResourceClick' )
-        console.log( this.views )
-        console.log( this.model.git('currentView') )
         if( this.model.git('currentView') === 'documentList' ) return
 
         this.clearCurrentView()
-        .then( () => console.log( this.model.git('currentView') ) )
         .then( () => Promise.resolve( this.model.set('currentView', 'documentList') ) )
         .catch( this.Error )
     },
 
     postRender() {
         if( this.path.length > 0 ) this.model.set( 'currentCollection', this.path[0] )
-
-        this.showProperView( true ).catch( this.Error )
 
         this.model.on( 'currentCollectionChanged', () =>
             this.views.documentList.delete( { silent: true } )
@@ -277,12 +269,6 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             .catch( this.Error )
         } )
 
-        /*this.WebSocket.on( 'createDisc', data => {
-            if( this.path.join('/') === 'Disc/undefined' ) {
-                console.log('proceed with upload');
-            }
-        } )*/
-
         return this
     },
 
@@ -290,7 +276,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         this.createView(
             'form',
             'documentView',
-            this.createDocumentModel( document )
+            this.createModel( 'documentView', document )
         )
     },
 
@@ -298,6 +284,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         console.log( 'showProperView' )
         console.log( this.path )
         console.log( this.views.documentList )
+        console.log( this.model.git('currentCollection') )
         return (this.views.documentList ? Promise.resolve() : this.createDocumentList( this.model.git('currentCollection'), this.path.length === 2 ? false : true ) )
         .then( () =>
             this.path.length === 2

@@ -1,4 +1,16 @@
-module.exports = Object.assign( { }, require('./__proto__'), require('./Submitter'), {
+const Submitter = require('./Submitter')
+
+module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
+
+    events: Object.assign( Submitter.events, { previewBtn: 'click' } ),
+
+    onPreviewBtnClick( e ) {
+        console.log( 'onPreviewClick' )
+        console.log( e.target )
+        console.log( e.target.nextElementSibling )
+        console.log( e.target.parentElement.previousElementSibling )
+        e.target.nextElementSibling.src = this.Format.ImageSrc( e.target.parentElement.previousElementSibling.value )
+    },
 
     clear() { this.inputEls.forEach( el => el.value = '' ) },
 
@@ -7,7 +19,6 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     getFormValues() {
-        console.log( 'getFormValues' )
         const attributes = this.model.attributes
 
         let data = this.reducer( Object.keys( this.els ), key =>
@@ -26,8 +37,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                 } )
             }
         } )
-        console.log( 'data' )
-        console.log( data )
+
         return data
     },
 
@@ -38,12 +48,11 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     initTypeAheads() {
-        //console.log( 'initTypeAheads' )
         this.model.attributes.forEach( attribute => {
-            //console.log( attribute )
             if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.fk ) )
             else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
+                    disallowEnterKeySubmission: true,
                     model: Object.create( this.Model ).constructor( Object.assign( this.model.data[ attribute.name ], { nested: !this.model.git('nested') } ), { attributes: attribute.range } ),
                     templateOpts: { hideButtonRow: true },
                     Views: { },
@@ -60,7 +69,8 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                         add: true,
                         collection: Object.create( this.Model ).constructor( collectionData, { meta: { key: 'value' } } ),
                         delete: true,
-                        draggable: true
+                        isDocumentList: false,
+                        draggable: 'listItem'
                     } ),
                     itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value ] )
                 }
@@ -70,7 +80,8 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
                 this.renderSubviews()
                 this.views[ attribute.name ].on( 'addClicked', () => this.views[ attribute.name ].add( { value: '' } ) )
                 this.views[ attribute.name ].on( 'deleteClicked', datum => this.views[ attribute.name ].remove( datum ) )
-                this.views[ attribute.name ].on( 'dragStart', draggable => console.log( 'Form dragStart ' + draggable ) )
+            } else if( attribute.range === "ImageUrl" ) {
+                console.log( 'ImageUrl' )
             }
         } )
     },

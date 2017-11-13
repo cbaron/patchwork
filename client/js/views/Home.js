@@ -1,4 +1,6 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+const CustomContent = require('./util/CustomContent')
+
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     events: {
         joinBtn: 'click'
@@ -9,7 +11,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.on( 'imgLoaded', () => this.els.container.classList.add('img-loaded') )
 
-        return this
+        return CustomContent.postRender.call(this)
     }
 
 } )

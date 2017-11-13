@@ -108,8 +108,14 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         return this
     },
 
-    hide( isSlow ) { return this.hideEl( this.els.container, isSlow ) },
-    
+    hide( isSlow ) {
+        if( !this.els || this.isHiding ) return Promise.resolve()
+
+        this.isHiding = true;
+        return this.hideEl( this.els.container, isSlow )
+        .then( () => Promise.resolve( this.hiding = false ) )
+    },
+
     hideSync() { this.els.container.classList.add('fd-hidden'); return this },
 
     _hideEl( el, resolve, hash, isSlow ) {
@@ -117,11 +123,12 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         el.classList.add('fd-hidden')
         el.classList.remove(`animate-out${ isSlow ? '-slow' : ''}`)
         delete this[hash]
+        this.isHiding = false
         resolve()
     },
 
     hideEl( el, isSlow ) {
-        if( this.isHidden() ) return Promise.resolve()
+        if( this.isHidden( el ) ) return Promise.resolve()
 
         const time = new Date().getTime(),
             hash = `${time}Hide`
@@ -157,10 +164,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         return this.requiresRole && user.roles.includes( this.requiresRole )
     },
     
-    isHidden( el ) {
-        const element = el || this.els.container
-        return element.classList.contains('fd-hidden')
-    },
+    isHidden( el ) { return el ? el.classList.contains('fd-hidden') : this.els.container.classList.contains('fd-hidden') },
 
     loadBgImage( el ) {
         const img = new Image()
@@ -217,7 +221,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
                 else if( this.events.views[ obj.view ] ) this.events.views[ obj.view ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
             }
 
-            if( obj.el.classList.contains('hidden') ) this.views[name].hideSync()
+            if( obj.el.classList.contains('fd-hidden') ) this.views[name].hideSync()
             obj.el.remove()
         } )
 

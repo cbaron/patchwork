@@ -1,15 +1,19 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     Views: {
-        buttonFlow: { model: { value: {
-            states: {
-                start: [ { name: 'save', text: 'Save Changes', class:'save-btn', nextState: 'confirm' } ],
-                confirm: [
-                    { name: 'confirmBtn', class:'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', class:'reset-btn', nextState: 'start', text: 'Cancel' }
-                ]
+        buttonFlow() {
+            return { 
+                model: Object.create( this.Model ).constructor( {
+                    states: {
+                        start: [ { name: 'save', text: 'Save Changes', class:'save-btn', nextState: 'confirm' } ],
+                        confirm: [
+                            { name: 'confirmBtn', class:'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                            { name: 'cancel', class:'reset-btn', nextState: 'start', text: 'Cancel' }
+                        ]
+                    }
+                } )
             }
-         } } }
+        }
     },
 
     displayTotal() {

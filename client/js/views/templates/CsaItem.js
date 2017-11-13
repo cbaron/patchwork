@@ -1,11 +1,15 @@
 const Format = require('../../Format')
 
-module.exports = p =>
+module.exports = p => {
+    const price = p.unit ? `${p.price} per ${p.unit}` : p.price
+
+return `` +
 `<div class="item-detail">
     <div>
-        <span>${p.heading || p.name}</span>
+        <span>${p.heading}</span>
         <span>|</span>
-        <span>${p.price}</span>
+        <span>${price}</span>
     </div>
-    <p>${Format.ParseTextLinks( p.description )}</p>
+    <p>${Format.ParseTextLinks( p.information || p.description )}</p>
 </div>`
+}

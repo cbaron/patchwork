@@ -1,6 +1,6 @@
 module.exports = {
 
-    Views: require('../../models/Views'),
+    Pages: Object.create( require('../../models/__proto__'), { resource: { value: 'Pages' } } ),
 
     loadImageTable( table, model ) {
         return new Promise( ( resolve, reject ) => {
@@ -57,7 +57,12 @@ module.exports = {
             console.log( typeof val )
             if( typeof val === 'object' ) return Array.isArray( val ) ? this.insertArrayData( name, key, val ) : this.processObject( key, val )
 
-            if( this.els[ key ] ) return this.els[ key ].innerHTML = this.Format.ParseTextLinks( data[ key ] )
+            if( this.els[ key ] ) return /image/i.test( key )
+                ? this.slurpTemplate( {
+                    insertion: { el: this.els[ key ] },
+                    template: `<img data-src="${this.Format.ImageSrc( data[ key ] )}" />`
+                  } )
+                : this.els[ key ].innerHTML = this.Format.ParseTextLinks( data[ key ] )
 
             if( this.nameToTagName[ key ] ) {
                 console.log( 'isHeading' )
@@ -102,10 +107,10 @@ module.exports = {
             this.tables.forEach( table => this.loadTableData( table ) )
         }
 
-        this.Views.get( { query: { name: this.documentName } } )
+        this.Pages.get( { query: { name: this.documentName } } )
         .then( () => {
-            console.log( this.Views.data )
-            this.processObject( null, this.Views.data )
+            console.log( this.Pages.data )
+            this.processObject( null, this.Pages.data )
         } )
         .catch( this.Error )
 

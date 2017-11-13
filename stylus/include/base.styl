@@ -70,13 +70,15 @@ body
     line-height: 1.5em
     text-align: left
     color: #666
-
-    &.admin
-        padding-top: 5rem
-
-div.container-fluid
-    display: flex
-    flex-direction: column
+    
+    >div:first-child
+        display: flex
+        flex-direction: column
+        height: 100%
+        
+    &.admin, &.admin-plus
+        div#content
+            height: 100%
 
 section
     padding-top: 2.5rem
@@ -134,8 +136,13 @@ button
 .link
     color: $sun-red
     cursor: pointer
-    &:hover
+    &:hover, &:focus
         text-decoration: underline
+        color: $sun-red
+        
+.striped .link
+  &:hover, &:focus
+    color: white
         
 .fd-hidden
     display: none !important

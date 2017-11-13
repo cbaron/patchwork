@@ -2,7 +2,7 @@ module.exports = ( { opts, ImageSrc } ) => {
     const fields = opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
 
 return `` +
-`<div class="row">
+`<div>
     <div>
         <img data-src="${ImageSrc('header_sun')}" />
     </div>

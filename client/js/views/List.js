@@ -49,12 +49,15 @@ module.exports = Object.assign( { }, Super, {
 
     checkDrag( e ) {
         if( !this.dragging ) return
+        console.log( 'checkDrag' )
 
         e.preventDefault()
 
         this.Dragger.els.container.classList.remove('fd-hidden')
         this.Dragger.els.container.style.top = `${e.clientY+5}px`
         this.Dragger.els.container.style.left = `${e.clientX+5}px`
+
+        if( this.model.git('draggable') !== 'listItem' ) return
 
         const listItemRectangles = this.getChildRectangles( this.els.list ),
             matchingItem = listItemRectangles.find( item =>
@@ -100,8 +103,7 @@ module.exports = Object.assign( { }, Super, {
     },
 
     checkDragStart( e ) {
-        //e.preventDefault()
-
+        console.log( 'checkDragStart' )
         const closestList = e.target.closest('.List')
         if( closestList === null || ( !closestList.isSameNode( this.els.container ) ) ) return
 
@@ -308,7 +310,6 @@ module.exports = Object.assign( { }, Super, {
                         this.itemViews[ keyValue ] =
                             this.factory.create( viewName, { model: Object.create( this.collection.model ).constructor( datum ), storeFragment: true } )
                                 .on( 'deleted', () => this.onDeleted( datum ) )
-                                //.on( 'dragstart', e => this.onDragStart( e ) )
 
                         while( this.itemViews[ keyValue ].fragment.firstChild ) fragment.appendChild( this.itemViews[ keyValue ].fragment.firstChild )
                         return fragment
@@ -338,9 +339,6 @@ module.exports = Object.assign( { }, Super, {
     },
 
     postRender() {
-        console.log( 'List postRender' )
-        console.log( this.model )
-        console.log( this.model.git('collection') )
         this.collection = this.model.git('collection') || Object.create( this.Model )
         this.key = this.collection.meta.key
 
@@ -381,7 +379,6 @@ module.exports = Object.assign( { }, Super, {
 
             if( child ) this.els.list.removeChild( child )
         }
-
 
         return this
     },
@@ -448,4 +445,5 @@ module.exports = Object.assign( { }, Super, {
     updateStyle() {
         this.els.list.classList.toggle( 'no-items', this.collection.data.length === 0 )
     }
+
 } )
