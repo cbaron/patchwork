@@ -7,12 +7,11 @@ module.exports = Object.create( {
     DELETE( resource, result ) { return resource.respond( { body: result.rows ? result.rows[0].id : { } } ) },
 
     GET( resource, result ) {
-        return resource.respond( { body: this.Mongo.model[ resource.path[0] ]
-            ? result
-            : ( resource.path.length > 2 )
+        return resource.respond( { body:
+            resource.path.length > 2
                 ? ( ( result.rows.length ) ? result.rows[0] : { } )
-                : result.rows
-        } )
+                : ( result.rows ? result.rows : result )
+            } )
     },
 
     PATCH( resource, result ) { resource.respond( { body: result.rows ? result.rows[0] : result[0] } ) },

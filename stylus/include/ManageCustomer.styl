@@ -2,24 +2,17 @@
     padding: 7rem 1.5rem 1.5rem
     min-height: 100vh
     background-color: $light-grey
+    
+    input:focus
+        border-color: initial
 
     .main-search
         display: flex
         justify-content: center
         align-items: center
         
-        .form-grouping
-            margin: 0
-        
-            input
-                display: inline-block
-                font-size: 1.2rem
-                padding: .75rem .5rem
-                width: 25rem
-        
-            .form-label
-                color: $gold
-                font-size: 1.4rem
+        .MemberTypeahead input:focus
+            border-color: initial
 
     .section
         border-top: 1px solid #eee
@@ -47,16 +40,11 @@
     .cell, .ms-ctn
         font-size: .9rem
         font-weight: bold
-        overflow-x: auto
-        flex: 1
         padding: .25rem
         white-space: nowrap
         
         &:first-child
             border-right: 1px solid black
-    
-    select.cell
-        margin: .25rem
             
     .edited
         color: $edit-green
@@ -103,10 +91,8 @@
 
     .content
         display: flex
-        align-items: flex-start
         
         .data
-            text-align: center
             width: 50%
                     
         .edit-summary

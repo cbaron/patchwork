@@ -1,7 +1,5 @@
 module.exports = {
 
-    Pages: Object.create( require('../../models/__proto__'), { resource: { value: 'Pages' } } ),
-
     loadTableData( table ) {
         this.models[ table.name ] = Object.create( require('../../models/__proto__'), { resource: { value: table.name } } )
         
@@ -73,9 +71,9 @@ module.exports = {
             this.tables.forEach( table => this.loadTableData( table ) )
         }
 
-        this.Pages.get( { query: { name: this.documentName } } )
-        .then( () => {
-            this.processObject( null, this.Pages.data )
+        this.Xhr( { method: 'get', resource: 'Pages', qs: JSON.stringify( { name: this.documentName } ) } )
+        .then( data => {
+            this.processObject( null, data )
             this.els.container.querySelectorAll('.link').forEach( el => el.addEventListener( 'click', () => this.onLinkClick( el ) ) )
         } )
         .catch( this.Error )

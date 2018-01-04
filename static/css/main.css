@@ -526,6 +526,9 @@ button.submitting {
     font-size: 0.75rem;
   }
 }
+.CustomerInfo .content .data {
+  min-width: 50%;
+}
 .CustomerInfo .content .data .customer-table {
   text-align: left;
 }
@@ -535,19 +538,26 @@ button.submitting {
   background-color: #fff;
   display: flex;
 }
-.CustomerInfo .content .data .customer-table .table-row div[contenteditable=true]:focus {
-  outline: 0;
-  background-color: #fce1ac;
-  color: #555;
+.CustomerInfo .content .data .customer-table .table-row:not(:first-child) {
+  border-top: none;
 }
 .CustomerInfo .content .data .customer-table .table-row select {
-  padding: 5px;
+  border: none;
+  background-color: #fff;
+}
+.CustomerInfo .content .data .customer-table .table-row >.cell:first-child {
+  min-width: 220px;
+}
+.CustomerInfo .content .data .customer-table .table-row >*:last-child {
+  flex: 1;
+  font-weight: normal;
+  color: #000;
+  overflow-x: hidden;
 }
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn {
-  margin: 0 0.15rem;
+  margin: 0;
   overflow: visible;
   padding-right: 0;
-  width: 50%;
 }
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-res-item .produce-family {
   font-weight: bold;
@@ -558,8 +568,6 @@ button.submitting {
 }
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-sel-ctn {
   margin-left: 0;
-  overflow-x: auto;
-  margin-right: 25px;
 }
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-trigger {
   background-color: #eee;
@@ -808,6 +816,9 @@ label {
   text-align: right;
   margin-right: 1rem;
   margin-bottom: 0;
+}
+.modal label {
+  margin-right: 0;
 }
 .Form {
   width: 100%;
@@ -1385,23 +1396,16 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   min-height: 100vh;
   background-color: #e7e7e7;
 }
+.ManageCustomer input:focus {
+  border-color: initial;
+}
 .ManageCustomer .main-search {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.ManageCustomer .main-search .form-grouping {
-  margin: 0;
-}
-.ManageCustomer .main-search .form-grouping input {
-  display: inline-block;
-  font-size: 1.2rem;
-  padding: 0.75rem 0.5rem;
-  width: 25rem;
-}
-.ManageCustomer .main-search .form-grouping .form-label {
-  color: #c98702;
-  font-size: 1.4rem;
+.ManageCustomer .main-search .MemberTypeahead input:focus {
+  border-color: initial;
 }
 .ManageCustomer .section {
   border-top: 1px solid #eee;
@@ -1432,17 +1436,12 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .ManageCustomer .ms-ctn {
   font-size: 0.9rem;
   font-weight: bold;
-  overflow-x: auto;
-  flex: 1;
   padding: 0.25rem;
   white-space: nowrap;
 }
 .ManageCustomer .cell:first-child,
 .ManageCustomer .ms-ctn:first-child {
   border-right: 1px solid #000;
-}
-.ManageCustomer select.cell {
-  margin: 0.25rem;
 }
 .ManageCustomer .edited {
   color: rgba(57,132,57,0.8);
@@ -1492,10 +1491,8 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 }
 .ManageCustomer .content {
   display: flex;
-  align-items: flex-start;
 }
 .ManageCustomer .content .data {
-  text-align: center;
   width: 50%;
 }
 .ManageCustomer .content .edit-summary {
@@ -1629,6 +1626,9 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
 .OrderOptions ol li.editable {
   padding: 0.25rem 0;
 }
+.OrderOptions ol li >.cell:first-child {
+  min-width: 150px;
+}
 .OrderOptions ol li span:first-child {
   color: #155d75;
   width: 8rem;
@@ -1678,6 +1678,9 @@ html.non-touch .Header >div:nth-child(2) ul li:hover {
   border: 1px solid;
   flex: 1;
   padding: 0.5rem;
+}
+.Seasons ol {
+  display: flex;
 }
 .Seasons .share-label {
   margin-right: 1rem;

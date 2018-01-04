@@ -287,7 +287,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             method: 'post',
             resource: 'mail',
             data: JSON.stringify( {
-                to: this.customer.person.email,
+                to: this.customer.person.data.email,
                 subject: `Patchwork Gardens ${this.share.label} Balance`,
                 body: `According to our records, you have an outstanding balance of ${this.els.balance.textContent}.\r\n\r\nPlease send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.\r\n\r\nIf you believe this is incorrect, please contact us by email or phone (937) 835-5807.\r\n\r\nThank You.`
             } )

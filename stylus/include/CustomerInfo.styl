@@ -1,7 +1,9 @@
 .CustomerInfo
 
     .content
-        .data            
+        .data
+            min-width: 50%
+      
             .customer-table 
                 text-align: left
                             
@@ -10,21 +12,27 @@
                     border: 1px solid #000
                     background-color: #fff
                     display: flex
-                   
-                    div[contenteditable=true]
-                        &:focus
-                            outline: 0
-                            background-color: $light-gold
-                            color: #555
+                    
+                    &:not(:first-child)
+                        border-top: none
 
                     select
-                        padding: 5px
+                        border: none
+                        background-color: white
+                        
+                        
+                    >.cell:first-child
+                        min-width: 220px
+                    >*:last-child
+                        flex: 1
+                        font-weight: normal
+                        color: black
+                        overflow-x: hidden
                                                
                     .ms-ctn
-                        margin: 0 .15rem
+                        margin: 0
                         overflow: visible
                         padding-right: 0
-                        width: 50%
                         
                         .ms-res-item
                             .produce-family
@@ -36,8 +44,6 @@
                         
                         .ms-sel-ctn
                             margin-left: 0
-                            overflow-x: auto
-                            margin-right: 25px
                         
                         .ms-trigger
                             background-color: #eee

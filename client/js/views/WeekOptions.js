@@ -94,7 +94,7 @@ module.exports = Object.assign( {}, Super, {
                     method: 'get',
                     resource: 'zipcoderoute',
                     qs: JSON.stringify( {
-                        zipcode: this.model.customer.member.zipcode,
+                        zipcode: this.model.customer.member.data.zipcode,
                         routeid: { operation: 'join', value: { table: 'deliveryroute', column: 'id' } }
                     } )
                   } )

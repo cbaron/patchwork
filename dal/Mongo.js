@@ -33,12 +33,12 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
             result => Promise.resolve( result ),
             this
         )
-        .then( results => Promise.resolve( results.length === 1 ? results[0] : results ) )
+        .then( results => Promise.resolve( results ) )
     },
 
     POST( resource ) {
         return this.getDb()
-        .then( db => db.collection( resource.path[0] ).insert( resource.body ) )
+        .then( db => db.collection( resource.path[0] ).insert( this.transform( resource.path[0], resource.body ) ) )
         .then( result => Promise.resolve( [ Object.assign( { _id: result.insertedIds[0] }, resource.body ) ] ) )
     },
 
