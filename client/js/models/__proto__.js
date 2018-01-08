@@ -137,11 +137,22 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
             }
         } )
 
-        return valid
+        return valid//return Promise.resolve( valid )
     },
 
     validateDatum( attr, val ) {
         return attr.validate.call( this, val.trim() )
+    },
+
+    validateRepeatPassword( valid ) {
+        if( !valid ) return Promise.resolve( false )
+
+        if( this.data.repeatPassword !== this.data.password ) {
+            this.emit( 'validationError', this.attributes.find( attr => attr.name === 'repeatPassword' ) )
+            valid = false
+        }
+
+        return Promise.resolve( valid )
     }
 
 } )

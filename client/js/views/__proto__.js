@@ -95,8 +95,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     },
 
     handleLogin() {
-
-        require('./Login').show().once( "success", userData => {
+        this.factory.create( 'login', { insertion: { el: document.querySelector('#content') } } )
+        .on( "success", userData => {
             if( !this.isAllowed( userData ) ) return this.scootAway()
 
             this.user.set( userData )

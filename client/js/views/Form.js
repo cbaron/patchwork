@@ -8,7 +8,25 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         e.target.nextElementSibling.src = this.Format.ImageSrc( e.target.parentElement.previousElementSibling.value )
     },
 
-    clear() { this.inputEls.forEach( el => el.value = '' ) },
+    clear() {
+        this.inputEls.forEach( el => el.value = '' )
+
+        if( this.views ) {
+            Object.keys( this.views ).forEach( key => {
+                const view = this.views[ key ]
+
+                if( view.itemViews ) {
+                    view.itemViews.forEach( itemView => {
+                        if( itemView.name !== 'Form' ) return
+                        itemView.clear()
+                    } )
+                } else {
+                    if( view.name !== 'Form' ) return
+                    view.clear()
+                }
+            } )
+        }
+    },
 
     getElementValue( el, attribute ) {
         if( attribute === undefined || ( !attribute.fk && attribute.range && typeof attribute.range === 'string' ) ) return el.value
@@ -80,24 +98,9 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         } )
     },
 
-    submit() {
-        if( ! this.model.validate( this.getFormValues() ) ) return Promise.resolve()
-
-        const isPost = !Boolean( this.model.data[ this.key ]  )
-
-        return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
-        .then( () => {
-            this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
-            this.model.data = { }
-            this.clear()
-            this.Toast.showMessage( 'success', this.toastSuccess || `Success` )
-            return Promise.resolve()
-        } )
-    },
-
     postRender() {
         if( this.model.git('nested') ) this.els.container.closest('.form-group').classList.add('vertical')
-        this.inputEls = this.els.container.querySelectorAll('input, select')
+        this.inputEls = this.els.container.querySelectorAll('input, select, textarea')
 
         if( !this.disallowEnterKeySubmission ) this.els.container.addEventListener( 'keyup', e => { if( e.keyCode === 13 ) this.onSubmitBtnClick() } )
 
@@ -112,6 +115,45 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         }
 
         return this 
+    },
+
+    submit() {
+        if( !this.validate( this.getFormValues() ) ) return Promise.resolve( this.onSubmitEnd() )
+
+        const isPost = !Boolean( this.model.data[ this.key ]  )
+
+        return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
+        .then( () => {
+            this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
+            this.model.data = { }
+            this.clear()
+            this.Toast.showMessage( 'success', this.toastSuccess || `Success` )
+            return Promise.resolve()
+        } )
+    },
+
+    validate( data ) {
+        let valid = true
+
+        if( !this.model.validate( data ) ) valid = false
+
+        if( this.views ) {
+            Object.keys( this.views ).forEach( key => {
+                const view = this.views[ key ]
+
+                if( view.itemViews ) {
+                    view.itemViews.forEach( itemView => {
+                        if( itemView.name !== 'Form' ) return
+                        if( !itemView.validate( itemView.getFormValues() ) ) valid = false
+                    } )
+                } else {
+                    if( view.name !== 'Form' ) return
+                    if( !view.validate( view.getFormValues() ) ) valid = false
+                }
+            } )
+        }
+
+        return valid
     }
 
 } )

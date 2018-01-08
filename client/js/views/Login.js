@@ -1,66 +1,38 @@
-var MyView = require('./MyView'),
-    Login = function() { return MyView.apply( this, arguments ) };
+module.exports = Object.assign( {}, require('./__proto__'), {
 
-Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototype, {
+    Views: {
 
-    checkForEnter( e ) { if( e.keyCode === 13 ) this.login() },
+        loginForm() {
+            return {
+                model: Object.create( this.Model ).constructor( { }, {
+                    attributes: require('../../../models/Login').attributes,
+                    resource: 'auth'
+                } ),
+                templateOpts() {
+                    return {
+                        heading: 'Sign In',
+                    }
+                },
+                onCancelBtnClick() { this.emit('cancel') },
+                toastSuccess: 'You are signed in!'
+            }
+        }
+
+    },
 
     events: {
-        'loginBtn': { method: 'login' }
-    },
-
-    fields: [ {
-        name: "email",
-        label: 'Email',
-        type: 'text',
-        validate: function( val ) { return true }
-    }, {
-        name: "password",
-        label: 'Password',
-        type: 'password',
-        error: "Passwords must be at least 6 characters long.",
-        validate: function( val ) { return val.length >= 6 }
-    } ],
-
-    getTemplateOptions() { return { fields: this.fields } },
-
-    initialize() {
-        if( window.location.pathname === "/admin" || window.location.pathname === "/admin-plus" ) {
-            Object.assign( this.fields[0], {
-                label: 'Email or Username',
-                error: "Username must be at least 6 characters long.",
-                validate: val => val.length >= 6 } )
+        views: {
+            loginForm: [
+                [ 'posted', function( data ) {
+                    this.hide()
+                    .then( () => {
+                        require('../models/User').set( data )
+                        this.emit( "success", data )
+                    } )
+                    .catch( this.Error )
+                } ]
+            ]
         }
-
-        MyView.prototype.initialize.call(this)
-    },
-
-    login() { this.submitForm( { resource: "auth" } ) },
-
-    name: "Login",
-
-    onSubmissionResponse( response ) {
-        
-        if( Object.keys( response ).length === 0 ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
-        }
-        
-        this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
-    
-        require('../models/User').set( response );
-        this.emit( "success", response );
-        this.hide().done();
-    },
-
-    postRender() {
-        this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
-        this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
-    },
-
-    requiresLogin: false,
-
-    template: require('../templates/login')( require('handlebars') )
+    }
 
 } )
-
-module.exports = new Login()

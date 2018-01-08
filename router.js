@@ -286,6 +286,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
 module.exports = new Router( {
     routes: {
         REST: {
+            'accountInfo': true,
             'auth': true,
             'Collection': true,
             'currentFarmDelivery': true,

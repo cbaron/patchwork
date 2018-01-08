@@ -12,7 +12,16 @@ return `` +
             <div><span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span></div>
         </div>
         <ul data-js="navLinks">${fields}</ul>
+        <div class="account-ui">
+            <div data-js="signInBtn" class="fd-hidden">Sign In</div>
+            <div class="member-ui" data-js="memberMenu" class="fd-hidden">
+                <div data-js="userName"></div>
+                <ul data-js="accountMenu" class="fd-hidden">
+                    <li data-js="accountBtn">Your Account</li>
+                    <li data-js="signOutBtn">Sign Out</li>         
+                </ul>
+            </div>
+        </div>
     </div>
-    <div>
 </div>`
 }

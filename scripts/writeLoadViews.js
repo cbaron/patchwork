@@ -5,7 +5,6 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
     FS: require('fs'),
 
     constructor( dir ) {
-        const excludedFiles = [ 'Login.js' ]
 
         this.P( this.FS.readdir, [ `${dir}/views` ] )
         .then( ( [ files ] ) =>
@@ -14,7 +13,7 @@ Object.create( Object.assign( require('../lib/MyObject').prototype, {
                 [
                     `${dir}/.ViewMap.js`,
                     `module.exports={\n\t` +
-                    files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) && excludedFiles.indexOf( name ) === -1 )
+                    files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
                          .map( name => {
                              name = name.replace('.js','')
                              return `${name}: require('./views/${name}')`

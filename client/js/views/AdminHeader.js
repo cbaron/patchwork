@@ -16,7 +16,7 @@ module.exports = Object.assign( { }, require( './__proto__' ), {
     requiresLogin: false,
 
     onSignoutBtnClick: function() {
-        document.cookie = 'patchworkjwt=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
         this.user.clear()
 
         this.user.set( this.user.defaults )

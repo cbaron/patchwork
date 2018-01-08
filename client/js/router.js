@@ -46,8 +46,24 @@ module.exports = Object.create( {
                 this.header =
                     this.ViewFactory.create( 'header', { insertion: { el: this.content, method: 'insertBefore' } } )
                     .on( 'navigate', this.onViewNavigate.bind(this) )
+                    .on( 'signInClicked', () => this.handleLogin() )
+
             }
         }
+    },
+
+    handleLogin() {
+        Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ).concat( this.footer.hide() ) )
+        .then( () => {
+            this.ViewFactory.create( 'login', { insertion: { el: this.content } } )
+            .on( "success", () =>
+                this.footer.show()
+                .then( () => this.header.onLogin() )
+                .then( () => this.handle() )
+                .catch( this.Error )
+            )
+        } )
+        .catch( this.Error )
     },
 
     handleFooter( resource ) {
@@ -61,11 +77,11 @@ module.exports = Object.create( {
             view = this.Views[ name ] ? path[0] : 'home'
 
         if( this.resources[ path[0] ] ) view = path[0]
-
-        this.handleHeader( path[0] )
-        this.handleFooter( path[0] )
       
         this.userPromise.then( () => {
+            this.handleHeader( path[0] )
+            this.handleFooter( path[0] )
+
             if( this.user.id && /admin/.test( path[0] ) ) this.adminHeader.onUser( this.user )
 
             if( view === this.currentView ) return this.views[ view ].onNavigation( path.slice(1) )
@@ -121,7 +137,8 @@ module.exports = Object.create( {
     },
 
     onUser( user ) {
-        if( this.adminHeader ) this.adminHeader.onUser( this.user )
+        console.log( 'router onUser' )
+        this.adminHeader ? this.adminHeader.onUser( this.user ) : this.header.onUser( this.user )
     },
 
     pathToView( path ) {

@@ -6,6 +6,7 @@
         margin: 0
         
     >div:nth-child(2)
+        position: relative
         background-color: black
         color: white
         padding: .2rem 1rem
@@ -32,7 +33,7 @@
                             color: $sun-yellow
                             transition: color .3s ease-in-out
             
-        ul
+        >ul
             display: flex
             justify-content: center
             align-items: center
@@ -51,6 +52,32 @@
                     &:hover
                         background-color: $sun-red
                         transition: background-color .3s ease-in-out
+                        
+        .account-ui
+            color: $sun-yellow
+            display: flex
+            justify-content: center
+            padding: .5rem 0
+            
+            .member-ui
+                position: relative
+                cursor: pointer
+                
+                >div
+                    padding-right: 1rem
+                    createArrow( $sun-yellow, false )
+                    background-position: right 5px top 5px, right 0px top 5px
+                
+                >ul
+                    position: absolute
+                    top: 26px
+                    left: 2.2rem
+                    
+                    >li
+                        background-color: black
+                        border-top: 1px solid white
+                        padding: .5rem
+                        
 
     @media only screen and (min-width: 1500px)
         >div:nth-child(2)
