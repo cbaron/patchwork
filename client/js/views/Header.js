@@ -65,12 +65,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     toggleAccountUI() {
-        this.els.signInBtn.classList.toggle('fd-hidden', this.user && this.user.id )
-        this.els.memberMenu.classList.toggle('fd-hidden', !this.user || !this.user.id )
+        this.els.signInBtn.classList.toggle( 'fd-hidden', this.user && this.user.id )
+        this.els.memberMenu.classList.toggle( 'fd-hidden', !this.user || !this.user.id )
     },
 
     toggleAccountMenu() {
+        console.log( 'toggleAccountMenu' )
+        console.log( !this.els.accountMenu.classList.contains('fd-hidden') )
         this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
+        this.els.userName.classList.toggle( 'menu-open', !this.els.accountMenu.classList.contains('fd-hidden') )
     },
 
     onLogin() {

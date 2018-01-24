@@ -13,7 +13,7 @@ Object.assign( Report.prototype, Base.prototype, {
     },
 
     handleQuery( model ) {
-        return this.Postgres.query( model.query, model.id === 5 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
+        return this.Postgres.query( model.query, model.id === 5 || model.id === 6 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
 
@@ -84,6 +84,19 @@ Object.assign( Report.prototype, Base.prototype, {
                    `JOIN share s ON s.id = ms.shareid ` +
                    `LEFT JOIN ( SELECT "memberShareId", value FROM "csaTransaction" WHERE action = 'Season Signup' ) ss ON ss."memberShareId" = ms.id ` +
                    `ORDER BY owes.sum DESC`
+        },
+
+        6: {
+            id: 6,
+            name: 'get-food-omission',
+            label: 'Get Food Omission',
+            query: `SELECT p.name, pr.name as "produce", prf.name as "produce family" ` +
+                   `FROM member m ` +
+                   `JOIN person p ON m.personid = p.id ` +
+                   `JOIN memberfoodomission mfo ON mfo.memberid = m.id ` +
+                   `LEFT JOIN produce pr on pr.id = mfo.produceid ` +
+                   `LEFT JOIN producefamily prf on prf.id = mfo.producefamilyid ` +
+                   `ORDER BY p.name ASC`
         }
 
     },

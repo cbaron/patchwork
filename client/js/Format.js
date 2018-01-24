@@ -6,6 +6,10 @@ module.exports = {
       minimumFractionDigits: 2
     } ),
 
+    FillRange( start, end ) {
+        return Array( end - start + 1 ).fill().map( (item, index) => start + index )
+    },
+
     GetFormField( datum, value ) {
         const icon = datum.metadata
             ? datum.metadata.icon

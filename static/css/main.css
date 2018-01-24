@@ -975,13 +975,15 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .Header >div:nth-child(2) .account-ui .member-ui >ul {
   position: absolute;
+  z-index: 1000;
   top: 26px;
-  left: 2.2rem;
+  color: #000;
+  background-color: #ffc502;
 }
 .Header >div:nth-child(2) .account-ui .member-ui >ul >li {
-  background-color: #000;
-  border-top: 1px solid #fff;
-  padding: 0.5rem;
+  border: 1px solid #000;
+  padding: 1rem 1rem;
+  text-align: center;
 }
 @media only screen and (min-width: 1500px) {
   .Header >div:nth-child(2) >div:first-child >div {
@@ -1708,27 +1710,37 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   opacity: 0.4;
 }
 .Reporting {
-  padding: 7rem 1.5rem 1.5rem;
+  padding: 5rem 1.5rem 1.5rem;
+}
+.Reporting button {
+  font-size: 1rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem 0;
+  width: 5rem;
+}
+.Reporting label {
+  margin-right: 0.5rem;
+  margin-left: 1rem;
 }
 .Reporting h4 {
   text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 .Reporting form {
-  display: flex;
   text-align: center;
+  margin: 2rem 0;
 }
-.Reporting form >* {
-  flex: 1;
-}
-.Reporting form >* button {
-  margin: 0rem 1rem;
+.Reporting form >div:first-child,
+.Reporting form >div:nth-child(2) >div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 .Reporting .results {
   overflow: auto;
   padding: 1rem;
-}
-.Reporting .results .columns {
-  text-align: center;
 }
 .Reporting .results .columns,
 .Reporting .results .rows > ol {
@@ -1738,7 +1750,20 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Reporting .results .rows > ol li {
   border: 1px solid;
   flex: 1;
-  padding: 0.5rem;
+  padding: 0.35rem;
+  overflow-x: auto;
+}
+.Reporting .results .columns {
+  text-align: center;
+}
+.Reporting .results .columns li {
+  background-color: #ed1c24;
+  color: #fff;
+  font-weight: bold;
+  border-color: #666;
+}
+.Reporting .results .rows > ol:nth-child(even) {
+  background-color: #e7e7e7;
 }
 .Seasons ol {
   display: flex;
