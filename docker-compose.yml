@@ -1,0 +1,29 @@
+version: '3.2'
+
+services:
+  web:
+    build: .
+    command: node ./app.js
+    volumes:
+      - ./:/app/
+      - /app/node_modules
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    environment:
+      PGHOST: postgres  # This must match the name assigned to the 'postgres' service below
+      PGUSER: patchwork
+      PGDATABASE: patchwork
+      PGPASSWORD: thepassword
+      PGPORT: 5432
+
+  postgres:
+    image: postgres:10-alpine
+    # command: pg_restore -d patchwork -x -O -U patchwork /sqldump
+    # volumes:
+      # - ./sqldump:/sqldump
+    environment:
+      POSTGRES_USER: patchwork
+      POSTGRES_DB: patchwork
+      POSTGRES_PASSWORD: thepassword
