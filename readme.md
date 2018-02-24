@@ -34,3 +34,14 @@ If this is the case, just re-run `docker-compose up -d`!
 Now you should be able to see the website in your browser at `http://localhost:4000`.
 
 
+## A few helpful Docker commands
+
+### Start a `psql` session inside the postgres container
+
+`$ docker-compose exec postgres psql patchwork patchwork`
+
+### View the error logs from a running container
+
+`$ docker-compose logs web`
+or
+`$ docker-compose logs postgres`
