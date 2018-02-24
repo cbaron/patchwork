@@ -13,8 +13,8 @@ $ docker-compose up -d
 
 Now you can load a database dump into the postgres database:
 ```
-$ docker cp sqldumpfile patchwork_postgres_1:/sqldumpfile
-$ docker-compose exec pg_restore -d patchwork -x -O /sqldumpfile
+$ docker cp /path/to/sqldumpfile patchwork_postgres_1:/sqldumpfile
+$ docker-compose exec postgres pg_restore -d patchwork -x -O /sqldumpfile -U patchwork
 ```
 
 You might need to restart the node app at this point if it has died from looking for missing db tables.  You can check its status:
