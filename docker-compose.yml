@@ -3,7 +3,7 @@ version: '3.2'
 services:
   web:
     build: .
-    command: nodemon ./app.js
+    command: nodemon --ignore ./dist/ --ignore ./client/ --delay 2 ./app.js
     volumes:
       - ./:/app/
       - /app/node_modules
