@@ -3,7 +3,7 @@ version: '3.2'
 services:
   web:
     build: .
-    command: node ./app.js
+    command: nodemon ./app.js
     volumes:
       - ./:/app/
       - /app/node_modules
