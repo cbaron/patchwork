@@ -33,6 +33,9 @@ If this is the case, just re-run `docker-compose up -d`!
 
 Now you should be able to see the website in your browser at `http://localhost:4000`.
 
+In order to re-Gulp your js bundle when you modify the code, you'll need to run `npm watch:js` inside the `web` container:
+`$ docker-compose exec web npm run watch:js`
+
 
 ## A few helpful Docker commands
 
@@ -40,8 +43,12 @@ Now you should be able to see the website in your browser at `http://localhost:4
 
 `$ docker-compose exec postgres psql patchwork patchwork`
 
-### View the error logs from a running container
+### View the server logs from a running container
 
 `$ docker-compose logs web`
 or
 `$ docker-compose logs postgres`
+
+...or to stream the log continuously:
+`$ docker-compose logs --follow web`
+
