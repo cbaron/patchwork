@@ -98,7 +98,6 @@ Object.assign( Resource.prototype, Table.prototype, {
 
     edit( data ) {
 
-        console.log(data);
         var filePromises = [ ],
             modelAttrs = { }
 
