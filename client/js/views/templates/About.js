@@ -1,6 +1,6 @@
 module.exports = p =>
 `<div>
-    <h1>About</h1>
+    <h1>Fresh food from farmers you know!</h1>
     <section data-js="sectionOne" class="striped">
         <h2></h2>
     </section>

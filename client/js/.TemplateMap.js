@@ -34,6 +34,7 @@ module.exports={
 	Members: require('./views/templates/Members'),
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Reporting: require('./views/templates/Reporting'),
+	SeasonalAddOn: require('./views/templates/SeasonalAddOn'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
 	ShareExample: require('./views/templates/ShareExample'),

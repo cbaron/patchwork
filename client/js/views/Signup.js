@@ -64,6 +64,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
     serializeShare( share ) {
         return {
             id: share.id,
+            seasonalAddOns: share.get('seasonalAddOns'),
             selectedDelivery: share.get('selectedDelivery'),
             selectedOptions: share.get('selectedOptions'),
             skipDays: share.get('skipDays')

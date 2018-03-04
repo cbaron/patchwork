@@ -179,7 +179,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     initialize() {
         return this._postgresQuery( this.getAllTables() )
-        .then( results => 
+        .then( results =>
             this.storeTableData( results.rows ).then( () => this._postgresQuery( "SELECT * FROM tablemeta" ) )
         )
         .then( results => {
@@ -247,9 +247,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     storeForeignKeyData( foreignKeyResult ) {
         foreignKeyResult.forEach( row => {
-            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
-                column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
-           
+            const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES ("?[a-zA-Z-]+"?)\((\w+)\)/.exec( row.pg_get_constraintdef )
+            let column = this.tables[ row.table_from.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
+            match[2] = match[2].replace( /"/g, '' )
+
             column.fk = {
                 table: match[2],
                 column: match[3],
@@ -298,6 +299,8 @@ module.exports = new Router( {
             'member-order': true,
             'never-receive': true,
             'report': true,
+            'seasonalAddOn': true,
+            'seasonalAddOnOption': true,
             'signup': true,
             'user': true
         }

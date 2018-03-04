@@ -69,6 +69,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                 if( sessionShare ) {
                     this.selectItem( item )
                     this.signupData.shares.add( item )
+                    if( sessionShare.seasonalAddOns ) item.set( 'seasonalAddOns', sessionShare.seasonalAddOns )
                     if( sessionShare.selectedOptions ) item.set( 'selectedOptions', sessionShare.selectedOptions ) 
                     if( sessionShare.selectedDelivery ) item.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
                     if( sessionShare.skipDays ) { item.set( 'skipDays', sessionShare.skipDays ) }

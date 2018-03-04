@@ -1,12 +1,11 @@
 .About section {
   padding-bottom: 2.5rem;
 }
+.About section:not(:first-of-type) {
+  border-top: 1px solid #999;
+}
 .About h2 {
   margin-bottom: 0.5rem;
-}
-.About .link {
-  color: #fff;
-  font-weight: bold;
 }
 .About .staff {
   display: flex;
@@ -134,7 +133,7 @@ button.submitting {
 .btn-submit {
   width: 8rem;
   background-color: #fff;
-  color: #ed1c24;
+  color: #a00;
   border: 1px solid;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
@@ -143,7 +142,7 @@ button.submitting {
   transition: all 0.15s ease-in-out;
 }
 .btn-submit:hover {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
 }
 .btn-cancel {
@@ -205,16 +204,18 @@ button.submitting {
 .CollectionManager {
   display: flex;
   height: 100%;
-  background-color: #ed1c24;
+  background-color: #a00;
   padding: 0;
+  margin: 0;
 }
 .CollectionManager section {
   padding: 0;
+  margin: 0;
 }
 .CollectionManager .left-panel {
   flex: 1;
   text-align: left;
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
   height: 100%;
 }
@@ -223,7 +224,7 @@ button.submitting {
 }
 .CollectionManager .left-panel .List .list li:hover {
   background-color: #fff;
-  color: #ed1c24;
+  color: #a00;
 }
 .CollectionManager .left-panel .List .list li >.buttons {
   right: 0.3rem;
@@ -257,7 +258,7 @@ button.submitting {
   margin: 0;
 }
 .CollectionManager .left-panel button {
-  background-color: #ed1c24;
+  background-color: #a00;
   font-size: 0.85rem;
   padding: 0.5rem 0 0;
 }
@@ -384,7 +385,7 @@ button.submitting {
   margin-bottom: 1rem;
 }
 .Contact .location >div:last-child >a {
-  color: #ed1c24;
+  color: #a00;
   cursor: pointer;
 }
 .Csa section:first-of-type {
@@ -409,7 +410,7 @@ button.submitting {
   font-size: 1rem;
 }
 .Csa .item-detail >div >span:first-child {
-  color: #ed1c24;
+  color: #a00;
 }
 .Csa .item-detail >div >span:nth-child(2) {
   padding: 0 0.2rem;
@@ -429,7 +430,7 @@ button.submitting {
   position: absolute;
   width: 5px;
   height: 5px;
-  background-color: #ed1c24;
+  background-color: #a00;
   top: 0.5rem;
   left: -1rem;
   border-radius: 50%;
@@ -446,7 +447,7 @@ button.submitting {
   margin: 0 2rem 1rem;
 }
 .Csa .csa-contents .share-examples >div h4 {
-  color: #ed1c24;
+  color: #a00;
   font-size: 1.1rem;
 }
 .Csa .csa-contents .share-examples >div >div img {
@@ -454,7 +455,7 @@ button.submitting {
   margin: 0;
 }
 .Csa .csa-contents .share-examples >div >div:nth-child(3) {
-  color: #ed1c24;
+  color: #a00;
   margin: 0.25rem 0;
 }
 .Csa .csa-contents .share-examples >div >ul {
@@ -463,7 +464,7 @@ button.submitting {
 }
 .Csa .csa-contents .share-examples >div >ul li {
   width: 50%;
-  color: #666;
+  color: #444;
   text-align: center;
   font-size: 0.85rem;
 }
@@ -486,15 +487,15 @@ button.submitting {
   padding: 0.4rem 0.85rem;
   margin: 0.085rem;
   color: #fff;
-  background-color: #ed1c24;
+  background-color: #a00;
   text-align: center;
 }
 .Csa .delivery .delivery-matrix >div >div {
   display: flex;
 }
 .Csa .delivery .delivery-matrix >div >div:first-child .cell {
-  border: 1px solid #ed1c24;
-  color: #ed1c24;
+  border: 1px solid #a00;
+  color: #a00;
   background-color: #fff;
 }
 .Csa .delivery .delivery-matrix >div >div >div:nth-child(2) {
@@ -609,7 +610,7 @@ button.submitting {
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date {
   width: 5rem;
   background-color: #000;
-  box-shadow: 1px 2px 5px #666;
+  box-shadow: 1px 2px 5px #444;
   color: #fff;
   cursor: pointer;
   padding: 0.65rem;
@@ -621,10 +622,10 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
   color: #e7e7e7;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date.selected {
-  background-color: #ed1c24;
+  background-color: #a00;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date.unselectable {
-  background-color: #666;
+  background-color: #444;
   color: #000;
   cursor: not-allowed;
   opacity: 0.5;
@@ -683,8 +684,8 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
 }
 .Delivery .delivery-options .options .delivery-option {
   width: 11rem;
-  background-color: #fff;
-  color: #ed1c24;
+  background-color: #fff5df;
+  color: #a00;
   border: 2px solid;
   cursor: pointer;
   display: inline-block;
@@ -694,12 +695,14 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
   transition: all 0.15s ease-in-out;
 }
 html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.selected) {
-  background-color: #ff383f;
+  background-color: #a00;
   color: #fff;
+  border-color: #a00;
 }
 .Delivery .delivery-options .options .delivery-option.selected {
   color: #fff;
-  background-color: #ed1c24;
+  background-color: #ff383f;
+  border-color: #ff383f;
 }
 .Delivery .delivery-options .feedback-messages {
   text-align: center;
@@ -717,16 +720,17 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   margin: 3px;
   border: 1px solid;
   cursor: pointer;
+  background-color: #fff5df;
 }
 .Delivery .dropoffs .dropoff >div:first-child {
-  color: #ed1c24;
+  color: #a00;
 }
 .Delivery .dropoffs .dropoff.selected {
   width: auto;
-  background-color: #ed1c24;
+  background-color: #ff383f;
   color: #fff;
   border-color: transparent;
-  box-shadow: 1px 1px 3px #666;
+  box-shadow: 1px 1px 3px #444;
   transition: background-color, color 0.2s ease-in-out;
 }
 .Delivery .dropoffs .dropoff.selected >div:first-child {
@@ -734,7 +738,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   color: #fff;
 }
 html.non-touch .Delivery .dropoffs .dropoff:hover {
-  box-shadow: 1px 1px 2px #666;
+  box-shadow: 1px 1px 2px #444;
 }
 @media only screen and (max-width: 767px) {
   .Delivery .delivery-options >div:first-child {
@@ -757,7 +761,7 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   }
 }
 .Dragger {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
   cursor: pointer;
   font-size: 0.7rem;
@@ -790,7 +794,7 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   text-align: center;
 }
 .Footer a {
-  color: #ed1c24;
+  color: #a00;
 }
 .Footer p,
 .Footer a {
@@ -824,11 +828,11 @@ textarea {
 }
 input:focus,
 textarea:focus {
-  border-color: #ed1c24;
+  border-color: #a00;
 }
 label {
   font-weight: 300;
-  color: #ed1c24;
+  color: #a00;
   text-align: right;
   margin-right: 1rem;
   margin-bottom: 0;
@@ -857,16 +861,19 @@ label {
 .GetInvolved section {
   padding-bottom: 2.5rem;
 }
+.GetInvolved section:not(:first-of-type) {
+  border-top: 1px solid #999;
+}
 .GetInvolved h2 {
   margin-bottom: 0.25rem;
 }
 .GetInvolved h3 {
   font-size: 1rem;
   margin-bottom: 0.15rem;
-  color: #ed1c24;
+  color: #a00;
 }
 .GetInvolved a {
-  color: #ed1c24;
+  color: #a00;
   cursor: pointer;
   font-weight: bold;
 }
@@ -895,7 +902,7 @@ label {
   position: absolute;
   width: 5px;
   height: 5px;
-  background-color: #ed1c24;
+  background-color: #a00;
   top: 0.5rem;
   left: -1rem;
   border-radius: 50%;
@@ -952,7 +959,7 @@ html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
   opacity: 0.85;
 }
 html.non-touch .Header >div:nth-child(2) >ul li:hover {
-  background-color: #ed1c24;
+  background-color: #a00;
   transition: background-color 0.3s ease-in-out;
 }
 .Header >div:nth-child(2) .account-ui {
@@ -976,14 +983,13 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Header >div:nth-child(2) .account-ui .member-ui >ul {
   position: absolute;
   z-index: 1000;
-  top: 26px;
-  color: #000;
-  background-color: #ffc502;
+  top: 1rem;
 }
 .Header >div:nth-child(2) .account-ui .member-ui >ul >li {
   border: 1px solid #000;
   padding: 1rem 1rem;
   text-align: center;
+  color: #a00;
 }
 @media only screen and (min-width: 1500px) {
   .Header >div:nth-child(2) >div:first-child >div {
@@ -1205,7 +1211,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .List .list li.dragover-top::before {
   content: "Drop here to move item.";
   text-align: center;
-  border: 2px dashed #ed1c24;
+  border: 2px dashed #a00;
   color: #000;
   border-radius: 0.25rem;
   font-size: 0.75rem;
@@ -1216,7 +1222,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .List .list li.dragover-bottom::after {
   content: "Drop here to move item.";
   text-align: center;
-  border: 2px dashed #ed1c24;
+  border: 2px dashed #a00;
   color: #000;
   border-radius: 0.25rem;
   font-size: 0.75rem;
@@ -1290,7 +1296,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   display: inline-block;
 }
 .Locations section ul .location >div:first-child {
-  color: #ed1c24;
+  color: #a00;
 }
 .Locations section ul .location >div >a {
   color: inherit;
@@ -1317,17 +1323,17 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   color: #000;
   font-size: 1.1rem;
   font-weight: 300;
-  border-bottom: 2px solid #ed1c24;
+  border-bottom: 2px solid #a00;
   padding-bottom: 0.25rem;
 }
 .Locations .map-wrap div:first-child .info-window >div:nth-child(2) {
-  color: #666;
+  color: #444;
   font-size: 0.8rem;
   text-transform: uppercase;
   margin: 0.5rem 0 0.75rem;
 }
 .Locations .map-wrap div:first-child .info-window >div:last-child >div >a {
-  color: #ed1c24;
+  color: #a00;
 }
 .Locations .map-wrap .legend {
   background-color: #fff;
@@ -1388,7 +1394,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: #ed1c24;
+  background-color: #a00;
   top: 0.15rem;
   left: -1rem;
   border-radius: 50%;
@@ -1428,7 +1434,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   position: absolute;
   width: 0.75rem;
   height: 0.75rem;
-  background-color: #ed1c24;
+  background-color: #a00;
   opacity: 0.5;
   top: 0.1rem;
   left: -1.05rem;
@@ -1573,7 +1579,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   font-weight: bold;
   font-family: "RalewayRegular";
   background-color: #e7e7e7;
-  color: #666;
+  color: #444;
 }
 .ManageCustomer .content .edit-summary >div:nth-child(2) {
   flex: 1 1 auto;
@@ -1667,7 +1673,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   border-radius: 0;
 }
 .modal-content .modal-header {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
 }
 .modal-content .modal-header >button.close {
@@ -1757,10 +1763,10 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   text-align: center;
 }
 .Reporting .results .columns li {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
   font-weight: bold;
-  border-color: #666;
+  border-color: #444;
 }
 .Reporting .results .rows > ol:nth-child(even) {
   background-color: #e7e7e7;
@@ -1778,7 +1784,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .share-label {
   background-color: #ffc502;
   border-radius: 0.35rem;
-  box-shadow: 2px 2px 5px #666;
+  box-shadow: 2px 2px 5px #444;
   color: #000;
   font-size: 1rem;
   padding: 0.75rem;
@@ -1793,11 +1799,11 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   margin: 0.25rem 0;
 }
 .inactive .share-label >div:nth-child(2) {
-  color: #666;
+  color: #444;
 }
 .inactive .share-label {
   background-color: #ccc;
-  color: #666;
+  color: #444;
 }
 .ShareOptions li {
   padding: 3rem 0;
@@ -1815,11 +1821,21 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .ShareOptions li .single-share {
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  flex-direction: column;
 }
-.ShareOptions li .single-share .share-label {
-  margin-right: 1rem;
+.ShareOptions li .single-share h4 {
+  color: #a00;
+  font-weight: bold;
+}
+.ShareOptions li .single-share >div {
+  margin-bottom: 1rem;
+}
+.ShareOptions li .single-share >div:first-child {
+  display: flex;
+  justify-content: center;
+}
+.ShareOptions li .single-share >div:first-child .share-label {
+  margin-bottom: 2rem;
 }
 .ShareOptions li .single-share .share-option:not(:first-child) {
   margin-top: 0.5rem;
@@ -1828,7 +1844,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  color: #ed1c24;
+  color: #a00;
 }
 .ShareOptions li .single-share .share-option .option-title >div:last-child {
   min-width: 3.5rem;
@@ -1947,7 +1963,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   padding: 0 20%;
 }
 .Signup .nav-arrows {
-  color: #ed1c24;
+  color: #a00;
   margin: 3rem 0;
   display: flex;
   justify-content: flex-end;
@@ -1990,7 +2006,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Summary .share-summary {
   padding: 1rem;
   margin-bottom: 3rem;
-  box-shadow: 1px 1px 2px #666;
+  box-shadow: 1px 1px 2px #444;
 }
 .Summary .share-summary >div:first-child {
   display: flex;
@@ -2027,7 +2043,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   text-align: left;
 }
 .Summary .share-summary .section-title {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
   font-weight: bold;
   padding: 0.25rem 0;
@@ -2042,7 +2058,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   width: 3.5rem;
   font-size: 0.8rem;
   background-color: #000;
-  box-shadow: 1px 2px 5px #666;
+  box-shadow: 1px 2px 5px #444;
   color: #fff;
   cursor: default;
   padding: 0.65rem;
@@ -2051,7 +2067,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   line-height: 1.05;
 }
 .Summary .share-summary .pickup-dates .pickup-date.selected {
-  background-color: #ed1c24;
+  background-color: #a00;
 }
 .Summary .share-summary .share-total {
   margin-bottom: 1rem;
@@ -2093,7 +2109,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   color: #000;
   border: 1px solid transparent;
   border-radius: 0.5rem;
-  box-shadow: 3px 3px 5px #666;
+  box-shadow: 3px 3px 5px #444;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
   margin: 0.5rem;
@@ -2104,7 +2120,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   background-color: #ffce28;
 }
 .Summary .payment .payment-options .payment-option.selected {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
 }
 .Summary .payment .payment-options .payment-option >div:first-child {
@@ -2153,7 +2169,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   justify-content: center;
 }
 .Summary .payment .button-row >button {
-  background-color: #ed1c24;
+  background-color: #a00;
   color: #fff;
   border: 1px solid transparent;
   padding: 0.5rem 0.75rem;
@@ -2161,14 +2177,14 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .Summary .payment .button-row >button.disabled {
   background-color: #ccc;
-  color: #666;
+  color: #444;
   cursor: not-allowed;
 }
 .Summary .payment .button-row >button.has-spinner {
-  background-color: #f03e45;
+  background-color: #d00;
 }
 .Summary .payment .button-row >button:hover:not(.disabled) {
-  background-color: #f03e45;
+  background-color: #d00;
 }
 @media only screen and (max-width: 500px) {
   .Summary .share-summary .share-total >div:not(:first-child) {
@@ -2482,7 +2498,8 @@ body {
   font-weight: 400;
   line-height: 1.5em;
   text-align: left;
-  color: #666;
+  color: #444;
+  background-color: #ffebc0;
 }
 body >div:first-child {
   display: flex;
@@ -2496,27 +2513,28 @@ body.admin-plus div#content {
 section {
   padding-top: 2.5rem;
   padding-bottom: 0;
-  padding-left: 20%;
-  padding-right: 20%;
-}
-section.striped {
-  color: #e7e7e7;
-  background-color: #ed1c24;
-}
-section.striped >h2,
-section.striped a {
-  color: #fff;
+  margin-left: 20%;
+  margin-right: 20%;
+/*&.striped
+        color: $light-grey
+        background-color: $sun-red
+        
+        >h2, a
+            color: white*/
 }
 h1,
 h2,
 h3 {
-  color: #ed1c24;
+  color: #a00;
   margin: 0;
 }
 h1 {
-  padding: 3rem 20%;
+  padding-top: 3.5rem;
+  padding-bottom: 1rem;
+  margin-left: 20%;
+  margin-right: 20%;
   font-weight: bold;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 h2 {
   font-size: 1.3rem;
@@ -2554,17 +2572,13 @@ button {
   margin: 0;
 }
 .link {
-  color: #ed1c24;
+  color: #a00;
   cursor: pointer;
 }
 .link:hover,
 .link:focus {
   text-decoration: underline;
-  color: #ed1c24;
-}
-.striped .link:hover,
-.striped .link:focus {
-  color: #fff;
+  color: #a00;
 }
 .fd-hidden {
   display: none !important;
@@ -2770,7 +2784,7 @@ button {
   position: relative;
   background-color: #fff;
   padding: 0.5rem;
-  border: 1px solid #666;
+  border: 1px solid #444;
   border-radius: 0.2rem;
 }
 .input-std:focus {

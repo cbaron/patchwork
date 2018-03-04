@@ -16,11 +16,21 @@
 
         .single-share
             display: flex
-            align-items: center
-            justify-content: space-around
-            
-            .share-label
-                margin-right: 1rem
+            flex-direction: column
+                
+            h4
+                color: $sun-red
+                font-weight: bold
+                
+            >div
+                margin-bottom: 1rem
+                
+                &:first-child
+                    display: flex
+                    justify-content: center
+                
+                    .share-label
+                        margin-bottom: 2rem
             
             .share-option
                 &:not(:first-child)

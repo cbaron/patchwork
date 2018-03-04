@@ -24,7 +24,7 @@
             
             .delivery-option
                 width: 11rem
-                background-color: white
+                background-color: lighten( $manila, 50% )//white
                 color: $sun-red
                 border: 2px solid
                 cursor: pointer
@@ -36,12 +36,14 @@
                 
                 html.non-touch &
                     &:hover:not(.selected)
-                        background-color: $light-sun-red
+                        background-color: $sun-red
                         color: white
+                        border-color: $sun-red
                                         
                 &.selected
                     color: white
-                    background-color: $sun-red
+                    background-color: $light-sun-red
+                    border-color: $light-sun-red
 
 
         .feedback-messages
@@ -61,13 +63,14 @@
             margin: 3px
             border: 1px solid
             cursor: pointer
+            background-color: lighten( $manila, 50% )
             
             >div:first-child
                 color: $sun-red
                 
             &.selected
                 width: auto
-                background-color: $sun-red
+                background-color: $light-sun-red
                 color: white
                 border-color: transparent
                 box-shadow: 1px 1px 3px $dark-grey

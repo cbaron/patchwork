@@ -1,5 +1,5 @@
 module.exports = p => {
-
+console.log( p )
 const shares = p.shares.map( share => {
 
     const selectedOptions = share.selectedOptions.map( opt =>
@@ -12,6 +12,19 @@ const shares = p.shares.map( share => {
             <div class="price">
                 <span>${opt.price}</span>
                 <span>per week</span>
+            </div>
+        </div>`
+    ).join('')
+
+    const seasonalAddOns = share.seasonalAddOns.map( addon =>
+        `<div class="item-row">
+            <div>${addon.label}</div>
+            <div>
+                <span>${addon.selectedOptionLabel}</span>
+                <span>${addon.unit}</span>
+            </div>
+            <div class="price">
+                <span>${addon.price}</span>
             </div>
         </div>`
     ).join('')
@@ -36,6 +49,7 @@ const shares = p.shares.map( share => {
         <div>
             <div class="section-title">Share Options</div>
             ${selectedOptions}
+            ${seasonalAddOns}
         </div>
         <div>
             <div class="section-title">Delivery</div>
@@ -74,7 +88,11 @@ const shares = p.shares.map( share => {
         <div class="share-total">
             <div class="section-title">Share Total</div>
             <div>
-                <div>Weekly Price :</div>
+                <div>Seasonal Items Total :</div>
+                <div>${share.seasonalOptionsTotal}</div>
+            </div>
+            <div>
+                <div>Weekly Share Price :</div>
                 <div>${share.weeklyPrice}</div>
             </div>
             <div>

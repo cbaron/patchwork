@@ -122,7 +122,7 @@ Object.assign( Summary.prototype, View.prototype, {
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {
-
+                console.log( share )
                 var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
                     groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
                         ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
@@ -139,6 +139,8 @@ Object.assign( Summary.prototype, View.prototype, {
                              .get('price').replace(/\$|,/g, "") ) )
                     .reduce( ( a, b ) => a + b ),
                 weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
+                seasonalAddOnTotal = share.get( 'seasonalAddOns' ).map( addon =>
+                   parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b ),
                 address = ( selectedDelivery.get('name') === 'home' )
                     ? this.user.get('address')
                     : ( groupDropoff )
@@ -155,7 +157,7 @@ Object.assign( Summary.prototype, View.prototype, {
                                 share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
                                 times.starttime, times.endtime, spaceTwoTab,
                                 address, spaceTwoTab, selectedDelivery.get('price') ) } ),
-                    total: weeklyTotal * share.get('selectedDates').length
+                    total: ( weeklyTotal * share.get('selectedDates').length ) + seasonalAddOnTotal
                 } )
 
                 share.set( 'selectedOptions', share.get( 'selectedOptions' ).map( selectedOption => {
@@ -173,6 +175,7 @@ Object.assign( Summary.prototype, View.prototype, {
 
                 return {
                     shareBox: this.templates.ShareBox( share.attributes ),
+                    seasonalAddOns: share.get('seasonalAddOns'),
                     selectedOptions: share.get('selectedOptions').map( selectedOption => {
                         var shareOption = share.get('shareoptions').get( selectedOption.shareoptionid ),
                             shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
@@ -198,6 +201,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         endtime: times.endtime
                     },
                     weeklyPrice: this.util.format( '$%s', weeklyTotal.toFixed(2) ),
+                    seasonalOptionsTotal: `$${seasonalAddOnTotal.toFixed(2)}`,
                     selectedDates: share.get('selectedDates').map( date => this.templates.PickupDate( Object.assign( { selected: true }, date.attributes ) ) ),
                     weeksSelected: share.get('selectedDates').length,
                     skipDays: ( share.has('skipDays') )
