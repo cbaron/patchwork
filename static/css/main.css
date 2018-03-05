@@ -85,7 +85,11 @@
 }
 .AdminPlus {
   height: 100%;
-  padding-top: 80px;
+  margin-top: 8rem;
+}
+.AdminPlus section {
+  margin: 0;
+  padding: 0;
 }
 .AdminPlus >div:first-child {
   display: flex;
@@ -137,7 +141,7 @@ button.submitting {
   border: 1px solid;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
   text-align: center;
   transition: all 0.15s ease-in-out;
 }
@@ -152,7 +156,7 @@ button.submitting {
   border: 1px solid;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
   text-align: center;
   transition: all 0.15s ease-in-out;
 }
@@ -1441,25 +1445,35 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   }
 }
 .Login {
-  margin: 3rem 0 3rem;
+  margin: 5rem 1rem 3rem;
+  display: flex;
+  justify-content: center;
 }
-.Login form {
+.Login section {
+  margin: 0;
+  padding: 0;
+}
+.Login .Form {
+  width: 25rem;
+}
+.Login .Form form {
   margin-bottom: 1.25rem;
 }
-.Login form .form-group {
+.Login .Form form .form-group {
   display: flex;
   align-items: center;
 }
-.Login form .form-group >label {
+.Login .Form form .form-group >label {
+  width: 5rem;
+}
+.Login .Form form .form-group >input {
   flex: 1;
 }
-.Login form .form-group >input {
-  flex: 6;
+.Login .Form form .btn-row {
+  margin-top: 1rem;
 }
 .ManageCustomer {
-  padding: 7rem 1.5rem 1.5rem;
-  min-height: 100vh;
-  background-color: #e7e7e7;
+  padding: 0 1.5rem;
 }
 .ManageCustomer input:focus {
   border-color: initial;
@@ -1766,6 +1780,9 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .Reporting .results .rows > ol:nth-child(even) {
   background-color: #e7e7e7;
+}
+.Reporting .results .rows > ol:nth-child(odd) {
+  background-color: #fff;
 }
 .Seasons ol {
   display: flex;
@@ -2620,22 +2637,22 @@ button {
 @media only screen and (max-width: 1050px) {
   section,
   h1 {
-    padding-left: 15%;
-    padding-right: 15%;
+    margin-left: 15%;
+    margin-right: 15%;
   }
 }
 @media only screen and (max-width: 900px) {
   section,
   h1 {
-    padding-left: 10%;
-    padding-right: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 }
 @media only screen and (max-width: 767px) {
   section,
   h1 {
-    padding-left: 5%;
-    padding-right: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
 }
 @-moz-keyframes slide-in-left {

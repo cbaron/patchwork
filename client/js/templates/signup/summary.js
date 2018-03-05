@@ -1,5 +1,5 @@
 module.exports = p => {
-console.log( p )
+
 const shares = p.shares.map( share => {
 
     const selectedOptions = share.selectedOptions.map( opt =>

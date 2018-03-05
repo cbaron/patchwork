@@ -123,7 +123,6 @@ Object.assign( Summary.prototype, View.prototype, {
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {
-                console.log( share )
                 var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
                     groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
                         ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
