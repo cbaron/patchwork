@@ -29,6 +29,10 @@ const shares = p.shares.map( share => {
         </div>`
     ).join('')
 
+    const seasonalTotal = share.seasonalAddOns.length
+        ? `<div><div>Seasonal Items Total :</div><div>${share.seasonalOptionsTotal}</div></div>`
+        : ``
+
     const groupdropoff = share.selectedDelivery.groupdropoff
         ? `<div class="item-row">
             <div>Drop-off Location</div>
@@ -87,10 +91,7 @@ const shares = p.shares.map( share => {
         ${skipDays}
         <div class="share-total">
             <div class="section-title">Share Total</div>
-            <div>
-                <div>Seasonal Items Total :</div>
-                <div>${share.seasonalOptionsTotal}</div>
-            </div>
+            ${seasonalTotal}
             <div>
                 <div>Weekly Share Price :</div>
                 <div>${share.weeklyPrice}</div>

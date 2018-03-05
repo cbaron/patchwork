@@ -48,6 +48,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         share.get('humanStartdate'), share.get('humanEnddate'), selectedWeeks, selectedWeeks + skipDaysTotal),
                 label: share.get('label'),
                 options: share.get('selectedOptions'),
+                seasonalAddOns: share.get('seasonalAddOns'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
                 skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
                 total: share.get('total')

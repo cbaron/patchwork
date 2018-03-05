@@ -36,7 +36,8 @@ Object.assign( ShareOptions.prototype, List.prototype, {
 
             share.set( 'seasonalAddOns', this.itemViews[ share.id ].seasonalAddOns.map( addon => {
                 const option = this.itemViews[ share.id ].SeasonalAddOnOption.data.find( option =>
-                    option.id == this.itemViews[ share.id ].templateData[ addon.name ].val() && option.seasonalAddOnId === addon.id )
+                    option.id == this.itemViews[ share.id ].templateData[ addon.name ].val() && option.seasonalAddOnId === addon.id
+                )
 
                 return {
                     name: addon.name,

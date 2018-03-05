@@ -35,12 +35,13 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
                     template: this.Templates.SeasonalAddOn( { name: addon.name, label: addon.label, options } )
                 } )
 
-                this.templateData[ addon.name ].on( 'change', () => this.updateTotal() )
+                this.templateData[ addon.name ].on( 'change', () => this.updateSeasonalTotal() )
             } )
 
-            if( this.model.get('seasonalAddOns').length ) {
+            if( this.model.get('seasonalAddOns') && this.model.get('seasonalAddOns').length ) {
                 this.model.get('seasonalAddOns').forEach( selectedAddon => {
                     this.templateData[ selectedAddon.name ].val( selectedAddon.seasonalAddOnOptionId )
+                    this.updateSeasonalTotal()
                 } )
             }
         } )
@@ -89,14 +90,7 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
         SeasonalAddOn: require('../templates/SeasonalAddOn')
     },
 
-    updateTotal() {
-        var total =
-            this.items.map( shareOption =>
-                parseFloat( shareOption.get('options').get( this.itemViews[ shareOption.id ].templateData.input.val() ).get('price').replace(/\$|,/g, "") ) )
-            .reduce( ( a, b ) => a + b ).toFixed(2) 
-
-        this.templateData.weeklyTotal.text( this.util.format( '$%s per week', total ) )
-
+    updateSeasonalTotal() {
         let seasonalTotal = 0
 
         this.seasonalAddOns.forEach( addon => {
@@ -108,6 +102,15 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
         } )
 
         this.templateData.seasonalTotal.text( `$${seasonalTotal.toFixed(2)} for the season`)
+    },
+
+    updateTotal() {
+        var total =
+            this.items.map( shareOption =>
+                parseFloat( shareOption.get('options').get( this.itemViews[ shareOption.id ].templateData.input.val() ).get('price').replace(/\$|,/g, "") ) )
+            .reduce( ( a, b ) => a + b ).toFixed(2) 
+
+        this.templateData.weeklyTotal.text( this.util.format( '$%s per week', total ) )
     }
 
 } )

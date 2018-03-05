@@ -80,7 +80,14 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
                     query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 ) RETURNING id",
-                    values: [ membershareid, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
+                    values: [ membershareid, option.shareoptionid, option.shareoptionoptionid ] } ) )
+                .concat( share.seasonalAddOns.map( addon =>
+                    this.dbQuery( {
+                        query: `INSERT INTO "memberShareSeasonalAddOn" ( "seasonalAddOnId", "seasonalAddOnOptionId", "memberShareId" ) VALUES ( $1, $2, $3 )`,
+                        values: [ addon.seasonalAddOnId, addon.seasonalAddOnOptionId, membershareid ]
+                    } )
+                ) )
+            )
         } )
         .spread( () => {
             return this.dbQuery( {
@@ -134,17 +141,20 @@ Object.assign( Signup.prototype, Base.prototype, {
         var body = this.format('Hello %s,\r\n\r\nThanks for signing up for our CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
 
         body += this.body.shares.map( share =>
-            this.format('Share: %s\r\n\t%s%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n',
+            this.format('Share: %s\r\n\t%s%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n\tSeasonal Add-Ons: \r\n\t\t%s\r\n',
                 share.label,
                 share.description,
                 ( share.skipDays.length )
                     ? this.format( "  You have opted out of produce for the following dates: %s.", share.skipDays.map( day => day.slice(5) ).join(', ') )
                     : "",
                 share.delivery.description,
-                this._( share.options ).pluck('description').join('\r\n\t\t') )
+                this._( share.options ).pluck('description').join('\r\n\t\t'),
+                share.seasonalAddOns.length ? share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit} -- ${addon.price}` ).join('\r\n\t\t') : `None`
+            )
         ).join('\r\n\r\n')
 
         if( this.body.member.omission.length ) body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`
+
         body += this.getEmailPaymentString()
 
         return body
@@ -224,6 +234,10 @@ Object.assign( Signup.prototype, Base.prototype, {
         return this.dbQuery( { query: this.format("DELETE from membersharedelivery WHERE membershareid IN ( %s )", this.membershareids.join(', ') ) } )
     },
 
+    rollbackSeasonalAddOns() {
+        return this.dbQuery( { query: `DELETE FROM "memberShareSeasonalAddOn" WHERE "memberShareId" IN ( ${this.membershareids.join(', ')}` } )
+    },
+
     rollbackShareOptions() {
         return this.dbQuery( { query: this.format("DELETE from membershareoption WHERE membershareid IN ( %s )", this.membershareids.join(', ') ) } )
     },
@@ -237,6 +251,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.rollbackSkipWeeks.bind(this),
             this.rollbackDelivery.bind(this),
             this.rollbackShareOptions.bind(this),
+            this.rollbackSeasonalAddOns.bind(this),
             this.rollbackMemberShare.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
