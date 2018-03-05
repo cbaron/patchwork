@@ -107,7 +107,10 @@ Object.assign( Resource.prototype, Table.prototype, {
             if( property.fk ) {
                 var attribute
 
-                if( ! this[ property.fk.table + "Typeahead" ] ) { delete data[ name ]; return }
+                if( ! this[ property.fk.table + "Typeahead" ] ) { 
+                    delete data[ name ]; 
+                    return;
+                }
 
                 attribute = this.util.format( '%s.%s', property.descriptor.table, property.descriptor.column.name )
 
@@ -128,9 +131,9 @@ Object.assign( Resource.prototype, Table.prototype, {
                 modelAttrs[ property.property ] = { raw: data[ property.property ], value: this.modelToEdit.DayOfWeekHash[ data[ property.property ] ] } }
             else { modelAttrs[ property.property ] = data[ property.property ] }
             
-        } )
+        } );
        
-        Promise.all( filePromises ).then( () =>
+        Promise.all( filePromises ).then( () => {
             this.$.ajax( {
                 headers: { accept: 'application/json' },
                 contentType: 'application/json',
@@ -143,7 +146,8 @@ Object.assign( Resource.prototype, Table.prototype, {
                 this.modelToEdit.trigger( 'change', this.modelToEdit )
                 this.modelToEdit = undefined
                 this.modalView.hide( { reset: true } )
-            } ) )
+            } );
+        })
         .catch( err => console.log( err.stack || err ) )
     },
 
@@ -245,12 +249,20 @@ Object.assign( Resource.prototype, Table.prototype, {
         } ),
         el = this.$( '#' + property.property )
 
+        const resetTypeAhead = (event) => {
+            const typeAheadValue = this[ property.fk.table + "Typeahead" ][property.descriptor.column.name];
+            if (typeAheadValue != event.target.value) {
+                this[property.fk.table + "Typeahead"] = undefined;
+                $(event.target).get(0).removeEventListener('change', resetTypeAhead);
+            }
+        };
+
         bloodhound.initialize()
 
         el.typeahead( { hint: true }, { display: obj => obj[ property.descriptor.column.name ], source: bloodhound.ttAdapter() } )
         .bind( 'typeahead:selected typeahead:autocompleted', ( obj, selected, name ) => {
-            this[ property.fk.table + "Typeahead" ] = selected
-            el.one( 'change', () => this[ property.fk.table + "Typeahead" ] = undefined )
+            this[ property.fk.table + "Typeahead" ] = selected;
+            el.get(0).addEventListener( 'change', resetTypeAhead);
         } )
     },
 
