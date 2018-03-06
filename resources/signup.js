@@ -52,12 +52,16 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
             } )
             .then( () => {
+                
                 console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
-                this.error = "Failed payment.  Please try again."
+                this.error = `${failedPayment}  Payment failed,  please try again.`;
             } ) 
         } )
         .then( charge => {
-            if( this.error ) return
+            if( this.error ) {
+                console.error(`Failed payment: ${charge}`)
+                return;
+            }
             return this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
                 this.Postgres.query(
                     `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe' )`,
@@ -208,13 +212,15 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
                 this.token = token
-                
+
+                console.log(`Sending sign-up confirmation email to: ${this.body.member.email}, using mail service: ${this.Email}`);
+
                 return this.Q( this.Email.send( {
                     to: this.body.member.email,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
-                ).fail( err => console.log("Error generating confirmation email : " + err.stack || ere ) )
+                ).fail( err => console.log(`Error generating confirmation email to ${this.body.member.email}: ${err.stack || err}` ) )
             } )
             .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
         }

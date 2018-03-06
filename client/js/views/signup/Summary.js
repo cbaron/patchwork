@@ -219,14 +219,14 @@ Object.assign( Summary.prototype, View.prototype, {
             $el.siblings('.help-block').remove()
         } else {
             this.showError( $el, field.error )
-            this.disableSignupBtn()
+            // this.disableSignupBtn()
         }
     },
 
     onInputFocus( e ) {
         var $el = this.$( e.currentTarget )
         if( $el.next().hasClass('glyphicon-remove') ) this.removeError( this.$( e.currentTarget ) )
-        if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
+        // if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
     },
 
     paymentUnselected() {
@@ -235,7 +235,7 @@ Object.assign( Summary.prototype, View.prototype, {
         this.selectedPayment = undefined
         this.updateGrandTotal()
 
-        this.templateData.signupBtn.addClass('disabled').removeClass('btn-success').off( 'click' )
+        // this.disableSignupBtn()
         this.templateData.paymentForm.addClass('hide')
     },
 
@@ -392,7 +392,7 @@ Object.assign( Summary.prototype, View.prototype, {
             }
         } )
 
-        if( ! valid ) this.disableSignupBtn()
+        // if( ! valid ) this.disableSignupBtn()
 
         return valid
     }
