@@ -13,7 +13,7 @@ Promise.all( [
 .then( () => {
     
     require('http').createServer( router.handler.bind(router) ).listen( port )
-    console.log( `server spinning at ${port}` )
+    console.log( `server spinning at ${port} with NodeJS ${process.version}` )
 } )
 .catch( e => console.log( e.stack || e ) )
 
