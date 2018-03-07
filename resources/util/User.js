@@ -20,7 +20,12 @@ module.exports = {
     respondSetCookie( token, body ) {
         var now = new Date()
         now.setTime( now.getTime() + 1000 * 86400 * 30 )
-        this.respond( { body, headers: { 'Set-Cookie': this.format( 'patchworkjwt=%s;expires=%s;', token, now.toGMTString() ) } } )
+        this.respond( {
+          body,
+          headers: {
+              'Set-Cookie': `${process.env.COOKIE}=${token}; Domain=${process.env.DOMAIN}; Expires=${now.toGMTString()}; Path=/;`
+          }
+        })
     }
 
 }
