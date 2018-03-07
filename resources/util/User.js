@@ -23,7 +23,7 @@ module.exports = {
         this.respond( {
           body,
           headers: {
-              'Set-Cookie': `${process.env.COOKIE}=${token}; Domain=${process.env.DOMAIN}; Expires=${now.toGMTString()}`
+              'Set-Cookie': `${process.env.COOKIE}=${token}; Domain=${process.env.DOMAIN}; Expires=${now.toGMTString()}; Path=/;`
           }
         })
     }
