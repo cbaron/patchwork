@@ -52,6 +52,18 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     },
 
     notify() {
+        console.log( 'notify' )
+        console.log( [
+                    `Hello ${this.body.name},`,
+                    `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
+                    `Details:`,
+                    `${this.body.adjustment.description}`,
+                    `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
+                    ( this.body.adjustment.value > 0
+                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
+                        : `We will mail a check to you in the near future.` ),
+                    `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
+                ].join( `${this.Email.newline}${this.Email.newline}` ) )
         if( !this.body.adjustment.sendEmail ) return this.Q()
 
         return this.Q(

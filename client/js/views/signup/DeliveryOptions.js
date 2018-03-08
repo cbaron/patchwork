@@ -46,7 +46,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
     groupFeedback( deliveryOption ) {
         if( this.dropoffView ) {
             if( !Object.keys( this.dropoffView.selectedItems ).length ) this.showFeedback( this.feedback.group() )
-            return this.dropoffView.templateData.container.show()
+            return this.slideIn( this.dropoffView.templateData.container.get(0), 'right' )
         }
 
         this.groupDropoffPromise.then( () => {
@@ -55,9 +55,7 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
             this.dropoffView = new this.Views.Dropoffs( { container: this.templateData.dropoffs } )
                 .on( 'itemUnselected', () => {
-                    this.dropoffView.itemViews.forEach( view => {
-                        if( view.templateData.container.is(':hidden') ) view.templateData.container.show()
-                    } )
+                    this.dropoffView.itemViews.forEach( view => this.fadeIn( view.templateData.container.get(0) ) )
 
                     this.showFeedback( this.feedback.group() )
 
@@ -66,8 +64,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
                 .on( 'itemSelected', model => {
                     var selectedId = model.id
                     
-                    this.model.get('groupdropoffs').forEach( model => {
-                        if( model.id !== selectedId ) this.dropoffView.itemViews[ model.id ].templateData.container.hide()
+                    this.model.get('groupdropoffs').forEach( dropoffModel => {
+                        if( dropoffModel.id !== selectedId ) this.fadeOut( this.dropoffView.itemViews[ dropoffModel.id ].templateData.container.get(0) )
                     } )
 
                     this.selectedDelivery = Object.assign( {},
@@ -94,6 +92,8 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
             if( this.model.get('groupdropoffs').length === 0 ) {
                 this.dropoffView.templateData.container.text("No available group dropoff locations, please select another option")
             }
+
+            this.slideIn( this.dropoffView.templateData.container.get(0), 'right' )
 
         } )
         .fail( e => console.log( e.stack || e ) )
@@ -171,14 +171,14 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            if( this.dropoffView && model.get('name') !== 'group' ) this.dropoffView.templateData.container.hide()
+            if( this.dropoffView && model.get('name') !== 'group' ) { this.dropoffView.delete(); this.dropoffView = undefined }
             this[ this.util.format('%sFeedback', model.get('name') ) ]( model )        
         } )
         .on( 'itemUnselected', () => {
             this.valid = false
             this.templateData.feedback.empty()
             this.selectedDelivery = null
-            if( this.dropoffView ) this.dropoffView.templateData.container.hide()
+            if( this.dropoffView ) this.slideOut( this.dropoffView.templateData.container.get(0), 'right' )
         } )
 
         this.groupDropoffPromise = share.getGroupDropoffs()

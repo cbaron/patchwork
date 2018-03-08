@@ -52,6 +52,9 @@
   text-transform: uppercase;
   margin-top: 0.75rem;
 }
+.AccountHome {
+  display: block;
+}
 .AddTransaction {
   border: 1px solid #000;
 }
@@ -85,7 +88,7 @@
 }
 .AdminPlus {
   height: 100%;
-  margin-top: 8rem;
+  margin-top: 5rem;
 }
 .AdminPlus section {
   margin: 0;
@@ -113,6 +116,9 @@
 }
 .AdminPlus .views {
   height: 100%;
+}
+.AdminPlus .MemberTypeahead {
+  margin-top: 3rem;
 }
 button.submitting {
   opacity: 0.3;
@@ -278,8 +284,8 @@ button.submitting {
   padding: 0.25rem 0rem;
 }
 .CollectionManager .main-panel {
-  background-color: #fff;
-  border-left: 1px solid #fff;
+  background-color: #ffebc0;
+  border-left: 1px solid #ffebc0;
   flex: 4;
   height: 100%;
   overflow-x: hidden;
@@ -294,6 +300,7 @@ button.submitting {
 .CollectionManager .main-panel >.List ol {
   overflow-y: auto;
   height: 100%;
+  color: #a00;
 }
 .CollectionManager .main-panel >.List ol >li,
 .CollectionManager .main-panel >.List ol >div {
@@ -395,6 +402,7 @@ button.submitting {
 .Csa section:first-of-type {
   padding-top: 0;
   padding-bottom: 2.5rem;
+  border-bottom: 1px solid #999;
 }
 .Csa h2 {
   margin-bottom: 0.15rem;
@@ -407,6 +415,14 @@ button.submitting {
   width: 100%;
   margin: 0;
 }
+.Csa .image-row {
+  padding: 2.5rem;
+}
+.Csa .image-row >img {
+  width: 30.5%;
+  display: inline-block;
+  margin: 0 0.5rem;
+}
 .Csa .item-detail {
   margin-bottom: 1rem;
 }
@@ -418,6 +434,9 @@ button.submitting {
 }
 .Csa .item-detail >div >span:nth-child(2) {
   padding: 0 0.2rem;
+}
+.Csa .csa-fit {
+  border-top: 1px solid #999;
 }
 .Csa .csa-fit >p {
   margin-bottom: 0.2rem;
@@ -438,6 +457,13 @@ button.submitting {
   top: 0.5rem;
   left: -1rem;
   border-radius: 50%;
+}
+.Csa .csa-contents {
+  border-bottom: 1px solid #999;
+  padding-bottom: 2.5rem;
+}
+.Csa .csa-contents .button-row {
+  margin-bottom: 0;
 }
 .Csa .csa-contents .share-examples {
   display: flex;
@@ -468,12 +494,15 @@ button.submitting {
 }
 .Csa .csa-contents .share-examples >div >ul li {
   width: 50%;
-  color: #444;
+  color: #333;
   text-align: center;
   font-size: 0.85rem;
 }
 .Csa .csa-contents .share-descriptions {
   margin: 2rem 0;
+}
+.Csa .delivery {
+  border-top: 1px solid #999;
 }
 .Csa .delivery img {
   display: block;
@@ -490,17 +519,17 @@ button.submitting {
   min-width: 12rem;
   padding: 0.4rem 0.85rem;
   margin: 0.085rem;
-  color: #fff;
-  background-color: #a00;
+  color: #a00;
+  background-color: #fff5df;
+  border: 1px solid #a00;
   text-align: center;
 }
 .Csa .delivery .delivery-matrix >div >div {
   display: flex;
 }
 .Csa .delivery .delivery-matrix >div >div:first-child .cell {
-  border: 1px solid #a00;
-  color: #a00;
-  background-color: #fff;
+  color: #fff5df;
+  background-color: #a00;
 }
 .Csa .delivery .delivery-matrix >div >div >div:nth-child(2) {
   order: 3;
@@ -520,6 +549,21 @@ button.submitting {
     padding: 0.3rem 0.6rem;
     font-size: 0.9rem;
   }
+  .Csa .image-row >img {
+    width: 47%;
+  }
+  .Csa .image-row >img:last-child {
+    display: none;
+  }
+}
+@media only screen and (max-width: 650px) {
+  .Csa .image-row >img {
+    width: 100%;
+    margin: 0;
+  }
+  .Csa .image-row >img:not(:first-child) {
+    display: none;
+  }
 }
 @media only screen and (max-width: 425px) {
   .Csa .csa-contents .share-examples >div {
@@ -531,16 +575,18 @@ button.submitting {
     font-size: 0.75rem;
   }
 }
-.CustomerInfo .content .data {
-  min-width: 50%;
+.CustomerInfo .content {
+  display: block;
 }
 .CustomerInfo .content .data .customer-table {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .CustomerInfo .content .data .customer-table .table-row {
   align-items: center;
-  border: 1px solid #000;
-  background-color: #fff;
+  margin: 0.5rem 0;
   display: flex;
 }
 .CustomerInfo .content .data .customer-table .table-row:not(:first-child) {
@@ -551,13 +597,20 @@ button.submitting {
   background-color: #fff;
 }
 .CustomerInfo .content .data .customer-table .table-row >.cell:first-child {
-  min-width: 220px;
+  border: none;
+  width: 9rem;
+  text-align: right;
+  margin-right: 1rem;
 }
 .CustomerInfo .content .data .customer-table .table-row >*:last-child {
   flex: 1;
+  min-width: 25rem;
+  border: 1px solid #ccc;
   font-weight: normal;
   color: #000;
+  background-color: #fff;
   overflow-x: hidden;
+  padding: 0.5rem;
 }
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn {
   margin: 0;
@@ -583,12 +636,33 @@ button.submitting {
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn-focus {
   box-shadow: none;
 }
-.CustomerInfo .content .data .customer-table .table-row.address {
-  height: 3.25rem;
-  line-height: 2.75rem;
-}
 .CustomerInfo .content .data .customer-table .table-row.neverReceive {
   white-space: inherit;
+}
+.CustomerInfo .content .edit-summary {
+  margin: 1.5rem 3rem;
+  display: block;
+}
+.CustomerInfo .content .edit-summary button {
+  font-weight: normal;
+}
+@media only screen and (max-width: 767px) {
+  .CustomerInfo .content .data .customer-table {
+    display: block;
+  }
+  .CustomerInfo .content .data .customer-table .table-row {
+    display: block;
+  }
+  .CustomerInfo .content .data .customer-table .table-row >.cell:first-child {
+    text-align: left;
+  }
+  .CustomerInfo .content .data .customer-table .table-row >*:last-child {
+    width: 100%;
+    min-width: 0;
+  }
+  .CustomerInfo .content .edit-summary {
+    margin: 1.5rem 0;
+  }
 }
 .DateSelection .share-dates {
   padding: 3rem 0;
@@ -614,7 +688,7 @@ button.submitting {
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date {
   width: 5rem;
   background-color: #000;
-  box-shadow: 1px 2px 5px #444;
+  box-shadow: 1px 2px 5px #333;
   color: #fff;
   cursor: pointer;
   padding: 0.65rem;
@@ -629,7 +703,7 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
   background-color: #a00;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date.unselectable {
-  background-color: #444;
+  background-color: #333;
   color: #000;
   cursor: not-allowed;
   opacity: 0.5;
@@ -721,8 +795,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
 .Delivery .dropoffs .dropoff {
   width: 45%;
   padding: 0.75rem;
-  margin: 3px;
-  border: 1px solid;
+  margin: 0.35rem;
   cursor: pointer;
   background-color: #fff5df;
 }
@@ -734,7 +807,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   background-color: #ff383f;
   color: #fff;
   border-color: transparent;
-  box-shadow: 1px 1px 3px #444;
+  box-shadow: 1px 1px 3px #333;
   transition: background-color, color 0.2s ease-in-out;
 }
 .Delivery .dropoffs .dropoff.selected >div:first-child {
@@ -742,7 +815,7 @@ html.non-touch .Delivery .delivery-options .options .delivery-option:hover:not(.
   color: #fff;
 }
 html.non-touch .Delivery .dropoffs .dropoff:hover {
-  box-shadow: 1px 1px 2px #444;
+  box-shadow: 1px 1px 2px #333;
 }
 @media only screen and (max-width: 767px) {
   .Delivery .delivery-options >div:first-child {
@@ -776,6 +849,10 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
 }
 .EditAccount {
   margin-bottom: 3rem;
+}
+.EditAccount section {
+  margin: 0;
+  padding: 0;
 }
 .EditAccount form {
   margin-bottom: 1.5rem;
@@ -987,13 +1064,22 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Header >div:nth-child(2) .account-ui .member-ui >ul {
   position: absolute;
   z-index: 1000;
-  top: 1rem;
+  top: 1.25rem;
+  color: initial;
+  background-color: #fff5df;
+  box-shadow: 1px 1px 5px #666;
 }
 .Header >div:nth-child(2) .account-ui .member-ui >ul >li {
-  border: 1px solid #000;
-  padding: 1rem 1rem;
+  padding: 0.6rem;
   text-align: center;
+  width: 10rem;
+}
+.Header >div:nth-child(2) .account-ui .member-ui >ul >li:not(:last-child) {
+  border-bottom: 1px solid #999;
+}
+html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
   color: #a00;
+  text-decoration: underline;
 }
 @media only screen and (min-width: 1500px) {
   .Header >div:nth-child(2) >div:first-child >div {
@@ -1195,7 +1281,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   line-height: 0.25rem;
 }
 .List .list li:hover:not(.is-dragging) {
-  background-color: #e7e7e7;
+  background-color: #fff5df;
 }
 .List .list li:hover:not(.is-dragging) >.buttons svg {
   display: inline-block;
@@ -1204,13 +1290,13 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   display: inherit;
 }
 .List .list li.checked {
-  background-color: #e7e7e7;
+  background-color: #fff5df;
 }
 .List .list li.checked >.selection input {
   display: inherit;
 }
 .List .list li.is-dragging {
-  background-color: #e7e7e7;
+  background-color: #fff5df;
 }
 .List .list li.dragover-top::before {
   content: "Drop here to move item.";
@@ -1244,7 +1330,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   background-color: initial;
 }
 .List .list.is-droppable li.mouseover {
-  background-color: #e7e7e7;
+  background-color: #fff5df;
 }
 .List >button {
   bottom: 2rem;
@@ -1284,7 +1370,16 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   font-weight: 700;
 }
 .Locations h1 {
-  padding-bottom: 2rem;
+  padding-bottom: 0;
+}
+.Locations section:first-of-type {
+  margin-bottom: 2rem;
+}
+.Locations section:nth-of-type(2),
+.Locations section:nth-of-type(3),
+.Locations section:nth-of-type(4) {
+  border-bottom: 1px solid #999;
+  padding-bottom: 2.5rem;
 }
 .Locations section ul {
   columns: 2;
@@ -1327,7 +1422,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   padding-bottom: 0.25rem;
 }
 .Locations .map-wrap div:first-child .info-window >div:nth-child(2) {
-  color: #444;
+  color: #333;
   font-size: 0.8rem;
   text-transform: uppercase;
   margin: 0.5rem 0 0.75rem;
@@ -1472,74 +1567,92 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Login .Form form .btn-row {
   margin-top: 1rem;
 }
-.ManageCustomer {
-  padding: 0 1.5rem;
+.ManageCustomer,
+.AccountHome {
+  margin: 2rem 3rem;
 }
-.ManageCustomer input:focus {
+.ManageCustomer input:focus,
+.AccountHome input:focus {
   border-color: initial;
 }
-.ManageCustomer .main-search {
+.ManageCustomer .main-search,
+.AccountHome .main-search {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.ManageCustomer .main-search .MemberTypeahead input:focus {
+.ManageCustomer .main-search .MemberTypeahead input:focus,
+.AccountHome .main-search .MemberTypeahead input:focus {
   border-color: initial;
 }
-.ManageCustomer .section {
-  border-top: 1px solid #eee;
+.ManageCustomer .section:not(:first-of-type),
+.AccountHome .section:not(:first-of-type) {
+  border-top: 1px solid #999;
   margin-top: 2rem;
 }
-.ManageCustomer .section-heading {
+.ManageCustomer .section-heading,
+.AccountHome .section-heading {
   display: inline-block;
   margin: 2rem 0 1rem;
 }
 .ManageCustomer .section-heading >div,
-.ManageCustomer .section-heading >span {
+.AccountHome .section-heading >div,
+.ManageCustomer .section-heading >span,
+.AccountHome .section-heading >span {
   display: inline-block;
   font-weight: bold;
   margin: 0 0.5rem;
 }
-.ManageCustomer h3 {
+.ManageCustomer h3,
+.AccountHome h3 {
   display: inline-block;
-  color: #c98702;
+  color: #a00;
   font-weight: bold;
   margin: 0;
   font-size: 1.2rem;
 }
-.ManageCustomer ol {
+.ManageCustomer ol,
+.AccountHome ol {
   margin-bottom: 0;
   -webkit-padding-start: 0;
 }
 .ManageCustomer .cell,
-.ManageCustomer .ms-ctn {
+.AccountHome .cell,
+.ManageCustomer .ms-ctn,
+.AccountHome .ms-ctn {
   font-size: 0.9rem;
   font-weight: bold;
   padding: 0.25rem;
   white-space: nowrap;
 }
 .ManageCustomer .cell:first-child,
-.ManageCustomer .ms-ctn:first-child {
+.AccountHome .cell:first-child,
+.ManageCustomer .ms-ctn:first-child,
+.AccountHome .ms-ctn:first-child {
   border-right: 1px solid #000;
 }
-.ManageCustomer .edited {
+.ManageCustomer .edited,
+.AccountHome .edited {
   color: rgba(57,132,57,0.8);
 }
-.ManageCustomer button {
+.ManageCustomer button,
+.AccountHome button {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   border: 1px solid transparent;
-  padding: 0.25rem 0.8rem;
+  padding: 0.5rem 0.8rem;
   letter-spacing: 1px;
   margin: 0;
   text-align: center;
   border-radius: 0.25rem;
   color: #fff;
 }
-.ManageCustomer button:focus {
+.ManageCustomer button:focus,
+.AccountHome button:focus {
   outline: 0;
 }
-.ManageCustomer button.reset-btn {
+.ManageCustomer button.reset-btn,
+.AccountHome button.reset-btn {
   background-color: transparent;
   text-decoration: underline;
   color: #155d75;
@@ -1547,71 +1660,90 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   letter-spacing: 0;
   padding: 0 0.5rem;
 }
-.ManageCustomer button.save-btn {
-  background-color: #155d75;
+.ManageCustomer button.save-btn,
+.AccountHome button.save-btn {
+  background-color: #ffc502;
+  color: #000;
 }
-.ManageCustomer select:focus {
+.ManageCustomer select:focus,
+.AccountHome select:focus {
   outline: 0;
 }
-.ManageCustomer .original-price {
+.ManageCustomer .original-price,
+.AccountHome .original-price {
   color: rgba(169,23,23,0.7);
 }
-.ManageCustomer .new-price {
+.ManageCustomer .new-price,
+.AccountHome .new-price {
   color: rgba(57,132,57,0.8);
 }
-.ManageCustomer .price-change {
+.ManageCustomer .price-change,
+.AccountHome .price-change {
   color: rgba(57,132,57,0.8);
 }
-.ManageCustomer .is-negative {
+.ManageCustomer .is-negative,
+.AccountHome .is-negative {
   color: #f00;
 }
-.ManageCustomer .is-positive {
+.ManageCustomer .is-positive,
+.AccountHome .is-positive {
   color: #008000;
 }
-.ManageCustomer .content {
-  display: flex;
+.ManageCustomer .content .data,
+.AccountHome .content .data {
+  flex: 1;
 }
-.ManageCustomer .content .data {
-  width: 50%;
-}
-.ManageCustomer .content .edit-summary {
+.ManageCustomer .content .edit-summary,
+.AccountHome .content .edit-summary {
+  flex: 1;
   margin-left: 3rem;
-  border: 1px solid rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
   background-color: #fff;
   font-weight: bold;
   min-width: 30%;
+  box-shadow: 1px 1px 5px #666;
 }
-.ManageCustomer .content .edit-summary >div:first-child {
+.ManageCustomer .content .edit-summary >div:first-child,
+.AccountHome .content .edit-summary >div:first-child {
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding: 0.5rem;
+  padding: 0.75rem;
   font-weight: bold;
   font-family: "RalewayRegular";
-  background-color: #e7e7e7;
-  color: #444;
+  background-color: #a00;
+  color: #fff;
 }
-.ManageCustomer .content .edit-summary >div:nth-child(2) {
+.ManageCustomer .content .edit-summary >div:nth-child(2),
+.AccountHome .content .edit-summary >div:nth-child(2) {
   flex: 1 1 auto;
   padding: 1rem;
 }
-.ManageCustomer .content .edit-summary >div:nth-child(2) >div {
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div,
+.AccountHome .content .edit-summary >div:nth-child(2) >div {
   padding-bottom: 0.25rem;
 }
-.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span {
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span,
+.AccountHome .content .edit-summary >div:nth-child(2) >div >span {
   padding: 0 1rem;
   font-weight: normal;
 }
-.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:first-child {
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:first-child,
+.AccountHome .content .edit-summary >div:nth-child(2) >div >span:first-child {
   color: rgba(169,23,23,0.7);
 }
-.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:last-child {
+.ManageCustomer .content .edit-summary >div:nth-child(2) >div >span:last-child,
+.AccountHome .content .edit-summary >div:nth-child(2) >div >span:last-child {
   color: rgba(57,132,57,0.8);
 }
-.ManageCustomer .content .edit-summary >div:nth-child(3) {
+.ManageCustomer .content .edit-summary >div:nth-child(3),
+.AccountHome .content .edit-summary >div:nth-child(3) {
   border-top: 1px solid rgba(0,0,0,0.1);
-  padding: 0.5rem;
+  padding: 0.75rem;
   text-align: center;
+}
+@media only screen and (max-width: 767px) {
+  .ManageCustomer,
+  .AccountHome {
+    margin: 2rem 1rem;
+  }
 }
 .MemberInfo >p {
   margin-bottom: 2rem;
@@ -1673,9 +1805,10 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   font-size: 1.2rem;
   padding: 0.75rem 0.5rem;
   width: 25rem;
+  border: 1px solid #ccc;
 }
 .MemberTypeahead .form-label {
-  color: #c98702;
+  color: #a00;
   font-size: 1.4rem;
   margin-right: 1rem;
 }
@@ -1695,6 +1828,10 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   color: #000;
   border-color: #f4bc00;
 }
+.OrderOptions .content {
+  display: flex;
+  flex-wrap: wrap;
+}
 .OrderOptions ol {
   text-align: left;
 }
@@ -1709,7 +1846,6 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   min-width: 150px;
 }
 .OrderOptions ol li span:first-child {
-  color: #155d75;
   width: 8rem;
 }
 .OrderOptions ol li select {
@@ -1724,6 +1860,11 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .OrderOptions ol li select:disabled {
   opacity: 0.4;
+}
+@media only screen and (max-width: 767px) {
+  .OrderOptions .content .edit-summary {
+    margin: 1.5rem 0;
+  }
 }
 .Reporting {
   padding: 5rem 1.5rem 1.5rem;
@@ -1776,7 +1917,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   background-color: #a00;
   color: #fff;
   font-weight: bold;
-  border-color: #444;
+  border-color: #333;
 }
 .Reporting .results .rows > ol:nth-child(even) {
   background-color: #e7e7e7;
@@ -1786,18 +1927,26 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .Seasons ol {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .Seasons .share-label {
   margin-right: 1rem;
+  margin-bottom: 1.5rem;
   cursor: pointer;
 }
 .Seasons .share-label.selected {
   background-color: #fce1ac;
 }
+@media only screen and (max-width: 767px) {
+  .Seasons ol {
+    justify-content: center;
+  }
+}
 .share-label {
   background-color: #ffc502;
   border-radius: 0.35rem;
-  box-shadow: 2px 2px 5px #444;
+  box-shadow: 2px 2px 5px #333;
   color: #000;
   font-size: 1rem;
   padding: 0.75rem;
@@ -1812,11 +1961,11 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   margin: 0.25rem 0;
 }
 .inactive .share-label >div:nth-child(2) {
-  color: #444;
+  color: #333;
 }
 .inactive .share-label {
   background-color: #ccc;
-  color: #444;
+  color: #333;
 }
 .ShareOptions li {
   padding: 3rem 0;
@@ -1850,6 +1999,13 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .ShareOptions li .single-share >div:first-child .share-label {
   margin-bottom: 2rem;
 }
+.ShareOptions li .single-share.horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+.ShareOptions li .single-share.horizontal .share-label {
+  margin-right: 1rem;
+}
 .ShareOptions li .single-share .share-option:not(:first-child) {
   margin-top: 0.5rem;
 }
@@ -1878,16 +2034,20 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   }
 }
 .SharePatch {
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: 1rem;
-  margin: 1rem;
-  background-color: #f2f2f2;
-  border: 1px solid #bbb;
+  margin: 3rem 2rem;
+  background-color: #fff5df;
 }
 .SharePatch .section-heading {
   display: block;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin: 0 0 2rem;
+}
+.SharePatch .section-heading h3 {
+  color: inherit;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
 }
 .SharePatch .content >div {
   margin: auto;
@@ -1902,9 +2062,22 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   padding-bottom: 0.25rem;
   margin-bottom: 1rem;
 }
+.SharePatch .content >div li.line-item:first-child {
+  font-weight: bold;
+}
+.SharePatch .content >div li.line-item:first-child >span:first-child {
+  float: left;
+}
+.SharePatch .content >div li.line-item:first-child >span:last-child {
+  float: right;
+}
+.SharePatch .content >div li.line-item.options >div:not(:first-child),
+.SharePatch .content >div li.line-item.options ul {
+  margin-left: 2rem;
+}
 .SharePatch .content >div li:last-child {
-  color: #c98702;
-  font-size: 1.25rem;
+  font-weight: bold;
+  font-size: 1.3rem;
   text-align: center;
 }
 .SharePatch .content >div li span {
@@ -1920,6 +2093,21 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .SharePatch .content >div .ButtonFlow {
   margin: 1rem;
   text-align: center;
+}
+.SharePatch .content >div .ButtonFlow button {
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+.SharePatch .content >div .ButtonFlow .reset-btn {
+  background-color: #d7d7d7;
+  margin-left: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+@media only screen and (max-width: 767px) {
+  .SharePatch {
+    margin: 3rem 0;
+  }
 }
 .Shares >h2 {
   margin: 2rem 0;
@@ -2020,7 +2208,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   padding: 1rem;
   margin-bottom: 3rem;
   background-color: #fff5df;
-  box-shadow: 1px 1px 2px #444;
+  box-shadow: 1px 1px 2px #333;
 }
 .Summary .share-summary >div:first-child {
   display: flex;
@@ -2072,7 +2260,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   width: 3.5rem;
   font-size: 0.8rem;
   background-color: #000;
-  box-shadow: 1px 2px 5px #444;
+  box-shadow: 1px 2px 5px #333;
   color: #fff;
   cursor: default;
   padding: 0.65rem;
@@ -2123,7 +2311,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   color: #000;
   border: 1px solid transparent;
   border-radius: 0.5rem;
-  box-shadow: 3px 3px 5px #444;
+  box-shadow: 3px 3px 5px #333;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
   margin: 0.5rem;
@@ -2192,7 +2380,7 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 }
 .Summary .payment .button-row >button.disabled {
   background-color: #ccc;
-  color: #444;
+  color: #333;
   cursor: not-allowed;
 }
 .Summary .payment .button-row >button.has-spinner {
@@ -2390,6 +2578,10 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .Transactions .balance span:last-child {
   flex: 4;
 }
+.WeekOptions .content {
+  display: flex;
+  flex-wrap: wrap;
+}
 .WeekOptions .content .data {
   text-align: left;
 }
@@ -2399,49 +2591,40 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .WeekOptions .content .data ol {
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
   margin-top: 1rem;
+  width: 26rem;
 }
 .WeekOptions .content .data ol .delivery-date {
   width: 5rem;
-  background-color: #555;
-  border: 1px solid #f5f5dc;
-  box-shadow: 1px 2px 5px #ccc;
-  color: #bf8002;
-  opacity: 0.7;
+  background-color: #000;
+  box-shadow: 1px 2px 5px #333;
+  color: #fff;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "RalewayRegular";
-  padding: 0.6rem 1.4rem;
+  padding: 0.65rem;
   margin: 1px;
+  text-align: center;
   line-height: 1.2;
 }
-.WeekOptions .content .data ol .delivery-date.edited {
-  border: 1px solid rgba(169,23,23,0.7);
-}
-.WeekOptions .content .data ol .delivery-date:hover {
-  background-color: #5e5e5e;
+html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):hover {
+  color: #e7e7e7;
 }
 .WeekOptions .content .data ol .delivery-date.selected {
-  background-color: rgba(201,135,2,0.3);
-  color: #c98702;
-  opacity: 1;
+  background-color: #a00;
 }
 .WeekOptions .content .data ol .delivery-date.selected.edited {
   border: 1px solid rgba(57,132,57,0.8);
 }
 .WeekOptions .content .data ol .delivery-date.unselectable {
+  background-color: #333;
+  color: #000;
   cursor: not-allowed;
-  opacity: 0.3;
+  opacity: 0.5;
 }
-.WeekOptions .content .data ol .delivery-date >div {
+.WeekOptions .content .data ol .delivery-date.edited {
+  border: 1px solid rgba(169,23,23,0.7);
+}
+.WeekOptions .content .data ol .delivery-date >div:not(:first-child) {
   font-weight: bold;
-}
-.WeekOptions .content .data ol .delivery-date >div:first-child {
-  font-weight: normal;
 }
 .WeekOptions .content .edit-summary >div:nth-child(2) {
   display: flex;
@@ -2460,6 +2643,20 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
 .WeekOptions .content .edit-summary >div:nth-child(2) .column >div:first-child {
   font-weight: bold;
   margin-bottom: 0.5rem;
+}
+@media only screen and (max-width: 767px) {
+  .WeekOptions .content {
+    display: block;
+  }
+  .WeekOptions .content .data {
+    margin-bottom: 2rem;
+  }
+  .WeekOptions .content .data ol {
+    width: auto;
+  }
+  .WeekOptions .content .edit-summary {
+    margin-left: 0;
+  }
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
@@ -2513,7 +2710,7 @@ body {
   font-weight: 400;
   line-height: 1.5em;
   text-align: left;
-  color: #444;
+  color: #333;
   background-color: #ffebc0;
 }
 body >div:first-child {
@@ -2530,12 +2727,6 @@ section {
   padding-bottom: 0;
   margin-left: 20%;
   margin-right: 20%;
-/*&.striped
-        color: $light-grey
-        background-color: $sun-red
-        
-        >h2, a
-            color: white*/
 }
 h1,
 h2,
@@ -2613,6 +2804,10 @@ button {
 .slide-in-right {
   animation: slide-in-right 0.5s forwards;
   -webkit-animation: slide-in-right 0.5s forwards;
+}
+.slide-out-right {
+  animation: slide-out-right 0.5s forwards;
+  -webkit-animation: slide-out-right 0.5s forwards;
 }
 .slide-in-left {
   animation: slide-in-left 0.5s forwards;
@@ -2719,6 +2914,38 @@ button {
     transform: translateX(0%);
   }
 }
+@-moz-keyframes slide-out-right {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+@-webkit-keyframes slide-out-right {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+@-o-keyframes slide-out-right {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+@keyframes slide-out-right {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
 @-moz-keyframes fadeIn {
   from {
     opacity: 0;
@@ -2799,7 +3026,7 @@ button {
   position: relative;
   background-color: #fff;
   padding: 0.5rem;
-  border: 1px solid #444;
+  border: 1px solid #333;
   border-radius: 0.2rem;
 }
 .input-std:focus {

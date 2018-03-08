@@ -235,9 +235,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.changes.innerHTML = ''
 
         if( edits.length === 0 ) {
+            console.log( 'no edits' )
             this.emit( 'reset', this.model )
             this.els.resetBtn.classList.add('fd-hidden')
-            return this.els.editSummary.classList.add('fd-hidden')
+            return this.slideOut( this.els.editSummary, 'right' )
         }
         
         edits.forEach( el => {
@@ -254,9 +255,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.originalWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice )
         this.els.newWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice + priceAdjustment )
 
-        this.els.editSummary.classList.remove('fd-hidden')
-
         this.emit( 'adjustment', { description: this.getAdjustmentDescription(), originalWeeklyPrice: this.originalWeeklyPrice, priceAdjustment } )
+    
+        if( !this.isHidden( this.els.editSummary ) && edits.length ) return
+
+        this.slideIn( this.els.editSummary, 'right' )
     },
 
     templates: {

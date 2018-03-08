@@ -207,7 +207,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( e.target.tagName !== "LI" ) return
         if( this.views.editButtons.state !== 'start' ) return
         e.target.children[0].appendChild( this.views.editButtons.els.container )
-        this.views.editButtons.els.container.classList.remove('fd-hidden', 'fd-hide')
+        this.views.editButtons.els.container.classList.remove('fd-hidden')
     },
     
     onTransactionMouseleave( e ) {

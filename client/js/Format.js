@@ -31,8 +31,11 @@ module.exports = {
                 ? `<label>${datum.fk || datum.label}</label>`
                 : ``
 
+        //const image = datum.range === 'ImageUrl'
+            //? `<div><button class="btn-yellow" data-js="previewBtn" type="button">Preview</button><img data-src="${this.ImageSrc( value )}" /></div>`
+           // : ``
         const image = datum.range === 'ImageUrl'
-            ? `<div><button class="btn-yellow" data-js="previewBtn" type="button">Preview</button><img data-src="${this.ImageSrc( value )}" /></div>`
+            ? `<div><img data-src="${value}" /></div>`
             : ``
 
         const input = datum.fk

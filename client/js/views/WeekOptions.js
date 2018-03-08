@@ -15,10 +15,11 @@ module.exports = Object.assign( {}, Super, {
     },
 
     clear() {
+        console.log( 'clear' )
         this.els.dates.innerHTML = ''
 
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
+        //this.els.editSummary.classList.add('hidden')
     },
 
     determineDates( dayOfWeek ) {
@@ -130,15 +131,16 @@ module.exports = Object.assign( {}, Super, {
         if( ! Object.keys( this.changedDates ).find( key => this.changedDates[key].editedStatus !== undefined ) ) {
             this.els.resetBtn.classList.add('hidden')
             this.emit( 'reset', this.model )
-            return this.els.editSummary.classList.add('hidden')
+            return this.slideOut( this.els.editSummary, 'right' )
         }
 
         this.showEditSummary()
     },
 
     onResetBtnClick() {
+        console.log( 'onResetBtnClick' )
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
+        this.slideOut( this.els.editSummary, 'right' )
 
         Object.keys( this.changedDates ).forEach( key => {
             if( this.changedDates[key].editedStatus ) {
@@ -158,6 +160,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     showEditSummary() {
+        console.log( 'showEditSummary' )
         let result = 0,
             added = 0,
             removed = 0
@@ -185,7 +188,7 @@ module.exports = Object.assign( {}, Super, {
         this.els.weekChange.textContent = result
         this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
-        this.els.editSummary.classList.remove('hidden')
+        if( this.isHidden( this.els.editSummary ) ) this.slideIn( this.els.editSummary, 'right' )
 
         this.emit( 'adjustment', { added, removed } )
     },

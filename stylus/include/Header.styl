@@ -71,13 +71,23 @@
                 >ul
                     position: absolute
                     z-index: 1000
-                    top: 1rem
+                    top: 1.25rem
+                    color: initial
+                    background-color: $light-manila
+                    box-shadow: 1px 1px 5px #666
                     
                     >li
-                        border: 1px solid black
-                        padding: 1rem 1rem
+                        padding: .6rem
                         text-align: center
-                        color: $sun-red
+                        width: 10rem
+                        
+                        &:not(:last-child)
+                            border-bottom: 1px solid $divider-grey
+                        
+                        html.non-touch &
+                            &:hover
+                                color: $sun-red
+                                text-decoration: underline
                         
 
     @media only screen and (min-width: 1500px)

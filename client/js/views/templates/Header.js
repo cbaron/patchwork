@@ -4,7 +4,7 @@ module.exports = ( { opts, ImageSrc } ) => {
 return `` +
 `<div>
     <div>
-        <img data-src="${ImageSrc('header_sun')}" />
+        <img data-src="${ImageSrc('header_sunrays')}" />
     </div>
     <div data-js="nav" class="fd-hidden">
         <div>

@@ -41,12 +41,21 @@ module.exports = {
     },
 
     insertArrayData( sectionName, key, data ) {
-        const el = this.els[ key ] || this.els[ sectionName ]
+        console.log( 'insertArrayData' )
+        console.log( sectionName )
+        console.log( key )
+        console.log( data )
+        const el = this.els[ key ] || this.els[ sectionName ],
+            hasImages = /image/i.test(key)
+
+        console.log( hasImages )
 
         data.forEach( datum =>
             this.slurpTemplate( {
                 insertion: { el },
-                template: `<${this.nameToTagName[ key ] || 'li'}>${this.Format.ParseTextLinks( datum )}</${this.nameToTagName[ key ] || 'li'}>`
+                template: hasImages
+                    ? `<img data-src="${this.Format.ImageSrc( datum )}" />`
+                    : `<${this.nameToTagName[ key ] || 'li'}>${this.Format.ParseTextLinks( datum )}</${this.nameToTagName[ key ] || 'li'}>`
             } )
         )
     },

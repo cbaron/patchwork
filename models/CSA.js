@@ -21,9 +21,10 @@ module.exports = {
                     }
                 ]
             }, {
-                name: 'dividerImageOne',
-                label: 'Divider Image One',
-                range: 'ImageUrl'
+                name: 'dividerImagesOne',
+                label: 'Divider Images One',
+                range: 'List',
+                itemRange: 'ImageUrl'
             }, {
                 name: 'csaFit',
                 label: 'CSA Fit',
@@ -62,9 +63,10 @@ module.exports = {
                     }
                 ]
             }, {
-                name: 'dividerImageTwo',
-                label: 'Divider Image Two',
-                range: 'ImageUrl'
+                name: 'dividerImagesTwo',
+                label: 'Divider Images Two',
+                range: 'List',
+                itemRange: 'ImageUrl'
             }, {
                 name: 'csaCustomization',
                 label: 'CSA Customization',

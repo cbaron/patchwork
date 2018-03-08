@@ -138,19 +138,21 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     generateEmailBody() {
-        var body = this.format('Hello %s,\r\n\r\nThanks for signing up for our CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
+        let body = `Hello ${this.body.member.name},\r\n\r\nThanks for signing up for our CSA program. Here is a summary for your records:\r\n\r\n`
 
-        body += this.body.shares.map( share =>
-            this.format('Share: %s\r\n\t%s%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n\tSeasonal Add-Ons: \r\n\t\t%s\r\n',
-                share.label,
-                share.description,
-                ( share.skipDays.length )
-                    ? this.format( "  You have opted out of produce for the following dates: %s.", share.skipDays.map( day => day.slice(5) ).join(', ') )
-                    : "",
-                share.delivery.description,
-                this._( share.options ).pluck('description').join('\r\n\t\t'),
-                share.seasonalAddOns.length ? share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit} -- ${addon.price}` ).join('\r\n\t\t') : `None`
-            )
+        body += this.body.shares.map( share => {
+            const skipDays = share.skipDays.length
+                ? `You have opted out of produce for the following dates: ${share.skipDays.map( day => day.slice(5) ).join(', ')}.`
+                : ""
+
+            const shareOptions = this._( share.options ).pluck('description').join('\r\n\t\t')
+
+            const seasonalAddOns = share.seasonalAddOns.length
+                ? `\r\n\tSeasonal Add-Ons: \r\n\t\t` + share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit} -- ${addon.price}` ).join('\r\n\t\t') + `\r\n`
+                : `\r\n`
+
+            return `Share: ${share.label}\r\n\t${share.description}${skipDays}\r\n\t${share.delivery.description}\r\n\tShareOptions:\r\n\t\t${shareOptions}${seasonalAddOns}`
+        }
         ).join('\r\n\r\n')
 
         if( this.body.member.omission.length ) body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`

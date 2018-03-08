@@ -14,7 +14,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onAccountBtnClick() {
         this.toggleAccountMenu()
-        this.emit( 'navigate', 'edit-account' )
+        this.emit( 'navigate', 'account-home' )
     },
 
     onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
@@ -70,10 +70,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     toggleAccountMenu() {
-        console.log( 'toggleAccountMenu' )
-        console.log( !this.els.accountMenu.classList.contains('fd-hidden') )
         this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
-        this.els.userName.classList.toggle( 'menu-open', !this.els.accountMenu.classList.contains('fd-hidden') )
     },
 
     onLogin() {

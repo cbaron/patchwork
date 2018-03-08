@@ -1,6 +1,8 @@
 .WeekOptions
-
     .content
+        display: flex
+        flex-wrap: wrap
+
         .data
             text-align: left
             
@@ -10,47 +12,41 @@
             ol
                 display: flex
                 flex-wrap: wrap
-                width: 90%
                 margin-top: 1rem
+                width: 26rem
                 
                 .delivery-date
                     width: 5rem
-                    background-color: #555
-                    border: 1px solid beige
-                    box-shadow: 1px 2px 5px $grey
-                    color: darken($gold, 5%)
-                    opacity: .7;
+                    background-color: black
+                    box-shadow: 1px 2px 5px $dark-grey
+                    color: white
                     cursor: pointer
-                    display: flex
-                    flex-direction: column
-                    justify-content: center
-                    align-items: center
-                    font-family: "RalewayRegular"
-                    padding: .6rem 1.4rem
+                    padding: .65rem
                     margin: 1px
+                    text-align: center
                     line-height: 1.2
-                    &.edited
-                        border: 1px solid $edit-red
-
-                    &:hover
-                        background-color: lighten(#555, 5%)
+                    
+                    &:not(.unselectable)
+                        html.non-touch &
+                            &:hover
+                                color: $light-grey
                     
                     &.selected
-                        background-color: rgba(201, 135, 2, .3)
-                        color: $gold
-                        opacity: 1
+                        background-color: $sun-red
                         &.edited
                             border: 1px solid $edit-green
                     
                     &.unselectable
-                        //background-color: rgba(85,85,85,0.1)
+                        background-color: $dark-grey
+                        color: black
                         cursor: not-allowed
-                        opacity: .3
-
-                    >div
+                        opacity: .5
+                        
+                    &.edited
+                        border: 1px solid $edit-red
+                        
+                    >div:not(:first-child)
                         font-weight: bold
-                        &:first-child
-                            font-weight: normal
                     
         .edit-summary
             >div:nth-child(2)
@@ -70,3 +66,16 @@
                     >div:first-child
                         font-weight: bold
                         margin-bottom: .5rem
+                        
+@media only screen and (max-width: 767px)
+    .WeekOptions .content
+        display: block
+        
+        .data
+            margin-bottom: 2rem
+            
+            ol
+                width: auto
+                
+        .edit-summary
+            margin-left: 0

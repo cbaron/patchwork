@@ -25,6 +25,8 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
             if( !this.seasonalAddOns.length ) {
                 this.templateData.seasonalContainer.get(0).classList.add('fd-hidden')
                 this.templateData.seasonalTotal.get(0).parentNode.classList.add('fd-hidden')
+                this.templateData.weeklyHeader.get(0).classList.add('fd-hidden')
+                this.templateData.container.get(0).children[0].classList.add('horizontal')
             }
 
             this.seasonalAddOns.forEach( addon => {

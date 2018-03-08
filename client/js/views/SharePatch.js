@@ -5,9 +5,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             return { 
                 model: Object.create( this.Model ).constructor( {
                     states: {
-                        start: [ { name: 'save', text: 'Save Changes', class:'save-btn', nextState: 'confirm' } ],
+                        start: [ { name: 'save', text: 'Update Share', class:'save-btn', nextState: 'confirm' } ],
                         confirm: [
-                            { name: 'confirmBtn', class:'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                            { name: 'confirmBtn', class:'save-btn', text: 'Are You Sure?', emit: true, nextState: 'start' },
                             { name: 'cancel', class:'reset-btn', nextState: 'start', text: 'Cancel' }
                         ]
                     }
@@ -148,6 +148,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.weeksAffected = this.originalWeeksAffected
         this.els.weeksAffected.textContent = this.weeksAffected
     },
+
+    templateOpts() { return { isAdmin: window.location.pathname.indexOf('admin') !== -1 } },
 
     updateOptionsAdjustment() {
         this.optionsAdjustment = this.weeksAffected * this.weeklyPriceAdjustment

@@ -12,6 +12,9 @@ module.exports = p => {
 return `` +
 `<div>
     <h1>Locations</h1>
+    <section>
+        <p data-js="intro"></p>
+    </section>
     <div>
         <div class="map-wrap">
             <div data-js="map"></div>
@@ -20,9 +23,6 @@ return `` +
             </ul>
         </div>
     </div>
-    <section>
-        <p data-js="intro"></p>
-    </section>
     <section data-js="farmersMarkets" class="striped">
         <h2></h2>
         <p></p>

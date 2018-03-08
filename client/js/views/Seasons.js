@@ -35,6 +35,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.list.querySelector(`div.share-label[data-id="${memberShareId}"]`).click()
     },
 
+    templateOpts() { return { isAdmin: window.location.pathname.indexOf('admin') !== -1 } },
+
     templates: {
         ShareBox: require('./templates/ShareBox')
     },

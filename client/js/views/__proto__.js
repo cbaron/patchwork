@@ -264,6 +264,28 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
         } )        
     },
 
+    slideIn( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.remove(`slide-in-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add(`slide-in-${direction}`)
+    },
+
+    slideOut( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove(`slide-out-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        el.classList.add(`slide-out-${direction}`)
+    },
+
     slurpEl( el ) {
         var key = el.getAttribute( this.slurp.attr ) || 'container'
 

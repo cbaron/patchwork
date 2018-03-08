@@ -140,7 +140,7 @@ Object.assign( Summary.prototype, View.prototype, {
                     .reduce( ( a, b ) => a + b ),
                 weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
                 seasonalAddOnTotal = share.get( 'seasonalAddOns' ).map( addon =>
-                   parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b ),
+                   parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b, 0 ),
                 address = ( selectedDelivery.get('name') === 'home' )
                     ? this.user.get('address')
                     : ( groupDropoff )

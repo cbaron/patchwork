@@ -1,5 +1,5 @@
 module.exports = p => {
-
+    const heading = p.isAdmin ? 'Customer Info' : 'Your Account Info'
     const rows = p.fields.map( field => {
         const rowValue = field.name === 'neverReceive'
             ? `<div data-js="neverReceive" class="cell"></div>`
@@ -18,9 +18,9 @@ module.exports = p => {
     } ).join('')
 
     return `` +
-    `<div class="fd-hide fd-hidden section">
+    `<div class="fd-hidden section">
         <div class="section-heading">
-            <h3>Customer Info</h3>
+            <h3>${heading}</h3>
             <button class="reset-btn fd-hidden" data-js="resetBtn">Reset</button>
         </div>
         <div class="content">
@@ -31,7 +31,7 @@ module.exports = p => {
                 <div>Summary of Changes</div>
                 <div data-js="changes"></div>
                 <div>
-                    <button class="save-btn" data-js="saveBtn">Save Changes</button>
+                    <button class="save-btn" data-js="saveBtn">Update Account</button>
                 </div>
             </div>
         </div>

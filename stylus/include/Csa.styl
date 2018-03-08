@@ -3,6 +3,7 @@
         &:first-of-type
             padding-top: 0
             padding-bottom: 2.5rem
+            border-bottom: 1px solid $divider-grey
 
     h2
         margin-bottom: .15rem
@@ -15,6 +16,14 @@
             height: auto
             width: 100%
             margin: 0
+            
+    .image-row
+        padding: 2.5rem
+
+        >img
+            width: 30.5%
+            display: inline-block
+            margin: 0 .5rem
     
     .item-detail
         margin-bottom: 1rem
@@ -30,6 +39,7 @@
         
 
     .csa-fit
+        border-top: 1px solid $divider-grey
         >p
             margin-bottom: .2rem
         ul
@@ -43,7 +53,12 @@
                     listCircle($sun-red)
 
     .csa-contents
-            
+        border-bottom: 1px solid $divider-grey
+        padding-bottom: 2.5rem
+        
+        .button-row
+            margin-bottom: 0
+
         .share-examples
             display: flex
             flex-wrap: wrap
@@ -81,6 +96,7 @@
             margin: 2rem 0
 
     .delivery
+        border-top: 1px solid $divider-grey
 
         img
             display: block
@@ -97,8 +113,9 @@
                 min-width: 12rem
                 padding: .4rem .85rem
                 margin: .085rem
-                color: white
-                background-color: $sun-red
+                color: $sun-red
+                background-color: $light-manila
+                border: 1px solid $sun-red
                 text-align: center
             
             >div
@@ -107,9 +124,8 @@
                     
                     &:first-child
                         .cell
-                            border: 1px solid $sun-red
-                            color: $sun-red
-                            background-color: white
+                            color: $light-manila
+                            background-color: $sun-red
                             
                     >div
                         &:nth-child(2)
@@ -131,6 +147,21 @@
                     padding: .3rem .6rem
                     font-size: .9rem
                     
+        .image-row
+            >img
+                width: 47%
+                &:last-child
+                    display: none
+                    
+    @media only screen and (max-width: 650px)
+        .image-row
+            >img
+                width: 100%
+                margin: 0
+                
+                &:not(:first-child)
+                    display: none
+
     @media only screen and (max-width: 425px)
         .csa-contents .share-examples >div
             margin: 0 1rem 1rem

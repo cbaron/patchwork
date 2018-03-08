@@ -1,7 +1,5 @@
-.ManageCustomer
-    padding: 0 1.5rem
-    //min-height: 100vh
-    //background-color: $light-grey
+.ManageCustomer, .AccountHome
+    margin: 2rem 3rem
     
     input:focus
         border-color: initial
@@ -14,8 +12,8 @@
         .MemberTypeahead input:focus
             border-color: initial
 
-    .section
-        border-top: 1px solid #eee
+    .section:not(:first-of-type)
+        border-top: 1px solid $divider-grey
         margin-top: 2rem
         
     .section-heading
@@ -28,7 +26,7 @@
             
     h3
         display: inline-block
-        color: $gold
+        color: $sun-red
         font-weight: bold
         margin: 0
         font-size: 1.2rem
@@ -51,9 +49,9 @@
         
     button
         display: inline-block
-        font-size: .8rem
+        font-size: .9rem
         border: 1px solid transparent
-        padding: .25rem .8rem
+        padding: .5rem .8rem
         letter-spacing: 1px
         margin: 0
         text-align: center
@@ -69,7 +67,8 @@
             letter-spacing: 0
             padding: 0 .5rem
         &.save-btn
-            background-color: $blue
+            background-color: $sun-yellow
+            color: black
             
     select:focus
         outline: 0
@@ -89,29 +88,26 @@
     .is-positive
         color: green
 
-    .content
-        display: flex
-        
+    .content        
         .data
-            width: 50%
+            flex: 1
                     
         .edit-summary
+            flex: 1
             margin-left: 3rem
-            border: 1px solid rgba(0,0,0,.1)
-            display: flex
-            flex-direction: column
-            background-color: #fff
+            background-color: white
             font-weight: bold
             min-width: 30%
+            box-shadow: 1px 1px 5px #666
             
             >div
                 &:first-child
                     border-bottom: 1px solid rgba(0,0,0,.1)
-                    padding: .5rem
+                    padding: .75rem
                     font-weight: bold
                     font-family: "RalewayRegular"
-                    background-color: $light-grey
-                    color: $dark-grey
+                    background-color: $sun-red
+                    color: white
                     
                 &:nth-child(2)
                     flex: 1 1 auto
@@ -128,5 +124,9 @@
                                 
                 &:nth-child(3)
                     border-top: 1px solid rgba(0,0,0,.1)
-                    padding: .5rem
+                    padding: .75rem
                     text-align: center
+
+@media only screen and (max-width: 767px)
+    .ManageCustomer, .AccountHome
+        margin: 2rem 1rem

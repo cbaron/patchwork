@@ -1,5 +1,8 @@
 .OrderOptions
-    
+    .content
+        display: flex
+        flex-wrap: wrap
+
     ol
         text-align: left
         
@@ -13,7 +16,6 @@
                 min-width: 150px
 
             span:first-child
-                color: $blue
                 width: 8rem
             select
                 height: 2rem
@@ -25,3 +27,7 @@
                     box-shadow: 0 0 3px 1px $grey
                 &:disabled
                     opacity: .4
+                    
+    @media only screen and (max-width: 767px)
+        .content .edit-summary
+            margin: 1.5rem 0

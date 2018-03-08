@@ -4,7 +4,7 @@ module.exports = p =>
     <section data-js="aboutCSA" class="about-csa">
         <h2></h2>
     </section>
-    <div data-js="dividerImageOne"></div>
+    <div class="image-row" data-js="dividerImagesOne"></div>
     <section data-js="csaFit" class="csa-fit">
         <h2 data-js="howDoIKnow"></h2>
         <p></p>
@@ -20,7 +20,7 @@ module.exports = p =>
             <button class="btn-yellow" data-js="signupBtn" type="button">Sign Up Now!</button>
         </div>
     </section>
-    <div data-js="dividerImageTwo"></div>
+    <div class="image-row" data-js="dividerImagesTwo"></div>
     <section data-js="csaDelivery" class="delivery">
         <h2></h2>
         <p></p>

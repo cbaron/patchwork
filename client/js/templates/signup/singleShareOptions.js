@@ -3,16 +3,16 @@ module.exports = p =>
     <div class="single-share">
         <div data-js="shareBox"></div>
         <div>
-            <h4>Weekly Options</h4>
+            <h4 data-js="weeklyHeader">Weekly Options</h4>
             <div data-js="options"></div>
         </div>
         <div data-js="seasonalContainer">
-            <h4>Seasonal Options</h4>
+            <h4>Seasonal Items</h4>
             <div data-js="seasonalOptions"></div>
         </div>
     </div>
     <div>
-        <div><span>Weekly Options Total: </span><span data-js="weeklyTotal"></span></div>
-        <div><span>Seasonal Options Total: </span><span data-js="seasonalTotal"></span></div>
+        <div><span>Share Total: </span><span data-js="weeklyTotal"></span></div>
+        <div><span>Seasonal Items Total: </span><span data-js="seasonalTotal"></span></div>
     </div>
 </li>`

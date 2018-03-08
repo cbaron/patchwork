@@ -1,16 +1,18 @@
 .CustomerInfo
 
     .content
+        display: block
+
         .data
-            min-width: 50%
-      
             .customer-table 
                 text-align: left
+                display: flex
+                flex-direction: column
+                align-items: center
                             
                 .table-row
                     align-items: center
-                    border: 1px solid #000
-                    background-color: #fff
+                    margin: .5rem 0
                     display: flex
                     
                     &:not(:first-child)
@@ -22,12 +24,19 @@
                         
                         
                     >.cell:first-child
-                        min-width: 220px
+                        border: none
+                        width: 9rem
+                        text-align: right
+                        margin-right: 1rem
                     >*:last-child
                         flex: 1
+                        min-width: 25rem
+                        border: 1px solid #ccc
                         font-weight: normal
                         color: black
+                        background-color: #fff
                         overflow-x: hidden
+                        padding: .5rem
                                                
                     .ms-ctn
                         margin: 0
@@ -52,10 +61,32 @@
                     
                     .ms-ctn-focus
                         box-shadow: none
-                
-                    &.address
-                        height: 3.25rem
-                        line-height: 2.75rem
 
                     &.neverReceive
                         white-space: inherit
+
+        .edit-summary
+            margin: 1.5rem 3rem
+            display: block
+            
+            button
+                font-weight: normal
+
+                
+@media only screen and (max-width: 767px)
+    .CustomerInfo .content
+        .data
+            .customer-table
+                display: block
+                
+                .table-row
+                    display: block
+                    >.cell:first-child
+                        text-align: left
+                    >*:last-child
+                        width: 100%
+                        min-width: 0
+        
+        .edit-summary
+            margin: 1.5rem 0
+

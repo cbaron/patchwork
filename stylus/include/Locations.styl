@@ -1,9 +1,15 @@
 .Locations
 
     h1
-        padding-bottom: 2rem
+        padding-bottom: 0
 
     section
+        &:first-of-type
+            margin-bottom: 2rem
+        &:nth-of-type(2), &:nth-of-type(3), &:nth-of-type(4)
+            border-bottom: 1px solid $divider-grey
+            padding-bottom: 2.5rem
+
         ul
             columns: 2
             margin-top: 2rem

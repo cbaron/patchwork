@@ -40,7 +40,7 @@ const shares = p.shares.map( share => {
         </div>`
         : ``
 
-    const skipDays = share.skipDays
+    const skipDays = share.skipDays.length
         ? `<div>
             <div class="section-title">Dates You Will Not Pickup</div>
             <div class="pickup-dates">${share.skipDays.join('')}</div>

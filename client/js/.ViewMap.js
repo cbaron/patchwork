@@ -1,5 +1,6 @@
 module.exports={
 	About: require('./views/About'),
+	AccountHome: require('./views/AccountHome'),
 	AddTransaction: require('./views/AddTransaction'),
 	Admin: require('./views/Admin'),
 	AdminHeader: require('./views/AdminHeader'),

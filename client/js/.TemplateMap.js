@@ -1,5 +1,6 @@
 module.exports={
 	About: require('./views/templates/About'),
+	AccountHome: require('./views/templates/AccountHome'),
 	AddTransaction: require('./views/templates/AddTransaction'),
 	AdminHeader: require('./views/templates/AdminHeader'),
 	AdminPlus: require('./views/templates/AdminPlus'),
@@ -16,6 +17,7 @@ module.exports={
 	Dragger: require('./views/templates/Dragger'),
 	EditAccount: require('./views/templates/EditAccount'),
 	EditCsaTransaction: require('./views/templates/EditCsaTransaction'),
+	EditOrders: require('./views/templates/EditOrders'),
 	FieldEdit: require('./views/templates/FieldEdit'),
 	FoodOmission: require('./views/templates/FoodOmission'),
 	Footer: require('./views/templates/Footer'),

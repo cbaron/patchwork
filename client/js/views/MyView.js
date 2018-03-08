@@ -35,6 +35,28 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         }
     },
 
+    fadeIn( el ) {
+        const onFadeEnd = () => {
+            el.classList.remove('animate-in')
+            el.removeEventListener( 'animationend', onFadeEnd )
+        }
+
+        el.addEventListener( 'animationend', onFadeEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add('animate-in')
+    },
+
+    fadeOut( el ) {
+        const onFadeEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove('animate-out')
+            el.removeEventListener( 'animationend', onFadeEnd )
+        }
+
+        el.addEventListener( 'animationend', onFadeEnd )
+        el.classList.add('animate-out')
+    },
+
     format: {
         capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1)
     },
@@ -126,6 +148,28 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         this.templateData.container.show()
         this.size()
         return this;
+    },
+
+    slideIn( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.remove(`slide-in-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add(`slide-in-${direction}`)
+    },
+
+    slideOut( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove(`slide-out-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        el.classList.add(`slide-out-${direction}`)
     },
 
     slurpEl: function( el ) {
