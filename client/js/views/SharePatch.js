@@ -24,8 +24,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( this.weeklyPriceAdjustment ) this.total += this.optionsAdjustment
         
-        this.els.adjustment.textContent = this.Currency.format( this.total )
-        if( this.total < 0 ) this.els.adjustment.classList.add('is-negative')
+        this.els.adjustment.textContent = `${this.total < 0 ? 'Price Reduction' : 'New Charges' }: ${this.Currency.format( Math.abs( this.total ) )}`
+        //if( this.total < 0 ) this.els.adjustment.classList.add('is-negative')
 
         return this
     },
@@ -66,7 +66,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.options.classList.add('fd-hidden')
 
         this.els.weeklyAdjustment.textContent = this.Currency.format( 0 )
-        this.els.shareOptionDescription.textContent = ``
+        this.els.shareOptionDescription.innerHTML = ''
 
         this.displayTotal()
 
@@ -78,6 +78,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
+        console.log( 'onOptionsUpdate' )
+        console.log( description )
+        console.log( description.split('\n\t') )
 
         this.optionsDescription = description
 
@@ -85,7 +88,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.weeklyPriceAdjustment = priceAdjustment
         this.els.weeklyAdjustment.textContent = this.Currency.format( priceAdjustment )
-        this.els.shareOptionDescription.textContent = description
+        //this.els.shareOptionDescription.textContent = description
+        this.els.shareOptionDescription.innerHTML = ''
+
+        this.slurpTemplate( {
+            insertion: { el: this.els.shareOptionDescription },
+            template: description.split('\n\t').map( option => `<li>${option}</li>` ).join('')
+        } )
         
         this.updateOptionsAdjustment()
 
@@ -135,7 +144,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.weeksRemovedPrice.textContent = this.Currency.format( this.weeksRemovedPrice )
         this.els.weeklyAdjustment.textContent = this.Currency.format( 0 )
         this.weeklyPriceAdjustment = false
-        this.els.shareOptionDescription.textContent = ``
+        this.els.shareOptionDescription.innerHTML = ''
         this.hide()
     },
 
@@ -149,12 +158,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.weeksAffected.textContent = this.weeksAffected
     },
 
-    templateOpts() { return { isAdmin: window.location.pathname.indexOf('admin') !== -1 } },
+    templateOpts() { return { isAdmin: window.location.pathname.split('/').includes('admin-plus') } },
 
     updateOptionsAdjustment() {
+        console.log( 'updateOptionsAdjustment' )
+        console.log( this.optionsAdjustment )
         this.optionsAdjustment = this.weeksAffected * this.weeklyPriceAdjustment
         this.els.optionsAdjustment.textContent = this.Currency.format( this.optionsAdjustment )
-        this.els.optionsAdjustment.classList.add( this.optionsAdjustment < 0 ? 'is-negative' : 'is-positive' )
+        //this.els.optionsAdjustment.classList.add( this.optionsAdjustment < 0 ? 'is-negative' : 'is-positive' )
     }
 
 } )

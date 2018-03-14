@@ -19,18 +19,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
 
-    onSignInBtnClick() {
-        this.hide().then( () => this.emit('signInClicked') ).catch( this.Error )
-    },
-
-    onSignOutBtnClick() {
-        document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
-        this.user.clear()
-
-        this.user.set( this.user.defaults )
-
-        this.toggleAccountUI()
-        this.toggleAccountMenu()
+    onLogin() {
+        this.onUser()
+        return Promise.resolve( this.toggleAccountUI() )
     },
 
     onNavLinksClick( e ) {
@@ -43,16 +34,30 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
+    onSignInBtnClick() { this.emit('signInClicked') },
+
+    onSignOutBtnClick() {
+        document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+        this.user.clear()
+
+        this.user.set( this.user.defaults )
+
+        this.toggleAccountUI()
+        this.toggleAccountMenu()
+
+        this.emit('signOutClicked')
+
+        this.Toast.showMessage( 'success', 'You are now signed out.' )
+    },
+
     onTitleClick() { this.emit( 'navigate', '/' ) },
 
-    onUser() {
-        this.els.userName.textContent = `Hello, ${this.user.get('name')}`
-    },
+    onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
 
     onUserNameClick() { this.toggleAccountMenu() },
 
     postRender() {
-        this.on('imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
+        this.on( 'imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
 
         this.toggleAccountUI()
         if( this.user.id ) this.onUser()
@@ -71,15 +76,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     toggleAccountMenu() {
         this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
-    },
-
-    onLogin() {
-        return this.show()
-        .then( () => {
-            this.onUser()
-            this.toggleAccountUI()
-        } )
-        .catch( this.Error )
     }
 
 } )

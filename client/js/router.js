@@ -47,21 +47,21 @@ module.exports = Object.create( {
                     this.ViewFactory.create( 'header', { insertion: { el: this.content, method: 'insertBefore' } } )
                     .on( 'navigate', this.onViewNavigate.bind(this) )
                     .on( 'signInClicked', () => this.handleLogin() )
-
+                    .on( 'signOutClicked', () => this.onSignout() )
             }
         }
     },
 
     handleLogin() {
-        Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ).concat( this.footer.hide() ) )
+        Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
         .then( () => {
-            this.ViewFactory.create( 'login', { insertion: { el: this.content } } )
+            this.Login = this.ViewFactory.create( 'login', { insertion: { el: this.content } } )
             .on( "success", () =>
-                this.footer.show()
-                .then( () => this.header.onLogin() )
+                this.header.onLogin()
                 .then( () => this.handle() )
                 .catch( this.Error )
             )
+            .on( 'loginCancelled', () => this.handle() )
         } )
         .catch( this.Error )
     },
@@ -112,13 +112,15 @@ module.exports = Object.create( {
     },
 
     navigate( location, options={} ) {
+        let path = `${window.location.pathname}`.split('/')
+
         if( options.replace || options.up ) {
-            let path = `${window.location.pathname}`.split('/')
             path.pop()
             if( options.replace ) path.push( location )
             location = path.join('/')
         } else if( options.append ) { location = `${window.location.pathname}/${location}` }
 
+        if( path.includes('resetPassword') || path.includes('verify') ) { window.location.pathname = `/${location}` }
         if( location !== window.location.pathname ) history.pushState( {}, '', location )
         if( !options.silent ) this.handle()
     },
@@ -137,7 +139,6 @@ module.exports = Object.create( {
     },
 
     onUser( user ) {
-        console.log( 'router onUser' )
         this.adminHeader ? this.adminHeader.onUser( this.user ) : this.header.onUser( this.user )
     },
 

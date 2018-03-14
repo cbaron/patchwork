@@ -3,7 +3,7 @@ var Base = require('./__proto__'),
 
 Object.assign( AccountInfo.prototype, Base.prototype, {
 
-    GET() {
+    /*GET() {
         return this.validate.GET.call(this)
         .then( () => this.Postgres.query(
             `SELECT p.name, p.email, m.phonenumber, m.address, m.extraaddress ` +
@@ -11,7 +11,7 @@ Object.assign( AccountInfo.prototype, Base.prototype, {
             `WHERE p.id = '${this.user.id}'`
         ) )
         .then( result => this.respond( { body: result.rows[0] } ) )
-    },
+    },*/
 
     POST() {
         return this.slurpBody()

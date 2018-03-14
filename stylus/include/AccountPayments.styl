@@ -1,0 +1,49 @@
+.AccountPayments
+    >.Seasons
+        border-top: none
+        margin-top: 0
+        
+        .table >ol
+            justify-content: center
+        
+        >.section-heading
+            display: none
+    
+    .payment
+        >div:last-child
+            display: flex
+            justify-content: center
+  
+        .total
+            font-size: 1.2rem
+            font-weight: bold
+            margin-bottom: 2rem
+            text-align: center
+
+        .Form
+            padding: 2rem
+            border-radius: 1rem
+            background-color: $light-manila
+            margin: 0
+            width: auto
+            
+            .form-group
+                margin: .5rem 0
+                >label
+                    display: block
+                    text-align: left
+                &:nth-child(2), &:nth-child(3)
+                    display: inline-block
+                &:nth-child(3)
+                    margin-left: 1rem
+                &:nth-child(4)
+                    >input
+                        width: 4rem
+                        
+            .btn-submit
+                margin: 1rem .25rem
+                width: 8rem
+                color: black
+                background-color: $sun-yellow
+            .btn-cancel
+                display: none

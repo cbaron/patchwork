@@ -77,7 +77,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                   newValue = this.editedFields[ fieldName ].newValue.toString()
 
             return `${fieldLabel}: ${oldValue} to ${newValue}`
-        } ).join(', ')
+        } ).join('\n\t')
     },
 
     getDeliveryData( ) {

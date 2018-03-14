@@ -52,11 +52,142 @@
   text-transform: uppercase;
   margin-top: 0.75rem;
 }
-.AccountHome {
+.AccountHome .back-btn {
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.AccountHome .account-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.AccountHome .account-nav >div {
+  width: 18rem;
+  padding: 0.75rem;
+  margin: 1rem;
+  background-color: #fff5df;
+  cursor: pointer;
+  border: 1px solid;
+}
+html.non-touch .AccountHome .account-nav >div:hover {
+  box-shadow: 2px 2px 5px #888;
+}
+.AccountHome .account-nav >div >div,
+.AccountHome .account-nav >div >h4 {
+  margin: 0.75rem;
+}
+.AccountHome .account-nav >div >h4 {
+  color: #a00;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid;
+}
+.AccountHome >div:nth-child(3) {
+  padding: 1rem;
+  background-color: #fff5df;
+  border-radius: 1rem;
+}
+.AccountHome >div:nth-child(3) .Form {
+  padding: 0;
+  margin: 0;
+}
+.AccountHome >div:nth-child(3) .Form .heading {
+  color: #a00;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.AccountHome >div:nth-child(3) .Form .form-group {
+  display: flex;
+  align-items: center;
+  margin: 1.25rem 5%;
+}
+.AccountHome >div:nth-child(3) .Form .form-group.has-error {
+  align-items: baseline;
+}
+.AccountHome >div:nth-child(3) .Form .form-group label {
+  flex: 1;
+}
+.AccountHome >div:nth-child(3) .Form .form-group >input {
+  flex: 6;
+}
+.AccountHome >div:nth-child(3) .Form button {
+  margin: 1rem 0.35rem;
+  width: 10rem;
+  color: #000;
+}
+.AccountHome >div:nth-child(3) .Form button.btn-submit {
+  background-color: #ffc502;
+}
+.AccountHome >div:nth-child(3) .Form button.btn-cancel {
+  background-color: #ccc;
+}
+.AccountHome >div:nth-child(4) .section:not(:first-of-type) {
+  border-top: 1px solid #999;
+  margin-top: 2rem;
+}
+@media only screen and (max-width: 500px) {
+  .AccountHome >div:nth-child(2) {
+    padding: 0.5rem;
+  }
+  .AccountHome >div:nth-child(2) .Form button {
+    width: 6rem;
+  }
+}
+.AccountPayments >.Seasons {
+  border-top: none;
+  margin-top: 0;
+}
+.AccountPayments >.Seasons .table >ol {
+  justify-content: center;
+}
+.AccountPayments >.Seasons >.section-heading {
+  display: none;
+}
+.AccountPayments .payment >div:last-child {
+  display: flex;
+  justify-content: center;
+}
+.AccountPayments .payment .total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.AccountPayments .payment .Form {
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: #fff5df;
+  margin: 0;
+  width: auto;
+}
+.AccountPayments .payment .Form .form-group {
+  margin: 0.5rem 0;
+}
+.AccountPayments .payment .Form .form-group >label {
   display: block;
+  text-align: left;
+}
+.AccountPayments .payment .Form .form-group:nth-child(2),
+.AccountPayments .payment .Form .form-group:nth-child(3) {
+  display: inline-block;
+}
+.AccountPayments .payment .Form .form-group:nth-child(3) {
+  margin-left: 1rem;
+}
+.AccountPayments .payment .Form .form-group:nth-child(4) >input {
+  width: 4rem;
+}
+.AccountPayments .payment .Form .btn-submit {
+  margin: 1rem 0.25rem;
+  width: 8rem;
+  color: #000;
+  background-color: #ffc502;
+}
+.AccountPayments .payment .Form .btn-cancel {
+  display: none;
 }
 .AddTransaction {
   border: 1px solid #000;
+  padding: 1rem;
 }
 .AddTransaction form {
   display: flex;
@@ -85,6 +216,9 @@
 }
 .AddTransaction .ButtonFlow .reset-btn {
   border: 1px solid #155d75;
+}
+.AddTransaction .ButtonFlow .save-btn {
+  margin-top: 1rem;
 }
 .AdminPlus {
   height: 100%;
@@ -140,36 +274,6 @@ button.submitting {
 .btn-yellow:hover {
   background-color: #ffce28;
 }
-.btn-submit {
-  width: 8rem;
-  background-color: #fff;
-  color: #a00;
-  border: 1px solid;
-  cursor: pointer;
-  padding: 0.5rem 0.75rem;
-  margin: 0 0.25rem;
-  text-align: center;
-  transition: all 0.15s ease-in-out;
-}
-.btn-submit:hover {
-  background-color: #a00;
-  color: #fff;
-}
-.btn-cancel {
-  width: 8rem;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid;
-  cursor: pointer;
-  padding: 0.5rem 0.75rem;
-  margin: 0 0.25rem;
-  text-align: center;
-  transition: all 0.15s ease-in-out;
-}
-.btn-cancel:hover {
-  background-color: #000;
-  color: #fff;
-}
 .floating {
   border: none;
   background-color: #ffc502;
@@ -221,6 +325,36 @@ button.submitting {
 .CollectionManager section {
   padding: 0;
   margin: 0;
+}
+.CollectionManager .btn-submit {
+  width: 8rem;
+  background-color: #fff;
+  color: #a00;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.25rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+}
+.CollectionManager .btn-submit:hover {
+  background-color: #a00;
+  color: #fff;
+}
+.CollectionManager .btn-cancel {
+  width: 8rem;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.25rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+}
+.CollectionManager .btn-cancel:hover {
+  background-color: #000;
+  color: #fff;
 }
 .CollectionManager .left-panel {
   flex: 1;
@@ -900,7 +1034,8 @@ html.non-touch .Delivery .dropoffs .dropoff:hover {
   z-index: 1;
 }
 input,
-textarea {
+textarea,
+select {
   background-color: #fff;
   border: 1px solid #ccc;
   padding: 0.3rem 0.5rem;
@@ -908,7 +1043,8 @@ textarea {
   border-radius: 0.25rem;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   border-color: #a00;
 }
 label {
@@ -1048,6 +1184,9 @@ html.non-touch .Header >div:nth-child(2) >ul li:hover {
   display: flex;
   justify-content: center;
   padding: 0.5rem 0;
+}
+.Header >div:nth-child(2) .account-ui >div:first-child {
+  cursor: pointer;
 }
 .Header >div:nth-child(2) .account-ui .member-ui {
   position: relative;
@@ -1539,37 +1678,98 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
     columns: 1;
   }
 }
-.Login {
-  margin: 5rem 1rem 3rem;
+.Login,
+.ResetPassword {
+  margin: 6rem 1rem;
   display: flex;
   justify-content: center;
 }
-.Login section {
+.Login section,
+.ResetPassword section {
   margin: 0;
   padding: 0;
 }
-.Login .Form {
-  width: 25rem;
+.Login button,
+.ResetPassword button {
+  color: #000;
+  background-color: #ffc502;
+  box-shadow: 3px 3px 5px #666;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.3rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  margin: 0.5rem 0.5rem 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
 }
-.Login .Form form {
+.Login button:hover,
+.ResetPassword button:hover {
+  background-color: #ffce28;
+}
+.Login .form-wrap,
+.ResetPassword .form-wrap {
+  width: 35rem;
+  padding: 0 3rem 1.5rem;
+  border-radius: 1rem;
+  background-color: #fff5df;
+}
+.Login .form-wrap .Form .heading,
+.ResetPassword .form-wrap .Form .heading {
+  color: #a00;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.Login .form-wrap .Form form,
+.ResetPassword .form-wrap .Form form {
   margin-bottom: 1.25rem;
 }
-.Login .Form form .form-group {
+.Login .form-wrap .Form form .form-group,
+.ResetPassword .form-wrap .Form form .form-group {
   display: flex;
   align-items: center;
 }
-.Login .Form form .form-group >label {
+.Login .form-wrap .Form form .form-group >label,
+.ResetPassword .form-wrap .Form form .form-group >label {
   width: 5rem;
+  color: initial;
 }
-.Login .Form form .form-group >input {
+.Login .form-wrap .Form form .form-group >input,
+.ResetPassword .form-wrap .Form form .form-group >input {
   flex: 1;
 }
-.Login .Form form .btn-row {
+.Login .form-wrap .Form form .btn-row,
+.ResetPassword .form-wrap .Form form .btn-row {
   margin-top: 1rem;
+}
+.Login .form-wrap >div:first-child >div:last-child,
+.ResetPassword .form-wrap >div:first-child >div:last-child {
+  color: #a00;
+  margin-top: 2rem;
+}
+.Login .form-wrap >div:first-child >div:last-child:hover,
+.ResetPassword .form-wrap >div:first-child >div:last-child:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media only screen and (max-width: 767px) {
+  .Login .form-wrap,
+  .ResetPassword .form-wrap {
+    width: 25rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .Login .form-wrap,
+  .ResetPassword .form-wrap {
+    width: 20rem;
+    padding: 0 1rem 2.5rem;
+  }
+}
+.ResetPassword .btn-cancel {
+  display: none;
 }
 .ManageCustomer,
 .AccountHome {
-  margin: 2rem 3rem;
+  margin: 2rem 3rem 4rem;
 }
 .ManageCustomer input:focus,
 .AccountHome input:focus {
@@ -1585,8 +1785,8 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .AccountHome .main-search .MemberTypeahead input:focus {
   border-color: initial;
 }
-.ManageCustomer .section:not(:first-of-type),
-.AccountHome .section:not(:first-of-type) {
+.ManageCustomer >.section:not(:first-of-type),
+.AccountHome >.section:not(:first-of-type) {
   border-top: 1px solid #999;
   margin-top: 2rem;
 }
@@ -1778,6 +1978,10 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .MemberInfo .form-group >div .help-block {
   margin-bottom: 0;
 }
+.MemberInfo .form-group .ms-helper {
+  color: #000;
+  font-size: 11px;
+}
 .MemberInfo .control-label[for="omission"] {
   position: relative;
 }
@@ -1938,6 +2142,9 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .Seasons .share-label.selected {
   background-color: #fce1ac;
 }
+.Seasons >div:last-child {
+  font-weight: bold;
+}
 @media only screen and (max-width: 767px) {
   .Seasons ol {
     justify-content: center;
@@ -2046,7 +2253,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 }
 .SharePatch .section-heading h3 {
   color: inherit;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   line-height: 1.8rem;
 }
 .SharePatch .content >div {
@@ -2058,30 +2265,35 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
   font-weight: bold;
 }
 .SharePatch .content >div li.line-item {
+  display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid #d3d3d3;
-  padding-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
   margin-bottom: 1rem;
 }
 .SharePatch .content >div li.line-item:first-child {
   font-weight: bold;
+  text-transform: uppercase;
 }
-.SharePatch .content >div li.line-item:first-child >span:first-child {
-  float: left;
+.SharePatch .content >div li.line-item.options {
+  display: block;
 }
-.SharePatch .content >div li.line-item:first-child >span:last-child {
-  float: right;
-}
-.SharePatch .content >div li.line-item.options >div:not(:first-child),
 .SharePatch .content >div li.line-item.options ul {
   margin-left: 2rem;
+  margin-bottom: 1rem;
 }
-.SharePatch .content >div li:last-child {
+.SharePatch .content >div li.line-item.options ul >li {
+  list-style-type: disc;
+}
+.SharePatch .content >div li.line-item.options >div:last-child {
+  display: flex;
+  justify-content: space-between;
+}
+.SharePatch .content >div .total {
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   text-align: center;
-}
-.SharePatch .content >div li span {
-  margin: 0 0.5rem;
+  margin-top: 1rem;
 }
 .SharePatch .content >div .email {
   margin-top: 1rem;
@@ -2097,6 +2309,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .SharePatch .content >div .ButtonFlow button {
   padding: 0.75rem;
   font-size: 1rem;
+  margin-top: 1rem;
 }
 .SharePatch .content >div .ButtonFlow .reset-btn {
   background-color: #d7d7d7;
@@ -2107,6 +2320,15 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 @media only screen and (max-width: 767px) {
   .SharePatch {
     margin: 3rem 0;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .SharePatch .section-heading h3 {
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+  }
+  .SharePatch .content >div .total {
+    font-size: 1rem;
   }
 }
 .Shares >h2 {
@@ -2458,6 +2680,9 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .Transactions .heading >span:first-child {
   flex: 1;
 }
+.Transactions ol {
+  background-color: #fff5df;
+}
 .Transactions ol li {
   display: flex;
   height: 2.75rem;
@@ -2563,6 +2788,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 }
 .Transactions .balance {
   display: flex;
+  align-items: center;
   margin-top: 1rem;
 }
 .Transactions .balance h3,
@@ -2577,6 +2803,10 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
 .Transactions .balance h3:last-child,
 .Transactions .balance span:last-child {
   flex: 4;
+}
+.Verify {
+  border: 1px solid transparent;
+  height: 20rem;
 }
 .WeekOptions .content {
   display: flex;

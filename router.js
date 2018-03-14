@@ -298,11 +298,14 @@ module.exports = new Router( {
             'mail': true,
             'member-order': true,
             'never-receive': true,
+            'payment': true,
             'report': true,
+            'reset-password': true,
             'seasonalAddOn': true,
             'seasonalAddOnOption': true,
             'signup': true,
-            'user': true
+            'user': true,
+            'verify': true
         }
     },
     tables: { } 

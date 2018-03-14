@@ -1,6 +1,7 @@
 module.exports={
 	About: require('./views/About'),
 	AccountHome: require('./views/AccountHome'),
+	AccountPayments: require('./views/AccountPayments'),
 	AddTransaction: require('./views/AddTransaction'),
 	Admin: require('./views/Admin'),
 	AdminHeader: require('./views/AdminHeader'),
@@ -12,7 +13,6 @@ module.exports={
 	CustomerInfo: require('./views/CustomerInfo'),
 	Deleter: require('./views/Deleter'),
 	Dragger: require('./views/Dragger'),
-	EditAccount: require('./views/EditAccount'),
 	FoodOmission: require('./views/FoodOmission'),
 	Footer: require('./views/Footer'),
 	Form: require('./views/Form'),
@@ -29,6 +29,7 @@ module.exports={
 	MyView: require('./views/MyView'),
 	OrderOptions: require('./views/OrderOptions'),
 	Reporting: require('./views/Reporting'),
+	ResetPassword: require('./views/ResetPassword'),
 	Resource: require('./views/Resource'),
 	ResourceRow: require('./views/ResourceRow'),
 	Seasons: require('./views/Seasons'),
@@ -38,6 +39,7 @@ module.exports={
 	Submitter: require('./views/Submitter'),
 	Toast: require('./views/Toast'),
 	Transactions: require('./views/Transactions'),
+	Verify: require('./views/Verify'),
 	WeekOptions: require('./views/WeekOptions'),
 	modal: require('./views/modal')
 }

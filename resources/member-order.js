@@ -12,10 +12,9 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     Email: require('../lib/Email'),
 
     PATCH() {
-
         return this.slurpBody()
         .then( () => {
-            if( !this.user.id || !this.user.roles.includes('admin') ) throw Error("401")
+            if( !this.user.id ) throw Error("401") //|| !this.user.roles.includes('admin') 
             return this.Q( this.Postgres.transaction( this.gatherQueries() ) )
         } )
         .then( () => this.notify() )
@@ -26,7 +25,8 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
         const queries = [ ],
             membersharedelivery = this.body.orderOptions.membersharedelivery,
             membershareoption = this.body.orderOptions.membershareoption,
-            adjustment = this.body.adjustment
+            adjustment = this.body.adjustment,
+            initiator = this.user.roles.includes('admin') ? 'admin' : 'customer'
         
         if( Object.keys( membersharedelivery ).length ) {
             queries.push( [
@@ -46,7 +46,10 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
 
         this.body.weekOptions.forEach( date => queries.push( [ `INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 );`, [ this.body.memberShareId, date ] ] ) )
 
-        queries.push( [ `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Adjustment', $1, $2, $3 )`, [ adjustment.value, this.body.memberShareId, [ adjustment.description, this.body.weekDetail ].join('') ] ] )
+        queries.push( [
+            `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description, initiator ) VALUES ( 'Adjustment', $1, $2, $3, $4 )`,
+            [ adjustment.value, this.body.memberShareId, [ adjustment.description, this.body.weekDetail ].join(''), initiator ]
+        ] )
 
         return queries
     },

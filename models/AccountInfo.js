@@ -1,13 +1,8 @@
 module.exports = {
     attributes: [
         require('./Name'),
+        require('./Email'),
         {
-            name: 'email',
-            label: 'Email',
-            range: 'Email',
-            error: "Please enter a valid email address.",
-            validate: function( val ) { return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( val ) }
-        }, {
             name: 'phonenumber',
             label: 'Phone Number',
             range: 'String',
@@ -18,7 +13,7 @@ module.exports = {
             label: 'Address 1',
             range: 'String',
             error: "Please enter a valid address.",
-            validate: () => true
+            validate: val => val !== ''
         }, {
             name: 'extraaddress',
             label: 'Address 2',
@@ -27,20 +22,3 @@ module.exports = {
         }
     ]
 }
-
-/*, {
-            name: 'omission',
-            label: 'Opt-out Vegetable',
-            range: 'select',
-            info: true,
-            validate: () => true
-        }
-        require('./Password'),
-        {
-            name: 'repeatpassword',
-            label: 'Repeat Password',
-            range: 'Password',
-            error: "Passwords must match.",
-            validate: () => true
-        }
-        */

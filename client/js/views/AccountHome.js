@@ -2,6 +2,126 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     Customer: require('../models/Customer'),
     Delivery: require('../models/Delivery'),
+    Transactions: require('../models/CsaTransaction'),
+
+    Views: {
+
+        personalInfo() {
+            return {
+                model: Object.create( this.Model ).constructor( { }, {
+                    attributes: require('../../../models/AccountInfo').attributes,
+                    resource: 'accountInfo'
+                } ),
+                templateOpts() {
+                    return {
+                        heading: 'Your Account Info',
+                        submitText: 'Update'
+                    }
+                },
+                onCancelBtnClick() { this.emit('cancel') },
+                toastSuccess: 'Account upadated!'
+            }
+        }
+
+    },
+
+    events: {
+        accountInfoBtn: 'click',
+        backBtn: 'click',
+        ordersBtn: 'click',
+        paymentBtn: 'click',
+
+        views: {
+            accountPayments: [
+
+            ],
+            personalInfo: [
+                [ 'posted', function( data ) { console.log( 'account updated' ); console.log( data ) } ],
+                [ 'cancel', function() {
+                    this.hideEl( this.els.accountInfo )
+                    .then( () => this.showEl( this.els.accountNav ) )
+                    .catch( this.Error )
+                } ]
+            ]
+        }
+    },
+
+    addressSelected() {
+        var place = this.addressAutoComplete.getPlace()
+
+        this.view.personalInfo.els.address.value = place.formatted_address
+
+        /*this.user.set( {
+            address: place.formatted_address,
+            addressModel: {
+                postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
+                types: place.types
+            }
+        } )*/
+    },
+
+    clearSubviews() {
+        return Promise.all( [
+            this.hideEl( this.els.accountInfo ),
+            this.hideEl( this.els.orderInfo ),
+            this.views.accountPayments.hide(),
+            this.views.orderOptions.hide(),
+            this.views.weekOptions.hide(),
+        ] )
+        .then( () => {
+            this.views.sharePatch.reset()
+            this.views.orderOptions.els.editSummary.classList.add('fd-hidden')
+            this.views.weekOptions.els.editSummary.classList.add('fd-hidden')
+            this.els.backBtn.classList.add('fd-hidden')
+            return this.showEl( this.els.accountNav )
+        } )
+        .catch( this.Error )
+    },
+
+    initAutocomplete() {
+        this.addressAutoComplete = new google.maps.places.Autocomplete( this.views.personalInfo.els.address, { types: ['address'] } )
+
+        this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
+    },
+
+    onAccountInfoBtnClick() {
+        this.hideEl( this.els.accountNav )
+        .then( () => {
+            this.els.backBtn.classList.remove('fd-hidden')
+            return this.showEl( this.els.accountInfo )
+        } )
+        .catch( this.Error )
+    },
+
+    onBackBtnClick() { this.clearSubviews() },
+
+    onNavigation() {
+        return this.show()
+        .then( () => this.clearSubviews() )
+        .then( () => this.views.seasons.update( this.selectedCustomer ) )
+        .catch( this.Error )
+    },
+
+    onOrdersBtnClick() {
+        this.hideEl( this.els.accountNav )
+        .then( () => {
+            this.els.backBtn.classList.remove('fd-hidden')
+            this.views.seasons.update( this.selectedCustomer )
+            return this.showEl( this.els.orderInfo )
+        } )
+        .catch( this.Error )
+    },
+
+    onPaymentBtnClick() {
+        this.hideEl( this.els.accountNav )
+        .then( () => {
+            this.els.backBtn.classList.remove('fd-hidden')
+            this.views.accountPayments.clear()
+            this.views.accountPayments.views.seasons.update( this.selectedCustomer )
+            return this.views.accountPayments.show()
+        } )
+        .catch( this.Error )
+    },
 
     patchMemberShare() {
         console.log( 'patchMemberShare' )
@@ -49,6 +169,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 memberShareId: this.memberShareId,
                 name: this.selectedCustomer.person.data.name,
                 orderOptions: this.views.orderOptions.getPatchData(),
+                previousBalance: this.views.sharePatch.balance,
                 shareLabel: this.selectedShare.label,
                 weekOptions: weekPatch.allRemoved,
                 weekDetail,
@@ -58,16 +179,29 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => {
             this.Toast.showMessage( 'success', 'Order Updated! You will receive a confirmation email shortly.' )
 
-            Object.keys( this.views ).forEach( view => {
+            Object.keys( this.views ).forEach( key => {
+                const view = this.views[ key ]
                 if( view.els.editSummary && !view.isHidden( view.els.editSummary ) ) view.els.editSummary.classList.add('hidden')
             } )
 
-            this.els.container.scrollIntoView( { behavior: 'smooth' } )
+            this.views.seasons.els.container.scrollIntoView( { behavior: 'smooth' } )
             this.views.seasons.select( this.memberShareId )
         } )
         .catch( e => {
             console.log( e.stack || e )
             this.Toast.showMessage( 'error', 'Update Failed. Please contact us for assistance.' )
+        } )
+    },
+
+    populateAccountFields() {
+        console.log( 'populateAccountFields' )
+        console.log( this.selectedCustomer )
+        Object.keys( this.selectedCustomer.person.data ).forEach( key => {
+            if( this.views.personalInfo.els[ key ] ) this.views.personalInfo.els[ key ].value = this.selectedCustomer.person.data[ key ]
+        } )
+
+        Object.keys( this.selectedCustomer.member.data ).forEach( key => {
+            if( this.views.personalInfo.els[ key ] ) this.views.personalInfo.els[ key ].value = this.selectedCustomer.member.data[ key ]
         } )
     },
 
@@ -82,30 +216,55 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             if( !customer ) return
 
             this.selectedCustomer = customer
-            this.views.customerInfo.reset( customer )
-            this.views.seasons.update( customer )
+            //this.populateAccountFields()
+            
             this.views.orderOptions.hide()
             this.views.weekOptions.hide()
-            this.views.sharePatch.reset()
+            this.views.sharePatch.reset();
+
+            ( window.google && window.google.maps ) 
+                ? this.initAutocomplete()
+                : window.initGMap = () => this.initAutocomplete()
+
+            //this.views.personalInfo.els.address.setAttribute( 'placeholder', '' )
 
             this.views.seasons.on( 'selected', data => {
                 this.views.sharePatch.reset()
                 this.selectedShare = data.share
                 this.memberShareId = this.selectedShare.membershareid
 
-                this.Delivery.get( {
-                    query: {
-                        membershareid: data.share.membershareid,
-                        deliveryoptionid: { operation: 'join', value: { table: 'deliveryoption', column: 'id' } },
-                        groupdropoffid: { operation: 'leftJoin', value: { table: 'groupdropoff', column: 'id' } }
-                    }
-                } )
+                Promise.all( [
+                    this.Delivery.get( {
+                        query: {
+                            membershareid: data.share.membershareid,
+                            deliveryoptionid: { operation: 'join', value: { table: 'deliveryoption', column: 'id' } },
+                            groupdropoffid: { operation: 'leftJoin', value: { table: 'groupdropoff', column: 'id' } }
+                        }
+                    } ),
+                    this.Transactions.get( { query: { memberShareId: data.share.membershareid } } )
+                ] )
                 .then( () => {
                     //TODO:If no delivery, Toast, or some UI
+                    console.log( 'balance' )
+                    const balance = this.Transactions.getBalance()
+                    console.log( this.Transactions.getBalance() )
+                    this.views.seasons.updateBalanceNotice( balance )
+                    this.views.sharePatch.balance = balance
                     Object.assign( data, { delivery: this.Delivery } )
                     this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
                     this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 } )
+            } )
+
+            this.views.seasons.on( 'payBalance', () => {
+                console.log( 'payBalance' )
+                console.log( this.memberShareId )
+                this.views.sharePatch.reset()
+
+                return this.hideEl( this.els.orderInfo )
+                .then( () => this.views.accountPayments.show() )
+                .then( () => this.views.accountPayments.update( customer, this.selectedShare, this.memberShareId ) )
+                .catch( this.Error )
             } )
 
             this.views.orderOptions.on( 'deliveryChanged', data => {

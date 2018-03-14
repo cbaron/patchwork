@@ -11,7 +11,7 @@
         
         h3
             color: inherit
-            font-size: 1.4rem
+            font-size: 1.3rem
             line-height: 1.8rem
 
     .content
@@ -25,30 +25,33 @@
                     font-weight: bold
 
                 &.line-item
+                    display: flex
+                    justify-content: space-between
                     border-bottom: 1px solid lightgray
-                    padding-bottom: .25rem
+                    padding: .25rem .5rem
                     margin-bottom: 1rem
                     
                     &:first-child
                         font-weight: bold
-                        
-                        >span:first-child
-                            float: left
-                        >span:last-child
-                            float: right
+                        text-transform: uppercase
                             
                     &.options
-                        >div:not(:first-child), ul
+                        display: block
+                        ul
                             margin-left: 2rem
+                            margin-bottom: 1rem
+                            >li
+                                list-style-type: disc
+                            
+                        >div:last-child
+                            display: flex
+                            justify-content: space-between
 
-                &:last-child
-                    font-weight: bold
-                    font-size: 1.3rem
-                    text-align: center
-
-                span
-                    margin: 0 .5rem
-
+            .total
+                font-weight: bold
+                font-size: 1.2rem
+                text-align: center
+                margin-top: 1rem
 
             .email
                 margin-top: 1rem
@@ -64,12 +67,24 @@
                 button
                     padding: .75rem
                     font-size: 1rem
+                    margin-top: 1rem
                 
                 .reset-btn
                     background-color: #d7d7d7
                     margin-left: 1rem
                     text-decoration: none
                     color: inherit
+
                 
     @media only screen and (max-width: 767px)
         margin: 3rem 0
+        
+    @media only screen and (max-width: 500px)
+        .section-heading
+            h3
+                font-size: 1.1rem
+                line-height: 1.5rem
+                
+        .content >div
+            .total
+                font-size: 1rem

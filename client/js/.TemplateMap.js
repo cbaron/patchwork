@@ -1,6 +1,7 @@
 module.exports={
 	About: require('./views/templates/About'),
 	AccountHome: require('./views/templates/AccountHome'),
+	AccountPayments: require('./views/templates/AccountPayments'),
 	AddTransaction: require('./views/templates/AddTransaction'),
 	AdminHeader: require('./views/templates/AdminHeader'),
 	AdminPlus: require('./views/templates/AdminPlus'),
@@ -15,9 +16,7 @@ module.exports={
 	DeliveryDate: require('./views/templates/DeliveryDate'),
 	Document: require('./views/templates/Document'),
 	Dragger: require('./views/templates/Dragger'),
-	EditAccount: require('./views/templates/EditAccount'),
 	EditCsaTransaction: require('./views/templates/EditCsaTransaction'),
-	EditOrders: require('./views/templates/EditOrders'),
 	FieldEdit: require('./views/templates/FieldEdit'),
 	FoodOmission: require('./views/templates/FoodOmission'),
 	Footer: require('./views/templates/Footer'),
@@ -36,6 +35,7 @@ module.exports={
 	Members: require('./views/templates/Members'),
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Reporting: require('./views/templates/Reporting'),
+	ResetPassword: require('./views/templates/ResetPassword'),
 	SeasonalAddOn: require('./views/templates/SeasonalAddOn'),
 	Seasons: require('./views/templates/Seasons'),
 	ShareBox: require('./views/templates/ShareBox'),
@@ -44,6 +44,7 @@ module.exports={
 	StaffProfile: require('./views/templates/StaffProfile'),
 	Toast: require('./views/templates/Toast'),
 	Transactions: require('./views/templates/Transactions'),
+	Verify: require('./views/templates/Verify'),
 	WeekOptions: require('./views/templates/WeekOptions'),
 	deliveryMatrix: require('./views/templates/deliveryMatrix')
 }

@@ -10,7 +10,7 @@ module.exports = {
         return Array( end - start + 1 ).fill().map( (item, index) => start + index )
     },
 
-    GetFormField( datum, value ) {
+    GetFormField( datum, value, meta ) {
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -20,16 +20,16 @@ module.exports = {
         const options = datum.metadata ? datum.metadata.options : false
 
         value = ( value === undefined ) ? '' : value
-
-        if( options ) {
-            if( typeof options === 'function' ) { options(); return this.GetSelect( datum, [ ], icon ) }
-            else if( Array.isArray( options ) ) return this.GetSelect( datum, options, icon )
-        }
             
         const label = 
             datum.fk || datum.label
                 ? `<label>${datum.fk || datum.label}</label>`
                 : ``
+
+        if( options ) {
+            if( typeof options === 'function' ) { options(); return this.GetSelect( datum, value, [ ], icon, label ) }
+            else if( Array.isArray( options ) ) return this.GetSelect( datum, value, options, icon, label )
+        }
 
         //const image = datum.range === 'ImageUrl'
             //? `<div><button class="btn-yellow" data-js="previewBtn" type="button">Preview</button><img data-src="${this.ImageSrc( value )}" /></div>`
@@ -38,13 +38,17 @@ module.exports = {
             ? `<div><img data-src="${value}" /></div>`
             : ``
 
+        const placeholder = meta.noPlaceholder
+            ? ''
+            : datum.label || ''
+
         const input = datum.fk
             ? `<div data-view="typeAhead" data-name="${datum.fk}"></div>`
             : datum.range === 'Text'
                 ? `<textarea data-js="${datum.name}" rows="3">${value}</textarea>`
                 : datum.range === 'List' || typeof datum.range === 'object'
                     ? `<div data-js="${datum.name}" data-name="${datum.name}"></div>`
-                    : `<input type="${this.RangeToInputType[ datum.range ]}" data-js="${datum.name}" placeholder="${datum.label || ''}" value="${value}" />`
+                    : `<input type="${this.RangeToInputType[ datum.range ]}" data-js="${datum.name}" placeholder="${placeholder}" value="${value}" />`
 
         return `` +
         `<div class="form-group ${image ? `has-image` : ``}">
@@ -55,10 +59,14 @@ module.exports = {
         </div>`
     },
 
-    GetFormFields( data, model={} ) {
+    GetFormFields( data, model={}, meta ) {
+        console.log( 'GetFormFields' )
+        console.log( meta )
         if( !data ) return ``
 
-        return data.map( datum => this.GetFormField( datum, model && model[ datum.name ] ) ).join('')
+        return data
+            .filter( datum => meta[ datum.name || datum.fk ] && meta[ datum.name || datum.fk ].hide ? false : true )
+            .map( datum => this.GetFormField( datum, model && model[ datum.name ], meta ) ).join('')
     },
 
     GetIcon( name, opts ) { return Reflect.apply( this.Icons[ name ], this, [ opts ] ) },
@@ -70,7 +78,26 @@ module.exports = {
         } ).join('')
     },
 
-    GetSelect( datum, optionsData, icon ) {
+    GetSelect( datum, selectedValue, optionsData, icon, label=`` ) {
+        if( typeof selectedValue === 'boolean' || typeof selectedValue === 'number' ) selectedValue = selectedValue.toString()
+
+        const options = optionsData.length ? this.GetSelectOptions( optionsData, selectedValue, { valueAttr: 'name' } ) : ``
+
+        return `` +
+        `<div class="form-group">
+            ${label}
+            <select data-js="${datum.name}">
+                <option disabled ${!selectedValue ? `selected` : ``} value>${datum.label}</option>
+                ${options}
+            </select>
+            ${icon}
+        </div>`
+    },
+
+    GetSelectOptions( options=[], selectedValue, opts={ valueAttr: 'value' } ) {
+        return options.map( option => `<option ${selectedValue === option[ opts.valueAttr ] ? `selected` : ``} value="${option[ opts.valueAttr ]}">${option.label}</option>` ).join('')
+    },
+    /*GetSelect( datum, optionsData, icon ) {
         const options = optionsData.length ? this.GetSelectOptions( optionsData, { valueAttr: 'name' } ) : ``
 
         return `` +
@@ -85,7 +112,7 @@ module.exports = {
 
     GetSelectOptions( options=[], opts={ valueAttr: 'value' } ) {
         return options.map( option => `<option value="${option[ opts.valueAttr ]}">${option.label}</option>` ).join('')
-    },
+    },*/
 
     Icons: require('./.IconMap'),
     

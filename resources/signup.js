@@ -60,7 +60,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             if( this.error ) return
             return this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
                 this.Postgres.query(
-                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe' )`,
+                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description, initiator ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe', 'customer' )`,
                     [ share.total ] 
                 )
             ) ) )
@@ -201,6 +201,8 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     newPersonQueries() {
+        this.newMember = true
+
         return ( this.body.isAdmin
             ? this.dbQuery( {
                 query: "INSERT INTO person ( email, name ) VALUES ( $1, $2 ) RETURNING id",
@@ -210,7 +212,12 @@ Object.assign( Signup.prototype, Base.prototype, {
                 query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
                 values: [ this.body.member.email, this.body.member.password, this.body.member.name ]
               } ) )
-        .then( result => this.insertMember( result.rows[0].id ) )
+        .then( result => {
+            this.user.id = result.rows[0].id
+            this.user.email = this.body.member.email
+            return this.insertMember( result.rows[0].id )
+        } )
+      
     },
 
     responses: Object.assign( { }, Base.prototype.responses, {
@@ -226,7 +233,24 @@ Object.assign( Signup.prototype, Base.prototype, {
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
-                ).fail( err => console.log("Error generating confirmation email : " + err.stack || ere ) )
+                )
+                .fail( err => console.log( "Error generating confirmation email : " + err.stack || err ) )
+            } )
+            .then( () => {
+                if( !this.newMember ) return this.Q()
+
+                return this.Q( this.Email.send( {
+                    to: this.body.member.email,
+                    from: 'eat.patchworkgardens@gmail.com',
+                    subject: `Patchwork Gardens Email Verification`,
+                    body:
+                        `Dear ${this.body.member.name},\n\n` +
+                        `Thank you for your Patchwork Gardens CSA purchase! ` +
+                        `In order for you to log in to the site, we will need to verify your email. Please click the following link to do so:\n` +
+                        `http://${process.env.DOMAIN}:${process.env.PORT}/verify/${this.token}`
+                    } )
+                )
+                .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
             } )
             .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
         }

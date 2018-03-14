@@ -1,7 +1,7 @@
 module.exports = p => {
     const heading = p.opts.heading ? `<div class="heading">${p.opts.heading}</div>` : ``,
        prompt  = p.opts.prompt ?  `<div class="prompt">${p.opts.prompt}</div>` : ``,
-       fields = p.GetFormFields( p.attributes, p.model ),
+       fields = p.GetFormFields( p.attributes, p.model, p.meta ),
        buttonRow = p.opts.hideButtonRow
         ? ``
         : `<div class="btn-row">
