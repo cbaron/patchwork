@@ -20,7 +20,7 @@ Object.assign( Admin.prototype, Table.prototype, {
 
     selection: true,
 
-    template: require('../templates/admin')( require('handlebars') )
+    template: require('./templates/Admin')
 
 } )
 

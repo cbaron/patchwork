@@ -14,9 +14,6 @@ Object.assign( Payment.prototype, Base.prototype, {
     Stripe: require('../lib/stripe'),
 
     executePayment() {
-        console.log( 'executePayment' )
-        console.log( this.body )
-
         return this.Stripe.charge( {
             amount: Math.floor( this.total * 100 ),
             description: `Payment for remaining balance of CSA share ${this.body.share.label}`,
@@ -46,8 +43,6 @@ Object.assign( Payment.prototype, Base.prototype, {
     },
 
     notifyCustomer() {
-        console.log( 'notify' )
-        console.log( this.body.person.email )
         return this.Email.send( {
             to: process.env.NODE_ENV === 'production' ? this.body.person.email : process.env.TEST_EMAIL,
             from: 'eat.patchworkgardens@gmail.com',

@@ -37,7 +37,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
         this.subviewElements = [ ]
 
-        if( this.requiresLogin && (!this.user.id ) ) return this.handleLogin()
+        if( this.requiresLogin && ( !this.user.isLoggedIn() ) ) return this.handleLogin()
         if( this.user && !this.isAllowed( this.user.attributes ) ) return this.scootAway()
 
         return this.initialize().render()

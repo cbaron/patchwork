@@ -34,18 +34,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         views: {
             personalInfo: [
-                [ 'posted', function( response ) {
-                    console.log( 'account info posted' )
-                    console.log( this.name )
-                    console.log( response )
+                [ 'posted', function( response ) {                    
+                    Object.keys( response ).forEach( key => {
+                        if( this.user.has( key ) ) this.user.set( key, response[ key ] )
+                    } )
+
                     this.selectedCustomer.person.data.name = response.name
                     this.selectedCustomer.person.data.email = response.email
                     this.selectedCustomer.member.data.phonenumber = response.phonenumber
                     this.selectedCustomer.member.data.address = response.address
                     this.selectedCustomer.member.data.extraaddress = response.extraaddress
                     this.selectedCustomer.member.data.zipcode = response.zipcode
-                    console.log( this.selectedCustomer )
-                    this.populateAccountFields()
+
+                    this.clearSubviews()
                 } ],
                 [ 'cancel', function() {
                     this.hideEl( this.els.accountInfo )
@@ -67,9 +68,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return Promise.all( [
             this.hideEl( this.els.accountInfo ),
             this.hideEl( this.els.orderInfo ),
-            this.views.accountPayments.hide(),
-            this.views.orderOptions.hide(),
-            this.views.weekOptions.hide(),
+            this.views.accountPayments.hide()
         ] )
         .then( () => {
             this.views.sharePatch.reset()
@@ -125,10 +124,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onOrdersBtnClick() {
         this.hideEl( this.els.accountNav )
+        .then( () => this.showEl( this.els.orderInfo ) )
         .then( () => {
+            this.views.orderOptions.hideSync()
+            this.views.weekOptions.hideSync()
             this.els.backBtn.classList.remove('fd-hidden')
-            this.views.seasons.update( this.selectedCustomer )
-            return this.showEl( this.els.orderInfo )
+            return this.views.seasons.update( this.selectedCustomer )
         } )
         .catch( this.Error )
     },
@@ -201,15 +202,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     populateAccountFields() {
-        console.log( 'populateAccountFields' )
         this.views.personalInfo.clear()
-        console.log( this.selectedCustomer.person.data )
-        console.log( this.selectedCustomer.member.data )
-        this.views.personalInfo.model.set( 'oldZipcode', this.selectedCustomer.member.data.zipcode || '')
+
+        this.views.personalInfo.model.set( 'oldZipcode', this.selectedCustomer.member.data.zipcode || '' )
 
         Object.keys( this.selectedCustomer.person.data ).forEach( key => {
-            console.log( key )
-            console.log( this.views.personalInfo.els[ key ] )
             if( this.views.personalInfo.els[ key ] ) this.views.personalInfo.els[ key ].value = this.selectedCustomer.person.data[ key ]
         } )
 
@@ -219,14 +216,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     postRender() {
-        console.log( this.user )
-        console.log( this.path )
-        console.log( this.user.get('email') )
         this.Customer.get( { query: { email: this.user.get('email'), 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
-            console.log( this.Customer.data )
             const customer = this.Customer.data[0]
-            if( !customer ) return
             this.selectedCustomer = customer
             
             this.views.orderOptions.hide()
@@ -253,7 +245,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     this.Transactions.get( { query: { memberShareId: data.share.membershareid } } )
                 ] )
                 .then( () => {
-                    //TODO:If no delivery, Toast, or some UI
                     const balance = this.Transactions.getBalance()
                     this.views.seasons.updateBalanceNotice( balance )
                     this.views.sharePatch.balance = balance
@@ -274,12 +265,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
             this.views.orderOptions.on( 'deliveryChanged', data => {
                 this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() )
+                this.views.sharePatch.onWeeksReset()
                 this.views.weekOptions.updateDelivery( data )
             } )
 
             this.views.orderOptions.on( 'reset', model => {
                 this.views.weekOptions.update( model )
-                this.views.sharePatch.onOptionsReset()
+                this.views.sharePatch.reset()
             } )
             
             this.views.weekOptions.on( 'reset', model => this.views.sharePatch.onWeeksReset() )

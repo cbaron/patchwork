@@ -12,7 +12,7 @@
 .admin-header {
   background-color: white;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
-  height: 5rem;
+  height: 4rem;
   left: 0;
   position: fixed;
   top: 0;
@@ -28,7 +28,7 @@
 
 .admin-header > :first-child .logo-container {
   float: left;
-  line-height: 5rem;
+  line-height: 4rem;
 }
 
 .admin-header > :first-child .logo-container img {
@@ -132,6 +132,10 @@ div.header {
 .w70 {
   width: 70%;
 }
+.resource {
+  margin-top: 5rem;
+}
+
 .resource .sub-heading button {
   position: absolute;
   right: 25px;
@@ -152,6 +156,7 @@ div.header {
   height: 100%;
   overflow-x: auto;
   position: relative;
+  margin-bottom: 2rem;
 }
 
 .mytable.no-items {
@@ -172,10 +177,12 @@ div.header {
 .mytable table {
   border-collapse: collapse;
   min-width: 100%;
+  background-color: #fff5df;
+  padding: 1rem;
 }
 
 .mytable table tr {
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 1px solid #ddd;
   display: flex;
   padding: 10px 0px;
 }
@@ -232,10 +239,10 @@ div.header {
 
 .mytable table tbody tr:hover {
   border-color: #ccc;
-  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  -ms-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   z-index: 3;
 }

@@ -25,8 +25,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
         
         if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ) ` }
-        console.log( 'share patch' )
-        console.log( this.views.sharePatch.balance )
+
         this.Xhr( {
             id: this.memberShareId,
             method: 'patch',
@@ -90,6 +89,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.views.orderOptions.on( 'deliveryChanged', data => {
             this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() )
+            this.views.sharePatch.onWeeksReset()
             this.views.weekOptions.updateDelivery( data )
         } )
 
@@ -110,8 +110,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     requiresLogin: true,
     
-    requiresRole: 'admin',
-
-    
+    requiresRole: 'admin'    
 
 } )

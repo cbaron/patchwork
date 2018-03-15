@@ -21,10 +21,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onLogin() {
         this.onUser()
-        return Promise.resolve( this.toggleAccountUI() )
+        this.displayingLogin = false
+        this.toggleAccountUI()
+        return Promise.resolve()
     },
 
     onNavLinksClick( e ) {
+        if( this.displayingLogin ) this.emit('removeLogin')
+
         const el = e.target.closest('li')
 
         if( !el ) return
@@ -34,7 +38,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
-    onSignInBtnClick() { this.emit('signInClicked') },
+    onSignInBtnClick() {
+        this.emit('signInClicked')
+        this.displayingLogin = true
+    },
 
     onSignOutBtnClick() {
         document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
@@ -60,7 +67,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.on( 'imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
 
         this.toggleAccountUI()
-        if( this.user.id ) this.onUser()
+
+        if( this.user.isLoggedIn() ) this.onUser()
 
         return this
     },
@@ -70,7 +78,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     toggleAccountUI() {
-        this.els.signInBtn.classList.toggle( 'fd-hidden', this.user && this.user.id )
+        this.els.signInBtn.classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
         this.els.memberMenu.classList.toggle( 'fd-hidden', !this.user || !this.user.id )
     },
 

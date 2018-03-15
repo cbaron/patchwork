@@ -216,7 +216,7 @@ html.non-touch .AccountHome .account-nav >div:hover {
 }
 .AdminPlus {
   height: 100%;
-  margin-top: 5rem;
+  margin-top: 4rem;
 }
 .AdminPlus section {
   margin: 0;
@@ -247,6 +247,9 @@ html.non-touch .AccountHome .account-nav >div:hover {
 }
 .AdminPlus .MemberTypeahead {
   margin-top: 3rem;
+}
+.AdminPlus .Reporting {
+  margin-top: 7rem;
 }
 button.submitting {
   opacity: 0.3;
@@ -319,6 +322,10 @@ button.submitting {
 .CollectionManager section {
   padding: 0;
   margin: 0;
+}
+.CollectionManager .main-panel,
+.CollectionManager .left-panel {
+  min-height: 100vh;
 }
 .CollectionManager .btn-submit {
   width: 8rem;
@@ -1220,7 +1227,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
   .Header >div:nth-child(2) >div:first-child >div {
     font-size: 3rem;
   }
-  .Header >div:nth-child(2) ul li {
+  .Header >div:nth-child(2) >ul li {
     font-size: 1.4rem;
   }
 }
@@ -1245,7 +1252,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
     text-align: center;
     flex: 1;
   }
-  .Header >div:nth-child(2) ul {
+  .Header >div:nth-child(2) >ul {
     text-align: center;
     position: absolute;
     z-index: 2;
@@ -1255,7 +1262,7 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
     z-index: 1000;
     margin-top: 0.15rem;
   }
-  .Header >div:nth-child(2) ul li {
+  .Header >div:nth-child(2) >ul li {
     font-size: 1.25rem;
     width: 100%;
     padding: 0.75rem;
@@ -1263,12 +1270,12 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
     border: 1px solid #ffc502;
     background-color: #000;
   }
-  .Header >div:nth-child(2) ul li:active {
+  .Header >div:nth-child(2) >ul li:active {
     background-color: #ffc502;
     color: #000;
     opacity: 1;
   }
-  .Header >div:nth-child(2) ul.is-mobile {
+  .Header >div:nth-child(2) >ul.is-mobile {
     transform: translateX(16rem);
   }
 }
@@ -1276,14 +1283,14 @@ html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
   .Header >div:nth-child(2) >div:first-child >div {
     font-size: 1.75rem;
   }
-  .Header >div:nth-child(2) ul {
+  .Header >div:nth-child(2) >ul {
     left: -12rem;
     width: 12rem;
   }
-  .Header >div:nth-child(2) ul li {
+  .Header >div:nth-child(2) >ul li {
     font-size: 1rem;
   }
-  .Header >div:nth-child(2) ul.is-mobile {
+  .Header >div:nth-child(2) >ul.is-mobile {
     transform: translateX(12rem);
   }
 }
@@ -2059,9 +2066,6 @@ html.non-touch .AccountHome button:hover {
     margin: 1.5rem 0;
   }
 }
-.Reporting {
-  padding: 5rem 1.5rem 1.5rem;
-}
 .Reporting button {
   font-size: 1rem;
   margin: 0 0.5rem;
@@ -2076,6 +2080,7 @@ html.non-touch .AccountHome button:hover {
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
+  color: #a00;
 }
 .Reporting form {
   text-align: center;
@@ -2098,9 +2103,9 @@ html.non-touch .AccountHome button:hover {
 }
 .Reporting .results .columns li,
 .Reporting .results .rows > ol li {
-  border: 1px solid;
+  text-align: center;
   flex: 1;
-  padding: 0.35rem;
+  padding: 0.25rem;
   overflow-x: auto;
 }
 .Reporting .results .columns {

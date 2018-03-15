@@ -3,6 +3,7 @@ module.exports={
 	AccountHome: require('./views/templates/AccountHome'),
 	AccountPayments: require('./views/templates/AccountPayments'),
 	AddTransaction: require('./views/templates/AddTransaction'),
+	Admin: require('./views/templates/Admin'),
 	AdminHeader: require('./views/templates/AdminHeader'),
 	AdminPlus: require('./views/templates/AdminPlus'),
 	ButtonFlow: require('./views/templates/ButtonFlow'),

@@ -27,7 +27,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         views: {
             creditCard: [
                 [ 'posted', function() {
-                    console.log( this.views.creditCard.model.data )
                     this.views.seasons.select( this.memberShareId )
                 } ]
             ]

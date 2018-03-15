@@ -8,7 +8,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
-        console.log( this.FoodOmission )
+
         this.FoodOmission.clear()
 
         this.els.resetBtn.classList.add( 'fd-hidden' )

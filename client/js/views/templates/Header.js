@@ -16,7 +16,7 @@ return `` +
             <div data-js="signInBtn" class="fd-hidden">Sign In</div>
             <div class="member-ui" data-js="memberMenu" class="fd-hidden">
                 <div data-js="userName"></div>
-                <ul data-js="accountMenu" class="fd-hidden">
+                <ul class="account-menu fd-hidden" data-js="accountMenu">
                     <li data-js="accountBtn">Your Account</li>
                     <li data-js="signOutBtn">Sign Out</li>         
                 </ul>

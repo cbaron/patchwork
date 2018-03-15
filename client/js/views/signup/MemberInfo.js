@@ -107,8 +107,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     },
 
     postRender() {
-        console.log( 'member info postRender' )
-        console.log( this.user )
         var self = this;
 
         if( this.user.isAdmin() ) {

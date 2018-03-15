@@ -46,12 +46,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         views: {
             loginForm: [
                 [ 'posted', function( data ) {
-                    this.delete()
-                    .then( () => {
-                        require('../models/User').set( data )
-                        this.emit( "success", data )
-                    } )
-                    .catch( this.Error )
+                    this.user.set( data )
+                    this.emit( "success", data )
+                    this.delete().catch( this.Error )
                 } ],
                 [ 'cancel', function() { this.delete().then( () => this.emit('loginCancelled') ).catch( this.Error ) } ]
             ],

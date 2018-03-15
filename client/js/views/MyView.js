@@ -93,7 +93,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         if( this.requiresLogin && ! this.user.id ) {
-            require('./Login').show().once( "success", e => {
+            this.Login = this.factory.create( 'login', { insertion: { el: document.querySelector('#content') } } )
+            .on( "success", () => {
                 this.router.onUser( this.user )
 
                 if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
@@ -102,6 +103,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
                 this.render()
             } )
+            .on( 'loginCancelled', () => this.router.navigate('/') )
+
             return this
         } else if( this.user.id && this.requiresRole ) {
             if( ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {

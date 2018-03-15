@@ -145,9 +145,6 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
     },
 
     validateRepeatPassword() {
-        console.log( 'validateRepeatPassword' )
-        console.log( this.data )
-        console.log( this.data.repeatPassword !== this.data.password )
         let valid = true
 
         if( this.data.repeatPassword !== this.data.password ) {

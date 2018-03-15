@@ -3,11 +3,13 @@ var Base = require('./__proto__'),
 
 Object.assign( AccountInfo.prototype, Base.prototype, {
 
+    User: require('./util/User'),
+
     POST() {
         return this.slurpBody()
         .then( () => {
             if( !this.user.id ) throw Error("401")
-            console.log( this.body )
+
             const zipcode = this.body.zipcode || this.body.oldZipcode
 
             return this.Postgres.query(
@@ -18,7 +20,15 @@ Object.assign( AccountInfo.prototype, Base.prototype, {
                 `UPDATE member SET phonenumber = $1, address = $2, extraaddress = $3, zipcode = $4 WHERE personid = $5`,
                 [ this.body.phonenumber, this.body.address, this.body.extraaddress, zipcode, this.user.id ]
             ) )
-            .then( () => this.respond( { body: Object.assign( { }, this.body, { zipcode } ) } ) )
+            .then( () => {
+                Object.keys( this.body ).forEach( key => {
+                    if( this.user[ key ] ) this.user[ key ] = this.body[ key ]
+                } )
+
+                this.user.zipcode = zipcode
+                return this.User.createToken.call(this)
+            } )
+            .then( token => this.User.respondSetCookie.call( this, token, Object.assign( { }, this.body, { zipcode } ) ) )
         } )
     }
 

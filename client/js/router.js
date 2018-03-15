@@ -48,6 +48,7 @@ module.exports = Object.create( {
                     .on( 'navigate', this.onViewNavigate.bind(this) )
                     .on( 'signInClicked', () => this.handleLogin() )
                     .on( 'signOutClicked', () => this.onSignout() )
+                    .on( 'removeLogin', () => this.Login.delete().catch( this.Error ) )
             }
         }
     },
@@ -125,7 +126,10 @@ module.exports = Object.create( {
         if( !options.silent ) this.handle()
     },
 
-    onLogin() { this.onUser( this.user ) },
+    onLogin() {
+        this.onUser( this.user )
+        if( this.header ) this.header.onLogin().catch( this.Error )
+    },
 
     onViewNavigate( route ) { this.navigate( route, { trigger: true } ) },
 
@@ -134,7 +138,8 @@ module.exports = Object.create( {
             this.views[ name ].delete()
             delete this.views[name] 
         } )
-    
+
+        this.currentView = undefined    
         this.navigate( "/" )
     },
 

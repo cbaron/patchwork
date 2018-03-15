@@ -10,7 +10,7 @@ module.exports = {
         return Array( end - start + 1 ).fill().map( (item, index) => start + index )
     },
 
-    GetFormField( datum, value, meta ) {
+    GetFormField( datum, value, meta={} ) {
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -31,11 +31,8 @@ module.exports = {
             else if( Array.isArray( options ) ) return this.GetSelect( datum, value, options, icon, label )
         }
 
-        //const image = datum.range === 'ImageUrl'
-            //? `<div><button class="btn-yellow" data-js="previewBtn" type="button">Preview</button><img data-src="${this.ImageSrc( value )}" /></div>`
-           // : ``
         const image = datum.range === 'ImageUrl'
-            ? `<div><img data-src="${value}" /></div>`
+            ? `<div><img src="${this.ImageSrc( value )}" /></div>`
             : ``
 
         const placeholder = meta.noPlaceholder
@@ -59,7 +56,7 @@ module.exports = {
         </div>`
     },
 
-    GetFormFields( data, model={}, meta ) {
+    GetFormFields( data, model={}, meta={} ) {
         if( !data ) return ``
 
         return data
@@ -95,22 +92,6 @@ module.exports = {
     GetSelectOptions( options=[], selectedValue, opts={ valueAttr: 'value' } ) {
         return options.map( option => `<option ${selectedValue === option[ opts.valueAttr ] ? `selected` : ``} value="${option[ opts.valueAttr ]}">${option.label}</option>` ).join('')
     },
-    /*GetSelect( datum, optionsData, icon ) {
-        const options = optionsData.length ? this.GetSelectOptions( optionsData, { valueAttr: 'name' } ) : ``
-
-        return `` +
-        `<div class="form-group">
-            <select data-js="${datum.name}">
-                <option selected value>${datum.label}</option>
-                ${options}
-            </select>
-            ${icon}
-        </div>`
-    },
-
-    GetSelectOptions( options=[], opts={ valueAttr: 'value' } ) {
-        return options.map( option => `<option value="${option[ opts.valueAttr ]}">${option.label}</option>` ).join('')
-    },*/
 
     Icons: require('./.IconMap'),
     

@@ -27,7 +27,7 @@ module.exports = p =>
         <title>${p.title}</title>
     </head>
 
-    <body class="${p.bodyClass}">
+    <body>
         <div>
            <div id="content"></div>
         </div>

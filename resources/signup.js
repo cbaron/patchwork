@@ -224,6 +224,8 @@ Object.assign( Signup.prototype, Base.prototype, {
         POST() {
             if( this.error ) return this.respond( { body: { error: this.error } } )
             this.user.state.signup = { }
+            this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
+
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
                 this.token = token

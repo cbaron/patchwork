@@ -25,7 +25,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.weeklyPriceAdjustment ) this.total += this.optionsAdjustment
         
         this.els.adjustment.textContent = `${this.total < 0 ? 'Price Reduction' : 'New Charges' }: ${this.Currency.format( Math.abs( this.total ) )}`
-        //if( this.total < 0 ) this.els.adjustment.classList.add('is-negative')
 
         return this
     },
