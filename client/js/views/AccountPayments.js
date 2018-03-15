@@ -17,7 +17,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     return {
                         prompt: 'Please enter your credit card information.'
                     }
-                }
+                },
+                toastSuccess: 'Thank you for your payment! You will receive an email receipt shortly.'
             }
         }
     },
@@ -25,7 +26,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         views: {
             creditCard: [
-                [ 'posted', function( data ) { console.log( 'account payment posted' ); console.log( data ) } ]
+                [ 'posted', function() {
+                    console.log( this.views.creditCard.model.data )
+                    this.views.seasons.select( this.memberShareId )
+                } ]
             ]
         }
     },
@@ -38,30 +42,29 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     postRender() {
         this.Customer.get( { query: { email: this.user.get('email'), 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
         .then( () => {
-            console.log( this.Customer.data )
             const customer = this.Customer.data[0]
             if( !customer ) return
 
             this.views.creditCard.model.set( 'member', customer.member.data )
             this.views.creditCard.model.set( 'person', customer.person.data )
-            console.log( this.views.creditCard.model.data )
 
             this.selectedCustomer = customer
 
             this.views.seasons.on( 'selected', data => {
-                console.log( 'selected' )
                 this.selectedShare = data.share
                 this.memberShareId = this.selectedShare.membershareid
                 this.Transactions.get( { query: { memberShareId: this.memberShareId } } )
                 .then( () => {
-                    console.log( this.Transactions.data )
-                    console.log( this.Transactions.getBalance() )
+                    this.views.creditCard.model.set( 'share', this.selectedShare )
+
                     this.balance = this.Transactions.getBalance()
                     this.views.creditCard.model.set( 'total', this.balance )
 
                     this.els.total.textContent = `Remaining Balance: ${this.Currency.format( this.balance )}`
+                    this.slideIn( this.els.total, 'right' )
 
                     this.els.ccWrapper.classList.toggle( 'fd-hidden', this.balance <= 0 )
+                    if( this.balance > 0 ) this.slideIn( this.els.ccWrapper, 'right' )
                 } )
                 .catch( this.Error )
             } )
@@ -74,10 +77,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     update( customer, share, memberShareId ) {
-        console.log( 'upate payments' )
-        console.log( customer )
-        console.log( share )
-        console.log( memberShareId )
         this.selectedCustomer = customer
         return this.views.seasons.update( customer )
         .then( () => this.views.seasons.select( memberShareId ) )

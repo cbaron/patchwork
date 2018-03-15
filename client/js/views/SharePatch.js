@@ -78,17 +78,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
-        console.log( 'onOptionsUpdate' )
-        console.log( description )
-        console.log( description.split('\n\t') )
-
         this.optionsDescription = description
 
         this.els.options.classList.remove('fd-hidden')
 
         this.weeklyPriceAdjustment = priceAdjustment
         this.els.weeklyAdjustment.textContent = this.Currency.format( priceAdjustment )
-        //this.els.shareOptionDescription.textContent = description
         this.els.shareOptionDescription.innerHTML = ''
 
         this.slurpTemplate( {
@@ -161,11 +156,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     templateOpts() { return { isAdmin: window.location.pathname.split('/').includes('admin-plus') } },
 
     updateOptionsAdjustment() {
-        console.log( 'updateOptionsAdjustment' )
-        console.log( this.optionsAdjustment )
         this.optionsAdjustment = this.weeksAffected * this.weeklyPriceAdjustment
         this.els.optionsAdjustment.textContent = this.Currency.format( this.optionsAdjustment )
-        //this.els.optionsAdjustment.classList.add( this.optionsAdjustment < 0 ? 'is-negative' : 'is-positive' )
     }
 
 } )

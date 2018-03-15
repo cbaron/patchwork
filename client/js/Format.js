@@ -60,8 +60,6 @@ module.exports = {
     },
 
     GetFormFields( data, model={}, meta ) {
-        console.log( 'GetFormFields' )
-        console.log( meta )
         if( !data ) return ``
 
         return data

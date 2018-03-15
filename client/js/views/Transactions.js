@@ -296,20 +296,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
-    
-
     update( { customer, share } ) {
         this.customer = customer
         this.share = share
       
         this.clear()
+        this.views.addTransaction.update( share.membershareid )
 
-        this.model.get( { query: { memberShareId: share.membershareid } } )
+        return this.model.get( { query: { memberShareId: share.membershareid } } )
         .then( () => this.model.data.forEach( csaTransaction => this.appendTransaction( csaTransaction ) ) )
         .then( () => this.updateBalance().show() )
-        .catch( this.Error )
-
-        this.views.addTransaction.update( share.membershareid )
+        .catch( this.Error )        
     },
 
     updateBalance() {

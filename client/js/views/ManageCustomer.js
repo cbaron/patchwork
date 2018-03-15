@@ -25,7 +25,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
         
         if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ) ` }
-
+        console.log( 'share patch' )
+        console.log( this.views.sharePatch.balance )
         this.Xhr( {
             id: this.memberShareId,
             method: 'patch',
@@ -35,6 +36,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 memberShareId: this.memberShareId,
                 name: this.selectedCustomer.person.data.name,
                 orderOptions: this.views.orderOptions.getPatchData(),
+                previousBalance: this.views.sharePatch.balance,
                 shareLabel: this.selectedShare.label,
                 weekOptions: weekPatch.allRemoved,
                 weekDetail,
@@ -82,7 +84,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 Object.assign( data, { delivery: this.Delivery } )
                 this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
                 this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
-                this.views.transactions.update( data )
+                this.views.transactions.update( data ).then( () => this.views.sharePatch.balance = this.views.transactions.model.getBalance() ).catch( this.Error )
             } )
         } )
 

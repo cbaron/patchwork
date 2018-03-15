@@ -3,6 +3,8 @@
     .back-btn
         cursor: pointer
         margin-bottom: 1rem
+        &:hover
+            opacity: .8
 
     .account-nav
         display: flex
@@ -38,6 +40,10 @@
             padding: 0
             margin: 0
             
+            button
+                margin: 1rem .35rem
+                width: 10rem
+            
             .heading
                 color: $sun-red
                 font-weight: bold
@@ -56,16 +62,6 @@
                     
                 >input
                     flex: 6
-                    
-            button
-                margin: 1rem .35rem
-                width: 10rem
-                color: black
-
-                &.btn-submit
-                    background-color: $sun-yellow
-                &.btn-cancel
-                    background-color: #ccc
                     
     >div:nth-child(4)
         .section:not(:first-of-type)

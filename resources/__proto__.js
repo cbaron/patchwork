@@ -142,16 +142,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         } catch( e ) {
             return this.requestEnded.reject( 'Unable to parse request : ' + e );
         }
-        console.log( 'handleRequestEnd' )
-        console.log( Object.keys( this ) )
-        console.log( this.path )
-        console.log( this.body )
-        console.log( this.request.method )
-        console.log( this.validate )
-        console.log( Object.keys( this.validate ) )
-        console.log( this.validate.POST )
-        console.log( this._.has( this.validate, this.request.method ) )
-        console.log( this.validate[ this.request.method ] )
+
         if( ! this._.has( this.validate, this.request.method ) ) return this.requestEnded.reject('Invalid Request')
 
         this.Q.fcall( this.validate[ this.request.method ].bind(this) )

@@ -15,11 +15,8 @@ module.exports = Object.assign( {}, Super, {
     },
 
     clear() {
-        console.log( 'clear' )
         this.els.dates.innerHTML = ''
-
         this.els.resetBtn.classList.add('hidden')
-        //this.els.editSummary.classList.add('hidden')
     },
 
     determineDates( dayOfWeek ) {
@@ -138,9 +135,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     onResetBtnClick() {
-        console.log( 'onResetBtnClick' )
         this.els.resetBtn.classList.add('hidden')
-        this.slideOut( this.els.editSummary, 'right' )
 
         Object.keys( this.changedDates ).forEach( key => {
             if( this.changedDates[key].editedStatus ) {
@@ -160,7 +155,6 @@ module.exports = Object.assign( {}, Super, {
     },
 
     showEditSummary() {
-        console.log( 'showEditSummary' )
         let result = 0,
             added = 0,
             removed = 0
@@ -200,6 +194,7 @@ module.exports = Object.assign( {}, Super, {
 
     update( { customer, delivery, share } ) {
         if( this.updating ) return
+        this.els.editSummary.classList.add('fd-hidden')
 
         this.updating = true
 

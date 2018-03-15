@@ -15,6 +15,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     Moment: require('moment'),
 
     OptimizedResize: require('./lib/OptimizedResize'),
+
+    UUID: require('uuid-v4'),
     
     P: ( fun, args=[ ], thisArg ) =>
         new Promise( ( resolve, reject ) => Reflect.apply( fun, thisArg || this, args.concat( ( e, ...callback ) => e ? reject(e) : resolve(callback) ) ) ),
@@ -129,9 +131,9 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     hideEl( el, isSlow ) {
         if( this.isHidden( el ) ) return Promise.resolve()
 
-        const time = new Date().getTime(),
-            hash = `${time}Hide`
-        
+        const uuid = this.UUID(),
+            hash = `${uuid}Hide`
+
         return new Promise( resolve => {
             this[ hash ] = e => this._hideEl( el, resolve, hash, isSlow )
             el.addEventListener( 'animationend', this[ hash ] )
@@ -253,8 +255,8 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     },
 
     showEl( el, isSlow ) {
-        const time = new Date().getTime(),
-            hash = `${time}Show`
+        const uuid = this.UUID(),
+            hash = `${uuid}Show`
 
         return new Promise( resolve => {
             this[ hash ] = e => this._showEl( el, resolve, hash, isSlow )

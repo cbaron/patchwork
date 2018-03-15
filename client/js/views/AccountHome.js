@@ -10,6 +10,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             return {
                 model: Object.create( this.Model ).constructor( { }, {
                     attributes: require('../../../models/AccountInfo').attributes,
+                    meta: { noPlaceholder: true },
                     resource: 'accountInfo'
                 } ),
                 templateOpts() {
@@ -19,7 +20,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     }
                 },
                 onCancelBtnClick() { this.emit('cancel') },
-                toastSuccess: 'Account upadated!'
+                toastSuccess: 'Account updated!'
             }
         }
 
@@ -32,11 +33,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         paymentBtn: 'click',
 
         views: {
-            accountPayments: [
-
-            ],
             personalInfo: [
-                [ 'posted', function( data ) { console.log( 'account updated' ); console.log( data ) } ],
+                [ 'posted', function( response ) {
+                    console.log( 'account info posted' )
+                    console.log( this.name )
+                    console.log( response )
+                    this.selectedCustomer.person.data.name = response.name
+                    this.selectedCustomer.person.data.email = response.email
+                    this.selectedCustomer.member.data.phonenumber = response.phonenumber
+                    this.selectedCustomer.member.data.address = response.address
+                    this.selectedCustomer.member.data.extraaddress = response.extraaddress
+                    this.selectedCustomer.member.data.zipcode = response.zipcode
+                    console.log( this.selectedCustomer )
+                    this.populateAccountFields()
+                } ],
                 [ 'cancel', function() {
                     this.hideEl( this.els.accountInfo )
                     .then( () => this.showEl( this.els.accountNav ) )
@@ -47,17 +57,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     addressSelected() {
-        var place = this.addressAutoComplete.getPlace()
+        const place = this.addressAutoComplete.getPlace(),
+            zipcode = place.address_components.find( component => component.types[0] === "postal_code" ).short_name
 
-        this.view.personalInfo.els.address.value = place.formatted_address
-
-        /*this.user.set( {
-            address: place.formatted_address,
-            addressModel: {
-                postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
-                types: place.types
-            }
-        } )*/
+        this.views.personalInfo.model.set( 'zipcode', zipcode )
     },
 
     clearSubviews() {
@@ -78,6 +81,23 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( this.Error )
     },
 
+    geolocate() {
+        if( navigator.geolocation ) {
+            navigator.geolocation.getCurrentPosition( position =>
+              
+                this.addressAutoComplete.setBounds(
+                    new google.maps.Circle( {
+                        center: {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        radius: position.coords.accuracy } )
+                    .getBounds() )
+
+            )
+        }
+    },
+
     initAutocomplete() {
         this.addressAutoComplete = new google.maps.places.Autocomplete( this.views.personalInfo.els.address, { types: ['address'] } )
 
@@ -88,6 +108,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.hideEl( this.els.accountNav )
         .then( () => {
             this.els.backBtn.classList.remove('fd-hidden')
+            this.populateAccountFields()
             return this.showEl( this.els.accountInfo )
         } )
         .catch( this.Error )
@@ -124,9 +145,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     patchMemberShare() {
-        console.log( 'patchMemberShare' )
-        console.log( this.selectedCustomer )
-        console.log( this.memberShareId )
         const weekPatch = this.views.weekOptions.getPatchData()
 
         let weekDetail = ``,
@@ -149,17 +167,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         
         if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ) ` }
 
-        console.log( Object.assign( {}, {
-            adjustment: this.views.sharePatch.getPatchData(),
-            memberShareId: this.memberShareId,
-            name: this.selectedCustomer.person.data.name,
-            orderOptions: this.views.orderOptions.getPatchData(),
-            shareLabel: this.selectedShare.label,
-            weekOptions: weekPatch.allRemoved,
-            weekDetail,
-            to: emailTo
-        }) )
-
         this.Xhr( {
             id: this.memberShareId,
             method: 'patch',
@@ -181,7 +188,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
             Object.keys( this.views ).forEach( key => {
                 const view = this.views[ key ]
-                if( view.els.editSummary && !view.isHidden( view.els.editSummary ) ) view.els.editSummary.classList.add('hidden')
+                if( view.els.editSummary && !view.isHidden( view.els.editSummary ) ) view.els.editSummary.classList.add('fd-hidden')
             } )
 
             this.views.seasons.els.container.scrollIntoView( { behavior: 'smooth' } )
@@ -195,8 +202,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     populateAccountFields() {
         console.log( 'populateAccountFields' )
-        console.log( this.selectedCustomer )
+        this.views.personalInfo.clear()
+        console.log( this.selectedCustomer.person.data )
+        console.log( this.selectedCustomer.member.data )
+        this.views.personalInfo.model.set( 'oldZipcode', this.selectedCustomer.member.data.zipcode || '')
+
         Object.keys( this.selectedCustomer.person.data ).forEach( key => {
+            console.log( key )
+            console.log( this.views.personalInfo.els[ key ] )
             if( this.views.personalInfo.els[ key ] ) this.views.personalInfo.els[ key ].value = this.selectedCustomer.person.data[ key ]
         } )
 
@@ -214,9 +227,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             console.log( this.Customer.data )
             const customer = this.Customer.data[0]
             if( !customer ) return
-
             this.selectedCustomer = customer
-            //this.populateAccountFields()
             
             this.views.orderOptions.hide()
             this.views.weekOptions.hide()
@@ -225,8 +236,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             ( window.google && window.google.maps ) 
                 ? this.initAutocomplete()
                 : window.initGMap = () => this.initAutocomplete()
-
-            //this.views.personalInfo.els.address.setAttribute( 'placeholder', '' )
 
             this.views.seasons.on( 'selected', data => {
                 this.views.sharePatch.reset()
@@ -245,9 +254,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 ] )
                 .then( () => {
                     //TODO:If no delivery, Toast, or some UI
-                    console.log( 'balance' )
                     const balance = this.Transactions.getBalance()
-                    console.log( this.Transactions.getBalance() )
                     this.views.seasons.updateBalanceNotice( balance )
                     this.views.sharePatch.balance = balance
                     Object.assign( data, { delivery: this.Delivery } )
@@ -257,8 +264,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             } )
 
             this.views.seasons.on( 'payBalance', () => {
-                console.log( 'payBalance' )
-                console.log( this.memberShareId )
                 this.views.sharePatch.reset()
 
                 return this.hideEl( this.els.orderInfo )

@@ -50,7 +50,7 @@ return `` +
                 </li>
             </ul>
             <div data-js="adjustment" class="total"></div>
-            <div class="email ${!p.isAdmin ? 'fd-hidden' : ''}">
+            <div class="email ${!p.opts.isAdmin ? 'fd-hidden' : ''}">
                 <label><input data-js="sendEmail" type="checkbox">Send Email</label>
             </div>
             <div data-view="buttonFlow"></div>

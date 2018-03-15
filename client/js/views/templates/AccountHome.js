@@ -7,11 +7,11 @@ module.exports = p =>
     <div class="account-nav" data-js="accountNav">
         <div data-js="accountInfoBtn">
             <h4>Account Info</h4>
-            <div>View and edit your name, email, address, etc.</div>
+            <div>View and edit your name, email, phone number, and address.</div>
         </div>
         <div data-js="ordersBtn">
             <h4>Your Orders</h4>
-            <div>View order options and make changes to current orders.</div>
+            <div>View past orders and make changes to current order options.</div>
         </div>
         <div data-js="paymentBtn">
             <h4>Payment</h4>

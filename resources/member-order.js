@@ -14,7 +14,7 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     PATCH() {
         return this.slurpBody()
         .then( () => {
-            if( !this.user.id ) throw Error("401") //|| !this.user.roles.includes('admin') 
+            if( !this.user.id ) throw Error("401")
             return this.Q( this.Postgres.transaction( this.gatherQueries() ) )
         } )
         .then( () => this.notify() )
@@ -55,19 +55,19 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     },
 
     notify() {
-        console.log( 'notify' )
-        console.log( [
-                    `Hello ${this.body.name},`,
-                    `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
-                    `Details:`,
-                    `${this.body.adjustment.description}`,
-                    `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
-                    ( this.body.adjustment.value > 0
-                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
-                        : `We will mail a check to you in the near future.` ),
-                    `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
-                ].join( `${this.Email.newline}${this.Email.newline}` ) )
-        if( !this.body.adjustment.sendEmail ) return this.Q()
+        console.log( this.body )
+        console.log( this.body.to )
+        console.log( Array.isArray( this.body.to ) )
+        console.log( process.env.TEST_EMAIL )
+        console.log( [ process.env.TEST_EMAIL ] )
+        console.log( this.user.roles.includes('admin') && !this.body.adjustment.sendEmail )
+
+        if( this.user.roles.includes('admin') && !this.body.adjustment.sendEmail ) return this.Q()
+        console.log( this.body.previousBalance )
+        console.log( this.body.adjustment.value )
+        const newBalance = this.body.previousBalance + this.body.adjustment.value
+        console.log( 'newBalance' )
+        console.log( newBalance )
 
         return this.Q(
             this.Email.send( {
@@ -79,15 +79,16 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
                     `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
                     `Details:`,
                     `${this.body.adjustment.description}`,
-                    `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
-                    ( this.body.adjustment.value > 0
-                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
-                        : `We will mail a check to you in the near future.` ),
+                    `${this.body.adjustment.value > 0 ? 'New Charges' : 'Price Reduction'}: ${this.Currency.format( Math.abs(this.body.adjustment.value ) )}`,
+                    `New Share Balance: ${this.Currency.format( newBalance )}`,
+                    ( newBalance > 0
+                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417. You may also log in to your account and pay online via credit card. Thank you!`
+                        : `If your overall balance with Patchwork is now negative, we will mail a check to you in the near future.` ),
                     `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
                 ].join( `${this.Email.newline}${this.Email.newline}` )
             } )
         )
-    },
+    }
 
 } )
 

@@ -6,7 +6,8 @@ module.exports = {
     },
 
     handleSubmissionError( e ) {
-        this.Toast.showMessage( 'error', this.toastError || 'Error' )
+        this.emit( 'submissionError', e )
+        this.Toast.showMessage( 'error', e || this.toastError || 'Error' )
         this.Error( e )
         this.onSubmitEnd()
     },

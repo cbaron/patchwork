@@ -41,14 +41,8 @@ module.exports = {
     },
 
     insertArrayData( sectionName, key, data ) {
-        console.log( 'insertArrayData' )
-        console.log( sectionName )
-        console.log( key )
-        console.log( data )
         const el = this.els[ key ] || this.els[ sectionName ],
             hasImages = /image/i.test(key)
-
-        console.log( hasImages )
 
         data.forEach( datum =>
             this.slurpTemplate( {

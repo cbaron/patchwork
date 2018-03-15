@@ -1,16 +1,10 @@
 .ManageCustomer, .AccountHome
     margin: 2rem 3rem 4rem
-    
-    input:focus
-        border-color: initial
 
     .main-search
         display: flex
         justify-content: center
         align-items: center
-        
-        .MemberTypeahead input:focus
-            border-color: initial
 
     >.section:not(:first-of-type)
         border-top: 1px solid $divider-grey
@@ -45,7 +39,7 @@
             border-right: 1px solid black
             
     .edited
-        color: $edit-green
+        color: $bright-green
         
     button
         display: inline-block
@@ -56,7 +50,11 @@
         margin: 0
         text-align: center
         border-radius: .25rem
-        color: #fff
+        color: black
+
+        html.non-touch &
+            &:hover
+                opacity: .8
         &:focus
             outline: 0
         &.reset-btn
@@ -69,18 +67,22 @@
         &.save-btn
             background-color: $sun-yellow
             color: black
+        &.btn-submit
+            background-color: $sun-yellow
+        &.btn-cancel
+            background-color: #ccc
             
     select:focus
         outline: 0
 
     .original-price
-        color: $edit-red
+        color: $light-sun-red
     
     .new-price
-        color: $edit-green
+        color: $bright-green
 
     .price-change
-        color: $edit-green
+        color: $bright-green
         
     .is-negative
         color: $negative-red
@@ -118,9 +120,9 @@
                             padding: 0 1rem
                             font-weight: normal
                             &:first-child
-                                color: $edit-red
+                                color: $light-sun-red
                             &:last-child
-                                color: $edit-green
+                                color: $bright-green
                                 
                 &:nth-child(3)
                     border-top: 1px solid rgba(0,0,0,.1)
