@@ -289,6 +289,7 @@ module.exports = new Router( {
         REST: {
             'accountInfo': true,
             'auth': true,
+            'check-email': true,
             'Collection': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,

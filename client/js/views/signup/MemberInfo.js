@@ -3,7 +3,8 @@ var View = require('../MyView'),
     MemberInfo = function() { return View.apply( this, arguments ) }
 
 Object.assign( MemberInfo.prototype, View.prototype, {
-                
+
+    Customer: require('../../models/Customer'),
     MemberFoodOmission: require('../../models/MemberFoodOmission'),
 
     addressSelected() {
@@ -18,6 +19,30 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
                 types: place.types
             }
+        } )
+    },
+
+    checkEmail( valid ) {
+        console.log( 'checkEmail' )
+        console.log( this.$.trim( this.templateData.email.val() ) )
+        const email = this.templateData.email.val()
+        if( !email ) return this.Q()
+
+        return this.Q( this.$.ajax( {
+            data: JSON.stringify( { email: this.$.trim( email ) } ),
+            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            url: "/check-email"
+        } ) )
+        .then( response => {
+            console.log( response )
+            if( response.hasAccount ) {
+                this.templateData.existingAccountNotice.removeClass('fd-hidden')
+                this.templateData.existingAccountNotice.get(0).scrollIntoView( { behavior: 'smooth' } )
+                valid = false
+            }
+
+            return this.Q()
         } )
     },
 
@@ -61,13 +86,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         label: 'Password',
         type: 'password',
         error: "Password must be at least six characters.",
-        validate: function(val) { return this.user.isAdmin() || val.length > 5 }
+        validate: function(val) { return this.user.isAdmin() || this.user.isLoggedIn() || val.length > 5 }
     }, {
         name: 'repeatpassword',
         label: 'Repeat Password',
         type: 'password',
         error: "Passwords must match.",
-        validate: function( val ) { return this.user.isAdmin() || ( val === this.templateData.password.val() ) }
+        validate: function( val ) { return this.user.isAdmin() || this.user.isLoggedIn() || ( val === this.templateData.password.val() ) }
     }, {
         name: 'omission',
         label: 'Opt-out Vegetable',
@@ -106,7 +131,48 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
     },
 
+    onSignupNavigation() {
+        console.log( 'onSignupNavigation' )
+        this.templateData.existingAccountNotice.addClass('fd-hidden')
+        this.checkForMember()
+    },
+
+    checkForMember() {
+        console.log( 'checkForMember' )
+        console.log( this.user.attributes )
+        console.log( this.user.isLoggedIn() )
+        if( this.user.isLoggedIn() ) {
+            console.log( 'isLoggedIn' )
+            this.Customer.get( { query: { email: this.user.get('email'), 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
+            .then( () => {
+                const customer = this.Customer.data[0]
+                console.log( customer )
+                Object.keys( customer.person.data ).forEach( key => {
+                    if( this.fields.find( field => field.name === key ) ) this.templateData[ key ].val( customer.person.data[ key ] )
+                } )
+
+                Object.keys( customer.member.data ).forEach( key => {
+                    if( this.fields.find( field => field.name === key ) ) this.templateData[ key ].val( customer.member.data[ key ] )
+                } )
+
+                this.signedInAddress = customer.member.data.address
+                this.signedInZipcode = customer.member.data.zipcode
+            } )
+        } else this.Customer.data = { }
+
+        this.fields.forEach( field => {
+            if( this.user.has( field.name ) ) {
+                this.templateData[ field.name ].val( this.user.get( field.name ) )
+            }
+        } )
+        console.log( this.templateData.email.get(0).closest('.form-group') )
+        this.templateData.email.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.templateData.password.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.templateData.repeatpassword.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+    },
+
     postRender() {
+        console.log( this.user.isAdmin() )
         var self = this;
 
         if( this.user.isAdmin() ) {
@@ -129,6 +195,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
                 .then( () => {
                     if( this.MemberFoodOmission.data.length ) {
+                        console.log( this.MemberFoodOmission.data[0] )
                         const datum = this.MemberFoodOmission.data[0],
                             index = this.FoodOmission.Foods.data.findIndex( food =>
                                 ( food.produceid == datum.produceid && food.produceid !== null ) ||
@@ -161,11 +228,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         .then( () => {
             this.templateData.omission = this.FoodOmission.getMagicSuggest()
 
-            this.fields.forEach( field => {
-                if( this.user.has( field.name ) ) {
-                    this.templateData[ field.name ].val( this.user.get( field.name ) )
-                }
-            } )
+            this.checkForMember()
         } )
         
         this.templateData.container.find('form input')
@@ -230,7 +293,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
     validate() {
         var valid = true
-        
+
         if( this.templateData.container.find('has-error').length ) return false
 
         return this.Q.all( this.fields.map( field => {
@@ -252,6 +315,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     url: "/user" } ) )
             }
         } )
+        .then( () => ( this.user.isLoggedIn() ? this.Q() : this.checkEmail( valid ) ) )
         .then( () => valid )
         .fail( e => { console.log( e.stack || e ); return false } )
     },
@@ -263,11 +327,24 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         addressModel = this.user.get('addressModel')
         customAddress = ( address !== this.user.get('address') || !addressModel || ( ! this._( addressModel.types ).contains( "street_address" ) ) ) ? true : false
-        
+
+        if( address === this.signedInAddress ) {
+            customAddress = false
+            this.user.set( 'addressModel', Object.assign( this.user.get('addressModel') || {} , { postalCode: this.signedInZipcode, types: [ "street_address" ]  } ) )
+        }
+
         this.user.set( { customAddress: customAddress } )
+        console.log( customAddress )
 
         if( customAddress ) this.user.set( { addressModel: { } } )
-                
+        console.log( 'validateAddress' )
+        console.log( address !== this.signedInAddress )
+        console.log( address )
+        console.log( this.signedInAddress )
+        console.log( this.user.get('address') )
+        console.log( this.user.get('addressModel') )
+        console.log( this.user.get('customAddress') )
+        console.log( this.user.attributes )   
         return true
     },
 
