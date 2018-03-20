@@ -10,8 +10,8 @@ Object.assign( CurrentShare.prototype, Base.prototype, {
                 this.dbQuery( { query: this.getOptionQuery( id ) } ),
                 this.dbQuery( { query: this.getDeliveryQuery( id ) } )
             ] )
+            .then( ( [ produceOptions, deliveryOptions ] ) => this.respond( { body: { id, produceOptions: produceOptions.rows, deliveryOptions: deliveryOptions.rows } } ) )
         )
-        .then( ( [ produceOptions, deliveryOptions ] ) => this.respond( { body: { produceOptions: produceOptions.rows, deliveryOptions: deliveryOptions.rows } } ) )
     },
 
     getDeliveryQuery( shareId ) {

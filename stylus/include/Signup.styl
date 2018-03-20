@@ -1,0 +1,51 @@
+.Signup
+    
+    .error
+        color: #a94442
+        display: none
+        margin-top: 1rem
+        text-align: center
+
+    .has-error .error
+            display: block
+
+    >h2
+        padding: 0 20%
+
+    .nav-arrows
+        color: $sun-red
+        margin: 3rem 0
+        display: flex
+        justify-content: flex-end
+        
+        >div
+            display: flex
+            align-items: center
+            font-size: 1.3rem
+            cursor: pointer
+
+            &:first-child
+                flex: 1
+                margin-left: 10%
+            &:last-child
+                margin-right: 10%
+
+            .glyphicon
+                font-size: 2rem
+                position: initial
+                
+            >span
+                margin: 0 .25rem
+
+
+    @media only screen and (max-width: 1050px)
+        >h2
+            padding: 0 15%
+            
+    @media only screen and (max-width: 900px)
+        >h2
+            padding: 0 10%
+
+    @media only screen and (max-width: 767px)
+        >h2
+            padding: 0 5%

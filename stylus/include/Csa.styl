@@ -1,0 +1,179 @@
+.Csa
+    section
+        &:first-of-type
+            padding-top: 0
+            padding-bottom: 2.5rem
+            border-bottom: 1px solid $divider-grey
+
+    h2
+        margin-bottom: .15rem
+    
+    h3
+        text-align: center
+        
+    >div        
+        >img
+            height: auto
+            width: 100%
+            margin: 0
+            
+    .image-row
+        padding: 2.5rem
+
+        >img
+            width: 30.5%
+            display: inline-block
+            margin: 0 .5rem
+    
+    .item-detail
+        margin-bottom: 1rem
+            
+        >div
+            font-size: 1rem
+            
+            >span:first-child
+                color: $sun-red
+
+            >span:nth-child(2)
+                padding: 0 .2rem
+        
+
+    .csa-fit
+        border-top: 1px solid $divider-grey
+        >p
+            margin-bottom: .2rem
+        ul
+            list-style: none
+            
+            >li
+                position: relative
+                margin-left: 1.25rem
+            
+                &::before
+                    listCircle($sun-red)
+
+    .csa-contents
+        border-bottom: 1px solid $divider-grey
+        padding-bottom: 2.5rem
+        
+        .button-row
+            margin-bottom: 0
+
+        .share-examples
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            margin: 1rem -15% 2rem
+            
+            >div
+                text-align: center
+                width: 20rem
+                margin: 0 2rem 1rem
+                
+                h4
+                    color: $sun-red
+                    font-size: 1.1rem
+                    
+                >div img
+                    height: 7.5rem
+                    margin: 0
+                    
+                >div:nth-child(3)
+                    color: $sun-red
+                    margin: .25rem 0
+                    
+                >ul
+                    display: flex
+                    flex-wrap: wrap
+                    
+                    li
+                        width: 50%
+                        color: $dark-grey
+                        text-align: center
+                        font-size: .85rem
+                        
+        .share-descriptions
+            margin: 2rem 0
+
+    .delivery
+        border-top: 1px solid $divider-grey
+
+        img
+            display: block
+            margin: 25px auto
+            max-height: 400px
+            max-width: 100%
+            
+        .delivery-matrix
+            display: flex
+            justify-content: center
+            margin-top: 2.5rem
+            
+            .cell
+                min-width: 12rem
+                padding: .4rem .85rem
+                margin: .085rem
+                color: $sun-red
+                background-color: $light-manila
+                border: 1px solid $sun-red
+                text-align: center
+            
+            >div
+                >div
+                    display: flex
+                    
+                    &:first-child
+                        .cell
+                            color: $light-manila
+                            background-color: $sun-red
+                            
+                    >div
+                        &:nth-child(2)
+                            order: 3
+                        &:nth-child(3)
+                            order: 2
+                            
+    .add-ons
+        margin: 1rem 1.5rem 0
+        
+    .contact
+        margin: 1rem 0
+        
+    @media only screen and (max-width: 767px)    
+        .delivery
+            .delivery-matrix
+                .cell
+                    min-width: 8rem
+                    padding: .3rem .6rem
+                    font-size: .9rem
+                    
+        .image-row
+            >img
+                width: 47%
+                &:last-child
+                    display: none
+                    
+    @media only screen and (max-width: 650px)
+        .image-row
+            >img
+                width: 100%
+                margin: 0
+                
+                &:not(:first-child)
+                    display: none
+
+    @media only screen and (max-width: 425px)
+        .csa-contents .share-examples >div
+            margin: 0 1rem 1rem
+            
+        .delivery
+            .delivery-matrix
+                .cell
+                    min-width: 101px
+                    padding: .25rem .4rem
+                    font-size: .75rem
+                
+            
+        
+    
+    

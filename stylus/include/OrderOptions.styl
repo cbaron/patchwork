@@ -1,0 +1,26 @@
+.OrderOptions
+    .content
+        display: flex
+        flex-wrap: wrap
+
+    ol
+        text-align: left
+        
+        li
+            display: flex
+            align-items: center
+            &.editable
+                padding: .25rem 0
+                
+            >.cell:first-child
+                min-width: 150px
+
+            span:first-child
+                width: 8rem
+            select
+                &:disabled
+                    opacity: .4
+                    
+    @media only screen and (max-width: 767px)
+        .content .edit-summary
+            margin: 1.5rem 0

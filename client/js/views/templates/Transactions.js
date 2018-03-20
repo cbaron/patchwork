@@ -1,5 +1,5 @@
 module.exports = p =>
-`<div class="fd-hide fd-hidden section">
+`<div class="fd-hidden section">
     <div class="heading">
         <span></span>
         <h3>Transactions</h3>

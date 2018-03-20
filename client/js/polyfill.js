@@ -49,4 +49,12 @@ if( ! window.Intl ) {
     require('intl/locale-data/jsonp/en.js')
 }
 
+//http://www.javascriptkit.com/dhtmltutors/sticky-hover-issue-solutions.shtml
+const touchsupport = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)
+if (!touchsupport){ // browser doesn't support touch
+    document.documentElement.classList.add("non-touch")
+}
+
+require('smoothscroll-polyfill').polyfill()
+
 module.exports = true

@@ -1,53 +1,60 @@
-module.exports = p => 
-`<div class="fd-hide fd-hidden">
+module.exports = p => {
+    const heading = p.opts.isAdmin ? `Adjust Member Share Options` : `Summary of Share Updates`
+
+return `` +
+`<div class="fd-hidden">
     <div class="section-heading">
-        <h3>Adjust Member Share Options</h3>
+        <h3>${heading}</h3>
     </div>
     <div class="content">
         <div>
             <ul>
-                <li class="clearfix line-item">
-                    <span>Weeks Removed: </span>
-                    <span data-js="weeksRemoved"></span>
-                    <span class="adjustment">
-                        <span>Adjustment: </span>
-                        <span class="is-negative" data-js="weeksRemovedPrice"></span>
-                    </span>
+                <li class="line-item">
+                    <span>Share Change</span>
+                    <span>Price Adjustment</span>
                 </li>
                 <li class="line-item">
-                    <span>Weeks Added: </span>
-                    <span data-js="weeksAdded"></span>
-                    <span data-js="addedAdjustment" class="adjustment">
-                        <span>Adjustment: </span>
-                        <span class="is-positive" data-js="weeksAddedPrice"></span>
-                    </span>
-                </li>
-                <li data-js="options" class="line-item fd-hidden">
                     <div>
-                        <span>Options Update: </span>
-                        <span data-js="shareOptionDescription"></span>
+                        <span>Weeks Removed: </span>
+                        <span data-js="weeksRemoved"></span>
+                    </div>
+                    <div class="adjustment" data-js="weeksRemovedPrice"></div>
+                </li>
+                <li class="line-item">
+                    <div>
+                        <span>Weeks Added: </span>
+                        <span data-js="weeksAdded"></span>
+                    </div>
+                    <div data-js="weeksAddedPrice" class="adjustment"></div>
+                </li>
+                <li data-js="options" class="line-item options fd-hidden">
+                    <div>
+                        <div>Options Update:</div>
+                        <ul data-js="shareOptionDescription"></ul>
                     </div>
                     <div>
                         <span>Weekly price adjustment: </span>
                         <span data-js="weeklyAdjustment"></span>
                     </div>
                     <div>
-                        <span>Weeks affected: </span>
-                        <span data-js="weeksAffected"></span>
-                        <span class="adjustment">
-                            <span> Adjustment: </span>
-                            <span data-js="optionsAdjustment"></span>
-                        </span>
+                        <div>
+                            <span>Weeks affected: </span>
+                            <span data-js="weeksAffected"></span>
+                        </div>
+                        <div>
+                            <span class="adjustment">
+                                <span data-js="optionsAdjustment"></span>
+                            </span>
+                        </div>
                     </div>
-                <li>
-                    <span>Total Adjustment: </span>
-                    <span data-js="adjustment"></span>
                 </li>
             </ul>
-            <div class="email">
+            <div data-js="adjustment" class="total"></div>
+            <div class="email ${!p.opts.isAdmin ? 'fd-hidden' : ''}">
                 <label><input data-js="sendEmail" type="checkbox">Send Email</label>
             </div>
             <div data-view="buttonFlow"></div>
         </div>
     </div>
 </div>`
+}

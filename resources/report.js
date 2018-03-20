@@ -13,7 +13,7 @@ Object.assign( Report.prototype, Base.prototype, {
     },
 
     handleQuery( model ) {
-        return this.Postgres.query( model.query, model.id === 5 || model.id === 6 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
+        return this.Postgres.query( model.query, model.id === 5 || model.id === 6 || model.id === 7 ? [ ] : [ this.query.from, this.query.to ], { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
 
@@ -90,6 +90,19 @@ Object.assign( Report.prototype, Base.prototype, {
 
         6: {
             id: 6,
+            name: 'get-food-omission',
+            label: 'Get Food Omission',
+            query: `SELECT p.name, pr.name as "produce", prf.name as "produce family" ` +
+                   `FROM member m ` +
+                   `JOIN person p ON m.personid = p.id ` +
+                   `JOIN memberfoodomission mfo ON mfo.memberid = m.id ` +
+                   `LEFT JOIN produce pr on pr.id = mfo.produceid ` +
+                   `LEFT JOIN producefamily prf on prf.id = mfo.producefamilyid ` +
+                   `ORDER BY p.name ASC`
+        },
+
+        7: {
+            id: 7,
             name: 'get-creditors',
             label: 'Get Creditors',
             query: `SELECT p.name, m.onpaymentplan, s.name as "season", ss.value as "Season Signup", ( COALESCE(owes.sum,0) - COALESCE(paid.sum,0) ) as "Owes" ` +

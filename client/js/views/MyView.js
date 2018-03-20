@@ -35,6 +35,28 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         }
     },
 
+    fadeIn( el ) {
+        const onFadeEnd = () => {
+            el.classList.remove('animate-in')
+            el.removeEventListener( 'animationend', onFadeEnd )
+        }
+
+        el.addEventListener( 'animationend', onFadeEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add('animate-in')
+    },
+
+    fadeOut( el ) {
+        const onFadeEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove('animate-out')
+            el.removeEventListener( 'animationend', onFadeEnd )
+        }
+
+        el.addEventListener( 'animationend', onFadeEnd )
+        el.classList.add('animate-out')
+    },
+
     format: {
         capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1)
     },
@@ -55,7 +77,7 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     getTemplateOptions: () => ({}),
 
     hide() {
-        return this.Q.Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
             this.templateData.container.hide()
             resolve()
         } )
@@ -71,9 +93,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         this.$(window).resize( this._.throttle( () => this.size(), 500 ) )
 
         if( this.requiresLogin && ! this.user.id ) {
-            require('./Login').show().once( "success", e => {
-                console.log(this)
-                console.log(this.router)
+            this.Login = this.factory.create( 'login', { insertion: { el: document.querySelector('#content') } } )
+            .on( "success", () => {
                 this.router.onUser( this.user )
 
                 if( this.requiresRole && ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
@@ -82,6 +103,8 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
 
                 this.render()
             } )
+            .on( 'loginCancelled', () => this.router.navigate('/') )
+
             return this
         } else if( this.user.id && this.requiresRole ) {
             if( ( ! this._( this.user.get('roles') ).contains( this.requiresRole ) ) ) {
@@ -93,9 +116,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     },
 
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
-
     
     moment: require('moment'),
+
+    onNavigation( path ) { return this.show() },
 
     postRender: function() {
         this.renderSubviews()
@@ -126,6 +150,28 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
         this.templateData.container.show()
         this.size()
         return this;
+    },
+
+    slideIn( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.remove(`slide-in-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add(`slide-in-${direction}`)
+    },
+
+    slideOut( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove(`slide-out-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        el.classList.add(`slide-out-${direction}`)
     },
 
     slurpEl: function( el ) {

@@ -1,4 +1,4 @@
-module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
+module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype, require('events').EventEmitter.prototype, {
 
     Currency: new Intl.NumberFormat( 'en-US', {
       style: 'currency',
@@ -8,11 +8,15 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     Error: require('../../../lib/MyError'),
 
+    Format: require('../Format'),
+
     Model: require('../models/__proto__'),
 
     Moment: require('moment'),
 
     OptimizedResize: require('./lib/OptimizedResize'),
+
+    UUID: require('uuid-v4'),
     
     P: ( fun, args=[ ], thisArg ) =>
         new Promise( ( resolve, reject ) => Reflect.apply( fun, thisArg || this, args.concat( ( e, ...callback ) => e ? reject(e) : resolve(callback) ) ) ),
@@ -26,8 +30,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
-    constructor() {
-        if( this.requiresLogin && (!this.user.id ) ) return this.handleLogin()
+    constructor( opts={} ) {
+
+        if( opts.events ) { Object.assign( this.events, opts.events ); delete opts.events; }
+        Object.assign( this, opts )
+
+        this.subviewElements = [ ]
+
+        if( this.requiresLogin && ( !this.user.isLoggedIn() ) ) return this.handleLogin()
         if( this.user && !this.isAllowed( this.user.attributes ) ) return this.scootAway()
 
         return this.initialize().render()
@@ -54,6 +64,17 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
 
     events: {},
 
+    fadeInImage( el ) {
+        el.onload = () => {
+            this.emit( 'imgLoaded', el )
+            el.removeAttribute('data-src')
+        }
+
+        el.setAttribute( 'src', el.getAttribute('data-src') )
+    },
+
+    getContainer() { return this.els.container },
+
     getData() {
         if( !this.model ) this.model = Object.create( this.Model, { resource: { value: this.name } } )
 
@@ -61,31 +82,23 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     getTemplateOptions() {
-        const modelData = this.model
-            ? this.model.data
-                ? this.model.data
-                : this.model
-            : { }
-        return Object.assign(
-            {},
-            modelData,
-            { user: (this.user) ? this.user.data : {} },
-            { opts: this.templateOpts
-                ? typeof this.templateOpts === 'function'
-                    ? this.templateOpts()
-                    : this.templateOpts
-                 : {} }
-        )
-    },
+        const rv = Object.assign( this.user ? { user: this.user.data } : {}, this.Format )
 
-    isAllowed( user ) {
-        if( !this.requiresRole ) return true
-        return this.requiresRole && user.roles.includes( this.requiresRole )
+        if( this.model ) {
+            rv.model = this.model.data
+
+            if( this.model.meta ) rv.meta = this.model.meta
+            if( this.model.attributes ) rv.attributes = this.model.attributes
+        }
+
+        if( this.templateOpts ) rv.opts = typeof this.templateOpts === 'function' ? this.templateOpts() : this.templateOpts || {}
+
+        return rv
     },
 
     handleLogin() {
-
-        require('./Login').show().once( "success", userData => {
+        this.factory.create( 'login', { insertion: { el: document.querySelector('#content') } } )
+        .on( "success", userData => {
             if( !this.isAllowed( userData ) ) return this.scootAway()
 
             this.user.set( userData )
@@ -97,30 +110,35 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    hide() {
-        if( !this.els || !document.body.contains(this.els.container) || this.isHidden() ) {
-            return Promise.resolve()
-        } else if( this.els.container.classList.contains('fd-hide') ) {
-            return new Promise( resolve => this.once( 'fd-hidden', resolve ) )
-        } else {
-            return new Promise( resolve => {
-                this.onHiddenProxy = e => this.onHidden(resolve)
-                this.els.container.addEventListener( 'transitionend', this.onHiddenProxy )
-                this.els.container.classList.add('fd-hide')
-            } )
-        }
+    hide( isSlow ) {
+        if( !this.els || this.isHiding ) return Promise.resolve()
+
+        this.isHiding = true;
+        return this.hideEl( this.els.container, isSlow )
+        .then( () => Promise.resolve( this.isHiding = false ) )
     },
 
-    hideEl( el ) {
-        if( el.classList.contains('fd-hide') ) {
-            return Promise.resolve()
-        } else {
-            return new Promise( resolve => {
-                el.onHiddenProxy = e => this.onElHidden( resolve, el )
-                el.addEventListener( 'transitionend', el.onHiddenProxy )
-                el.classList.add('fd-hide')
-            } )
-        }
+    hideSync() { this.els.container.classList.add('fd-hidden'); return this },
+
+    _hideEl( el, resolve, hash, isSlow ) {
+        el.removeEventListener( 'animationend', this[ hash ] )
+        el.classList.add('fd-hidden')
+        el.classList.remove(`animate-out${ isSlow ? '-slow' : ''}`)
+        delete this[hash]
+        resolve()
+    },
+
+    hideEl( el, isSlow ) {
+        if( this.isHidden( el ) ) return Promise.resolve()
+
+        const uuid = this.UUID(),
+            hash = `${uuid}Hide`
+
+        return new Promise( resolve => {
+            this[ hash ] = e => this._hideEl( el, resolve, hash, isSlow )
+            el.addEventListener( 'animationend', this[ hash ] )
+            el.classList.add(`animate-out${ isSlow ? '-slow' : ''}`)
+        } )
     },
 
     htmlToFragment( str ) {
@@ -131,21 +149,29 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     initialize() {
-        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view' }, views: { } } )
+        return Object.assign( this, { els: { }, slurp: { attr: 'data-js', view: 'data-view', name: 'data-name', img: 'data-src', bgImg: 'data-bg' }, views: { } } )
+    },
+
+    insertToDom( fragment, options ) {
+        const insertion = typeof options.insertion === 'function' ? options.insertion() : options.insertion;
+
+        insertion.method === 'insertBefore'
+            ? insertion.el.parentNode.insertBefore( fragment, insertion.el )
+            : insertion.el[ insertion.method || 'appendChild' ]( fragment )
+    },
+
+    isAllowed( user ) {
+        if( !this.requiresRole ) return true
+        return this.requiresRole && user.roles.includes( this.requiresRole )
     },
     
-    isHidden() { return this.els.container.classList.contains('fd-hidden') },
+    isHidden( el ) { return el ? el.classList.contains('fd-hidden') : this.els.container.classList.contains('fd-hidden') },
 
-    onElHidden( resolve, el ) {
-        el.removeEventListener( 'transitionend', el.onHiddenProxy )
-        el.classList.add('fd-hidden')
-        resolve( this.emit( 'elHidden', el ) )
-    },
+    loadBgImage( el ) {
+        const img = new Image()
 
-    onHidden( resolve ) {
-        this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
-        this.els.container.classList.add('fd-hidden')
-        resolve( this.emit('fd-hidden') )
+        img.onload = () => el.classList.add('bg-loaded')
+        img.src = this.Format.ImageSrc( el.getAttribute('data-bg') )
     },
 
     onLogin() {
@@ -156,16 +182,6 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this.show()
     },
 
-    onElShown( resolve, el ) {
-        el.removeEventListener( 'transitionend', el.onShownProxy )
-        resolve( this.emit( 'elShown' ) )
-    },
-
-    onShown( resolve ) {
-        this.els.container.removeEventListener( 'transitionend', this.onShownProxy )
-        resolve( this.emit( 'shown' ) )
-    },
-
     showNoAccess() {
         alert("No privileges, son")
         return this
@@ -174,7 +190,14 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     postRender() { return this },
 
     render() {
-        this.slurpTemplate( { template: this.template( this.getTemplateOptions(), { Moment: this.Moment } ), insertion: this.insertion, isView: true } )
+        if( this.data ) this.model = Object.create( this.Model, { } ).constructor( this.data )
+
+        this.slurpTemplate( {
+            insertion: this.insertion || { el: document.body },
+            isView: true,
+            storeFragment: this.storeFragment,
+            template: this.template( this.getTemplateOptions(), { Moment: this.Moment } )
+        } )
 
         this.renderSubviews()
 
@@ -184,37 +207,26 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
     },
 
     renderSubviews() {
-        Object.keys( this.viewEls || { } ).forEach( key => {
+        this.subviewElements.forEach( obj => {
+            const name = obj.name || obj.view
 
-            if( Array.isArray( this.viewEls[ key ] ) ) {
-                this.viewEls[ key ].forEach( el => {
-                    const name = el.getAttribute('data-name')
-                    let config = this.Views[ name ],
-                        opts = { }
-                    if( config ) {
-                        opts = typeof config === "object"
-                            ? config
-                            : Reflect.apply( config, this, [ ] )
-                    }
-                    this.views[ name ] = this.factory.create( key, Object.assign( { insertion: { value: { el, method: 'insertBefore' } } }, opts ) )
-                    el.remove()
-                } )
-                this.viewEls[ key ] = undefined
-                return
-            }
-                
+            let opts = { }
 
-            let opts = { } 
-            if( this.Views && this.Views[ key ] ) {
-                opts =
-                    typeof this.Views[ key ] === "object"
-                        ? this.Views[ key ]
-                        : Reflect.apply( this.Views[ key ], this, [ ] )
+            if( this.Views && this.Views[ obj.view ] ) opts = typeof this.Views[ obj.view ] === "object" ? this.Views[ obj.view ] : Reflect.apply( this.Views[ obj.view ], this, [ ] )
+            if( this.Views && this.Views[ name ] ) opts = typeof this.Views[ name ] === "object" ? this.Views[ name ] : Reflect.apply( this.Views[ name ], this, [ ] )
+
+            this.views[ name ] = this.factory.create( obj.view, Object.assign( { insertion: { el: obj.el, method: 'insertBefore' } }, opts ) )
+
+            if( this.events.views ) {
+                if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
+                else if( this.events.views[ obj.view ] ) this.events.views[ obj.view ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
             }
-            this.views[ key ] = this.factory.create( key, Object.assign( { insertion: { value: { el: this.viewEls[ key ], method: 'insertBefore' } } }, opts ) )
-            this.viewEls[ key ].remove()
-            this.viewEls[ key ] = undefined
+
+            if( obj.el.classList.contains('fd-hidden') ) this.views[name].hideSync()
+            obj.el.remove()
         } )
+
+        this.subviewElements = [ ]
 
         return this
     },
@@ -229,58 +241,51 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         return this
     },
 
-    show() {
-        if( this.els.container.classList.contains( 'fd-hidden' ) ) {
-            this.els.container.classList.remove( 'fd-hidden' )
-            
-            return new Promise( resolve => {
-                setTimeout( () => {
-                    this.onShownProxy = e => this.onShown(resolve)
-                    this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'fd-hide' )
-                }, 10 ) 
-            } )
-        } else if( this.els.container.classList.contains( 'fd-hide' ) ) {
-            this.els.container.classList.remove( 'fd-hide' )
-            this.els.container.removeEventListener( 'transitionend', this.onHiddenProxy )
-            
-            return new Promise( resolve => {
-                setTimeout( () => {
-                    this.onShownProxy = e => this.onShown(resolve)
-                    this.els.container.addEventListener( 'transitionend', this.onShownProxy )
-                    this.els.container.classList.remove( 'fd-hide' )
-                }, 10 ) 
-            } )
-        } else {
-            return new Promise( resolve => this.once( 'shown', resolve ) )
-        }
+    show( isSlow ) {
+        return this.showEl( this.els.container, isSlow )
     },
 
-    showEl( el ) {
-        if( el.classList.contains( 'fd-hidden' ) ) {
-            el.classList.remove( 'fd-hidden' )
-            
-            return new Promise( resolve => {
-                window.requestAnimationFrame( () => {
-                    el.onShownProxy = e => this.onShown( resolve, el )
-                    el.addEventListener( 'transitionend', el.onShownProxy )
-                    el.classList.remove( 'fd-hide' )
-                } )
-            } )
-        } else if( el.classList.contains( 'fd-hide' ) ) {
-            el.classList.remove( 'fd-hide' )
-            el.container.removeEventListener( 'transitionend', el.onHiddenProxy )
-            
-            return new Promise( resolve => {
-                window.requestAnimationFrame( () => {
-                    el.onShownProxy = e => this.onShown( resolve, el )
-                    el.addEventListener( 'transitionend', el.onShownProxy )
-                    el.classList.remove( 'fd-hide' )
-                } )
-            } )
-        } else {
-            return Promise.resolve()
+    showSync() { this.els.container.classList.remove('fd-hidden'); return this },
+
+    _showEl( el, resolve, hash, isSlow ) {
+        el.removeEventListener( 'animationend', this[hash] )
+        el.classList.remove(`animate-in${ isSlow ? '-slow' : ''}`)
+        delete this[ hash ]
+        resolve()
+    },
+
+    showEl( el, isSlow ) {
+        const uuid = this.UUID(),
+            hash = `${uuid}Show`
+
+        return new Promise( resolve => {
+            this[ hash ] = e => this._showEl( el, resolve, hash, isSlow )
+            el.addEventListener( 'animationend', this[ hash ] )
+            el.classList.remove('fd-hidden')
+            el.classList.add(`animate-in${ isSlow ? '-slow' : ''}`)
+        } )        
+    },
+
+    slideIn( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.remove(`slide-in-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
         }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        if( el.classList.contains('fd-hidden') ) el.classList.remove('fd-hidden')
+        el.classList.add(`slide-in-${direction}`)
+    },
+
+    slideOut( el, direction ) {
+        const onSlideEnd = () => {
+            el.classList.add('fd-hidden')
+            el.classList.remove(`slide-out-${direction}`)
+            el.removeEventListener( 'animationend', onSlideEnd )
+        }
+
+        el.addEventListener( 'animationend', onSlideEnd )
+        el.classList.add(`slide-out-${direction}`)
     },
 
     slurpEl( el ) {
@@ -303,30 +308,28 @@ module.exports = Object.assign( { }, require('events').EventEmitter.prototype, {
         var fragment = this.htmlToFragment( options.template ),
             selector = `[${this.slurp.attr}]`,
             viewSelector = `[${this.slurp.view}]`,
+            imgSelector = `[${this.slurp.img}]`,
+            bgImgSelector = `[${this.slurp.bgImg}]`,
             firstEl = fragment.querySelector('*')
 
         if( options.isView || firstEl.getAttribute( this.slurp.attr ) ) this.slurpEl( firstEl )
-        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}` ) ).forEach( el => {
+
+        Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
+            else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
+            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
             else if( el.hasAttribute( this.slurp.view ) ) {
-                let attr = el.getAttribute(this.slurp.view)
-                if( ! this.viewEls ) this.viewEls = { }
-               
-                this.viewEls[ attr ] = this.viewEls[ attr ] === undefined
-                    ? el
-                    : Array.isArray( this.viewEls[ attr ] )
-                        ? this.viewEls[ attr ].concat( el )
-                        : [ this.viewEls[ attr ], el ]
+                this.subviewElements.push( { el, view: el.getAttribute(this.slurp.view), name: el.getAttribute(this.slurp.name) } )
             }
         } )
-          
-        options.insertion.method === 'insertBefore'
-            ? options.insertion.el.parentNode.insertBefore( fragment, options.insertion.el )
-            : options.insertion.method === 'after'
-                ? options.insertion.el.parentNode.insertBefore( fragment, options.insertion.el.nextSibling )
-                : options.insertion.el[ options.insertion.method || 'appendChild' ]( fragment )
+   
+        if( options.storeFragment ) return Object.assign( this, { fragment } )
+
+        this.insertToDom( fragment, options )
+
+        if( options.renderSubviews ) this.renderSubviews()
 
         return this
-    }
+    },
 
 } )

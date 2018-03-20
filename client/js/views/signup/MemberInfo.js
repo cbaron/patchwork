@@ -3,7 +3,8 @@ var View = require('../MyView'),
     MemberInfo = function() { return View.apply( this, arguments ) }
 
 Object.assign( MemberInfo.prototype, View.prototype, {
-                
+
+    Customer: require('../../models/Customer'),
     MemberFoodOmission: require('../../models/MemberFoodOmission'),
 
     addressSelected() {
@@ -18,6 +19,27 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 postalCode: this._( place.address_components ).find( component => component.types[0] === "postal_code" ).short_name,
                 types: place.types
             }
+        } )
+    },
+
+    checkForAccount( valid ) {
+        const email = this.templateData.email.val()
+        if( !email ) return this.Q()
+
+        return this.Q( this.$.ajax( {
+            data: JSON.stringify( { email: this.$.trim( email ) } ),
+            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            url: "/check-email"
+        } ) )
+        .then( response => {
+            if( response.hasAccount ) {
+                this.templateData.existingAccountNotice.removeClass('fd-hidden')
+                this.templateData.container.get(0).scrollIntoView( { behavior: 'smooth' } )
+                valid = false
+            }
+
+            return this.Q()
         } )
     },
 
@@ -47,13 +69,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         validate: val => val.length > 8,
     }, {
         name: 'address',
-        label: 'Address',
+        label: 'Address 1',
         type: 'text',
         error: "Please enter a valid address.",
         validate: function(val) { return this.validateAddress( val ) }
     }, {
         name: 'extraaddress',
-        label: 'Further Address Info ( Apt, Suite )',
+        label: 'Address 2',
         type: 'text',
         validate: () => true
     }, {
@@ -61,16 +83,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         label: 'Password',
         type: 'password',
         error: "Password must be at least six characters.",
-        validate: function(val) { return this.user.isAdmin() || val.length > 5 }
+        validate: function(val) { return this.user.isAdmin() || this.user.isLoggedIn() || val.length > 5 }
     }, {
         name: 'repeatpassword',
         label: 'Repeat Password',
         type: 'password',
         error: "Passwords must match.",
-        validate: function( val ) { return this.user.isAdmin() || ( val === this.templateData.password.val() ) }
+        validate: function( val ) { return this.user.isAdmin() || this.user.isLoggedIn() || ( val === this.templateData.password.val() ) }
     }, {
         name: 'omission',
-        label: 'One vegetable to never receive',
+        label: 'Opt-out Vegetable',
         type: 'select',
         info: true,
         validate: () => true
@@ -106,11 +128,70 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         this.addressAutoComplete.addListener( 'place_changed', this.addressSelected.bind(this) )
     },
 
+    onSignupNavigation() {
+        this.fields.filter( field => field.name !== 'omission' ).forEach( field => this.removeError( this.templateData[ field.name ] ) )
+        this.templateData.existingAccountNotice.addClass('fd-hidden')
+        this.populateFields()
+    },
+
+    populateFields() {
+        if( this.user.isLoggedIn() ) {
+            this.Customer.get( { query: { email: this.user.get('email'), 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
+            .then( () => {
+                const customer = this.Customer.data[0]
+
+                Object.keys( customer.person.data ).forEach( key => {
+                    if( this.fields.find( field => field.name === key ) && !this.user.get( key ) ) this.templateData[ key ].val( customer.person.data[ key ] )
+                } )
+
+                Object.keys( customer.member.data ).forEach( key => {
+                    if( this.fields.find( field => field.name === key ) && !this.user.get( key ) ) this.templateData[ key ].val( customer.member.data[ key ] )
+                } )
+
+                this.memberAddress = customer.member.data.address
+                this.memberZipcode = customer.member.data.zipcode
+                this.setFoodOmission( customer ).catch( e => { console.log( 'error', 'Error retrieving Food Omission Data' ); this.Error } )
+            } )
+        } else this.Customer.data = { }
+
+        this.fields.forEach( field => {
+            if( this.user.has( field.name ) ) {
+                this.templateData[ field.name ].val( this.user.get( field.name ) )
+            }
+        } )
+
+        this.templateData.email.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.templateData.password.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.templateData.repeatpassword.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+    },
+
+    setFoodOmission( customer ) {
+        return this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
+        .then( () => {
+            if( this.MemberFoodOmission.data.length ) {
+                const datum = this.MemberFoodOmission.data[0],
+                    index = this.FoodOmission.Foods.data.findIndex( food =>
+                        ( food.produceid == datum.produceid && food.produceid !== null ) ||
+                        ( food.producefamilyid == datum.producefamilyid && datum.produceid === null ) )
+
+                if( index !== -1 ) {
+                    const foodDatum = this.FoodOmission.Foods.data[ index ]
+                    datum.name = foodDatum.name
+                    this.FoodOmission.ms.setSelection( [ Object.assign( {}, foodDatum, { id: index } ) ] )
+                }
+            } else {
+                this.FoodOmission.clear()
+            }
+
+            return Promise.resolve()
+        } )
+    },
+
     postRender() {
         var self = this;
 
         if( this.user.isAdmin() ) {
-            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { value: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } } ) ) }
+            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } ) ) }
             this.views.memberTypeahead.focus()
 
             this.views.memberTypeahead.on( 'customerSelected', customer => {
@@ -126,23 +207,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 this.templateData.extraaddress.val( customer.member.data.extraaddress )
                 this.templateData.heard.val( customer.member.data.heard )
 
-                this.MemberFoodOmission.get( { query: { memberid: customer.member.data.id } } )
-                .then( () => {
-                    if( this.MemberFoodOmission.data.length ) {
-                        const datum = this.MemberFoodOmission.data[0],
-                            index = this.FoodOmission.Foods.data.findIndex( food =>
-                                ( food.produceid == datum.produceid && food.produceid !== null ) ||
-                                ( food.producefamilyid == datum.producefamilyid && datum.produceid === null ) )
-
-                        if( index !== -1 ) {
-                            const foodDatum = this.FoodOmission.Foods.data[ index ]
-                            datum.name = foodDatum.name
-                            this.FoodOmission.ms.setSelection( [ Object.assign( {}, foodDatum, { id: index } ) ] )
-                        }
-                    } else {
-                        this.FoodOmission.clear()
-                    }
-                } )
+                this.setFoodOmission( customer )
                 .catch( e => { this.Toast.showMessage( 'error', 'Error retrieving Food Omission Data' ); this.Error } )
             } );
         }
@@ -153,20 +218,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         this.templateData.address.attr( 'placeholder', '' )
         
-        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: this.templateData.omission.get(0), method: 'after' } } } )
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { el: this.templateData.omission.get(0), method: 'after' } } )
 
         this.templateData.omission.remove()
 
         this.FoodOmission.initializeFoodOmission()
         .then( () => {
             this.templateData.omission = this.FoodOmission.getMagicSuggest()
-
-            this.fields.forEach( field => {
-                if( this.user.has( field.name ) ) {
-                    this.templateData[ field.name ].val( this.user.get( field.name ) )
-                }
-            } )
         } )
+
+        this.populateFields()
         
         this.templateData.container.find('form input')
         .on( 'blur', function() {
@@ -184,6 +245,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
             } )
         } )
         .on( 'focus', function() { self.removeError( self.$(this) ) } )
+
+        this.fields.forEach( field => this.removeError( this.templateData[ field.name ] ) )
 
     },
 
@@ -230,7 +293,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
     validate() {
         var valid = true
-        
+
         if( this.templateData.container.find('has-error').length ) return false
 
         return this.Q.all( this.fields.map( field => {
@@ -252,6 +315,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     url: "/user" } ) )
             }
         } )
+        .then( () => ( this.user.isLoggedIn() ? this.Q() : this.checkForAccount( valid ) ) )
         .then( () => valid )
         .fail( e => { console.log( e.stack || e ); return false } )
     },
@@ -263,11 +327,16 @@ Object.assign( MemberInfo.prototype, View.prototype, {
 
         addressModel = this.user.get('addressModel')
         customAddress = ( address !== this.user.get('address') || !addressModel || ( ! this._( addressModel.types ).contains( "street_address" ) ) ) ? true : false
-        
+
+        if( address === this.memberAddress ) {
+            customAddress = false
+            this.user.set( 'addressModel', Object.assign( this.user.get('addressModel') || {} , { postalCode: this.memberZipcode, types: [ "street_address" ]  } ) )
+        }
+
         this.user.set( { customAddress: customAddress } )
 
         if( customAddress ) this.user.set( { addressModel: { } } )
-                
+ 
         return true
     },
 

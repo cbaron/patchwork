@@ -26,7 +26,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     
     context: Object.assign( {}, Base.prototype.context, {
         POST() {
-            this.body.member.password = this.bcrypt.hashSync( this.body.member.password )
+            this.body.member.password = this.body.member.password ? this.bcrypt.hashSync( this.body.member.password ) : ''
             delete this.body.member.repeatpassword
 
             this.body.totalCents = Math.floor( this.body.total * 100 )
@@ -54,14 +54,14 @@ Object.assign( Signup.prototype, Base.prototype, {
             .then( () => {
                 
                 console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
-                this.error = `${failedPayment}  Payment failed,  please try again.`;
+                this.error = `Payment failed, please try again.`;
             } ) 
         } )
         .then( charge => {
             if( this.error ) return
             return this.Q.all( this.body.shares.map( ( share, i ) => this.Q(
                 this.Postgres.query(
-                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe' )`,
+                    `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description, initiator ) VALUES ( 'Payment', $1, ${this.membershareids[i]}, 'Stripe', 'customer' )`,
                     [ share.total ] 
                 )
             ) ) )
@@ -81,7 +81,14 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.Q.all( share.options.map( option =>
                 this.dbQuery( {
                     query: "INSERT INTO membershareoption ( membershareid, shareoptionid, shareoptionoptionid ) VALUES ( $1, $2, $3 ) RETURNING id",
-                    values: [ membershareid, option.shareoptionid, option.shareoptionoptionid ] } ) ) )
+                    values: [ membershareid, option.shareoptionid, option.shareoptionoptionid ] } ) )
+                .concat( share.seasonalAddOns.map( addon =>
+                    this.dbQuery( {
+                        query: `INSERT INTO "memberShareSeasonalAddOn" ( "seasonalAddOnId", "seasonalAddOnOptionId", "memberShareId" ) VALUES ( $1, $2, $3 )`,
+                        values: [ addon.seasonalAddOnId, addon.seasonalAddOnOptionId, membershareid ]
+                    } )
+                ) )
+            )
         } )
         .spread( () => {
             return this.dbQuery( {
@@ -132,20 +139,25 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     generateEmailBody() {
-        var body = this.format('Hello %s,\r\n\r\nThanks for signing up for our CSA program.  Here is a summary for your records:\r\n\r\n', this.body.member.name)
+        let body = `Hello ${this.body.member.name},\r\n\r\nThanks for signing up for our CSA program. Here is a summary for your records:\r\n\r\n`
 
-        body += this.body.shares.map( share =>
-            this.format('Share: %s\r\n\t%s%s\r\n\t%s\r\n\tShare Options:\r\n\t\t%s\r\n',
-                share.label,
-                share.description,
-                ( share.skipDays.length )
-                    ? this.format( "  You have opted out of produce for the following dates: %s.", share.skipDays.map( day => day.slice(5) ).join(', ') )
-                    : "",
-                share.delivery.description,
-                this._( share.options ).pluck('description').join('\r\n\t\t') )
+        body += this.body.shares.map( share => {
+            const skipDays = share.skipDays.length
+                ? `You have opted out of produce for the following dates: ${share.skipDays.map( day => day.slice(5) ).join(', ')}.`
+                : ""
+
+            const shareOptions = this._( share.options ).pluck('description').join('\r\n\t\t')
+
+            const seasonalAddOns = share.seasonalAddOns.length
+                ? `\r\n\tSeasonal Add-Ons: \r\n\t\t` + share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit} -- ${addon.price}` ).join('\r\n\t\t') + `\r\n`
+                : `\r\n`
+
+            return `Share: ${share.label}\r\n\t${share.description}${skipDays}\r\n\t${share.delivery.description}\r\n\tShareOptions:\r\n\t\t${shareOptions}${seasonalAddOns}`
+        }
         ).join('\r\n\r\n')
 
         if( this.body.member.omission.length ) body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`
+
         body += this.getEmailPaymentString()
 
         return body
@@ -190,22 +202,31 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     newPersonQueries() {
+        this.newMember = true
+
         return ( this.body.isAdmin
             ? this.dbQuery( {
                 query: "INSERT INTO person ( email, name ) VALUES ( $1, $2 ) RETURNING id",
-                values: [ this.body.member.email, this.body.member.name ]
+                values: [ this.body.member.email.toLowerCase(), this.body.member.name ]
               } )
             : this.dbQuery( {
                 query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
-                values: [ this.body.member.email, this.body.member.password, this.body.member.name ]
+                values: [ this.body.member.email.toLowerCase(), this.body.member.password, this.body.member.name ]
               } ) )
-        .then( result => this.insertMember( result.rows[0].id ) )
+        .then( result => {
+            this.user.id = result.rows[0].id
+            this.user.email = this.body.member.email
+            return this.insertMember( result.rows[0].id )
+        } )
+      
     },
 
     responses: Object.assign( { }, Base.prototype.responses, {
         POST() {
             if( this.error ) return this.respond( { body: { error: this.error } } )
             this.user.state.signup = { }
+            this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
+
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
                 this.token = token
@@ -215,7 +236,24 @@ Object.assign( Signup.prototype, Base.prototype, {
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
-                ).fail( err => console.log("Error generating confirmation email : " + err.stack || ere ) )
+                )
+                .fail( err => console.log( "Error generating confirmation email : " + err.stack || err ) )
+            } )
+            .then( () => {
+                if( !this.newMember ) return this.Q()
+
+                return this.Q( this.Email.send( {
+                    to: this.body.member.email,
+                    from: 'eat.patchworkgardens@gmail.com',
+                    subject: `Patchwork Gardens Email Verification`,
+                    body:
+                        `Dear ${this.body.member.name},\n\n` +
+                        `Thank you for your Patchwork Gardens CSA purchase! ` +
+                        `In order for you to log in to the site, we will need to verify your email. Please click the following link to do so:\n` +
+                        `http://${process.env.DOMAIN}:${process.env.PORT}/verify/${this.token}`
+                    } )
+                )
+                .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
             } )
             .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
         }
@@ -223,6 +261,10 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     rollbackDelivery() {
         return this.dbQuery( { query: this.format("DELETE from membersharedelivery WHERE membershareid IN ( %s )", this.membershareids.join(', ') ) } )
+    },
+
+    rollbackSeasonalAddOns() {
+        return this.dbQuery( { query: `DELETE FROM "memberShareSeasonalAddOn" WHERE "memberShareId" IN ( ${this.membershareids.join(', ')}` } )
     },
 
     rollbackShareOptions() {
@@ -238,6 +280,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.rollbackSkipWeeks.bind(this),
             this.rollbackDelivery.bind(this),
             this.rollbackShareOptions.bind(this),
+            this.rollbackSeasonalAddOns.bind(this),
             this.rollbackMemberShare.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
@@ -247,10 +290,7 @@ Object.assign( Signup.prototype, Base.prototype, {
 
 
     updatePersonQueries( personid ) {
-        return this.dbQuery( {
-            query: "UPDATE person SET password = $1, name = $2 WHERE id = $3",
-            values: [ this.body.member.password, this.body.member.name, personid ] } )
-        .then( () => this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } ) )
+        return this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } )
         .then( result => {
             var row = ( result.rows.length ) ? result.rows[0] : undefined
             if( row ) {

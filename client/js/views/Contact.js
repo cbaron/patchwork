@@ -1,18 +1,11 @@
-var CustomContent = require('./util/CustomContent'),
-    Contact = function() { return CustomContent.apply( this, arguments ) }
+const CustomContent = require('./util/CustomContent')
 
-Object.assign( Contact.prototype, CustomContent.prototype, {
+module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
-    requiresLogin: false,
-
-    tables: [ { name: 'contactinfo', comparator: 'id', el: 'contactInfo', template: 'contact'} ],
-
-    template: require('../templates/contact')( require('handlebars') ),
+    tables: [ { name: 'contactinfo', el: 'contactInfo', template: 'contact'} ],
 
     templates: {
-        contact: require('../templates/business')( require('handlebars') )
+        contact: require('./templates/Location')
     }
 
 } )
-
-module.exports = Contact

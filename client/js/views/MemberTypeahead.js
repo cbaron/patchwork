@@ -34,7 +34,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => {
             if( ! this.Customer.data.length ) return Promise.resolve( false )
             
-            this.attr = attr            
+            this.attr = attr     
             suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
             return Promise.resolve( true )
         } )

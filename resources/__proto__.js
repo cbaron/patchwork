@@ -5,6 +5,10 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     Db: require('./lib/Db'),
 
+    Mongo: require('../dal/Mongo'),
+
+    Permissions: require('./.Permissions'),
+
     Postgres: require('../dal/postgres'),
 
     QueryString: require('querystring'),
@@ -14,11 +18,15 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     badRequest() { return this.respond( { stopChain: true, code: 400, body: 'BadRequest' } ) },
 
     context: {
-        DELETE:function(){},
+        DELETE() { if( this.veeTwo ) return this.path.shift() },
 
-        GET: function() {
+        GET() {
             const query = require('url').parse( this.request.url ).query
-            if( query === '{}' ) return this.query = { }
+
+            if( query === '{}' ) {
+                if( this.veeTwo ) this.path.shift()
+                return this.query = { }
+            }
 
             if( this.request.headers.v2 ) {
                 this.path.shift()
@@ -26,8 +34,10 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             }
 
             if( query !== null && query.charAt(0) === "{" ) {
-                this.veeTwo = true
-                this.path.shift()
+                if( !this.request.headers.v2 ) {
+                    this.veeTwo = true
+                    this.path.shift()
+                }
                 if( [ 'member', 'person' ].includes[ this.path[0] ] && !this.user.roles.includes('admin') ) throw Error("401")
                 return this.query = JSON.parse( decodeURIComponent( query ) )
             }
@@ -44,25 +54,26 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             } )
         },
 
-        PATCH: function() {
-            if( this.request.headers.v2 ) {
-                this.path.shift()
-                this.veeTwo = true
-                return
-            }
+        PATCH() {
+            if( this.request.headers.v2 ) this.veeTwo = true
+
+            if( this.veeTwo ) { this.path.shift(); return }
+
             this.body = this._.omit( this.body, [ 'id', 'serverId', 'updated', 'updatedAt', 'created', 'createdAt' ] )
         },
 
-        POST: function() {
-            if( this.request.headers.v2 ) {
-                this.path.shift()
-                this.veeTwo = true
-                return
-            }
+        POST() {
+            if( this.request.headers.v2 ) this.veeTwo = true
+
+            if( this.veeTwo ) { this.path.shift(); return }
+        },
+
+        PUT() {
+            this.path.shift()
         }
     },
 
-    DELETE: function() {
+    DELETE() {
         return [
             this.validate.DELETE.bind(this),
             this.context.DELETE.bind(this),
@@ -71,10 +82,11 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     },
 
     db: {
-        DELETE: function() { return this.dbQuery( this.queryBuilder.deleteQuery.call( this ) ) },
-        GET: function() { return this.veeTwo ? this.Db.GET( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
-        PATCH: function() { return this.veeTwo ? this.Db.PATCH( this ) : this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
-        POST: function() { return this.veeTwo ? this.Db.POST( this ) : this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
+        DELETE() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.deleteQuery.call( this ) ) },
+        GET() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.getQuery.call( this ) ) },
+        PATCH() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.patchQuery.call( this ) ) },
+        POST() { return this.veeTwo ? this.Db.apply( this ) : this.dbQuery( this.queryBuilder.postQuery.call( this ) ) },
+        PUT() { return this.Db.apply( this ) }
     },
 
     dbQuery( data  ) { return this.Q( this.Postgres.query( data.query, data.values ) ) },
@@ -84,7 +96,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         return this.query = JSON.parse( decodeURIComponent( query ) )
     },
 
-    GET: function() {
+    GET() {
         return [
             this.validate.GET.bind(this),
             this.context.GET.bind(this),
@@ -103,7 +115,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         return this.getDescriptor( descriptorColumn.fk.table, path )
     },
 
-    getHeaders: function( body ) { return this._.extend( {}, this.headers, { 'Date': new Date().toISOString(), 'Content-Length': Buffer.byteLength( body ) } ) },
+    getHeaders( body ) { return this._.extend( {}, this.headers, { 'Date': new Date().toISOString(), 'Content-Length': Buffer.byteLength( body ) } ) },
 
     headers: {
         'Content-Type': 'application/json',
@@ -111,7 +123,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         'Keep-Alive': 'timeout=50, max=100',
     },
 
-    handleIncomingData: function( someData ) {
+    handleIncomingData( someData ) {
 
         this.body += someData;
 
@@ -121,7 +133,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         }
     },
 
-    handleRequestEnd: function() {
+    handleRequestEnd() {
 
         if( this.body.length === 0 ) this.body = "{}"
 
@@ -141,7 +153,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     jws: require('jws'),
 
-    PATCH: function() {
+    PATCH() {
         return [
             this.slurpBody.bind(this),
             this.context.PATCH.bind(this),
@@ -157,11 +169,19 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.responses.POST.bind(this) ].reduce( this.Q.when, this.Q() )
     },
 
+    PUT() {
+        return [
+            this.slurpBody.bind(this),
+            this.context.PUT.bind(this),
+            this.db.PUT.bind(this),
+            this.responses.PUT.bind(this) ].reduce( this.Q.when, this.Q() )        
+    },
+
     queryBuilder: require('../lib/queryBuilder'),
 
     relations: [ ],
 
-    respond: function( data ) {
+    respond( data ) {
         data.body = JSON.stringify( data.body );
         this.response.writeHead( data.code || 200, this._.extend( this.getHeaders( data.body ), data.headers || {} ) )
         this.response.end( data.body );
@@ -170,16 +190,21 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     responses: {
         
-        DELETE: function( result ) { this.respond( { body: { success: true } } ) },
+        DELETE( result ) {
+            if( this.veeTwo ) return this.Response.apply( this, result )
 
-        GET: function( result ) {
-            if( this.veeTwo ) { return this.Response.GET( this, result ) }
+            this.respond( { body: { success: true } } )
+        },
+
+        GET( result ) {
+            if( this.veeTwo ) return this.Response.apply( this, result )
+
             const body = ( this.path.length > 2 ) ? ( ( result.rows.length ) ? result.rows[0] : { } ) : result.rows
             return this.respond( { body: body } )
         },
 
-        PATCH: function( result ) {
-            if( this.veeTwo ) { return this.Response.PATCH( this, result ) }
+        PATCH( result ) {
+            if( this.veeTwo ) { return this.Response.apply( this, result ) }
 
             const payload = { body: { success: true } };
 
@@ -188,8 +213,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             this.respond( payload )
         },
 
-        POST: function( result ) {
-            if( this.veeTwo ) { return this.Response.POST( this, result ) }
+        POST( result ) {
+            if( this.veeTwo ) { return this.Response.apply( this, result ) }
 
             var tableName = this.path[1],
                 table = this.tables[ tableName ],
@@ -214,10 +239,12 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             dateColumns.forEach( column => row[ column.name ] = { raw: row[ column.name ], type: 'date' } )
                 
             this.respond( { body: row } )
-        }
+        },
+
+        PUT( result ) { return this.Response.apply( this, result ) }
     },
 
-    slurpBody: function() {
+    slurpBody() {
 
         this.requestEnded = this.Q.defer();
 
@@ -230,7 +257,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
         return this.requestEnded.promise;
     },
 
-    transform: function( obj, mapping ) {
+    transform( obj, mapping ) {
         this._.each( obj, ( value, key ) => {
             if( this._.has( mapping, key ) ) {
                 obj[ mapping[ key ] ] = value;
@@ -241,16 +268,16 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     validate: {
 
-        DELETE: function() {
+        DELETE() {
 
             this.validate.Token.call(this)
             
-            if( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) throw new Error("Invalid resource id")
+            if( this.path.length !== 3 ) throw new Error("Invalid resource id")
 
             return this.validate.User.call(this)
         },
 
-        GET: function() {
+        GET() {
 
             this.validate.Token.call(this)
 
@@ -259,24 +286,30 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             return this.validate.User.call(this)
         },
 
-        PATCH: function() {
+        PATCH() {
             
             this.validate.Token.call(this)
 
-            if( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) throw new Error("Invalid resource id")
+            if( this.path[1] !== 'person' && ( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) ) throw new Error("Invalid resource id")
 
             return this.validate.User.call(this)
         },
 
-        POST: function() {
-            if( /(auth)/.test(this.path[1]) ) return
+        POST() {
+            
+            this.validate.Token.call(this)
+            
+            return this.validate.User.call(this)
+        },
+
+        PUT() {
             
             this.validate.Token.call(this)
             
             return this.validate.User.call(this)
         },
     
-        Token: function() {
+        Token() {
             var list = {},
                 rc = this.request.headers.cookie
 
@@ -302,6 +335,16 @@ Object.assign( Resource.prototype, MyObject.prototype, {
                 } ).on( 'error', e => { this.user = { }; return resolve() } )
             } )
         }
+    },
+
+    validateUser() {
+        const permissions = this.Permissions[ this.path[1] ] && this.Permissions[ this.path[1] ][ this.request.method ]
+
+        if( this.user.id === undefined ||
+            permissions && this.user.roles.find( role => permissions.has( role ) ) === undefined
+          ) { return this.respond( { stopChain: true, code: 401, body: { } } ) }
+
+        return Promise.resolve()
     }
 
 } )

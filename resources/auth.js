@@ -14,10 +14,11 @@ Object.assign( Auth.prototype, BaseResource.prototype, {
     },
 
     handleQueryResult: function( result ) {
-
         if( ( result.rows.length !== 1 ) || ( this.bcrypt.compareSync( this.body.password, result.rows[0].password ) === false ) ) {
             return BaseResource.prototype.respond.call( this, { body: {} } )
         }
+
+        if( result.rows[0].emailVerified !== true ) return this.respond( { stopChain: true, body: 'Your email has not been verified.', code: 500 } )
 
         this.user = this._.omit( result.rows[0], [ 'password' ] )
 

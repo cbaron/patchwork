@@ -1,0 +1,178 @@
+.Header
+    
+    >div:first-child img
+        width: 100%
+        height: auto
+        margin: 0
+        
+    >div:nth-child(2)
+        position: relative
+        background-color: black
+        color: white
+        padding: .2rem 1rem
+        line-height: 1
+        
+        >div:first-child
+            text-align: center
+                        
+            >svg
+                display: none
+            
+            >div
+                font-size: 2.5rem
+                padding: .75rem 1rem .25rem
+                text-transform: uppercase
+                cursor: pointer
+                
+                >span
+                    &:active
+                        color: $sun-yellow
+                    
+                    html.non-touch &
+                        &:hover
+                            color: $sun-yellow
+                            transition: color .3s ease-in-out
+            
+        >ul
+            display: flex
+            justify-content: center
+            align-items: center
+            flex-wrap: wrap
+            
+            li
+                padding: .5rem .75rem
+                margin: 0 .25rem
+                font-size: 1.2rem
+                cursor: pointer
+                
+                &:active
+                    opacity: .85
+                
+                html.non-touch &
+                    &:hover
+                        background-color: $sun-red
+                        transition: background-color .3s ease-in-out
+                        
+        .account-ui
+            color: $sun-yellow
+            display: flex
+            justify-content: center
+            padding: .5rem 0
+            
+            >div:first-child
+                cursor: pointer
+            
+            .member-ui
+                position: relative
+                cursor: pointer
+                
+                >div
+                    padding-right: 1rem
+                    createArrow( $sun-yellow, false )
+                    background-position: right 5px top 5px, right 0px top 5px
+                
+                >ul
+                    position: absolute
+                    z-index: 1000
+                    top: 1.25rem
+                    color: initial
+                    background-color: $light-manila
+                    box-shadow: 1px 1px 5px #666
+                    
+                    >li
+                        padding: .6rem
+                        text-align: center
+                        width: 10rem
+                        
+                        &:not(:last-child)
+                            border-bottom: 1px solid $divider-grey
+                        
+                        html.non-touch &
+                            &:hover
+                                color: $sun-red
+                                text-decoration: underline
+                        
+
+    @media only screen and (min-width: 1500px)
+        >div:nth-child(2)
+            >div:first-child >div
+                font-size: 3rem
+                
+            >ul li
+                font-size: 1.4rem
+                
+    @media only screen and (max-width: 767px)
+        >div:nth-child(2)
+            position: relative
+            
+            >div:first-child
+                display: flex
+                align-items: center
+                
+                svg
+                    display: block
+                    cursor: pointer
+                    height: 1.5rem
+                    stroke: white
+                    padding: 0 .5rem
+
+                >div
+                    font-size: 2rem
+                    padding: .5rem 1rem
+                    text-align: center
+                    flex: 1
+                
+            >ul
+                text-align: center
+                position: absolute
+                z-index: 2
+                left: -16rem
+                width: 16rem
+                transition: transform .4s ease-in-out
+                z-index: 1000
+                margin-top: .15rem
+                
+                li
+                    font-size: 1.25rem
+                    width: 100%
+                    padding: .75rem
+                    margin: 0
+                    border: 1px solid $sun-yellow
+                    background-color: black
+                        
+                    &:active
+                        background-color: $sun-yellow
+                        color: black
+                        opacity: 1
+                    
+                &.is-mobile
+                    transform: translateX(16rem)
+                    
+    @media only screen and (max-width: 475px)
+        >div:nth-child(2)
+            >div:first-child
+                >div
+                    font-size: 1.75rem
+                
+            >ul
+                left: -12rem
+                width: 12rem
+                
+                li
+                    font-size: 1rem
+                    
+                &.is-mobile
+                    transform: translateX(12rem)
+                
+    @media only screen and (max-width: 400px)
+        >div:nth-child(2)
+            >div:first-child
+                svg
+                    height: 1.25rem
+
+                >div
+                    font-size: 1.2rem
+        
+                    
+
+            

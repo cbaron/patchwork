@@ -1,23 +1,27 @@
-module.exports = p => {
-const fields = p.opts.fields.map( field => `<li data-id="${field.name}">${field.label}</li>` ).join('')
+module.exports = ( { opts, ImageSrc } ) => {
+    const fields = opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
 
 return `` +
-`<nav data-js="container" class="row header navbar navbar-default">
-    <div class="navbar-header">
-        <button data-js="hamburger" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mobile-menu" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
+`<div>
+    <div>
+        <img data-src="${ImageSrc('header_sunrays')}" />
     </div>
-
-    <div data-js="navbarCollapse" class="collapse navbar-collapse" id="mobile-menu">
-        <ul data-js="navLinks" class="nav navbar-nav">
-            <li data-id="${p.opts.home.name}">${p.opts.home.label}</li>
-            ${fields}
-        </ul>
+    <div data-js="nav" class="fd-hidden">
+        <div>
+            ${require('./lib/justify')}
+            <div><span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span></div>
+        </div>
+        <ul data-js="navLinks">${fields}</ul>
+        <div class="account-ui">
+            <div data-js="signInBtn" class="fd-hidden">Sign In</div>
+            <div class="member-ui" data-js="memberMenu" class="fd-hidden">
+                <div data-js="userName"></div>
+                <ul class="account-menu fd-hidden" data-js="accountMenu">
+                    <li data-js="accountBtn">Your Account</li>
+                    <li data-js="signOutBtn">Sign Out</li>         
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="header-title" data-js="headerTitle" data-id="${p.opts.home.name}">${p.opts.home.label}</div>       
-</nav>`
+</div>`
 }

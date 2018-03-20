@@ -16,9 +16,7 @@ module.exports = Object.assign( {}, Super, {
 
     clear() {
         this.els.dates.innerHTML = ''
-
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
     },
 
     determineDates( dayOfWeek ) {
@@ -94,7 +92,7 @@ module.exports = Object.assign( {}, Super, {
                     method: 'get',
                     resource: 'zipcoderoute',
                     qs: JSON.stringify( {
-                        zipcode: this.model.customer.member.zipcode,
+                        zipcode: this.model.customer.member.data.zipcode,
                         routeid: { operation: 'join', value: { table: 'deliveryroute', column: 'id' } }
                     } )
                   } )
@@ -130,7 +128,7 @@ module.exports = Object.assign( {}, Super, {
         if( ! Object.keys( this.changedDates ).find( key => this.changedDates[key].editedStatus !== undefined ) ) {
             this.els.resetBtn.classList.add('hidden')
             this.emit( 'reset', this.model )
-            return this.els.editSummary.classList.add('hidden')
+            return this.slideOut( this.els.editSummary, 'right' )
         }
 
         this.showEditSummary()
@@ -138,7 +136,6 @@ module.exports = Object.assign( {}, Super, {
 
     onResetBtnClick() {
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
 
         Object.keys( this.changedDates ).forEach( key => {
             if( this.changedDates[key].editedStatus ) {
@@ -185,7 +182,7 @@ module.exports = Object.assign( {}, Super, {
         this.els.weekChange.textContent = result
         this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
-        this.els.editSummary.classList.remove('hidden')
+        if( this.isHidden( this.els.editSummary ) ) this.slideIn( this.els.editSummary, 'right' )
 
         this.emit( 'adjustment', { added, removed } )
     },
@@ -197,6 +194,7 @@ module.exports = Object.assign( {}, Super, {
 
     update( { customer, delivery, share } ) {
         if( this.updating ) return
+        this.els.editSummary.classList.add('fd-hidden')
 
         this.updating = true
 

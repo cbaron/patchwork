@@ -1,10 +1,3 @@
-var MyView = require('./MyView'),
-    Members = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( Members.prototype, MyView.prototype, {
-
-    template: require('../templates/members')( require('handlebars') )
+module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
 } )
-
-module.exports = Members

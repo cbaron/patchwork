@@ -12,10 +12,9 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     Email: require('../lib/Email'),
 
     PATCH() {
-
         return this.slurpBody()
         .then( () => {
-            if( !this.user.id || !this.user.roles.includes('admin') ) throw Error("401")
+            if( !this.user.id ) throw Error("401")
             return this.Q( this.Postgres.transaction( this.gatherQueries() ) )
         } )
         .then( () => this.notify() )
@@ -26,7 +25,8 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
         const queries = [ ],
             membersharedelivery = this.body.orderOptions.membersharedelivery,
             membershareoption = this.body.orderOptions.membershareoption,
-            adjustment = this.body.adjustment
+            adjustment = this.body.adjustment,
+            initiator = this.user.roles.includes('admin') ? 'admin' : 'customer'
         
         if( Object.keys( membersharedelivery ).length ) {
             queries.push( [
@@ -46,13 +46,18 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
 
         this.body.weekOptions.forEach( date => queries.push( [ `INSERT INTO membershareskipweek ( membershareid, date ) VALUES ( $1, $2 );`, [ this.body.memberShareId, date ] ] ) )
 
-        queries.push( [ `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Adjustment', $1, $2, $3 )`, [ adjustment.value, this.body.memberShareId, [ adjustment.description, this.body.weekDetail ].join('') ] ] )
+        queries.push( [
+            `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description, initiator ) VALUES ( 'Adjustment', $1, $2, $3, $4 )`,
+            [ adjustment.value, this.body.memberShareId, [ adjustment.description, this.body.weekDetail ].join(''), initiator ]
+        ] )
 
         return queries
     },
 
     notify() {
-        if( !this.body.adjustment.sendEmail ) return this.Q()
+        if( this.user.roles.includes('admin') && !this.body.adjustment.sendEmail ) return this.Q()
+
+        const newBalance = this.body.previousBalance + this.body.adjustment.value
 
         return this.Q(
             this.Email.send( {
@@ -64,15 +69,16 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
                     `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
                     `Details:`,
                     `${this.body.adjustment.description}`,
-                    `Cost: ${this.Currency.format( this.body.adjustment.value )}`,
-                    ( this.body.adjustment.value > 0
-                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!`
-                        : `We will mail a check to you in the near future.` ),
+                    `Prevous Share Balance: ${this.Currency.format( this.body.previousBalance )}\n${this.body.adjustment.value > 0 ? 'New Charges' : 'Price Reduction'}: ${this.Currency.format( Math.abs(this.body.adjustment.value ) )}`,
+                    `New Share Balance: ${this.Currency.format( newBalance )}`,
+                    ( newBalance > 0
+                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417. You may also log in to your account and pay online via credit card. Thank you!`
+                        : `If your overall balance with Patchwork is now negative, we will mail a check to you in the near future.` ),
                     `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
                 ].join( `${this.Email.newline}${this.Email.newline}` )
             } )
         )
-    },
+    }
 
 } )
 

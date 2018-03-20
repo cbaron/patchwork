@@ -1,5 +1,6 @@
 const router = require('./router'),
-      Postgres = require('./dal/postgres')
+    Postgres = require('./dal/postgres'),
+    Mongo = require('./dal/Mongo')
 
 require('node-env-file')( __dirname + '/.env' )
 
@@ -11,7 +12,6 @@ Promise.all( [
     Postgres.initialize()
 ] )
 .then( () => {
-    
     require('http').createServer( router.handler.bind(router) ).listen( port )
     console.log( `server spinning at ${port}` )
 } )

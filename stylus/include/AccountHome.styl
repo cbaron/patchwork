@@ -1,0 +1,78 @@
+.AccountHome
+
+    .back-btn
+        cursor: pointer
+        margin-bottom: 1rem
+        &:hover
+            opacity: .8
+
+    .account-nav
+        display: flex
+        justify-content: center
+        flex-wrap: wrap
+        
+        >div
+            width: 18rem
+            padding: .75rem
+            margin: 1rem
+            background-color: $light-manila
+            cursor: pointer
+            border: 1px solid
+            
+            html.non-touch &
+                &:hover
+                    box-shadow: 2px 2px 5px #888
+            
+            >div, >h4
+                margin: .75rem
+            
+            >h4
+                color: $sun-red
+                padding-bottom: .15rem
+                border-bottom: 1px solid
+    
+    >div:nth-child(3)
+        padding: 1rem
+        background-color: $light-manila
+        border-radius: 1rem
+  
+        .Form
+            padding: 0
+            margin: 0
+            
+            button
+                margin: 1rem .35rem
+                width: 10rem
+            
+            .heading
+                color: $sun-red
+                font-weight: bold
+                font-size: 1.5rem
+
+            .form-group
+                display: flex
+                align-items: center
+                margin: 1.25rem 5%
+                
+                &.has-error
+                    align-items: baseline
+                
+                label
+                    flex: 1
+                    
+                >input
+                    flex: 6
+                    
+    >div:nth-child(4)
+        .section:not(:first-of-type)
+            border-top: 1px solid $divider-grey
+            margin-top: 2rem
+                    
+                    
+    @media only screen and (max-width: 500px)
+        >div:nth-child(2)
+            padding: .5rem
+            
+            .Form
+                button
+                    width: 6rem

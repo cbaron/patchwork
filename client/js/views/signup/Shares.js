@@ -69,6 +69,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                 if( sessionShare ) {
                     this.selectItem( item )
                     this.signupData.shares.add( item )
+                    if( sessionShare.seasonalAddOns ) item.set( 'seasonalAddOns', sessionShare.seasonalAddOns )
                     if( sessionShare.selectedOptions ) item.set( 'selectedOptions', sessionShare.selectedOptions ) 
                     if( sessionShare.selectedDelivery ) item.set( 'selectedDelivery', sessionShare.selectedDelivery ) 
                     if( sessionShare.skipDays ) { item.set( 'skipDays', sessionShare.skipDays ) }
@@ -89,7 +90,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
     showCSAInfoPageInNewTab() { window.open('/csa#how-do-i-know') },
 
-    template: require('../../templates/signup/shares')( require('handlebars') ),
+    template: require('../../templates/signup/shares'),
 
     validate() {
         var prevShareIds = this.signupData.shares.map( share => share.id ),

@@ -1,0 +1,33 @@
+.AddTransaction
+    border: 1px solid black
+    padding: 1rem
+
+    form
+        display: flex
+        opacity: .25
+
+        >span
+            flex: 1
+
+        >select, >input
+            flex: 4
+            margin: .25rem
+            
+            &:last-child
+                flex: 6
+
+        &.active
+            opacity: 1
+        
+        &:hover
+            opacity: 1
+
+    .ButtonFlow
+        button
+            margin: .1rem 1rem
+            
+        .reset-btn
+            border: 1px solid $blue
+            
+        .save-btn
+            margin-top: 1rem

@@ -38,6 +38,12 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.instances.shares.templateData.header.text('There are no shares available at this time')
     },
 
+    onNavigation( path ) {
+        const instance = this.instances[ this.views[ this.currentIndex ].name ]
+        if( instance.onSignupNavigation ) instance.onSignupNavigation()
+        return this.show()
+    },
+
     postRender() {
 
         this.signupData = { }
@@ -64,6 +70,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
     serializeShare( share ) {
         return {
             id: share.id,
+            seasonalAddOns: share.get('seasonalAddOns'),
             selectedDelivery: share.get('selectedDelivery'),
             selectedOptions: share.get('selectedOptions'),
             skipDays: share.get('skipDays')
@@ -134,7 +141,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         return this
     },
 
-    template: require('../templates/signup')( require('handlebars') ),
+    template: require('../templates/signup'),
 
     updateState( data ) {
         this.currentIndex = data.index

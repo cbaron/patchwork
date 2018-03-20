@@ -49,7 +49,7 @@ Object.assign( PickupDates.prototype, List.prototype, {
 
     selection: 'multiSimple',
 
-    template: require('../../templates/signup/pickupDates')( require('handlebars') ),
+    template: require('../../templates/signup/pickupDates'),
 
     updateShare() {
         this.valid = ( Object.keys( this.selectedItems ).length === 0 ) ? false : true

@@ -3,7 +3,7 @@ module.exports = p => {
           count = p.count ? `<span>(${p.count})</span>` : ``
 
     return `` +
-    `<div ${dataId}" class="share-label">
+    `<div ${dataId} class="share-label">
         <div><span>${p.label}</span> ${count}</div>
         <div>
             <span>${p.humanStartdate}</span>

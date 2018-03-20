@@ -6,6 +6,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     Path: require('path'),
 
+    Fs: require('fs'),
+
+    Mongo: require('./dal/Mongo'),
+
     Postgres: require('./dal/postgres'),
 
     _postgresQuery( query, args ) { return this.Postgres.query( query, args ) },
@@ -23,7 +27,11 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     
     applyResource( request, response, path, subPath ) {
-        var filename = ( path[1] === "" && subPath ) ? 'index' : path[1],
+        var filename = this.mongoRoutes[ path[1] ]
+            ? this.mongoRoutes[ path[1] ]
+            : ( path[1] === "" && subPath )
+                ? 'index'
+                : path[1],
             file = `./resources${subPath || ''}/${filename}`
 
         return new Promise( ( resolve, reject ) => {
@@ -41,6 +49,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
                     response,
                     path,
                     tables: this.tables,
+                    veeTwo: Boolean( this.mongoRoutes[ path[1] ] )
                 } )
 
                 if( !instance[ request.method ] ) { this.handleFailure( response, new Error("Not Found"), 404, false ); return resolve() }
@@ -158,7 +167,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } else if( /text\/html/.test( request.headers.accept ) && request.method === "GET" ) {
             return this.applyHTMLResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( ( /application\/json/.test( request.headers.accept ) || /(POST|PATCH|DELETE)/.test(request.method) ) &&
-                   ( this.routes.REST[ path[1] ] || this.tables[ path[1] ] ) ) {
+                   ( this.routes.REST[ path[1] ] || this.mongoRoutes[ path[1] ] || this.tables[ path[1] ] ) ) {
             return this.applyResource( request, response, path ).catch( err => this.handleFailure( response, err, 500, true ) )
         } else if( /application\/ld\+json/.test( request.headers.accept ) && ( this.tables[ path[1] ] || path[1] === "" ) ) {
             if( path[1] === "" ) path[1] === "index"
@@ -170,7 +179,7 @@ Object.assign( Router.prototype, MyObject.prototype, {
     },
     initialize() {
         return this._postgresQuery( this.getAllTables() )
-        .then( results => 
+        .then( results =>
             this.storeTableData( results.rows ).then( () => this._postgresQuery( "SELECT * FROM tablemeta" ) )
         )
         .then( results => {
@@ -179,6 +188,23 @@ Object.assign( Router.prototype, MyObject.prototype, {
         } )
         .then( results => {
             return Promise.resolve( this.storeForeignKeyData( results.rows ) )
+        } )
+        .then( () => this.initializeMongo() )
+    },
+
+    initializeMongo() {
+        this.mongoRoutes = { }
+
+        return this.Mongo.initialize( this.mongoRoutes )
+        .then( () => this.P( this.Fs.readdir, [ `${__dirname}/resources` ] ) )
+        .then( ( [ files ] ) => {
+            const fileHash =
+                files.filter( name => !/^[\._]/.test(name) && /\.js/.test(name) )
+                .reduce( ( memo, name ) => Object.assign( memo, { [name.replace('.js','')]: true } ), { } )
+
+            this.Mongo.collectionNames.forEach( table => this.mongoRoutes[ table ] = fileHash[ table ] ? table : '__proto__' )
+
+            return Promise.resolve() 
         } )
     },
 
@@ -221,9 +247,10 @@ Object.assign( Router.prototype, MyObject.prototype, {
 
     storeForeignKeyData( foreignKeyResult ) {
         foreignKeyResult.forEach( row => {
-            var match = /FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
-                column = this._( this.tables[ row.table_from ].columns ).find( column => column.name === match[1] )
-           
+            const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES ("?[a-zA-Z-]+"?)\((\w+)\)/.exec( row.pg_get_constraintdef )
+            let column = this.tables[ row.table_from.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
+            match[2] = match[2].replace( /"/g, '' )
+
             column.fk = {
                 table: match[2],
                 column: match[3],
@@ -260,17 +287,26 @@ Object.assign( Router.prototype, MyObject.prototype, {
 module.exports = new Router( {
     routes: {
         REST: {
+            'accountInfo': true,
             'auth': true,
+            'check-email': true,
+            'Collection': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,
             'currentShare': true,
+            'document': true,
             'food': true,
             'mail': true,
             'member-order': true,
             'never-receive': true,
+            'payment': true,
             'report': true,
+            'reset-password': true,
+            'seasonalAddOn': true,
+            'seasonalAddOnOption': true,
             'signup': true,
-            'user': true
+            'user': true,
+            'verify': true
         }
     },
     tables: { } 

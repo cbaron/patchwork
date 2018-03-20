@@ -1,0 +1,56 @@
+.About
+    
+    section
+        padding-bottom: 2.5rem
+        
+        &:not(:first-of-type)
+          border-top: 1px solid $divider-grey
+        
+    h2
+        margin-bottom: 1rem
+        
+    .staff
+        display: flex
+        justify-content: center
+        flex-wrap: wrap
+        margin: 2rem 0
+
+        .bio
+            margin: 0 4rem 2rem 0
+            
+            >div:first-child
+                position: relative
+                    
+                &:hover
+                    .overlay
+                        opacity: 1
+            
+                >img
+                    border-radius: 50%
+                    border: 1px solid transparent
+                    width: 9rem
+                    height: 9rem
+                    margin: 0
+                        
+                .overlay
+                    border-radius: 50%
+                    border: 1px solid transparent
+                    position: absolute
+                    height: 100%
+                    width: 100%
+                    top: 0
+                    text-align: center
+                    color: white
+                    background-color: rgba(0,0,0,.6)
+                    transition: opacity .3s ease-in-out
+                    display: flex
+                    opacity: 0
+                    justify-content: center
+                    align-items: center
+                    font-size: .7rem
+                    line-height: 1.2
+                    
+            >div:last-child
+                text-align: center
+                text-transform: uppercase
+                margin-top: .75rem

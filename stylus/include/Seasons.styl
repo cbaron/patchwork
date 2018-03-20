@@ -1,0 +1,21 @@
+.Seasons
+    
+    ol
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+
+    .share-label
+        margin-right: 1rem
+        margin-bottom: 1.5rem
+        cursor: pointer
+        &.selected
+            background-color: $light-gold
+    
+    >div:last-child
+        font-weight: bold
+            
+    @media only screen and (max-width: 767px)
+        ol
+            justify-content: center
+    

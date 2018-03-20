@@ -1,0 +1,54 @@
+.Reporting
+    
+    button
+        font-size: 1rem
+        margin: 0 .5rem
+        padding: .5rem 0
+        width: 5rem
+        
+    label
+        margin-right: .5rem
+        margin-left: 1rem
+
+    h4
+        text-align: center
+        font-size: 1.2rem
+        font-weight: bold
+        color: $sun-red
+
+    form
+        text-align: center
+        margin: 2rem 0
+        
+        >div:first-child, >div:nth-child(2) >div
+            display: flex
+            align-items: center
+            justify-content: center
+            margin-bottom: 1.5rem
+
+    .results
+        overflow: auto
+        padding: 1rem
+        
+        .columns, .rows > ol
+            display: flex
+
+            li
+                text-align: center
+                flex: 1
+                padding: .25rem
+                overflow-x: auto
+
+        .columns
+            text-align: center
+            
+            li
+                background-color: $sun-red
+                color: white
+                font-weight: bold
+                border-color: $dark-grey
+                
+        .rows > ol:nth-child(even)
+            background-color: $light-grey
+        .rows > ol:nth-child(odd)
+            background-color: white

@@ -1,0 +1,81 @@
+.WeekOptions
+    .content
+        display: flex
+        flex-wrap: wrap
+
+        .data
+            text-align: left
+            
+            .review-btn
+                margin-left: 9rem
+            
+            ol
+                display: flex
+                flex-wrap: wrap
+                margin-top: 1rem
+                width: 26rem
+                
+                .delivery-date
+                    width: 5rem
+                    background-color: black
+                    box-shadow: 1px 2px 5px $dark-grey
+                    color: white
+                    cursor: pointer
+                    padding: .65rem
+                    margin: 1px
+                    text-align: center
+                    line-height: 1.2
+                    
+                    &:not(.unselectable)
+                        html.non-touch &
+                            &:hover
+                                color: $light-grey
+                    
+                    &.selected
+                        background-color: $sun-red
+                        &.edited
+                            border: 1px solid $bright-green
+                    
+                    &.unselectable
+                        background-color: $dark-grey
+                        color: black
+                        cursor: not-allowed
+                        opacity: .5
+                        
+                    &.edited
+                        border: 1px solid $light-sun-red
+                        
+                    >div:not(:first-child)
+                        font-weight: bold
+                    
+        .edit-summary
+            >div:nth-child(2)
+                display: flex
+                justify-content: center
+                
+                .column
+                    text-align: center
+                    padding: 0 1rem
+                    
+                    .added-dates
+                        color: $bright-green
+                            
+                    .removed-dates
+                        color: $light-sun-red
+                    
+                    >div:first-child
+                        font-weight: bold
+                        margin-bottom: .5rem
+                        
+@media only screen and (max-width: 767px)
+    .WeekOptions .content
+        display: block
+        
+        .data
+            margin-bottom: 2rem
+            
+            ol
+                width: auto
+                
+        .edit-summary
+            margin-left: 0

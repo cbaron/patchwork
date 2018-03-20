@@ -8,34 +8,42 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     Views: {
-        editButtons: { model: { value: {
-            hide: true,
-            states: {
-                start: [
-                    { name: 'edit', svg: require('./templates/lib/edit')(), emit: true, nextState: 'onEdit' },
-                    { name: 'garbage', svg: require('./templates/lib/garbage')(), nextState: 'onDelete', emit: true }
-                ],
-                onDelete: [
-                    { name: 'confirmDelete', class: 'link', 'text': 'Delete?', nextState: 'start', emit: 'true' },
-                    { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
-                ],
-                onEdit: [
-                    { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true', nextState: 'start' },
-                    { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
-                ]
+        editButtons() {
+            return {
+                model: Object.create( this.Model ).constructor( {
+                    hide: true,
+                    states: {
+                        start: [
+                            { name: 'edit', svg: require('./templates/lib/edit')(), emit: true, nextState: 'onEdit' },
+                            { name: 'garbage', svg: require('./templates/lib/garbage')(), nextState: 'onDelete', emit: true }
+                        ],
+                        onDelete: [
+                            { name: 'confirmDelete', class: 'link', 'text': 'Delete?', nextState: 'start', emit: 'true' },
+                            { name: 'cancelDelete', svg: require('./templates/lib/ex')( { name: 'cancelDelete' } ), nextState: 'start', emit: true }
+                        ],
+                        onEdit: [
+                            { name: 'confirmEdit', class: 'link', 'text': 'Edit', emit: 'true', nextState: 'start' },
+                            { name: 'cancelEdit', svg: require('./templates/lib/ex')( { name: 'cancelEdit' } ), nextState: 'start', emit: true }
+                        ]
+                    }
+                } )
             }
-        } } },
-        emailButtons: { model: { value: {
-            hide: true,
-            states: {
-                start: [ { name: 'sendEmail', class: 'save-btn', text: 'Send Email Reminder', nextState: 'confirm' } ],
-                confirm: [
-                    { name: 'confirmEmail', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', nextState: 'start', class: 'reset-btn', text: 'Cancel' }
-                ]
+        },
+        emailButtons() {
+            return {
+                model: Object.create( this.Model ).constructor( {
+                    hide: true,
+                    states: {
+                        start: [ { name: 'sendEmail', class: 'save-btn', text: 'Send Email Reminder', nextState: 'confirm' } ],
+                        confirm: [
+                            { name: 'confirmEmail', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                            { name: 'cancel', nextState: 'start', class: 'reset-btn', text: 'Cancel' }
+                        ]
+                    }
+                } )
             }
-         } } },
-        addTransaction: function() { return { model: { value: this.model } } },
+        },
+        addTransaction: function() { return { model: this.model } },
     },
 
     addTransaction() {
@@ -199,7 +207,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( e.target.tagName !== "LI" ) return
         if( this.views.editButtons.state !== 'start' ) return
         e.target.children[0].appendChild( this.views.editButtons.els.container )
-        this.views.editButtons.els.container.classList.remove('fd-hidden', 'fd-hide')
+        this.views.editButtons.els.container.classList.remove('fd-hidden')
     },
     
     onTransactionMouseleave( e ) {
@@ -279,7 +287,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             method: 'post',
             resource: 'mail',
             data: JSON.stringify( {
-                to: this.customer.person.email,
+                to: this.customer.person.data.email,
                 subject: `Patchwork Gardens ${this.share.label} Balance`,
                 body: `According to our records, you have an outstanding balance of ${this.els.balance.textContent}.\r\n\r\nPlease send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.\r\n\r\nIf you believe this is incorrect, please contact us by email or phone (937) 835-5807.\r\n\r\nThank You.`
             } )
@@ -288,20 +296,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error sending email.' ) } )
     },
 
-    
-
     update( { customer, share } ) {
         this.customer = customer
         this.share = share
       
         this.clear()
+        this.views.addTransaction.update( share.membershareid )
 
-        this.model.get( { query: { memberShareId: share.membershareid } } )
+        return this.model.get( { query: { memberShareId: share.membershareid } } )
         .then( () => this.model.data.forEach( csaTransaction => this.appendTransaction( csaTransaction ) ) )
         .then( () => this.updateBalance().show() )
-        .catch( this.Error )
-
-        this.views.addTransaction.update( share.membershareid )
+        .catch( this.Error )        
     },
 
     updateBalance() {

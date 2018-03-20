@@ -10,6 +10,10 @@ module.exports = new ( require('backbone').Model.extend( {
         return roles.includes( 'admin' )
     },
 
+    isLoggedIn() {
+        return Boolean( this.id && this.get('emailVerified') )
+    },
+
     url() { return "/user" }
 
 } ) )()

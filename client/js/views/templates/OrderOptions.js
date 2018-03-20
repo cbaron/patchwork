@@ -1,5 +1,5 @@
 module.exports = p => 
-`<div class="fd-hide fd-hidden section">
+`<div class="fd-hidden section">
     <div class="section-heading">
         <h3>Order Options</h3>
         <span data-js="seasonLabel"></span>

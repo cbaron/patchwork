@@ -9,7 +9,7 @@ Object.assign( Dropoffs.prototype, List.prototype, {
 
     selection: 'single',
 
-    template: require('../../templates/signup/dropoffs')( require('handlebars') ),
+    template: require('../../templates/signup/dropoffs'),
 
 } )
 
