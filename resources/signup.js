@@ -52,8 +52,9 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
             } )
             .then( () => {
+                
                 console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
-                this.error = "Failed payment.  Please try again."
+                this.error = `Payment failed, please try again.`;
             } ) 
         } )
         .then( charge => {
