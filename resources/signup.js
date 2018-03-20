@@ -26,7 +26,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     
     context: Object.assign( {}, Base.prototype.context, {
         POST() {
-            this.body.member.password = this.bcrypt.hashSync( this.body.member.password )
+            this.body.member.password = this.body.member.password ? this.bcrypt.hashSync( this.body.member.password ) : ''
             delete this.body.member.repeatpassword
 
             this.body.totalCents = Math.floor( this.body.total * 100 )
@@ -289,10 +289,7 @@ Object.assign( Signup.prototype, Base.prototype, {
 
 
     updatePersonQueries( personid ) {
-        return this.dbQuery( {
-            query: "UPDATE person SET password = $1, name = $2 WHERE id = $3",
-            values: [ this.body.member.password, this.body.member.name, personid ] } )
-        .then( () => this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } ) )
+        return this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } )
         .then( result => {
             var row = ( result.rows.length ) ? result.rows[0] : undefined
             if( row ) {

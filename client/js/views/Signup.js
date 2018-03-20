@@ -39,7 +39,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     onNavigation( path ) {
-        console.log( this.instances[ this.views[ this.currentIndex ].name ] )
         const instance = this.instances[ this.views[ this.currentIndex ].name ]
         if( instance.onSignupNavigation ) instance.onSignupNavigation()
         return this.show()

@@ -762,6 +762,9 @@ button.submitting {
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-sel-ctn {
   margin-left: 0;
 }
+.CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-sel-ctn >input {
+  height: auto;
+}
 .CustomerInfo .content .data .customer-table .table-row .ms-ctn .ms-trigger {
   background-color: #eee;
 }
@@ -2031,6 +2034,7 @@ html.non-touch .AccountHome button:hover {
   font-size: 1.2rem;
   padding: 0.75rem 0.5rem;
   width: 25rem;
+  height: 3rem;
 }
 .MemberTypeahead .form-label {
   color: #a00;

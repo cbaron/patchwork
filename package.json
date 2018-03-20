@@ -39,7 +39,7 @@
     "gulp-watch": "^4.3.5",
     "handlebars": "^4.0.5",
     "intl": "^1.2.5",
-    "jquery": "^2.1.4",
+    "jquery": "^2.2.4",
     "livereload": "git://github.com/cbaron/node-livereload.git#master",
     "path": "^0.12.7",
     "pikaday": "git://github.com/dbushell/Pikaday.git#1.5.1",

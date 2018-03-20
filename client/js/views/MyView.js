@@ -116,7 +116,6 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     },
 
     isHidden: function() { return this.templateData.container.css('display') === 'none' },
-
     
     moment: require('moment'),
 
