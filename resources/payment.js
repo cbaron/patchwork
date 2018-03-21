@@ -47,10 +47,13 @@ Object.assign( Payment.prototype, Base.prototype, {
             to: process.env.NODE_ENV === 'production' ? this.body.person.email : process.env.TEST_EMAIL,
             from: 'eat.patchworkgardens@gmail.com',
             subject: `Patchwork Gardens Payment Receipt`,
-            body: 
+            body:
+                `Dear ${this.body.person.name},\n\n` +
                 `We are sending you this email to confirm payment for the remaining balance on the following share:\n\n` +
                 `${this.body.share.label}\nAmount: ${this.Currency.format( this.body.total )}\n\n` +
-                `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
+                `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com\n\n` +
+                `Thank you!\n` +
+                `Patchwork Gardens`
         } )
         .catch( e => Promise.resolve( console.log( 'Failed to send payment details to customer.' ) ) )
     },
