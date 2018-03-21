@@ -234,7 +234,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     requiresLogin: false,
 
     scootAway() {
-        this.Toast.show( 'error', 'You are not allowed here.  Sorry.')
+        this.Toast.showMessage( 'error', 'You are not allowed here.  Sorry.')
         .catch( e => { this.Error( e ); this.emit( 'navigate', `/` ) } )
         .then( () => this.emit( 'navigate', `/` ) )
 
