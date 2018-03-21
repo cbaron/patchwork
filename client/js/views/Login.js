@@ -5,7 +5,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         loginForm() {
             return {
                 handleSubmissionError( err ) {
-                    this.Toast.showMessage( 'error', err )
+                    this.emit( 'loginError', err )
                     this.Error( err )
                     this.onSubmitEnd()
                 },
@@ -49,6 +49,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     this.user.set( data )
                     this.emit( "success", data )
                     this.delete().catch( this.Error )
+                } ],
+                [ 'loginError', function( err ) {
+                    this.els.errorMessage.textContent = err
+                    this.slideIn( this.els.errorMessage, 'right' )
                 } ],
                 [ 'cancel', function() { this.delete().then( () => this.emit('loginCancelled') ).catch( this.Error ) } ]
             ],

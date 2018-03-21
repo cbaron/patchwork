@@ -29,8 +29,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
         window.setTimeout( () => this.delegateEvents( 'leftBtn', this.templateData.leftBtn ), 1000 )
     },
 
-    instances: { },
-
     noShares() {
         this.templateData.leftBtn.hide()
         this.templateData.rightBtn.hide()
@@ -45,23 +43,26 @@ Object.assign( Signup.prototype, MyView.prototype, {
     },
 
     postRender() {
-
         this.signupData = { }
+        this.instances = { }
 
         this.state = this.user.get('state')
+        if( !this.state ) this.user.set( 'state', { } )
 
         if( this.state.signup && Object.keys( this.state.signup ).length ) return this.updateState( this.state.signup )
 
         if( ! this.currentIndex ) this.currentIndex = 0
         this.state.signup = { index: this.currentIndex, shares: [ ] }
+
         this.showProperView()
     },
 
     requiresLogin: false,
 
     saveState() {
+        const data = this.user.isLoggedIn() ? this.user.attributes : { state: this.state }
         this.$.ajax( {
-            data: JSON.stringify( { state: this.state } ),
+            data: JSON.stringify( data ),
             method: "PATCH",
             url: "/user" } )
         .fail( e => new this.Error(e) )

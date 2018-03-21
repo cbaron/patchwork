@@ -182,7 +182,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     relations: [ ],
 
     respond( data ) {
-        data.body = JSON.stringify( data.body );
+        if( typeof data.body !== 'string' ) data.body = JSON.stringify( data.body || {} )
         this.response.writeHead( data.code || 200, this._.extend( this.getHeaders( data.body ), data.headers || {} ) )
         this.response.end( data.body );
         if( data.stopChain ) { this.handled = true; throw new Error("Handled") }
@@ -318,19 +318,24 @@ Object.assign( Resource.prototype, MyObject.prototype, {
                 list[ parts.shift().trim() ] = parts.join('=')
             } )
 
-            this.token = list.patchworkjwt
+            this.token = list[ process.env.COOKIE ]
+
         },
 
         User() {
             return new Promise( ( resolve, reject ) => {
-                if( ! this.token ) { this.user = { }; return resolve() }
+                if( ! this.token ) {
+                    if( !this.user || !this.user.id || !this.user.emailVerified ) this.user = { }
+                    return resolve()
+                }
+
                 this.jws.createVerify( {
                     algorithm: "HS256",
                     key: process.env.JWS_SECRET,
                     signature: this.token,
                 } ).on( 'done', ( verified, obj ) => {
                     if( ! verified ) reject( 'Invalid Signature' )
-                    this.user = obj.payload
+                    this.user = Object.assign( obj.payload, this.user || { } )
                     resolve()
                 } ).on( 'error', e => { this.user = { }; return resolve() } )
             } )

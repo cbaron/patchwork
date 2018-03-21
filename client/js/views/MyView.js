@@ -31,8 +31,10 @@ Object.assign( MyView.prototype, require('events').EventEmitter.prototype, {
     delete: function() {
         if( this.templateData && this.templateData.container ) {
             this.templateData.container.remove()
-            this.emit("removed")
+            this.emit("deleted")
         }
+
+        return Promise.resolve()
     },
 
     fadeIn( el ) {

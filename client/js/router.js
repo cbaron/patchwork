@@ -57,11 +57,11 @@ module.exports = Object.create( {
         Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
         .then( () => {
             this.Login = this.ViewFactory.create( 'login', { insertion: { el: this.content } } )
-            .on( "success", () =>
+            .on( "success", () => {
                 this.header.onLogin()
                 .then( () => this.handle() )
                 .catch( this.Error )
-            )
+            } )
             .on( 'loginCancelled', () => this.handle() )
         } )
         .catch( this.Error )
@@ -78,7 +78,7 @@ module.exports = Object.create( {
             view = this.Views[ name ] ? path[0] : 'home'
 
         if( this.resources[ path[0] ] ) view = path[0]
-      
+
         this.userPromise.then( () => {
             this.handleHeader( path[0] )
             this.handleFooter( path[0] )
@@ -89,7 +89,6 @@ module.exports = Object.create( {
 
             Promise.all( Object.keys( this.views ).map( view => this.views[ view ].hide() ) )
             .then( () => {
-
                 this.currentView = view
 
                 if( this.views[ view ] ) return this.views[ view ].onNavigation( path )
@@ -103,6 +102,7 @@ module.exports = Object.create( {
                       .on( 'deleted', () => delete this.views[ view ] )
                     : new ( this.resources[ view ].view )( Object.assign( { factory: this.ViewFactory }, this.resources[ view ].options ) )
                         .on( 'navigate', ( route, options ) => this.navigate( route, options ) )
+                        .on( 'deleted', () => delete this.views[ view ] )
                         
                 if( !/admin/.test( path[0] ) ) document.body.scrollTop = 0
 
@@ -134,13 +134,12 @@ module.exports = Object.create( {
     onViewNavigate( route ) { this.navigate( route, { trigger: true } ) },
 
     onSignout() {
-        Object.keys( this.views ).forEach( name => {
-            this.views[ name ].delete()
-            delete this.views[name] 
+        return Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
+        .then( () => {
+            this.currentView = undefined    
+            this.navigate( "/" )
         } )
-
-        this.currentView = undefined    
-        this.navigate( "/" )
+        .catch( this.Error )
     },
 
     onUser( user ) {

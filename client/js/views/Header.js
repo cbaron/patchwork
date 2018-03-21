@@ -45,9 +45,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onSignOutBtnClick() {
         document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+
         this.user.clear()
 
-        this.user.set( this.user.defaults )
+        this.user.set( this.user.defaults() )
 
         this.toggleAccountUI()
         this.toggleAccountMenu()
@@ -57,7 +58,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.Toast.showMessage( 'success', 'You are now signed out.' )
     },
 
-    onTitleClick() { this.emit( 'navigate', '/' ) },
+    onTitleClick() {
+        if( this.displayingLogin ) this.emit('removeLogin')
+        this.emit( 'navigate', '/' )
+    },
 
     onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
 

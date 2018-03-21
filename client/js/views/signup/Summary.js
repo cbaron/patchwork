@@ -351,6 +351,13 @@ Object.assign( Summary.prototype, View.prototype, {
             this.emit('done')
             this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
             this.templateData.signupBtn.text('Thank you')
+            this.user.set( 'state', { } )
+
+            if( !this.user.isLoggedIn() ) {
+                this.user.set( this.user.defaults() )
+                document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+            }
+            
             this.showSuccessModal()
         } )
         .fail( () => {

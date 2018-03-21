@@ -1,7 +1,6 @@
 .Login, .ResetPassword
     margin: 6rem 1rem
-    display: flex
-    justify-content: center
+
     
     section
         margin: 0
@@ -12,51 +11,65 @@
         margin: .5rem .5rem 0
         padding: .5rem 1rem
         font-size: 1rem
-
-    .form-wrap
+        
+    .notice
+        padding: .75rem
+        background-color: $sun-red
+        color: white
+        border-radius: .5rem
+        border: 1px solid transparent
         width: 35rem
-        padding: 0 3rem 1.5rem
-        border-radius: 1rem
-        background-color: $light-manila
-        
-        .Form
-        
-            .heading
-                color: $sun-red
-                font-weight: bold
-                font-size: 1.5rem
-        
-            form
-                margin-bottom: 1.25rem
-                
-                .form-group
-                    display: flex
-                    align-items: center
-                            
-                    >label
-                        width: 5rem
-                        color: initial
-                       
-                    >input
-                        flex: 1
-                        
-                .btn-row
-                    margin-top: 1rem
-                    
-        >div:first-child >div:last-child
-            color: $sun-red
-            margin-top: 2rem
+        margin: 0 auto 1rem
+
+    >div:last-child
+        display: flex
+        justify-content: center
+        .form-wrap
+            width: 35rem
+            padding: 0 3rem 1.5rem
+            border-radius: 1rem
+            background-color: $light-manila
             
-            &:hover
-                text-decoration: underline
-                cursor: pointer
+            .Form
+            
+                .heading
+                    color: $sun-red
+                    font-weight: bold
+                    font-size: 1.5rem
+            
+                form
+                    margin-bottom: 1.25rem
+                    
+                    .form-group
+                        display: flex
+                        align-items: center
+                                
+                        >label
+                            width: 5rem
+                            color: initial
+                           
+                        >input
+                            flex: 1
+                            
+                    .btn-row
+                        margin-top: 1rem
+                        
+            >div:first-child >div:last-child
+                color: $sun-red
+                margin-top: 2rem
+                
+                &:hover
+                    text-decoration: underline
+                    cursor: pointer
                 
     @media only screen and (max-width: 767px)
-        .form-wrap
+        .notice, >div:last-child .form-wrap
             width: 25rem
             
     @media only screen and (max-width: 767px)
-        .form-wrap
+        .notice
+            width: 20rem
+        >div:last-child .form-wrap
             width: 20rem
             padding: 0 1rem 2.5rem
             

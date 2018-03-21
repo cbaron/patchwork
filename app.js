@@ -4,7 +4,7 @@ const router = require('./router'),
 
 require('node-env-file')( __dirname + '/.env' )
 
-const port = process.env.HTTP_PORT
+const port = process.env.PORT
 if (!port) return console.log('NEED PORT! Specify in .env')
 
 Promise.all( [

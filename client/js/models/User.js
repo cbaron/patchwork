@@ -1,6 +1,6 @@
 module.exports = new ( require('backbone').Model.extend( {
 
-    defaults: { state: {} },
+    defaults: function() { return { state: {} } },
 
     isAdmin() {
         const roles = this.get('roles')
