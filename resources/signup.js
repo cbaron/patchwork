@@ -232,7 +232,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.token = token
                 
                 return this.Q( this.Email.send( {
-                    to: this.body.member.email,
+                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
@@ -243,7 +243,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 if( !this.newMember ) return this.Q()
 
                 return this.Q( this.Email.send( {
-                    to: this.body.member.email,
+                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: `Patchwork Gardens Email Verification`,
                     body:
