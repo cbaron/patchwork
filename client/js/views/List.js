@@ -127,10 +127,14 @@ module.exports = Object.assign( { }, Super, {
     },
 
     fetch( nextPage=false ) {
+        console.log( 'fetch' )
+        console.log( this.model.git('isPostgres') )
         this.fetching = true
         if( nextPage ) this.model.set( 'skip', this.model.git('skip') + this.model.git('pageSize') )
 
-        return this.collection.get( { query: { skip: this.model.git('skip'), limit: this.model.git('pageSize'), sort: this.model.git('sort') } } )
+        const query = this.model.git('isPostgres') ? { } : { skip: this.model.git('skip'), limit: this.model.git('pageSize'), sort: this.model.git('sort') }
+
+        return this.collection.get( { query } )
         .then( newData => {
             this.populateList( newData )
             this.fetched = true

@@ -17,7 +17,9 @@ module.exports = Object.create( {
     GET( resource ) {
         const table = resource.path[0],
             queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query )
-            
+
+        if( queryKeys.includes( 'countOnly' ) ) return this.Postgres.query( `SELECT count(*) FROM "${table}"` )
+
         let paramCtr = 1,
             joins = [ ],
             selects = { [table]: true },

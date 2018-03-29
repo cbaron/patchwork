@@ -39,6 +39,7 @@ module.exports={
 	Submitter: require('./views/Submitter'),
 	Toast: require('./views/Toast'),
 	Transactions: require('./views/Transactions'),
+	TypeAhead: require('./views/TypeAhead'),
 	Verify: require('./views/Verify'),
 	WeekOptions: require('./views/WeekOptions'),
 	modal: require('./views/modal')

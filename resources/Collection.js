@@ -21,20 +21,38 @@ Object.assign( Collection.prototype, Base.prototype, {
     },
 
     GET() {
+        const pgModels = Object.keys( this.Postgres.tables ).map( name => {
+            const schema = {
+                attributes: this.Postgres.tables[ name ].columns.filter( column => column.name !== 'id' ).map( column => {
+                    if( column.fk ) return { fk: column.fk.table }
+
+                    const range = column.range === 'Text'
+                        ? column.name === 'description' ? 'Text' : 'String'
+                        : column.range
+
+                    return {
+                        name: column.name,
+                        label: column.name.charAt(0).toUpperCase() + column.name.slice(1),
+                        range
+                    }
+                } )
+            }
+
+            return { name, schema, isPostgres: true }
+        } )
+
         return Promise.resolve(
             this.respond( {
                 body: this.Mongo.collectionNames.map( name =>
                     name === 'Pages'
                         ? ( { name,
-                              clientData: this.Mongo.model[ name ].clientData,
                               documents: this.Mongo.viewModelNames.map( name => ( {
                                   name, 
-                                  schema: this.Mongo.model[name].schema,
-                                  clientData: this.Mongo.model[ name ].clientData
+                                  schema: this.Mongo.model[name]
                               } ) )
                           } )
-                        : ( { name, schema: this.Mongo.model[name].schema, clientData: this.Mongo.model[ name ].clientData } ) 
-                )
+                        : ( { name, schema: this.Mongo.model[name] } )
+                ).concat( pgModels )
             } )
         )
     },

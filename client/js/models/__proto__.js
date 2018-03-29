@@ -44,9 +44,10 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
 
     getCount() {
         return this.Xhr( { method: 'get', resource: this.resource, headers: this.headers || {}, qs: JSON.stringify( { countOnly: true } ) } )
-        .then( ( { result } ) => {
-            this.meta.count = result
-            return Promise.resolve( result )
+        .then( response => {
+            const count = Array.isArray( response ) ? response[0].count : response.result
+            this.meta.count = count
+            return Promise.resolve( count )
         } )
     },
 
