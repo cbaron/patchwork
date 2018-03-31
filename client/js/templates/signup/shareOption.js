@@ -6,7 +6,7 @@ return `` +
 `<div data-js="container" class="share-option">
     <div class="option-title">
         <div>
-            <span>${p.label}</span>
+            <span>${p.prompt}</span>
             ${description}
        </div>
         <div>

@@ -25,12 +25,16 @@ module.exports = Object.create( {
             selects = { [table]: true },
             where = [ ],
             params = [ ]
-
+        console.log( 'in db' )
+        console.log( resource.query )
+        console.log( queryKeys )
         queryKeys.forEach( key => {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
-            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
 
+            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
+            if( operation === '~*' && !resource.user.roles.includes('admin') ) { throw new Error('Access Forbidden') }
+            
             if( /join/i.test( operation ) ) {
                 let fkCol = this.Postgres.tables[ datum.value.table ].columns.find( column => column.name === datum.value.column )
                 if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )

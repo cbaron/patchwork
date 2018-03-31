@@ -21,7 +21,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                     delete: false,
                     fetch: true
                 } ),
-                itemTemplate: collection => `<span>${collection.name}</span>`,
+                itemTemplate: collection => `<span>${collection.label || collection.name}</span>`,
                 templateOpts: { heading: 'Collections', name: 'Collections', toggle: true }
             }
         },
@@ -63,17 +63,20 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         documentList() {
             const collection = this.model.git('currentCollection'),
-                meta = this.model.meta[ collection ] || { }
+                meta = this.model.meta[ collection ] || { },
+                isPostgres = this.views.collections.collection.store.name[ collection ].isPostgres,
+                schema = this.views.collections.collection.store.name[ collection ].schema
 
             return {
                 model: Object.create( this.Model ).constructor( Object.assign ( {
                     add: true,
                     collection: Object.create( this.DocumentModel ).constructor( [ ], {
+                        meta: { key: isPostgres ? 'id' : '_id' },
                         resource: collection
                     } ),
                     delete: true,
                     draggable: 'document',
-                    isPostgres: this.views.collections.collection.store.name[ collection ].isPostgres,
+                    isPostgres,
                     pageSize: 100,
                     skip: 0,
                     sort: { 'label': 1 },
@@ -81,7 +84,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                 }, meta ) ),
                 events: { list: 'click' },
                 insertion: { el: this.els.mainPanel },
-                itemTemplate: datum => this.getDisplayValue( meta, datum )
+                itemTemplate: datum => this.getDisplayValue( meta, datum, schema )
             }
         },
 
@@ -112,7 +115,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                 Views: {
                     typeAhead: {
                         Type: 'Document',
-                        templateOptions: { hideSearch: true }
+                        templateOpts: { hideSearch: true }
                     }
                 }
             }
@@ -145,9 +148,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                   }
                 ],
                 [ 'fetched', function() {
-                    this.showProperView( true )
-                    .then( () => this.views.collections.hideItems( [ this.model.git('currentCollection') ] ) )
-                    .catch( this.Error )
+                    this.views.collections.hideItems( [ this.model.git('currentCollection') ] )
                 } ],
                 [ 'itemClicked', function( model ) {
                     this.clearCurrentView()
@@ -189,7 +190,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                     .catch( this.Error )
                   }
                 ],
-                [ 'itemClicked', function( document ) { this.onDocumentSelected( document ) } ],
+                [ 'itemClicked', function( document ) { console.log( document ); this.onDocumentSelected( document ) } ],
                 //[ 'dragStart', function( type ) { this.views.collections.showDroppable( type ) } ],
                 //[ 'dropped', function( data ) { this.views.collections.hideDroppable(); this.views.collections.checkDrop( data ) } ],
                 [ 'deleteClicked',
@@ -215,6 +216,8 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         }
     },
+
+    cachedTables: [ 'deliveryoption', 'deliveryroute', 'groupdropoff', 'producefamily', 'seasonalAddOn', 'share', 'shareoption' ],
     
     clearCurrentView() {
         const currentView = this.model.git('currentView');
@@ -257,7 +260,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             Object.assign( {
                 meta,
                 resource: collection,
-                heading: this.getDisplayValue( meta, data )
+                heading: this.getDisplayValue( meta, data, schema )
             },
                 schema
             )
@@ -295,30 +298,56 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         this.model.set( 'currentView', name )
     },
 
-    getDisplayValue( meta, datum ) {
+    getDisplayValue( meta, datum, schema ) {
         if( !Object.keys( datum ).length ) return `<div>New ${this.model.git('currentCollection')}</div>`
         if( this.Templates[ meta.displayAttr ] ) return this.Templates[ meta.displayAttr ]( datum )
 
-        const value = meta.displayAttr
+        let value
+
+        if( meta.displayAttr ) {
+            value = meta.displayAttr.map( attr => {
+                const fkColumn = schema.attributes.find( schemaAttr => schemaAttr.fk === attr )
+                if( fkColumn ) return this[ attr ].store.id[ datum[ fkColumn.columnName ] ].label || this[ attr ].store.id[ datum[ fkColumn.columnName ] ].name
+
+                return attr === 'createdAt'
+                    ? this.Format.Moment.utc( datum[ meta.displayAttr ] ).format('YYYY-MM-DD hh:mm:ss')
+                    : datum[ attr ]
+            } ).join(' -- ')
+        } else {
+            value = datum.label || datum.name
+        }
+
+        /*const value = meta.displayAttr
             ? meta.displayAttr === 'createdAt'
                 ? this.Format.Moment.utc( datum[ meta.displayAttr ] ).format('YYYY-MM-DD hh:mm:ss')
                 : datum[ meta.displayAttr ]
-            : datum.label || datum.name
+            : datum.label || datum.name*/
 
         return `<div><span>${value}</span></div>`
     },
 
-    getDocument( collection, documentName ) {
+    /*getDocument( collection, documentName ) {
         const meta = this.model.meta[ collection ] || { },
             queryAttr = meta.displayAttr || 'name'
 
         return Object.create( this.Model ).constructor( {}, { resource: collection } ).get( { query: { [ queryAttr ]: documentName } } )
         .then( document => Promise.resolve( document.length === 1 ? document[0] : document ) )
-    },
-    /*
-    getDocument( collection, documentName ) {
-        return Object.create( this.Model ).constructor( {}, { resource: this.path[0] } ).get( { query: { name: this.path[1] } } )
     },*/
+
+    getDocument( collection, value ) {
+        console.log( 'getDocument' )
+        console.log( collection )
+        console.log( value )
+        const opts = { resource: collection },
+            isId = !Number.isNaN( window.parseInt( value ) ),
+            query = isId ? { } : { name: value }
+        console.log( query )
+        console.log( opts )
+        console.log( isId )
+        if( isId ) opts.id = this.path[1]
+        return Object.create( this.Model ).constructor( {}, opts ).get( { query } )
+        .then( document => Promise.resolve( document.length === 1 ? document[0] : document ) )
+    },
 
     onBackBtnClick() { this.emit( 'navigate', '/admin-plus' ) },
 
@@ -362,10 +391,11 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         )
 
         this.model.on( 'currentViewChanged', () => {
+            if( this.model.git('currentView') === 'documentView' ) console.log( this.views.documentView.model )
             const currentView = this.model.git('currentView'),
                 currentCollection = this.model.git('currentCollection'),
                 path = currentView === 'documentView'
-                    ? `/${currentCollection}/${this.views.documentView.model.git('name')}`
+                    ? `/${currentCollection}/${this.views.documentView.model.git('name') || this.views.documentView.model.git('id')}`
                     : currentView === 'documentList'
                         ? `/${currentCollection}`
                         : ``
@@ -376,6 +406,13 @@ module.exports = Object.assign( { }, require('./__proto__'), {
             .then( () => this.views[ currentView ].show() )
             .catch( this.Error )
         } )
+
+        Promise.all( this.cachedTables.map( name => {
+            this[ name ] = Object.create( this.Model ).constructor( { }, { resource: name } )
+            return this[ name ].get( { storeBy: ['id'] } )
+        } ) )
+        .then( () => this.showProperView( true ) )
+        .catch( this.Error )
 
         return this
     },

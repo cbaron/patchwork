@@ -452,7 +452,7 @@ button.submitting {
   margin: 0 1rem;
 }
 .CollectionManager .main-panel >.Form >.form-box >form {
-  padding: 0 1rem 0 2rem;
+  padding: 0 1rem;
 }
 .CollectionManager .main-panel .Form {
   height: 100%;
@@ -2837,6 +2837,25 @@ html.non-touch .AccountHome button:hover {
 .Transactions .balance h3:last-child,
 .Transactions .balance span:last-child {
   flex: 4;
+}
+.TypeAhead {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.TypeAhead input {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.5rem 0.25rem 0.5rem 3rem;
+}
+.TypeAhead .search {
+  position: absolute;
+  height: 1rem;
+  left: 1rem;
+}
+.TypeAhead.hiding-search input {
+  padding-left: 0.25rem;
 }
 .Verify {
   border: 1px solid transparent;

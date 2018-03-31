@@ -62,8 +62,12 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     },
 
     initTypeAheads() {
+        console.log( 'initTypeAheads' )
+        console.log( this.model )
         this.model.attributes.forEach( attribute => {
-            if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.fk ) )
+            console.log( attribute )
+            if( attribute.fk ) { console.log( attribute.fk ); console.log( this.model.git( attribute.fk ) ) }
+            if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.columnName ) )
             else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
                     disallowEnterKeySubmission: true,

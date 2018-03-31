@@ -45,6 +45,7 @@ module.exports={
 	StaffProfile: require('./views/templates/StaffProfile'),
 	Toast: require('./views/templates/Toast'),
 	Transactions: require('./views/templates/Transactions'),
+	TypeAhead: require('./views/templates/TypeAhead'),
 	Verify: require('./views/templates/Verify'),
 	WeekOptions: require('./views/templates/WeekOptions'),
 	deliveryMatrix: require('./views/templates/deliveryMatrix')

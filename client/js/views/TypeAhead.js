@@ -3,17 +3,16 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     AutoComplete: require('./lib/AutoComplete'),
 
     Resources: {
-
         Document: {
             Model: Object.assign( { }, require('../models/Document') ),
-            renderItem: ( item, search ) => `<div class="autocomplete-suggestion" data-val="${item.label}" data-id="${item._id}">${item.label}</div>`,
+            renderItem: ( item, search ) => `<div class="autocomplete-suggestion" data-val="${item.label || item.name}" data-id="${item.id}">${item.label || item.name}</div>`,
             search( term, suggest ) {
-                return this.Xhr( { method: 'get', qs: JSON.stringify( { label: { '$regex': term, '$options': 'i' } } ), resource: this.Resource } )
+                return this.Xhr( { method: 'get', qs: JSON.stringify( { name: { value: term, operation: '~*' } } ), resource: this.Resource } )
                 .then( documents => {
                     if( ! Array.isArray( documents ) ) documents = [ documents ]
                     if( documents.length === 0 ) return Promise.resolve( false )
                 
-                    this.resource.Model.constructor( documents, { storeBy: [ '_id' ] } )
+                    this.resource.Model.constructor( documents, { storeBy: [ 'id' ] } )
                     suggest( this.resource.Model.data )
                     return Promise.resolve( true )
                 } )
@@ -42,11 +41,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return JSON.stringify( Object.assign( {}, { [ attr ]: { operation: '~*', value: term } } ) )
     },
 
-    initAutoComplete( initialId, defaultName ) {
-        const queryAttr = initialId
-            ? { id: initialId }
-            : defaultName ? { name: defaultName } : undefined
-
+    initAutoComplete( initialId ) {
         new this.AutoComplete( {
             delay: 500,
             selector: this.els.input,
@@ -65,12 +60,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
         } )
 
-        if( queryAttr ) {
-            this.Xhr( Object.assign ( { resource: this.Resource }, queryAttr ) )
+        if( initialId ) {
+            this.Xhr( { method: 'get', resource: this.Resource, id: initialId } )
             .then( document => {
                 document = Array.isArray( document ) ? document[0] : document
                 this.selectedModel = document
-                this.els.input.value = document.label
+                this.els.input.value = document.label || document.name
                 return Promise.resolve()
             } )
             .catch( this.Error )

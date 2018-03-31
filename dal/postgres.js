@@ -22,6 +22,8 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
         }
     },
 
+    excludedCmsTables: [ 'csaTransaction', 'role', 'spatial_ref_sys', 'tablemeta', 'transaction' ],
+
     initialize() {
         return this.getTableData()
     },
@@ -96,7 +98,8 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
                         const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES ("?[a-zA-Z-]+"?)\((\w+)\)/.exec( row.pg_get_constraintdef )
                         let column = this.tables[ row.tablefrom.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
                         match[2] = match[2].replace( /"/g, '' ) 
-                        
+                        //console.log( row )
+                        //console.log( this.tables[ match[2] ].meta )
                         column.fk = {
                             table: match[2],
                             column: match[3],
@@ -106,6 +109,37 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
                 )
             )
         )
+        .then( () => {
+            //console.log( this.tables.groupdropoff )
+            //console.log( Object.keys( this.tables ).filter( name => !this.excludedCmsTables.includes( name ) && !/member|person/.test( name ) ) )
+            return this.query( "SELECT * FROM tablemeta" )
+            .then( result => {
+                const cmsTablesMeta = result.rows.filter( row => !this.excludedCmsTables.includes( row.name ) && !/member|person/.test( row.name ) )
+                console.log( cmsTablesMeta )
+                this.cmsModels = cmsTablesMeta.map( row => {
+                    console.log( row.name )
+                    const schema = {
+                        attributes: this.tables[ row.name ].columns.filter( column => column.name !== 'id' ).map( column => {
+                            if( column.fk ) { console.log( column.fk ); return { fk: column.fk.table, columnName: column.name } }
+
+                            const range = column.range === 'Text'
+                                ? column.name === 'description' ? 'Text' : 'String'
+                                : column.range
+
+                            return {
+                                name: column.name,
+                                label: column.name.charAt(0).toUpperCase() + column.name.slice(1),
+                                range
+                            }
+                        } )
+                    }
+
+                    return { name: row.name, label: row.label, schema, isPostgres: true }
+                } )
+                //console.log( this.cmsModels )
+                return Promise.resolve()
+            } )
+        } )
     },
 
     _factory( data ) {
