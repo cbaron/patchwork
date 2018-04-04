@@ -12,6 +12,7 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
 
     delete() {
         const keyValue = this.data[ this.meta.key ]
+
         return this.Xhr( { method: 'DELETE', resource: this.resource, id: keyValue } )
         .then( () => {
             const key = this.meta.key
@@ -58,7 +59,7 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
     moneyToReal( price ) { return parseFloat( price.replace( /\$|,/g, "" ) ) },
 
     patch( id, data ) {
-        return this.Xhr( { method: 'patch', id, resource: this.resource, headers: this.headers || {}, data: JSON.stringify( data || this.data ) } )
+        return this.Xhr( { method: 'patch', id, resource: this.resource, headers: Object.assign( { v2: true }, this.headers || {} ), data: JSON.stringify( data || this.data ) } )
         .then( response => {
            
             if( Array.isArray( this.data ) ) { 
@@ -73,8 +74,8 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
     },
 
     _put( keyValue, data ) {
-        let item = this.data.find( datum => datum[ this.meta.key ] == keyValue );
-        if( item ) item = data;
+        const item = this.data.find( datum => datum[ this.meta.key ] == keyValue );
+        if( item ) { Object.keys( data ).forEach( key => item[key] = data[key] ) }
         return this
     },
 

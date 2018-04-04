@@ -44,16 +44,11 @@ Object.assign( Form.prototype, MyView.prototype, {
     },
     
     templates: {
-        fieldError: require('../../templates/fieldError')( require('handlebars') ),
-        invalidLoginError: require('../../templates/invalidLoginError')( require('handlebars') ),
-        serverError: require('../../templates/serverError')(require('handlebars') )
+        fieldError: require('../templates/FieldError'),
     },
 
     validateForm: function() {
         var valid = true
-        
-        if ( this.templateData.invalidLoginError ) this.templateData.invalidLoginError.remove();
-        if ( this.templateData.serverError ) this.templateData.serverError.remove();
 
         this.fields.forEach( function( field ) {
           

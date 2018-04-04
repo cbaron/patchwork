@@ -146,7 +146,7 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
     transform( collectionName, document ) {
         if( !this.model[ collectionName ] || collectionName === 'Pages' ) return document
 
-        this.model[ collectionName ].schema.attributes.forEach( attribute => {
+        this.model[ collectionName ].attributes.forEach( attribute => {
             if( attribute.fk && document[ attribute.fk ] ) document[ attribute.fk ] = new ( this.Mongo.ObjectID )( document[ attribute.fk ] )
         } )
 

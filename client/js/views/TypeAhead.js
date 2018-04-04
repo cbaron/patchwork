@@ -7,7 +7,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             Model: Object.assign( { }, require('../models/Document') ),
             renderItem: ( item, search ) => `<div class="autocomplete-suggestion" data-val="${item.label || item.name}" data-id="${item.id}">${item.label || item.name}</div>`,
             search( term, suggest ) {
-                return this.Xhr( { method: 'get', qs: JSON.stringify( { name: { value: term, operation: '~*' } } ), resource: this.Resource } )
+                return this.Xhr( { method: 'get', qs: this.getQs( term ), resource: this.Resource } )
                 .then( documents => {
                     if( ! Array.isArray( documents ) ) documents = [ documents ]
                     if( documents.length === 0 ) return Promise.resolve( false )
@@ -37,7 +37,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this.selectedModel._id || this.selectedModel.id
     },
 
-    getQs( attr, term ) {
+    getQs( term ) {
+        const attr = this.Resource === 'deliveryroute' ? 'label' : 'name'
         return JSON.stringify( Object.assign( {}, { [ attr ]: { operation: '~*', value: term } } ) )
     },
 

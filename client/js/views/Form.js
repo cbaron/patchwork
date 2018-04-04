@@ -2,6 +2,8 @@ const Submitter = require('./Submitter')
 
 module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
+    Flatpickr: require('flatpickr'),
+
     events: Object.assign( Submitter.events, { previewBtn: 'click' } ),
 
     onPreviewBtnClick( e ) {
@@ -42,7 +44,8 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         )
 
         attributes.forEach( attribute => {
-            if( attribute.fk ) { data[ attribute.fk ] = this.views[ attribute.fk ].getSelectedId() }
+            if( attribute.fk ) { data[ attribute.columnName ] = this.views[ attribute.fk ].getSelectedId() }
+            else if( attribute.range === 'Geography' ) { data[ attribute.name ] = Array.from( this.els[ attribute.name ].querySelectorAll('input') ).map( el => el.value ) }
             else if( typeof attribute.range === "object" ) { data[ attribute.name ] = this.views[ attribute.name ].getFormValues() }
             else if( attribute.range === "List" ) {
                 data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
@@ -62,13 +65,17 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     },
 
     initTypeAheads() {
-        console.log( 'initTypeAheads' )
-        console.log( this.model )
         this.model.attributes.forEach( attribute => {
-            console.log( attribute )
-            if( attribute.fk ) { console.log( attribute.fk ); console.log( this.model.git( attribute.fk ) ) }
             if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.columnName ) )
-            else if( typeof attribute.range === "object" ) {
+            else if( attribute.range === 'Time' ) {
+                const flatpickr = this.Flatpickr( this.els[ attribute.name ], {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i"
+                } )
+            } else if( attribute.range === 'Date' ) {
+                const flatpickr = this.Flatpickr( this.els[ attribute.name ], { } )
+            } else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
                     disallowEnterKeySubmission: true,
                     model: Object.create( this.Model ).constructor( Object.assign( this.model.data[ attribute.name ], { nested: !this.model.git('nested') } ), { attributes: attribute.range } ),
@@ -115,7 +122,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         if( this.model ){
             this.model.on( 'validationError', attr => this.handleValidationError( attr ) )
             this.initTypeAheads()
-            this.key = this.model.metadata ? this.model.metadata.key : '_id'
+            this.key = this.model.meta ? this.model.meta.key : '_id'
         }
 
         return this 
@@ -124,11 +131,14 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     submit() {
         if( !this.validate( this.getFormValues() ) ) return Promise.resolve( this.onSubmitEnd() )
 
-        const isPost = !Boolean( this.model.data[ this.key ]  )
+        const method = !Boolean( this.model.data[ this.key ]  ) ? 'post' : this.key === 'id' ? 'patch' : 'put'
 
-        return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
+        return ( method === 'post'
+            ? this.model.post()
+            : this.model[ method ]( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) )
+        )
         .then( () => {
-            this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
+            this.emit( method === 'post' ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
             this.model.data = { }
             this.clear()
             this.Toast.showMessage( 'success', this.toastSuccess || `Success` )

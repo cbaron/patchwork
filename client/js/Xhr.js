@@ -12,13 +12,16 @@ module.exports = Object.create( Object.assign( {}, require('../../lib/MyObject')
                         ? reject( this.response )
                         : resolve( JSON.parse(this.response) )
                 }
+
+                const path = `/${data.resource}` + ( data.id ? `/${data.id}` : '' );
+
                 if( data.method === "get" || data.method === "options" ) {
                     let qs = data.qs ? `?${data.qs}` : ''
-                    req.open( data.method, `/${data.resource}${qs}` )
+                    req.open( data.method, `${path}${qs}` )
+                    //req.open( data.method, `/${data.resource}${qs}` )
                     this.setHeaders( req, data.headers )
                     req.send(null)
                 } else {
-                    const path = `/${data.resource}` + ( data.id ? `/${data.id}` : '' );
                     req.open( data.method.toUpperCase(), path, true)
                     this.setHeaders( req, data.headers )
                     req.send( data.data || null )

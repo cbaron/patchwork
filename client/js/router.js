@@ -2,8 +2,6 @@ module.exports = Object.create( {
 
     Error: require('../../lib/MyError'),
 
-    Resource: require('./views/Resource'),
-
     ViewFactory: require('./factory/View'),
 
     Views: require('./.ViewMap'),
@@ -72,8 +70,6 @@ module.exports = Object.create( {
     },
 
     handler( path ) {
-        if( path[0] === 'admin' && path[1] ) return this.resourceHandler( path[1] )
-
         let name = this.pathToView( path[0] ),
             view = this.Views[ name ] ? path[0] : 'home'
 
@@ -150,37 +146,8 @@ module.exports = Object.create( {
         const hyphenSplit = path.split('-')
         return hyphenSplit.map( item => this.capitalizeFirstLetter( item ) ).join('')
     },
-    
-    resourceHandler( resource ) {
-        this.handleHeader( `admin/${resource}` )
-        this.handleFooter( `admin/${resource}` )
-
-        this.userPromise.then( () => {
-
-            if( this.user.id ) this.adminHeader.onUser( this.user )
-
-            Object.keys( this.views ).forEach( key => this.views[key].hide() )
-
-            if( this.views.resource ) return this.views.resource.update( resource )
-
-            this.views.resource = new this.Resource( { resource: resource } )
-
-        } ).catch( err => new this.Error(err) )
-    },
 
     resources: {
-        admin: {
-            view: require('./views/Admin'),
-            options: {
-                collection: {
-                    comparator: "name",
-                    model: require('./models/Resource'),
-                    parse: response => response.resource,
-                    url: "/"
-                },
-                fetch: { headers: { accept: "application/ld+json" } }
-            }
-        },
         "sign-up": { view: require('./views/Signup'), options: { } },
     }
 

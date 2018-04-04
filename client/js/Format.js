@@ -10,7 +10,23 @@ module.exports = {
         return Array( end - start + 1 ).fill().map( (item, index) => start + index )
     },
 
+    GetCoordinateInputs( datum, value ) {
+        const longitude = value ? value[0] : '',
+            latitude = value ? value[1] : ''
+
+        return `` +
+        `<div data-js="${datum.name}" class="form-group">
+            <label>${datum.label}</label>
+            <div>
+                <input type="text" placeholder="Enter longitude" value="${longitude}"/>
+                <input type="text" placeholder="Enter latitude" value="${latitude}"/>
+            </div>
+        </div>`
+    },
+
     GetFormField( datum, value, meta={} ) {
+        if( datum.range === 'Geography' ) return this.GetCoordinateInputs( datum, value )
+
         const icon = datum.metadata
             ? datum.metadata.icon
                 ? this.Icons[ datum.metadata.icon ]
@@ -19,7 +35,7 @@ module.exports = {
                            
         const options = datum.metadata ? datum.metadata.options : false
 
-        value = ( value === undefined ) ? '' : value
+        value = ( value === undefined || value === null ) ? '' : value
             
         const label = 
             datum.fk || datum.label

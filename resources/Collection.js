@@ -34,7 +34,7 @@ Object.assign( Collection.prototype, Base.prototype, {
                         : ( { name, schema: this.Mongo.model[name] } )
                 )
                 .concat( this.Postgres.cmsModels )
-                .sort( ( a, b ) => a.name > b.name ? 1 : -1 )
+                .sort( ( a, b ) => ( a.label || a.name ) > ( b.label || b.name ) ? 1 : -1 )
             } )
         )
     },
