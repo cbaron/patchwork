@@ -214,6 +214,28 @@ html.non-touch .AccountHome .account-nav >div:hover {
 .AddTransaction .ButtonFlow .save-btn {
   margin-top: 1rem;
 }
+.AdminHeader {
+  background-color: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.35);
+  height: 4rem;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.AdminHeader >:first-child {
+  height: 100%;
+  margin: 0 auto;
+  max-width: 61.25rem;
+}
+.AdminHeader >:first-child .logo-container {
+  float: left;
+  line-height: 4rem;
+}
+.AdminHeader >:first-child .logo-container img {
+  height: 2rem;
+}
 .AdminPlus {
   height: 100%;
   margin-top: 4rem;
@@ -426,6 +448,9 @@ button.submitting {
   overflow-x: hidden;
   padding: 0 1rem 2rem;
 }
+.CollectionManager .main-panel .Deleter {
+  margin-top: 2rem;
+}
 .CollectionManager .main-panel >.List {
   display: flex;
   flex-direction: column;
@@ -452,7 +477,7 @@ button.submitting {
   margin: 0 1rem;
 }
 .CollectionManager .main-panel >.Form >.form-box >form {
-  padding: 0 1rem 0 2rem;
+  padding: 0 1rem;
 }
 .CollectionManager .main-panel .Form {
   height: 100%;
@@ -2838,6 +2863,26 @@ html.non-touch .AccountHome button:hover {
 .Transactions .balance span:last-child {
   flex: 4;
 }
+.TypeAhead {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.TypeAhead input {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.5rem 0.25rem 0.5rem 3rem;
+  width: 100%;
+}
+.TypeAhead .search {
+  position: absolute;
+  height: 1rem;
+  left: 1rem;
+}
+.TypeAhead.hiding-search input {
+  padding-left: 0.25rem;
+}
 .Verify {
   border: 1px solid transparent;
   height: 20rem;
@@ -3049,6 +3094,34 @@ button {
 .link:focus {
   text-decoration: underline;
   color: #a00;
+}
+div.btn-row {
+  text-align: center;
+}
+div.header {
+  margin: 5px 0 15px 0;
+  text-align: center;
+  font-size: 1.25rem;
+}
+.form-group {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.glyphicon-ok {
+  color: #008000;
+  margin-left: 5px;
+}
+.container-fluid {
+  height: 100%;
+}
+.alert {
+  padding: 5px;
+  margin: 5px 0 10px 0;
+}
+.heading {
+  font-size: 2rem;
+  line-height: 3em;
+  text-align: center;
 }
 .fd-hidden {
   display: none !important;

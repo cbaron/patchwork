@@ -86,17 +86,33 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
         return Promise.resolve( this.model[ collection.name ] = false )
     },
 
-    getDb() { return this.Client.connect(process.env.MONGODB) },
+    cacheModels() {
+        this.collectionNames = Object.keys( this.model ).sort()
+        this.model = { }
 
-    getViewModels() {
-        this.viewModelNames = [ ]
+        return this.P( this.Fs.readdir, [ `${__dirname}/../models` ], this.Fs )
+        .then( ( [ files ] ) => {
+            files.forEach( filename => {
+                const name = filename.replace('.js','')
 
-        return this.forEach(
-            db => db.collection('Pages').find(),
-            result => Promise.resolve( this.viewModelNames.push( result.label.replace( ' ', '' ) ) ),
-            this
-        )
+                this.model[ name ] = require( `${__dirname}/../models/${name}` )
+            } )
+
+            this.model.Pages = { }
+
+            this.collectionNames.forEach( name => {
+                if( this.model[ name ] === false ) this.model[ name ] = this.SuperModel.create()
+            } )
+
+            return Promise.resolve()
+        } )
     },
+
+    cachePageModel( pageDatum ) {
+        return Promise.resolve( this.model.Pages[ pageDatum.name ] = require( `${__dirname}/../models/${pageDatum.label.replace(/\s+/g, '')}` ) )
+    },
+
+    getDb() { return this.Client.connect(process.env.MONGODB) },
 
     handleCountOnly( resource ) {
         delete resource.query.countOnly
@@ -114,28 +130,8 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
     initialize( routes ) {
         this.routes = routes
         return this.forEach( db => db.listCollections( { name: { $ne: 'system.indexes' } } ), this.cacheCollection, this )
-        .then( () => {
-            this.collectionNames = Object.keys( this.model ).sort()
-            this.model = { }
-
-            return this.getViewModels()
-            .then( () => this.P( this.Fs.readdir, [ `${__dirname}/../models` ], this.Fs ) )
-            .then( ( [ files ] ) => {
-                files.forEach( filename => {
-                    const name = filename.replace('.js','')
-
-                    if( this.collectionNames.includes( name ) || this.viewModelNames.includes( name ) ) {
-                        this.model[ name ] = require( `${__dirname}/../models/${name}` )
-                    }
-                } )
-
-                this.collectionNames.forEach( name => {
-                    if( this.model[ name ] === false ) this.model[ name ] = this.SuperModel.create()
-                } )
-
-                return Promise.resolve()
-            } )
-        } )
+        .then( () => this.cacheModels() )
+        .then( () => this.forEach( db => db.collection('Pages').find(), this.cachePageModel, this ) )
     },
 
     removeCollection( collectionName ) {
@@ -146,7 +142,7 @@ module.exports = Object.create( Object.assign( { }, require('../lib/MyObject').p
     transform( collectionName, document ) {
         if( !this.model[ collectionName ] || collectionName === 'Pages' ) return document
 
-        this.model[ collectionName ].schema.attributes.forEach( attribute => {
+        this.model[ collectionName ].attributes.forEach( attribute => {
             if( attribute.fk && document[ attribute.fk ] ) document[ attribute.fk ] = new ( this.Mongo.ObjectID )( document[ attribute.fk ] )
         } )
 

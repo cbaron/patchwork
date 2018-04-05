@@ -1,0 +1,1 @@
+db.Share.renameCollection('CsaPageShare')

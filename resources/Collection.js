@@ -20,22 +20,50 @@ Object.assign( Collection.prototype, Base.prototype, {
         )
     },
 
-    GET() {
-        return Promise.resolve(
-            this.respond( {
-                body: this.Mongo.collectionNames.map( name =>
-                    name === 'Pages'
-                        ? ( { name,
-                              clientData: this.Mongo.model[ name ].clientData,
-                              documents: this.Mongo.viewModelNames.map( name => ( {
-                                  name, 
-                                  schema: this.Mongo.model[name].schema,
-                                  clientData: this.Mongo.model[ name ].clientData
-                              } ) )
-                          } )
-                        : ( { name, schema: this.Mongo.model[name].schema, clientData: this.Mongo.model[ name ].clientData } ) 
-                )
+    getMongoCollections() {
+        return Promise.resolve( this.Mongo.collectionNames.map( name =>
+            name === 'Pages'
+                ? ( { name, key: '_id', ...this.Mongo.model.Pages } )
+                : ( { name, schema: this.Mongo.model[name], key: '_id' } ) )
+        )
+    },
+
+    getPostgresCollections() {
+        const excludedTables = [ 'csaTransaction', 'role', 'spatial_ref_sys', 'tablemeta', 'transaction' ]
+
+        return this.Postgres.query( "SELECT * FROM tablemeta" )
+        .then( result => {
+            const cmsTablesMeta = result.rows.filter( row => !excludedTables.includes( row.name ) && !/member|person/.test( row.name ) )
+
+            const pgCollections = cmsTablesMeta.map( row => {
+                const schema = {
+                    attributes: this.Postgres.tables[ row.name ].columns.filter( column => column.name !== 'id' ).map( column => {
+                        if( column.fk ) return { fk: column.fk.table, columnName: column.name }
+
+                        return {
+                            name: column.name,
+                            label: column.name.charAt(0).toUpperCase() + column.name.slice(1),
+                            range: column.range
+                        }
+                    } )
+                }
+
+                return { name: row.name, label: row.label, schema, key: 'id' }
             } )
+
+            return Promise.resolve( pgCollections )
+        } )
+    },
+
+    GET() {
+        return Promise.all( [ this.getMongoCollections(), this.getPostgresCollections() ] )
+        .then( ( [ mongoCollections, pgCollections ] ) =>
+            Promise.resolve(
+                this.respond( {
+                    body: mongoCollections.concat( pgCollections )
+                          .sort( ( a, b ) => ( a.label || a.name ) > ( b.label || b.name ) ? 1 : -1 )
+                } )
+            )
         )
     },
 

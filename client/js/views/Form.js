@@ -2,6 +2,8 @@ const Submitter = require('./Submitter')
 
 module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
+    Flatpickr: require('flatpickr'),
+
     events: Object.assign( Submitter.events, { previewBtn: 'click' } ),
 
     onPreviewBtnClick( e ) {
@@ -42,7 +44,8 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         )
 
         attributes.forEach( attribute => {
-            if( attribute.fk ) { data[ attribute.fk ] = this.views[ attribute.fk ].getSelectedId() }
+            if( attribute.fk ) { data[ attribute.columnName ] = this.views[ attribute.fk ].getSelectedId() }
+            else if( attribute.range === 'Geography' ) { data[ attribute.name ] = Array.from( this.els[ attribute.name ].querySelectorAll('input') ).map( el => el.value ) }
             else if( typeof attribute.range === "object" ) { data[ attribute.name ] = this.views[ attribute.name ].getFormValues() }
             else if( attribute.range === "List" ) {
                 data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
@@ -63,11 +66,22 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
     initTypeAheads() {
         this.model.attributes.forEach( attribute => {
-            if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.fk ) )
-            else if( typeof attribute.range === "object" ) {
+            if( attribute.fk ) this.views[ attribute.fk ].setResource( attribute.fk ).initAutoComplete( this.model.git( attribute.columnName ) )
+            else if( attribute.range === 'Time' ) {
+                const flatpickr = this.Flatpickr( this.els[ attribute.name ], {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i"
+                } )
+            } else if( attribute.range === 'Date' ) {
+                const flatpickr = this.Flatpickr( this.els[ attribute.name ], { } )
+            } else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
                     disallowEnterKeySubmission: true,
-                    model: Object.create( this.Model ).constructor( Object.assign( this.model.data[ attribute.name ], { nested: !this.model.git('nested') } ), { attributes: attribute.range } ),
+                    model: Object.create( this.Model ).constructor( this.model.data[ attribute.name ], {
+                        meta: { isNested: !this.model.meta.isNested, ...this.model.meta },
+                        attributes: attribute.range
+                    } ),
                     templateOpts: { hideButtonRow: true },
                     Views: { },
                 }
@@ -86,7 +100,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
                         isDocumentList: false,
                         draggable: 'listItem'
                     } ),
-                    itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value ] )
+                    itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value, this.model.meta ] )
                 }
                 const el = this.els[ attribute.name ]
                 delete this.els[ attribute.name ]
@@ -99,7 +113,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     },
 
     postRender() {
-        if( this.model.git('nested') ) this.els.container.closest('.form-group').classList.add('vertical')
+        if( this.model.meta.isNested && this.els.container.closest('.form-group') ) this.els.container.closest('.form-group').classList.add('vertical')
         this.inputEls = this.els.container.querySelectorAll('input, select, textarea')
 
         if( !this.disallowEnterKeySubmission ) this.els.container.addEventListener( 'keyup', e => { if( e.keyCode === 13 ) this.onSubmitBtnClick() } )
@@ -111,7 +125,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
         if( this.model ){
             this.model.on( 'validationError', attr => this.handleValidationError( attr ) )
             this.initTypeAheads()
-            this.key = this.model.metadata ? this.model.metadata.key : '_id'
+            this.key = this.model.meta ? this.model.meta.key : '_id'
         }
 
         return this 
@@ -120,11 +134,14 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     submit() {
         if( !this.validate( this.getFormValues() ) ) return Promise.resolve( this.onSubmitEnd() )
 
-        const isPost = !Boolean( this.model.data[ this.key ]  )
+        const method = !Boolean( this.model.data[ this.key ]  ) ? 'post' : this.key === 'id' ? 'patch' : 'put'
 
-        return ( isPost ? this.model.post() : this.model.put( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) ) )
+        return ( method === 'post'
+            ? this.model.post()
+            : this.model[ method ]( this.model.data[ this.key ], this.omit( this.model.data, [ this.key ] ) )
+        )
         .then( () => {
-            this.emit( isPost ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
+            this.emit( method === 'post' ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
             this.model.data = { }
             this.clear()
             this.Toast.showMessage( 'success', this.toastSuccess || `Success` )

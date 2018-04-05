@@ -17,7 +17,9 @@ module.exports = Object.create( {
     GET( resource ) {
         const table = resource.path[0],
             queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query )
-            
+
+        if( queryKeys.includes( 'countOnly' ) ) return this.Postgres.query( `SELECT count(*) FROM "${table}"` )
+
         let paramCtr = 1,
             joins = [ ],
             selects = { [table]: true },
@@ -27,8 +29,10 @@ module.exports = Object.create( {
         queryKeys.forEach( key => {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
-            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
 
+            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
+            if( operation === '~*' && !resource.user.roles.includes('admin') ) { throw new Error('Access Forbidden') }
+            
             if( /join/i.test( operation ) ) {
                 let fkCol = this.Postgres.tables[ datum.value.table ].columns.find( column => column.name === datum.value.column )
                 if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )
@@ -47,24 +51,57 @@ module.exports = Object.create( {
         return this.Postgres.query( `SELECT ${selects} FROM "${table}" ${joins} ${where}`, params )
     },
 
-    PATCH( resource ) { 
+    PATCH( resource ) {
         var paramCtr = 1,
             name = resource.path[0],
             bodyKeys = Object.keys( resource.body ),
-            set = 'SET ' + bodyKeys.map( key => `"${key}" = $${paramCtr++}` ).join(', ')
+            set = 'SET ' + bodyKeys.map( key => {
+                const column = this.Postgres.tables[ name ].columns.find( col => col.name === key )
+                return column.range === 'Geography'
+                    ? `"${key}" = ST_MakePoint( $${paramCtr++}, $${paramCtr++} )`
+                    : `"${key}" = $${paramCtr++}`
+            } ).join(', ')
+
+        let values = [ ]
+
+        bodyKeys.forEach( key => {
+            const column = this.Postgres.tables[ name ].columns.find( col => col.name === key )
+            if( column.range === 'Geography' ) {
+                values.push( resource.body[key][0] )
+                values.push( resource.body[key][1] )
+            } else values.push( resource.body[key] )
+        } )
 
         return this.Postgres.query(
             `UPDATE "${name}" ${set} WHERE id = $${paramCtr} RETURNING ${this._getColumns(name)}`,
-            bodyKeys.map( key => resource.body[key] ).concat( resource.path[1] ) )
+            values.concat( resource.path[1] )
+        )
     },
 
     POST( resource ) {
-        var bodyKeys = Object.keys( resource.body ),
-            name = resource.path[0]
-               
+        const bodyKeys = Object.keys( resource.body ),
+            name = resource.path[0],
+            valuesString = bodyKeys.map( ( key, i ) => {
+                const column = this.Postgres.tables[ name ].columns.find( col => col.name === key )
+                return column.range === 'Geography'
+                    ? `ST_MakePoint( $${i+1}, $${i+2} )`
+                    : `$${i+1}`
+            } ).join(', ')
+
+        let values = [ ]
+
+        bodyKeys.forEach( key => {
+            const column = this.Postgres.tables[ name ].columns.find( col => col.name === key )
+            if( column.range === 'Geography' ) {
+                values.push( resource.body[key][0] )
+                values.push( resource.body[key][1] )
+            } else values.push( resource.body[key] )
+        } )
+
         return this.Postgres.query(
-            `INSERT INTO "${name}" ( ${this._wrapKeys(bodyKeys)} ) VALUES ( ${ bodyKeys.map( ( key, i ) => "$"+(i+1) ).join(', ') } ) RETURNING ${this._getColumns(name)}`,
-            bodyKeys.map( key => resource.body[key] ) )
+            `INSERT INTO "${name}" ( ${this._wrapKeys(bodyKeys)} ) VALUES ( ${valuesString} ) RETURNING ${this._getColumns(name)}`,
+            values
+        )
     },
 
     _getColumns( name, opts={} ) {

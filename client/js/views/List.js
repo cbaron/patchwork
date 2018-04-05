@@ -130,7 +130,9 @@ module.exports = Object.assign( { }, Super, {
         this.fetching = true
         if( nextPage ) this.model.set( 'skip', this.model.git('skip') + this.model.git('pageSize') )
 
-        return this.collection.get( { query: { skip: this.model.git('skip'), limit: this.model.git('pageSize'), sort: this.model.git('sort') } } )
+        const query = this.key === 'id' ? { } : { skip: this.model.git('skip'), limit: this.model.git('pageSize'), sort: this.model.git('sort') }
+
+        return this.collection.get( { query } )
         .then( newData => {
             this.populateList( newData )
             this.fetched = true

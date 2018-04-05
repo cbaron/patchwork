@@ -96,7 +96,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
                         const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES ("?[a-zA-Z-]+"?)\((\w+)\)/.exec( row.pg_get_constraintdef )
                         let column = this.tables[ row.tablefrom.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
                         match[2] = match[2].replace( /"/g, '' ) 
-                        
+
                         column.fk = {
                             table: match[2],
                             column: match[3],
@@ -205,6 +205,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
         "integer": "Integer",
         "money": "Float",
         "real": "Float",
+        "time without time zone": "Time",
         "timestamp with time zone": "DateTime",
         "text": "Text"
     }

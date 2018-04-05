@@ -1,7 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), require('./util/CustomContent'), {
 
     CurrentShare: require('../models/CurrentShare'),
-    Shares: Object.create( require('../models/__proto__'), { resource: { value: 'Share' } } ),
+    Shares: Object.create( require('../models/__proto__'), { resource: { value: 'CsaPageShare' } } ),
     ShareOptions: Object.create( require('../models/__proto__'), { resource: { value: 'shareoption' } } ),
 
     events: {
