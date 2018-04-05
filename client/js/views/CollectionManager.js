@@ -346,6 +346,9 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
     showProperView() {
         const path = this.path
+
+        if( path.length && path[0] !== this.model.git('currentCollection') ) return Promise.resolve( this.model.set( 'currentCollection', path[0] ) )
+
         return ( this.views.documentList ? Promise.resolve() : this.createDocumentList( this.model.git('currentCollection'), this.path.length === 2 ? false : true ) )
         .then( () =>
             path.length === 2 && path[1] !== 'new-item'
