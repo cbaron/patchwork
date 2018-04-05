@@ -22,8 +22,6 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
         }
     },
 
-    excludedCmsTables: [ 'csaTransaction', 'role', 'spatial_ref_sys', 'tablemeta', 'transaction' ],
-
     initialize() {
         return this.getTableData()
     },
@@ -108,34 +106,6 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
                 )
             )
         )
-        .then( () => {
-            return this.query( "SELECT * FROM tablemeta" )
-            .then( result => {
-                const cmsTablesMeta = result.rows.filter( row => !this.excludedCmsTables.includes( row.name ) && !/member|person/.test( row.name ) )
-
-                this.cmsModels = cmsTablesMeta.map( row => {
-                    const schema = {
-                        attributes: this.tables[ row.name ].columns.filter( column => column.name !== 'id' ).map( column => {
-                            if( column.fk ) return { fk: column.fk.table, columnName: column.name }
-
-                            const range = column.range === 'Text'
-                                ? column.name === 'description' ? 'Text' : 'String'
-                                : column.range
-
-                            return {
-                                name: column.name,
-                                label: column.name.charAt(0).toUpperCase() + column.name.slice(1),
-                                range
-                            }
-                        } )
-                    }
-
-                    return { name: row.name, label: row.label, schema, isPostgres: true }
-                } )
-
-                return Promise.resolve()
-            } )
-        } )
     },
 
     _factory( data ) {

@@ -78,7 +78,10 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
             } else if( typeof attribute.range === "object" ) {
                 this.Views[ attribute.name ] = {
                     disallowEnterKeySubmission: true,
-                    model: Object.create( this.Model ).constructor( Object.assign( this.model.data[ attribute.name ], { nested: !this.model.git('nested') } ), { attributes: attribute.range } ),
+                    model: Object.create( this.Model ).constructor( this.model.data[ attribute.name ], {
+                        meta: { isNested: !this.model.meta.isNested, ...this.model.meta },
+                        attributes: attribute.range
+                    } ),
                     templateOpts: { hideButtonRow: true },
                     Views: { },
                 }
@@ -97,7 +100,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
                         isDocumentList: false,
                         draggable: 'listItem'
                     } ),
-                    itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value ] )
+                    itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value, this.model.meta ] )
                 }
                 const el = this.els[ attribute.name ]
                 delete this.els[ attribute.name ]
@@ -110,7 +113,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
     },
 
     postRender() {
-        if( this.model.git('nested') ) this.els.container.closest('.form-group').classList.add('vertical')
+        if( this.model.meta.isNested && this.els.container.closest('.form-group') ) this.els.container.closest('.form-group').classList.add('vertical')
         this.inputEls = this.els.container.querySelectorAll('input, select, textarea')
 
         if( !this.disallowEnterKeySubmission ) this.els.container.addEventListener( 'keyup', e => { if( e.keyCode === 13 ) this.onSubmitBtnClick() } )

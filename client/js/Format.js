@@ -57,7 +57,7 @@ module.exports = {
 
         const input = datum.fk
             ? `<div data-view="typeAhead" data-name="${datum.fk}"></div>`
-            : datum.range === 'Text'
+            : ( datum.range === 'Text' && meta.key === '_id' ) || ( meta.key === 'id' && datum.name === 'description' )
                 ? `<textarea data-js="${datum.name}" rows="3">${value}</textarea>`
                 : datum.range === 'List' || typeof datum.range === 'object'
                     ? `<div data-js="${datum.name}" data-name="${datum.name}"></div>`
@@ -143,7 +143,8 @@ module.exports = {
         Email: 'email',
         ImageUrl: 'text',
         Password: 'password',
-        String: 'text'
+        String: 'text',
+        Text: 'text'
     }
 
 }

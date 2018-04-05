@@ -43,38 +43,36 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         },*/
 
         deleteDocument( document ) {
-            const collection = this.model.git('currentCollection'),
-                meta = this.model.meta[ collection ] || { },
-                isPostgres = this.views.collections.collection.store.name[ collection ].isPostgres,
-                schema = this.views.collections.collection.store.name[ collection ].schema
+            const collectionName = this.model.git('currentCollection'),
+                collection = this.views.collections.collection.store.name[ collectionName ],
+                meta = this.model.meta[ collectionName ] || { },
+                schema = collection.schema
 
             return {
                 insertion: { el: this.els.mainPanel },
                 model: Object.create( this.DocumentModel ).constructor( document, {
-                    meta: { key: isPostgres ? 'id' : '_id' },
-                    resource: this.model.git('currentCollection')
+                    meta: { key: collection.key },
+                    resource: collectionName
                 } ),
-                templateOpts: { message: `<div><span>Delete </span>${this.getDisplayValue( meta, document, schema )}<span> from ${collection}?</span></div>` },
+                templateOpts: { message: `<div><span>Delete </span>${this.getDisplayValue( meta, document, schema )}<span> from ${collectionName}?</span></div>` },
                 toastSuccess: 'Item deleted.'
             }
         },
 
         documentList() {
-            const collection = this.model.git('currentCollection'),
-                meta = this.model.meta[ collection ] || { },
-                isPostgres = this.views.collections.collection.store.name[ collection ].isPostgres,
-                schema = this.views.collections.collection.store.name[ collection ].schema
+            const collectionName = this.model.git('currentCollection'),
+                collection = this.views.collections.collection.store.name[ collectionName ],
+                meta = this.model.meta[ collectionName ] || { },
+                schema = collection.schema
 
             return {
                 model: Object.create( this.Model ).constructor( Object.assign ( {
                     add: true,
                     collection: Object.create( this.DocumentModel ).constructor( [ ], {
-                        meta: { key: isPostgres ? 'id' : '_id' },
-                        resource: collection
+                        meta: { key: collection.key },
+                        resource: collectionName
                     } ),
                     delete: true,
-                    draggable: 'document',
-                    isPostgres,
                     pageSize: 100,
                     skip: 0,
                     sort: { 'label': 1 },
@@ -212,10 +210,10 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     createDocumentModel( data={} ) {
         const collectionName = this.model.git('currentCollection'),
             collection = this.views.collections.collection.store.name[ collectionName ],
-            meta = Object.assign( this.model.meta[ collectionName ] || { }, { noPlaceholder: true, key: collection.isPostgres ? 'id' : '_id' } )
+            meta = Object.assign( this.model.meta[ collectionName ] || { }, { noPlaceholder: true, key: collection.key } )
 
         let schema = this.model.git('currentCollection') === 'Pages'
-            ? collection.documents.find( doc => doc.name === data.label.replace( ' ', '' ) ).schema
+            ? collection[ data.name ]
             : collection.schema
 
         schema.attributes.forEach( attr => {
