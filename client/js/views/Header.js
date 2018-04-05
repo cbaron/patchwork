@@ -4,6 +4,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
         accountBtn: 'click',
+        csaSignUpBtn: 'click',
         justify: 'click',
         navLinks: 'click',
         signInBtn: 'click',
@@ -13,9 +14,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onAccountBtnClick() {
+        console.log( 'onAccountBtnClick' )
         this.toggleAccountMenu()
         this.emit( 'navigate', 'account-home' )
     },
+
+    onCsaSignUpBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
     onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
 
@@ -27,14 +31,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onNavLinksClick( e ) {
+        console.log( 'onNavLinksClick' )
         if( this.displayingLogin ) this.emit('removeLogin')
-
         const el = e.target.closest('li')
 
         if( !el ) return
 
         this.emit( 'navigate', el.getAttribute('data-name') )
-
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
@@ -44,6 +47,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onSignOutBtnClick() {
+        console.log( 'onSignOutBtnClick' )
         document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 
         this.user.clear()
@@ -65,11 +69,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
 
-    onUserNameClick() { this.toggleAccountMenu() },
+    onUserNameClick(e) { console.log( 'onUserNameClick'); this.toggleAccountMenu(); e.stopPropagation() },
 
     postRender() {
         this.on( 'imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
-
+        //console.log( this.els.accountBtn )
+        //this.els.accountBtn.addEventListener('click', () => console.log( 'clickkkkkkkk' ) )
         this.toggleAccountUI()
 
         if( this.user.isLoggedIn() ) this.onUser()
@@ -88,6 +93,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     toggleAccountMenu() {
         this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
+    },
+
+    toggleSignUpBtn( view ) {
+        this.els.csaSignUpBtn.parentNode.classList.toggle( 'fd-hidden', view === 'home' )
     }
 
 } )

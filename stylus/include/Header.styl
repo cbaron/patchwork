@@ -6,7 +6,6 @@
         margin: 0
         
     >div:nth-child(2)
-        position: relative
         background-color: black
         color: white
         padding: .2rem 1rem
@@ -32,65 +31,89 @@
                         &:hover
                             color: $sun-yellow
                             transition: color .3s ease-in-out
-            
-        >ul
+        >div:nth-child(2)
             display: flex
             justify-content: center
             align-items: center
-            flex-wrap: wrap
-            
-            li
-                padding: .5rem .75rem
-                margin: 0 .25rem
-                font-size: 1.2rem
+            flex-wrap: wrap 
+
+            >ul
+                display: flex
+                justify-content: center
+                align-items: center
+                flex-wrap: wrap
+
+                &:first-child >li, &:last-child >li >div:first-child
+                    padding: .5rem .75rem
+                    margin: .15rem .25rem
+                    font-size: 1.2rem
+                    cursor: pointer
+                    
+                    &:active
+                        opacity: .85
+
+                    html.non-touch &
+                        &:hover
+                            background-color: $sun-red
+                            transition: background-color .3s ease-in-out
+        
+        >div:last-child
+            width: 100%
+            text-align: center
+            padding: .5rem .75rem
+            margin: .1rem .25rem
+            >span
+                color: $sun-yellow
+                font-weight: bold
+                font-size: 1.3rem
                 cursor: pointer
-                
-                &:active
-                    opacity: .85
                 
                 html.non-touch &
                     &:hover
-                        background-color: $sun-red
-                        transition: background-color .3s ease-in-out
-                        
-        .account-ui
-            color: $sun-yellow
-            display: flex
-            justify-content: center
-            padding: .5rem 0
+                        background-color: initial
+                        color: lighten($sun-yellow, 25%)
             
-            >div:first-child
-                cursor: pointer
+    .member-ui
+        position: relative
+        cursor: pointer
+        padding: .5rem .75rem
+        margin: .15rem .25rem
+        font-size: 1.2rem
+        
+        &:active
+            opacity: .85
+        
+        >div
+            padding-right: 1rem
+            createArrow( white, false )
+            background-position: right 5px top 5px, right 0px top 5px
             
-            .member-ui
-                position: relative
-                cursor: pointer
-                
-                >div
-                    padding-right: 1rem
+            html.non-touch &
+                &:hover
+                    color: $sun-yellow
                     createArrow( $sun-yellow, false )
                     background-position: right 5px top 5px, right 0px top 5px
+        
+        >ul
+            position: absolute
+            z-index: 1000
+            top: 1.95rem
+            color: initial
+            background-color: $light-manila
+            box-shadow: 1px 1px 5px #666
+            
+            >li
+                padding: .6rem
+                text-align: center
+                width: 10rem
                 
-                >ul
-                    position: absolute
-                    z-index: 1000
-                    top: 1.25rem
-                    color: initial
-                    background-color: $light-manila
-                    box-shadow: 1px 1px 5px #666
-                    
-                    >li
-                        padding: .6rem
-                        text-align: center
-                        width: 10rem
-                        
-                        &:not(:last-child)
-                            border-bottom: 1px solid $divider-grey
-                        
-                        html.non-touch &
-                            &:hover
-                                color: $sun-red
-                                text-decoration: underline
+                &:not(:last-child)
+                    border-bottom: 1px solid $divider-grey
+                
+                html.non-touch &
+                    &:hover
+                        color: $sun-red
+                        text-decoration: underline
                         
 
     @media only screen and (min-width: 1500px)

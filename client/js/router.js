@@ -87,6 +87,8 @@ module.exports = Object.create( {
             .then( () => {
                 this.currentView = view
 
+                if( this.header ) this.header.toggleSignUpBtn( view )
+
                 if( this.views[ view ] ) return this.views[ view ].onNavigation( path )
 
                 this.views[ view ] = !this.resources[ view ]

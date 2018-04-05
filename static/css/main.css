@@ -1173,7 +1173,6 @@ label {
   margin: 0;
 }
 .Header >div:nth-child(2) {
-  position: relative;
   background-color: #000;
   color: #fff;
   padding: 0.2rem 1rem;
@@ -1198,63 +1197,93 @@ html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
   color: #ffc502;
   transition: color 0.3s ease-in-out;
 }
-.Header >div:nth-child(2) >ul {
+.Header >div:nth-child(2) >div:nth-child(2) {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
-.Header >div:nth-child(2) >ul li {
+.Header >div:nth-child(2) >div:nth-child(2) >ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li,
+.Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child {
   padding: 0.5rem 0.75rem;
-  margin: 0 0.25rem;
+  margin: 0.15rem 0.25rem;
   font-size: 1.2rem;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >ul li:active {
+.Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li:active,
+.Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child:active {
   opacity: 0.85;
 }
-html.non-touch .Header >div:nth-child(2) >ul li:hover {
+html.non-touch .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li:hover,
+html.non-touch .Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child:hover {
   background-color: #a00;
   transition: background-color 0.3s ease-in-out;
 }
-.Header >div:nth-child(2) .account-ui {
-  color: #ffc502;
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem 0;
+.Header >div:nth-child(2) >div:last-child {
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  margin: 0.1rem 0.25rem;
 }
-.Header >div:nth-child(2) .account-ui >div:first-child {
+.Header >div:nth-child(2) >div:last-child >span {
+  color: #ffc502;
+  font-weight: bold;
+  font-size: 1.3rem;
   cursor: pointer;
 }
-.Header >div:nth-child(2) .account-ui .member-ui {
+html.non-touch .Header >div:nth-child(2) >div:last-child >span:hover {
+  background-color: initial;
+  color: #ffd341;
+}
+.Header .member-ui {
   position: relative;
   cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  margin: 0.15rem 0.25rem;
+  font-size: 1.2rem;
 }
-.Header >div:nth-child(2) .account-ui .member-ui >div {
+.Header .member-ui:active {
+  opacity: 0.85;
+}
+.Header .member-ui >div {
   padding-right: 1rem;
+  background-image: linear-gradient(45deg, transparent 47%, #fff 53%), linear-gradient(135deg, #fff 53%, transparent 47%);
+  background-position: 6px 15px, 11px 15px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  background-position: right 5px top 5px, right 0px top 5px;
+}
+html.non-touch .Header .member-ui >div:hover {
+  color: #ffc502;
   background-image: linear-gradient(45deg, transparent 47%, #ffc502 53%), linear-gradient(135deg, #ffc502 53%, transparent 47%);
   background-position: 6px 15px, 11px 15px;
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
   background-position: right 5px top 5px, right 0px top 5px;
 }
-.Header >div:nth-child(2) .account-ui .member-ui >ul {
+.Header .member-ui >ul {
   position: absolute;
   z-index: 1000;
-  top: 1.25rem;
+  top: 1.95rem;
   color: initial;
   background-color: #fff5df;
   box-shadow: 1px 1px 5px #666;
 }
-.Header >div:nth-child(2) .account-ui .member-ui >ul >li {
+.Header .member-ui >ul >li {
   padding: 0.6rem;
   text-align: center;
   width: 10rem;
 }
-.Header >div:nth-child(2) .account-ui .member-ui >ul >li:not(:last-child) {
+.Header .member-ui >ul >li:not(:last-child) {
   border-bottom: 1px solid #999;
 }
-html.non-touch .Header >div:nth-child(2) .account-ui .member-ui >ul >li:hover {
+html.non-touch .Header .member-ui >ul >li:hover {
   color: #a00;
   text-decoration: underline;
 }
