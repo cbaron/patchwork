@@ -1167,6 +1167,9 @@ label {
     margin: 1rem;
   }
 }
+.Header {
+  z-index: 2;
+}
 .Header >div:first-child img {
   width: 100%;
   height: auto;
@@ -1189,9 +1192,6 @@ label {
   padding: 0.75rem 1rem 0.25rem;
   text-transform: uppercase;
   cursor: pointer;
-}
-.Header >div:nth-child(2) >div:first-child >div >span:active {
-  color: #ffc502;
 }
 html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
   color: #ffc502;
@@ -1316,7 +1316,10 @@ html.non-touch .Header .member-ui >ul >li:hover {
     text-align: center;
     flex: 1;
   }
-  .Header >div:nth-child(2) >ul {
+  .Header >div:nth-child(2) >div:nth-child(2) {
+    display: block;
+  }
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child {
     text-align: center;
     position: absolute;
     z-index: 2;
@@ -1326,7 +1329,7 @@ html.non-touch .Header .member-ui >ul >li:hover {
     z-index: 1000;
     margin-top: 0.15rem;
   }
-  .Header >div:nth-child(2) >ul li {
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child:first-child >li {
     font-size: 1.25rem;
     width: 100%;
     padding: 0.75rem;
@@ -1334,13 +1337,40 @@ html.non-touch .Header .member-ui >ul >li:hover {
     border: 1px solid #ffc502;
     background-color: #000;
   }
-  .Header >div:nth-child(2) >ul li:active {
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child:first-child >li:active {
     background-color: #ffc502;
     color: #000;
     opacity: 1;
   }
-  .Header >div:nth-child(2) >ul.is-mobile {
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child.is-mobile {
     transform: translateX(16rem);
+  }
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:last-child {
+    text-align: center;
+    color: #ffc502;
+  }
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child {
+    padding: 0;
+    margin: 0.25rem 0 1rem;
+  }
+  .Header >div:nth-child(2) >div:last-child {
+    margin: 0.25rem 0;
+    padding: 0;
+  }
+  .Header .member-ui {
+    padding: 0;
+    margin: 0.25rem 0 0.5rem;
+  }
+  .Header .member-ui >div {
+    padding-right: 1rem;
+    background-image: linear-gradient(45deg, transparent 47%, #ffc502 53%), linear-gradient(135deg, #ffc502 53%, transparent 47%);
+    background-position: 6px 15px, 11px 15px;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    background-position: right 5px top 5px, right 0px top 5px;
+  }
+  .Header .member-ui >ul {
+    top: 1.35rem;
   }
 }
 @media only screen and (max-width: 475px) {
@@ -1351,19 +1381,42 @@ html.non-touch .Header .member-ui >ul >li:hover {
     left: -12rem;
     width: 12rem;
   }
-  .Header >div:nth-child(2) >ul li {
+  .Header >div:nth-child(2) >ul:first-child >li,
+  .Header >div:nth-child(2) >ul:last-child >li >div:first-child {
     font-size: 1rem;
   }
   .Header >div:nth-child(2) >ul.is-mobile {
     transform: translateX(12rem);
   }
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 425px) {
+  .Header >div:nth-child(2) >div:first-child >div {
+    font-size: 1.5rem;
+  }
   .Header >div:nth-child(2) >div:first-child svg {
     height: 1.25rem;
   }
+  .Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child {
+    font-size: 0.95rem;
+  }
+  .Header >div:nth-child(2) >div:last-child >span {
+    font-size: 1.1rem;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .Header >div:nth-child(2) >div:first-child >div {
+    font-size: 1.3rem;
+  }
+  .Header .member-ui {
+    font-size: 1rem;
+  }
+}
+@media only screen and (max-width: 350px) {
   .Header >div:nth-child(2) >div:first-child >div {
     font-size: 1.2rem;
+  }
+  .Header >div:nth-child(2) >div:last-child >span {
+    font-size: 1rem;
   }
 }
 .Home {

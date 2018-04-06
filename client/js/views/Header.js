@@ -14,7 +14,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onAccountBtnClick() {
-        console.log( 'onAccountBtnClick' )
         this.toggleAccountMenu()
         this.emit( 'navigate', 'account-home' )
     },
@@ -31,7 +30,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onNavLinksClick( e ) {
-        console.log( 'onNavLinksClick' )
         if( this.displayingLogin ) this.emit('removeLogin')
         const el = e.target.closest('li')
 
@@ -47,7 +45,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onSignOutBtnClick() {
-        console.log( 'onSignOutBtnClick' )
         document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 
         this.user.clear()
@@ -69,12 +66,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
 
-    onUserNameClick(e) { console.log( 'onUserNameClick'); this.toggleAccountMenu(); e.stopPropagation() },
+    onUserNameClick() { this.toggleAccountMenu() },
 
     postRender() {
         this.on( 'imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
-        //console.log( this.els.accountBtn )
-        //this.els.accountBtn.addEventListener('click', () => console.log( 'clickkkkkkkk' ) )
+
         this.toggleAccountUI()
 
         if( this.user.isLoggedIn() ) this.onUser()
