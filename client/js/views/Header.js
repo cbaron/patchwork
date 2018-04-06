@@ -4,6 +4,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
         accountBtn: 'click',
+        csaSignUpBtn: 'click',
         justify: 'click',
         navLinks: 'click',
         signInBtn: 'click',
@@ -17,6 +18,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'navigate', 'account-home' )
     },
 
+    onCsaSignUpBtnClick() { this.emit( 'navigate', 'sign-up' ) },
+
     onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
 
     onLogin() {
@@ -28,13 +31,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onNavLinksClick( e ) {
         if( this.displayingLogin ) this.emit('removeLogin')
-
         const el = e.target.closest('li')
 
         if( !el ) return
 
         this.emit( 'navigate', el.getAttribute('data-name') )
-
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
@@ -88,6 +89,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     toggleAccountMenu() {
         this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
+    },
+
+    toggleSignUpBtn( view ) {
+        this.els.csaSignUpBtn.parentNode.classList.toggle( 'fd-hidden', view === 'home' )
     }
 
 } )

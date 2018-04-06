@@ -1,12 +1,12 @@
 .Header
-    
+    z-index: 2
+
     >div:first-child img
         width: 100%
         height: auto
         margin: 0
         
     >div:nth-child(2)
-        position: relative
         background-color: black
         color: white
         padding: .2rem 1rem
@@ -24,73 +24,95 @@
                 text-transform: uppercase
                 cursor: pointer
                 
-                >span
-                    &:active
-                        color: $sun-yellow
-                    
+                >span                    
                     html.non-touch &
                         &:hover
                             color: $sun-yellow
                             transition: color .3s ease-in-out
-            
-        >ul
+
+        >div:nth-child(2)
             display: flex
             justify-content: center
             align-items: center
-            flex-wrap: wrap
-            
-            li
-                padding: .5rem .75rem
-                margin: 0 .25rem
-                font-size: 1.2rem
+            flex-wrap: wrap 
+
+            >ul
+                display: flex
+                justify-content: center
+                align-items: center
+                flex-wrap: wrap
+
+                &:first-child >li, &:last-child >li >div:first-child
+                    padding: .5rem .75rem
+                    margin: .15rem .25rem
+                    font-size: 1.2rem
+                    cursor: pointer
+                    
+                    &:active
+                        opacity: .85
+
+                    html.non-touch &
+                        &:hover
+                            background-color: $sun-red
+                            transition: background-color .3s ease-in-out
+        
+        >div:last-child
+            width: 100%
+            text-align: center
+            padding: .5rem .75rem
+            margin: .1rem .25rem
+            >span
+                color: $sun-yellow
+                font-weight: bold
+                font-size: 1.3rem
                 cursor: pointer
-                
-                &:active
-                    opacity: .85
                 
                 html.non-touch &
                     &:hover
-                        background-color: $sun-red
-                        transition: background-color .3s ease-in-out
-                        
-        .account-ui
-            color: $sun-yellow
-            display: flex
-            justify-content: center
-            padding: .5rem 0
+                        background-color: initial
+                        color: lighten($sun-yellow, 25%)
             
-            >div:first-child
-                cursor: pointer
+    .member-ui
+        position: relative
+        cursor: pointer
+        padding: .5rem .75rem
+        margin: .15rem .25rem
+        font-size: 1.2rem
+        
+        &:active
+            opacity: .85
+        
+        >div
+            padding-right: 1rem
+            createArrow( white, false )
+            background-position: right 5px top 5px, right 0px top 5px
             
-            .member-ui
-                position: relative
-                cursor: pointer
-                
-                >div
-                    padding-right: 1rem
+            html.non-touch &
+                &:hover
+                    color: $sun-yellow
                     createArrow( $sun-yellow, false )
                     background-position: right 5px top 5px, right 0px top 5px
+        
+        >ul
+            position: absolute
+            z-index: 1000
+            top: 1.95rem
+            color: initial
+            background-color: $light-manila
+            box-shadow: 1px 1px 5px #666
+            
+            >li
+                padding: .6rem
+                text-align: center
+                width: 10rem
                 
-                >ul
-                    position: absolute
-                    z-index: 1000
-                    top: 1.25rem
-                    color: initial
-                    background-color: $light-manila
-                    box-shadow: 1px 1px 5px #666
-                    
-                    >li
-                        padding: .6rem
-                        text-align: center
-                        width: 10rem
-                        
-                        &:not(:last-child)
-                            border-bottom: 1px solid $divider-grey
-                        
-                        html.non-touch &
-                            &:hover
-                                color: $sun-red
-                                text-decoration: underline
+                &:not(:last-child)
+                    border-bottom: 1px solid $divider-grey
+                
+                html.non-touch &
+                    &:hover
+                        color: $sun-red
+                        text-decoration: underline
                         
 
     @media only screen and (min-width: 1500px)
@@ -121,32 +143,58 @@
                     padding: .5rem 1rem
                     text-align: center
                     flex: 1
-                
-            >ul
-                text-align: center
-                position: absolute
-                z-index: 2
-                left: -16rem
-                width: 16rem
-                transition: transform .4s ease-in-out
-                z-index: 1000
-                margin-top: .15rem
-                
-                li
-                    font-size: 1.25rem
-                    width: 100%
-                    padding: .75rem
-                    margin: 0
-                    border: 1px solid $sun-yellow
-                    background-color: black
-                        
-                    &:active
-                        background-color: $sun-yellow
-                        color: black
-                        opacity: 1
+            
+            >div:nth-child(2)
+                display: block
+  
+                >ul:first-child
+                    text-align: center
+                    position: absolute
+                    z-index: 2
+                    left: -16rem
+                    width: 16rem
+                    transition: transform .4s ease-in-out
+                    z-index: 1000
+                    margin-top: .15rem
                     
-                &.is-mobile
-                    transform: translateX(16rem)
+                    &:first-child >li
+                        font-size: 1.25rem
+                        width: 100%
+                        padding: .75rem
+                        margin: 0
+                        border: 1px solid $sun-yellow
+                        background-color: black
+                            
+                        &:active
+                            background-color: $sun-yellow
+                            color: black
+                            opacity: 1
+                        
+                    &.is-mobile
+                        transform: translateX(16rem)
+                        
+                >ul:last-child
+                    text-align: center
+                    color: $sun-yellow
+                    >li >div:first-child
+                        padding: 0
+                        margin: .25rem 0 1rem
+                        
+            >div:last-child
+                margin: .25rem 0
+                padding: 0
+                
+        .member-ui
+            padding: 0
+            margin: .25rem 0 .5rem
+            
+            >div
+                padding-right: 1rem
+                createArrow( $sun-yellow, false )
+                background-position: right 5px top 5px, right 0px top 5px
+            
+            >ul
+                top: 1.35rem
                     
     @media only screen and (max-width: 475px)
         >div:nth-child(2)
@@ -158,21 +206,40 @@
                 left: -12rem
                 width: 12rem
                 
-                li
+                &:first-child >li, &:last-child >li >div:first-child
                     font-size: 1rem
                     
                 &.is-mobile
                     transform: translateX(12rem)
-                
-    @media only screen and (max-width: 400px)
+                    
+    @media only screen and (max-width: 425px)
         >div:nth-child(2)
             >div:first-child
+                >div
+                    font-size: 1.5rem
                 svg
                     height: 1.25rem
-
+                    
+            >div:nth-child(2) >ul:last-child >li >div:first-child
+                font-size: .95rem
+                
+            >div:last-child >span
+                font-size: 1.1rem
+                    
+    @media only screen and (max-width: 375px)
+        >div:nth-child(2)
+            >div:first-child
+                >div
+                    font-size: 1.3rem
+                    
+        .member-ui
+            font-size: 1rem
+                
+    @media only screen and (max-width: 350px)
+        >div:nth-child(2)
+            >div:first-child
                 >div
                     font-size: 1.2rem
-        
                     
-
-            
+            >div:last-child >span
+                font-size: 1rem

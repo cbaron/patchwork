@@ -11,17 +11,22 @@ return `` +
             ${require('./lib/justify')}
             <div><span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span></div>
         </div>
-        <ul data-js="navLinks">${fields}</ul>
-        <div class="account-ui">
-            <div data-js="signInBtn" class="fd-hidden">Sign In</div>
-            <div class="member-ui" data-js="memberMenu" class="fd-hidden">
-                <div data-js="userName"></div>
-                <ul class="account-menu fd-hidden" data-js="accountMenu">
-                    <li data-js="accountBtn">Your Account</li>
-                    <li data-js="signOutBtn">Sign Out</li>         
-                </ul>
-            </div>
+        <div>
+            <ul data-js="navLinks">${fields}</ul>
+            <ul>
+                <li>
+                    <div data-js="signInBtn" class="fd-hidden">Member Sign In</div>
+                    <div class="member-ui" data-js="memberMenu" class="fd-hidden">
+                        <div data-js="userName"></div>
+                        <ul class="account-menu fd-hidden" data-js="accountMenu">        
+                            <li data-js="accountBtn">Your Account</li>
+                            <li data-js="signOutBtn">Sign Out</li>                         
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
+        <div><span data-js="csaSignUpBtn">CSA Sign Up</span></div>
     </div>
 </div>`
 }
