@@ -14,20 +14,23 @@
   margin: 2rem 0;
 }
 .About .staff .bio {
-  margin: 0 4rem 2rem 0;
+  margin: 0 1.5rem 2rem;
 }
 .About .staff .bio >div:first-child {
   position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  height: 11rem;
+  width: 11rem;
 }
 .About .staff .bio >div:first-child:hover .overlay {
   opacity: 1;
 }
 .About .staff .bio >div:first-child >img {
-  border-radius: 50%;
-  border: 1px solid transparent;
-  width: 9rem;
-  height: 9rem;
-  margin: 0;
+  position: absolute;
+  height: auto;
+  width: auto;
+  max-width: 100%;
 }
 .About .staff .bio >div:first-child .overlay {
   border-radius: 50%;
@@ -44,8 +47,9 @@
   opacity: 0;
   justify-content: center;
   align-items: center;
-  font-size: 0.7rem;
-  line-height: 1.2;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  padding: 0 0.5rem;
 }
 .About .staff .bio >div:last-child {
   text-align: center;
@@ -850,9 +854,9 @@ button.submitting {
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date {
   width: 5rem;
-  background-color: #000;
+  background-color: #333;
   box-shadow: 1px 2px 5px #333;
-  color: #fff;
+  color: #ccc;
   cursor: pointer;
   padding: 0.65rem;
   margin: 1px;
@@ -864,12 +868,13 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date.selected {
   background-color: #a00;
+  color: #fff;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date.unselectable {
   background-color: #333;
   color: #000;
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date >div:not(:first-child) {
   font-weight: bold;
@@ -1304,11 +1309,11 @@ html.non-touch .Header .member-ui >ul >li:hover {
     align-items: center;
   }
   .Header >div:nth-child(2) >div:first-child svg {
+    position: absolute;
     display: block;
     cursor: pointer;
     height: 1.5rem;
     stroke: #fff;
-    padding: 0 0.5rem;
   }
   .Header >div:nth-child(2) >div:first-child >div {
     font-size: 2rem;
@@ -2987,9 +2992,9 @@ html.non-touch .AccountHome button:hover {
 }
 .WeekOptions .content .data ol .delivery-date {
   width: 5rem;
-  background-color: #000;
+  background-color: #333;
   box-shadow: 1px 2px 5px #333;
-  color: #fff;
+  color: #ccc;
   cursor: pointer;
   padding: 0.65rem;
   margin: 1px;
@@ -3001,6 +3006,7 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
 }
 .WeekOptions .content .data ol .delivery-date.selected {
   background-color: #a00;
+  color: #fff;
 }
 .WeekOptions .content .data ol .delivery-date.selected.edited {
   border: 1px solid #4ab74a;
@@ -3009,7 +3015,7 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   background-color: #333;
   color: #000;
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 .WeekOptions .content .data ol .delivery-date.edited {
   border: 1px solid #ff383f;
@@ -3248,7 +3254,7 @@ div.header {
     -webkit-transform: translateX(0%);
   }
 }
-@media only screen and (max-width: 1050px) {
+@media only screen and (max-width: 1250px) {
   section,
   h1 {
     margin-left: 15%;

@@ -17,9 +17,9 @@
                 
                 .delivery-date
                     width: 5rem
-                    background-color: black
+                    background-color: $dark-grey
                     box-shadow: 1px 2px 5px $dark-grey
-                    color: white
+                    color: $grey
                     cursor: pointer
                     padding: .65rem
                     margin: 1px
@@ -33,6 +33,7 @@
                     
                     &.selected
                         background-color: $sun-red
+                        color: white
                         &.edited
                             border: 1px solid $bright-green
                     
@@ -40,7 +41,7 @@
                         background-color: $dark-grey
                         color: black
                         cursor: not-allowed
-                        opacity: .5
+                        opacity: .4
                         
                     &.edited
                         border: 1px solid $light-sun-red
