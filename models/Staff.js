@@ -13,6 +13,10 @@ module.exports = {
             name: 'image',
             label: 'Image',
             range: 'ImageUrl'
+        }, {
+            name: 'order',
+            label: 'Order',
+            range: 'Integer'
         }
     ]
 }

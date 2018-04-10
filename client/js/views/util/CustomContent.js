@@ -2,8 +2,10 @@ module.exports = {
 
     loadTableData( table ) {
         this.models[ table.name ] = Object.create( require('../../models/__proto__'), { resource: { value: table.name } } )
+
+        const query = table.sort ? { sort: table.sort } : { }
         
-        this.models[ table.name ].get().then( () => {
+        this.models[ table.name ].get( { query } ).then( () => {
             if( table.image ) {
                 let promise = Promise.resolve()
                 this.models[ table.name ].data.forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
@@ -76,8 +78,8 @@ module.exports = {
 
         this.Xhr( { method: 'get', resource: 'Pages', qs: JSON.stringify( { name: this.documentName } ) } )
         .then( data => {
-            this.processObject( null, data )
-            this.els.container.querySelectorAll('.link').forEach( el => el.addEventListener( 'click', () => this.onLinkClick( el ) ) )
+            this.processObject( null, data );
+            [ ...this.els.container.querySelectorAll('.link') ].forEach( el => el.addEventListener( 'click', () => this.onLinkClick( el ) ) )
         } )
         .catch( this.Error )
 
