@@ -14,19 +14,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getDateQueries() {
-        const from = this.dateType === 'season'
-            ? this.Moment( this.Shares.data.find( datum => datum.name === this.els.season.value ).startdate ).format('YYYY-MM-DD')
-            : this.dateType === 'year'
-                ? `${this.els[ this.dateType ].value}-01-01`
-                : this.els.from.value
+        if( this.dateType === 'season' ) {
+            const share = this.Shares.data.find( datum => datum.name === this.els.season.value )
+            return { shareId: share.id, shareName: share.name }
+        } else if( this.dateType === 'year' ) {
+            return { year: this.els.year.value }
+        }
 
-        const to = this.dateType === 'season'
-            ? this.Moment( this.Shares.data.find( datum => datum.name === this.els.season.value ).enddate ).format('YYYY-MM-DD')
-            : this.dateType === 'year'
-                ? `${this.els[ this.dateType ].value}-12-31`
-                : this.els.to.value
-
-        return { from, to }
+        return { from: this.els.from.value, to: this.els.to.value }
     },
 
     getReportOptions() {

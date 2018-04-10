@@ -128,7 +128,7 @@ module.exports = {
 
         replacement = /email/i.test( target )
             ? `<a href="mailto:${value}" class="link">${key}</a>`
-            : /http/.test( value )
+            : /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi.test( value )
                 ? `<a target="_blank" href="${value}" class="link">${key}</a>`
                 : `<span data-js="link" data-name="${value}" class="link">${key}</span>`
 
