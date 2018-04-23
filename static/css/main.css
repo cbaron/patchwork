@@ -2312,9 +2312,12 @@ html.non-touch .AccountHome button:hover {
 .Seasons .share-label.selected {
   background-color: #ffdc00;
 }
-.Seasons >div:nth-last-child(2) {
+.Seasons >.totals {
+  margin-bottom: 1.5rem;
+}
+.Seasons >.totals >div:first-child {
   color: #a00;
-  margin-bottom: 1rem;
+  margin-bottom: 0.15rem;
   font-size: 1.2rem;
 }
 .Seasons >div:last-child {
@@ -3043,7 +3046,7 @@ html.non-touch .AccountHome button:hover {
   text-align: center;
   line-height: 1.2;
 }
-html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):hover {
+html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):not(.not-admin):hover {
   color: #e7e7e7;
 }
 .WeekOptions .content .data ol .delivery-date.selected {
@@ -3058,6 +3061,9 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   color: #000;
   cursor: not-allowed;
   opacity: 0.4;
+}
+.WeekOptions .content .data ol .delivery-date.not-admin {
+  cursor: default;
 }
 .WeekOptions .content .data ol .delivery-date.edited {
   border: 1px solid #ff383f;

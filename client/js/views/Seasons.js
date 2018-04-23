@@ -65,8 +65,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.balanceAmount.textContent = this.Currency.format( amount )
     },
 
-    updateWeeklyPrice( amount, label ) {
-        this.els.weeklyPrice.textContent = `${label} - ${this.Currency.format(amount)}/week`
+    updateWeeklyPriceAndTotal( amount, label, weeks ) {
+        this.els.seasonLabel.textContent = label
+        this.els.weeklyPrice.textContent = `${this.Currency.format(amount)}/week`
+        this.els.weekNumber.textContent = `Number of Weeks: ${weeks}`
+        this.els.orderTotal.textContent = `Order Total: ${this.Currency.format( amount * weeks )}`
+        this.els.totals.classList.remove('fd-hidden')
     }
 
 } )

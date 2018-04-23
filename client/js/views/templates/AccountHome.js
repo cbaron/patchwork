@@ -11,7 +11,7 @@ module.exports = p =>
         </div>
         <div data-js="ordersBtn">
             <h4>Your Orders</h4>
-            <div>View past orders and make changes to current order options.</div>
+            <div>View your past and current orders.</div>
         </div>
         <div data-js="paymentBtn">
             <h4>Payment</h4>

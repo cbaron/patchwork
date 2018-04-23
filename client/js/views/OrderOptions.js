@@ -265,16 +265,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         fieldEdit: require('./templates/FieldEdit'),
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
-        selectOption: option => `<option value="${option.name}">${option.label} &mdash; ${option.price}/week</option>`
+        selectOption: option => {
+            const price = ``//option.price ? ` &mdash; ${option.price}/week` : ``
+            return `<option value="${option.name}">${option.label}${price}</option>`
+        }
     },
 
-    update( { customer, delivery, share } ) {
+    update( { customer, delivery, share, isAdmin } ) {
         this.clear()
         this.editedFields = { }
 
         this.model = arguments[0]
 
-        this.editable = ( this.Moment() < this.Moment( share.enddate ) )
+        this.editable = isAdmin && ( this.Moment() < this.Moment( share.enddate ) )
         this.optionTemplate = this.editable ? 'editableOption' : 'archivedOption'
 
         this.els.seasonLabel.textContent = share.label

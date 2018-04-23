@@ -82,12 +82,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 //TODO:If no delivery, Toast, or some UI
                 Object.assign( data, { delivery: this.Delivery } )
 
-                this.views.orderOptions.update( data ).then( () => {
-                    this.views.seasons.updateWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label )
+                this.views.orderOptions.update( { ...data, isAdmin: true } ).then( () => {
+                    this.views.seasons.updateWeeklyPriceAndTotal( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label, this.views.weekOptions.getTotalDates() )
                     this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.views.weekOptions.getTotalDates() )
                 } ).catch(this.Error)
 
-                this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
+                this.views.weekOptions.update( { ...data, isAdmin: true } ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 this.views.transactions.update( data ).then( () => this.views.sharePatch.balance = this.views.transactions.model.getBalance() ).catch( this.Error )
             } )
         } )

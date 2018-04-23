@@ -104,6 +104,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     onDatesClick( e ) {
+        if( !this.isAdmin ) return
         const el = e.target.closest('li'),
               date = el.getAttribute('data-date')
         
@@ -150,7 +151,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     renderDates() {
-        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( datum ), insertion: { el: this.els.dates } } ) )
+        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( { ...datum, isAdmin: this.isAdmin } ), insertion: { el: this.els.dates } } ) )
         return this
     },
 
@@ -192,8 +193,10 @@ module.exports = Object.assign( {}, Super, {
         summaryColumn: date => `<li>${date.value}</li>`
     },
 
-    update( { customer, delivery, share } ) {
+    update( { customer, delivery, share, isAdmin } ) {
         if( this.updating ) return
+
+        this.isAdmin = isAdmin
         this.els.editSummary.classList.add('fd-hidden')
 
         this.updating = true
