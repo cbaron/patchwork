@@ -18,7 +18,7 @@ module.exports = p =>
             <div>Make a credit card payment on any remaining balances.</div>
         </div>
     </div>
-    <div class="fd-hidden" data-js="accountInfo">
+    <div class="fd-hidden account-info" data-js="accountInfo">
         <div data-view="form" data-name="personalInfo"></div>
     </div>
     <div class="fd-hidden" data-js="orderInfo">

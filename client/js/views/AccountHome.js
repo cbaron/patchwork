@@ -249,7 +249,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     this.views.seasons.updateBalanceNotice( balance )
                     this.views.sharePatch.balance = balance
                     Object.assign( data, { delivery: this.Delivery } )
-                    this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
+                    
+                    this.views.orderOptions.update( data ).then( () => {
+                        this.views.seasons.updateWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label )
+                        this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.views.weekOptions.getTotalDates() )
+                    } ).catch(this.Error)
+
                     this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 } )
             } )

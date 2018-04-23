@@ -33,6 +33,14 @@ return `` +
                         <ul data-js="shareOptionDescription"></ul>
                     </div>
                     <div>
+                        <span>Original Weekly Price: </span>
+                        <span data-js="originalWeeklyPrice"></span>
+                    </div>
+                    <div>
+                        <span>New Weekly Price: </span>
+                        <span data-js="newWeeklyPrice"></span>
+                    </div>
+                    <div>
                         <span>Weekly price adjustment: </span>
                         <span data-js="weeklyAdjustment"></span>
                     </div>
@@ -49,7 +57,20 @@ return `` +
                     </div>
                 </li>
             </ul>
-            <div data-js="adjustment" class="total"></div>
+            <div class="total">
+                <div>
+                    <span>Original Grand Total: </span>
+                    <span data-js="originalGrandTotal"></span>
+                </div>
+                <div>
+                    <span>New Grand Total: </span>
+                    <span data-js="newGrandTotal"></span>
+                </div>
+                <div>
+                    <span data-js="adjustmentType"></span>
+                    <span data-js="adjustment"></span>
+                </div>
+            </div>
             <div class="email ${!p.opts.isAdmin ? 'fd-hidden' : ''}">
                 <label><input data-js="sendEmail" type="checkbox">Send Email</label>
             </div>

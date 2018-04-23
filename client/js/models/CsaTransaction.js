@@ -7,7 +7,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         'Season Signup'
     ],
 
-    attributes: [ 'action', 'value', 'checkNumber', 'created', 'description' ],
+    attributes: [ 'action', 'value', 'checkNumber', 'initiator', 'created', 'description' ],
 
     getBalance() {
         return this.data.reduce( ( memo, datum ) => {
