@@ -31,7 +31,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 { }
             ) 
         ) )
-        .then( () => this.Toast.showMessage( 'success', 'Transaction added!' ) )
+        .then( response => this.emit( 'transactionAdded', response ) )
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error adding transaction' ) } )
     },
 
@@ -70,9 +70,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els[ attr ].value =
                 attr === 'action'
                     ? this.model.actions[0]
-                    : attr === 'created'
-                        ? now
-                        : '' )
+                    : attr === 'initiator'
+                        ? 'admin'
+                        : attr === 'created'
+                            ? now
+                            : '' )
 
         this.created.setMoment( now )
     },

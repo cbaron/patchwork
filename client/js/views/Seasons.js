@@ -63,6 +63,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     updateBalanceNotice( amount ) {
         this.els.balanceNotice.classList.toggle( 'fd-hidden', amount <= 0 )
         this.els.balanceAmount.textContent = this.Currency.format( amount )
+    },
+
+    updateWeeklyPrice( amount, label ) {
+        this.els.weeklyPrice.textContent = `${label} - ${this.Currency.format(amount)}/week`
     }
 
 } )

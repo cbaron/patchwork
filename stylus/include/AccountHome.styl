@@ -31,7 +31,7 @@
                 padding-bottom: .15rem
                 border-bottom: 1px solid
     
-    >div:nth-child(3)
+    .account-info
         padding: 1rem
         background-color: $light-manila
         border-radius: 1rem
@@ -76,3 +76,11 @@
             .Form
                 button
                     width: 6rem
+                    
+    @media only screen and (max-width: 400px)
+        .account-info .Form .form-group
+            display: block
+            label
+                display: block
+                text-align: left
+                margin-bottom: .15rem

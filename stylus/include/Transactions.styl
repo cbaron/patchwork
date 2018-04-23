@@ -4,19 +4,17 @@
 
     .heading
         display: flex
+        margin-top: 1rem
 
-        >h3, >span
+        >span
             border: none
-            flex: 4
             font-size: 1rem
             margin: 0rem
             padding: .25rem
             line-height: 1rem
+            width: 8.25rem
                 
             &:last-child
-                flex: 6
-            
-            &:first-child
                 flex: 1
 
     ol
@@ -30,7 +28,7 @@
                 margin: .25rem
 
             > span.cell, input, select
-                flex: 4
+                width: 8.25rem
 
                 &.cell
                     background-color: transparent
@@ -52,12 +50,6 @@
                     content: ')'
 
                 &:last-child
-                    text-align: left
-                    flex: 6
-                
-                &:first-child
-                    padding: 0px
-                    position: relative
                     text-align: left
                     flex: 1
 
@@ -115,15 +107,22 @@
     .balance
         display: flex
         align-items: center
-        margin-top: 1rem
+        margin-top: 1.5rem
 
         h3, span
-            flex: 2
             font-size: 1rem
-            margin: 0rem
+            margin: 0
+            width: 8.25rem
+            text-align: center
             padding: .25rem
             line-height: 1rem
-            text-align: center
                 
             &:last-child
-                flex: 4
+                flex: 1
+                
+                .ButtonFlow button
+                    margin: 0 1rem
+                    &:not(.reset-btn)
+                        background-color: $sun-red
+                        color: white
+            

@@ -24,7 +24,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( this.weeklyPriceAdjustment ) this.total += this.optionsAdjustment
         
-        this.els.adjustment.textContent = `${this.total < 0 ? 'Price Reduction' : 'New Charges' }: ${this.Currency.format( Math.abs( this.total ) )}`
+        this.newGrandTotal = this.originalGrandTotal + this.total
+
+        this.els.originalGrandTotal.textContent = this.Currency.format( this.originalGrandTotal )
+        this.els.newGrandTotal.textContent = this.Currency.format( this.newGrandTotal )
+        this.els.adjustmentType.textContent = this.total < 0 ? 'Price Reduction:' : 'New Charges:'
+        this.els.adjustment.textContent = this.Currency.format( Math.abs( this.total ) )
 
         return this
     },
@@ -47,7 +52,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return [ `${lines[0][0]}${this.getWhitespace( lineWidth - lines[0][0].length - lines[0][1].length )}${lines[0][1]}`,
                  `${lines[1][0]}${this.getWhitespace( lineWidth - lines[1][0].length - lines[1][1].length )}${lines[1][1]}`,
                 `Options Update: ${this.optionsDescription}`,
+                `Original Weekly Price: ${this.Currency.format(this.originalWeeklyPrice)}`,
                 `Weekly price adjustment: ${this.Currency.format(this.weeklyPriceAdjustment)}`,
+                `New Weekly Price: ${this.Currency.format(this.originalWeeklyPrice + this.weeklyPriceAdjustment)}`,
                 `Weeks affected: ${this.weeksAffected}`
             ].join('\n')
     },
@@ -89,6 +96,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             insertion: { el: this.els.shareOptionDescription },
             template: description.split('\n\t').map( option => `<li>${option}</li>` ).join('')
         } )
+
+        this.els.originalWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice )
+        this.els.newWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice + priceAdjustment )
         
         this.updateOptionsAdjustment()
 
@@ -142,8 +152,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.hide()
     },
 
-    setOriginalWeeklyPrice( price ) {
+    setOriginalWeeklyPrice( price, weeks ) {
         this.originalWeeklyPrice = price
+        this.originalGrandTotal = price * weeks
     },
 
     setWeeksAffected( { selectable, skipped } ) {

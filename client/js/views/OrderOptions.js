@@ -265,7 +265,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         fieldEdit: require('./templates/FieldEdit'),
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
-        selectOption: option => `<option value="${option.name}">${option.label}</option>`
+        selectOption: option => `<option value="${option.name}">${option.label} &mdash; ${option.price}/week</option>`
     },
 
     update( { customer, delivery, share } ) {
