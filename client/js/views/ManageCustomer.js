@@ -64,6 +64,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.weekOptions.hide()
             this.views.transactions.hide()
             this.views.sharePatch.reset()
+            this.views.seasons.els.totals.classList.add('fd-hidden')
         } )
 
         this.views.seasons.on( 'selected', data => {
@@ -83,6 +84,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 Object.assign( data, { delivery: this.Delivery } )
 
                 this.views.orderOptions.update( { ...data, isAdmin: true } ).then( () => {
+                    this.views.seasons.els.totals.classList.remove('fd-hidden')
                     this.views.seasons.updateWeeklyPriceAndTotal( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label, this.views.weekOptions.getTotalDates() )
                     this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.views.weekOptions.getTotalDates() )
                 } ).catch(this.Error)
