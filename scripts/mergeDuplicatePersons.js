@@ -34,7 +34,7 @@ Postgres.initialize()
 
             return Postgres.query( "SELECT * FROM person WHERE email ~* $1 ORDER BY created DESC", [ person.email ], { rowsOnly: true } )
             .then( matches => {
-                if( !matches.length || matches.length < 2 || processedEmails.includes( matches[0].email ) ) return Promise.resolve()
+                if( !matches.length || matches.length < 2 || processedEmails.includes( matches[0].email ) || matches.find( match => match.email === 'george.mertz@gmail.com;orthoadvantage@ameritech.net' ) ) return Promise.resolve()
 
                 matches.forEach( match => processedEmails.push( match.email ) )
 
