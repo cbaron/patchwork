@@ -27,7 +27,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         if( !email ) return this.Q()
 
         return this.Q( this.$.ajax( {
-            data: JSON.stringify( { email: this.$.trim( email.toLowerCase() ) } ),
+            data: JSON.stringify( { email: this.$.trim( email ) } ),
             headers: { 'Content-Type': 'application/json' },
             method: "POST",
             url: "/check-email"
@@ -303,9 +303,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     valid = false
                     this.showError( this.templateData[ field.name ], field.error )
                 } else {
-                    const val = field.name === 'email' ? this.templateData[ field.name ].val().toLowerCase() : this.templateData[ field.name ].val()
-                    console.log( val )
-                    this.user.set( field.name, val )
+                    this.user.set( field.name, this.templateData[ field.name ].val() )
                 }
             } )
         } ) )
