@@ -12,12 +12,12 @@ function findMemberReferences() {
 }
 
 function updateAndDelete( extraPersonId, newestMemberId, extraMemberId ) {
-    duplicates++
     return Promise.all( findMemberReferences().map( tableName =>
         Postgres.query( `UPDATE ${tableName} SET memberid = $1 WHERE memberid = $2`, [ newestMemberId, extraMemberId ] )
     ) )
     .then( () => Postgres.query( `DELETE FROM member WHERE id = $1`, [ extraMemberId ] ) )
     .then( () => Postgres.query( `DELETE FROM person WHERE id = $1`, [ extraPersonId ] ) )
+    .then( () => Promise.resolve( duplicates++ ) )
 }
 
 let duplicates = 0
@@ -49,7 +49,6 @@ Postgres.initialize()
                             return updateAndDelete( extraPersonRow.id, newestMemberRow[0].id, extraMemberRow[0].id )
                         } )
                     ) )
-                    .then( () => Promise.resolve( console.log( `Number of duplicate accounts deleted: ${duplicates}` ) ) )
                     .catch( e => { console.log( e.stack || e ); process.exit(1) } )
 
                 } )
@@ -63,5 +62,6 @@ Postgres.initialize()
 
     } )
 )
+.then( () => Promise.resolve( console.log( `Number of duplicate accounts deleted: ${duplicates}` ) ) )
 .catch( e => { console.log( e.stack || e ); process.exit(1) } )
 .then( () => process.exit(0) )
