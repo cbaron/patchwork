@@ -134,7 +134,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     executeUserQueries() {
-        return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.member.email ] } )
+        return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.member.email.toLowerCase() ] } )
         .then( result => this[ `${ result.rows.length === 0 ? 'new' : 'update' }PersonQueries` ]( result.rows.length ? result.rows[0].id : undefined ) )
     },
 
