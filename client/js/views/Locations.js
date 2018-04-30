@@ -67,7 +67,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
     fetchAndRender() {
         let chain = Promise.resolve()
 
-        Object.keys( this.models ).forEach( name => {
+        return Promise.all( Object.keys( this.models ).map( name => {
             chain = chain.then( () => 
                 this.models[ name ].get()
                 .then( () =>
@@ -88,7 +88,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
                 } )
                 .catch( e => Promise.resolve( console.log( `Failed to retrieve ${name} data.` ) ) )
             )
-        } )
+        } ) )
     },
 
     getIcon( category ) {
@@ -103,10 +103,6 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
             fillOpacity: 1,
             scale: 4
         }
-    },
-
-    hashToElement: {
-        'groups': 'pickupLocations',
     },
 
     initMap() {
@@ -124,8 +120,6 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
         this.createDeliveryRange()
 
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push( this.els.legend )
-
-        this.fetchAndRender()
     },
 
     insertListLocations( data, el ) {
@@ -151,10 +145,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     onNavigation() {
         return this.show()
-        .then( () => window.location.hash
-            ? this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
-            : window.scrollTo(0,0)
-        )
+        .then( () => window.scrollTo(0,0) )
         .catch( this.Error )
     },
 
@@ -163,9 +154,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
     postRender() {
         if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
 
-        if( window.location.hash ) {
-            this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
-        }
+        this.fetchAndRender()
 
         return CustomContent.postRender.call(this)
     },
