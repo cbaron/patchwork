@@ -105,6 +105,10 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
         }
     },
 
+    hashToElement: {
+        'groups': 'pickupLocations',
+    },
+
     initMap() {
         const mapOpts = {
             center: { lat: 39.758948, lng: -84.191607 },
@@ -145,10 +149,23 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
 
     },
 
+    onNavigation() {
+        return this.show()
+        .then( () => window.location.hash
+            ? this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
+            : window.scrollTo(0,0)
+        )
+        .catch( this.Error )
+    },
+
     onSignupBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
     postRender() {
         if( window.google ) { this.initMap() } else { window.initGMap = this.initMap }
+
+        if( window.location.hash ) {
+            this.els[ this.hashToElement[ window.location.hash.slice(1) ] ].scrollIntoView( { behavior: 'smooth' } )
+        }
 
         return CustomContent.postRender.call(this)
     },

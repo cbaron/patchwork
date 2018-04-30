@@ -63,6 +63,20 @@ module.exports = {
             range: 'List',
             itemRange: 'ImageUrl'
         }, {
+            name: 'csaDelivery',
+            label: 'CSA Delivery',
+            range: [
+                {
+                    name: 'heading',
+                    label: 'Heading',
+                    range: 'String'
+                }, {
+                    name: 'description',
+                    label: 'Description',
+                    range: 'Text'
+                }
+            ]
+        }, {
             name: 'csaCustomization',
             label: 'CSA Customization',
             range: [

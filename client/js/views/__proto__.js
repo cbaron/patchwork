@@ -179,7 +179,7 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
     },
 
     onNavigation( path ) {
-        return this.show()
+        return this.show().catch( this.Error )
     },
 
     showNoAccess() {
