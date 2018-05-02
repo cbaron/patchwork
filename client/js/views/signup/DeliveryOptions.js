@@ -150,10 +150,16 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
 
         this.on( 'itemAdded', model => {
             const price = parseFloat( model.get('price').replace(/\$|,/g, "") ),
-                selectedDelivery = this.model.get('selectedDelivery')
-            
-            if( model.get('name') === 'group' ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "Varies" )
-            else if( price < 0 ) this.itemViews[ model.id ].templateData.deliveryPrice.text( this.util.format('Save %s per week', model.get('price').replace('-','') ) )
+                selectedDelivery = this.model.get('selectedDelivery'),               
+                priceLabel = model.get('name') === 'group'
+                    ? 'Varies by location'
+                    : price == 0
+                        ? 'No charge'
+                        : price < 0
+                            ? `Save ${model.get('price').replace('-','')} per week`
+                            : `${model.get('price')} per week`
+
+            this.itemViews[ model.id ].templateData.deliveryPrice.text( priceLabel )
 
             if( selectedDelivery && selectedDelivery.deliveryoptionid == model.id ) this.selectItem( model )
         } )

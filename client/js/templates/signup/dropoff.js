@@ -1,5 +1,5 @@
 module.exports = p => {
-    const price = p.price === '$0.00' ? `No charge` : `${p.price}/week`
+    const price = p.price === '$0.00' ? `No charge` : `${p.price} per week`
 
 return `` +
 `<div data-js="container" class="dropoff">
