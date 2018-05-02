@@ -149,10 +149,10 @@ Object.assign( DeliveryOptions.prototype, List.prototype, {
         List.prototype.postRender.call( this )
 
         this.on( 'itemAdded', model => {
-            var price = parseFloat( model.get('price').replace(/\$|,/g, "") ),
+            const price = parseFloat( model.get('price').replace(/\$|,/g, "") ),
                 selectedDelivery = this.model.get('selectedDelivery')
             
-            if( price == 0 ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "No charge" )
+            if( model.get('name') === 'group' ) this.itemViews[ model.id ].templateData.deliveryPrice.text( "Varies" )
             else if( price < 0 ) this.itemViews[ model.id ].templateData.deliveryPrice.text( this.util.format('Save %s per week', model.get('price').replace('-','') ) )
 
             if( selectedDelivery && selectedDelivery.deliveryoptionid == model.id ) this.selectItem( model )

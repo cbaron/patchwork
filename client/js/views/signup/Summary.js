@@ -125,27 +125,28 @@ Object.assign( Summary.prototype, View.prototype, {
             shares: this.signupData.shares.map( share => {
                 var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
                     groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
-                        ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
-                        : undefined,
-                times = ( groupDropoff )
-                    ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
-                    : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
-                shareOptionWeeklyTotal = share.get('selectedOptions')
-                    .map( selectedOption =>
-                        parseFloat( share.get('shareoptions')
-                             .get( selectedOption.shareoptionid )
-                             .get( 'options' )
-                             .get( selectedOption.shareoptionoptionid )
-                             .get('price').replace(/\$|,/g, "") ) )
-                    .reduce( ( a, b ) => a + b ),
-                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
-                seasonalAddOnTotal = share.get( 'seasonalAddOns' ).map( addon =>
-                   parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b, 0 ),
-                address = ( selectedDelivery.get('name') === 'home' )
-                    ? this.user.get('address')
-                    : ( groupDropoff )
-                        ? groupDropoff.get('address')
-                        : this.ContactInfo.data.farmpickup
+                            ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
+                            : undefined,
+                    times = ( groupDropoff )
+                        ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
+                        : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
+                    shareOptionWeeklyTotal = share.get('selectedOptions')
+                        .map( selectedOption =>
+                            parseFloat( share.get('shareoptions')
+                                 .get( selectedOption.shareoptionid )
+                                 .get( 'options' )
+                                 .get( selectedOption.shareoptionoptionid )
+                                 .get('price').replace(/\$|,/g, "") ) )
+                        .reduce( ( a, b ) => a + b ),
+                    deliveryCost = groupDropoff ? groupDropoff.get('price') : selectedDelivery.get('price'),
+                    weeklyTotal =  shareOptionWeeklyTotal + parseFloat( deliveryCost.replace(/\$|,/g,"") ),
+                    seasonalAddOnTotal = share.get( 'seasonalAddOns' ).map( addon =>
+                       parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b, 0 ),
+                    address = ( selectedDelivery.get('name') === 'home' )
+                        ? this.user.get('address')
+                        : ( groupDropoff )
+                            ? groupDropoff.get('address')
+                            : this.ContactInfo.data.farmpickup
 
                 share.set( {
                     selectedDelivery: Object.assign( share.get('selectedDelivery'), {
@@ -189,7 +190,7 @@ Object.assign( Summary.prototype, View.prototype, {
                     } ),
                     selectedDelivery: {
                         deliveryType: selectedDelivery.get('label'),
-                        weeklyCost: selectedDelivery.get('price'),
+                        weeklyCost: deliveryCost,
                         groupdropoff: ( groupDropoff ) ? groupDropoff.get('label') : undefined,
                         address: ( groupDropoff )
                             ? groupDropoff.get('street') + ', ' + groupDropoff.get('cityStateZip')

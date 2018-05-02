@@ -11,18 +11,24 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     calculateWeeklyPrice() {
         let optionPrice = this.MemberSelection.data.reduce( ( sum, selection ) => sum + Model.moneyToReal( selection.price ), 0 )
-        return optionPrice + Model.moneyToReal( this.model.delivery.data[0].deliveryoption.price )
+        return optionPrice + Model.moneyToReal( this.model.delivery.data[0].groupdropoff.price || this.model.delivery.data[0].deliveryoption.price )
     },
 
     calculatePriceAdjustment() {
         return Object.keys( this.editedFields ).reduce( ( acc, key ) => {
-            if( ! this.editedFields[ key ].newValue || key === 'groupOption' ) return acc
+            if( ! this.editedFields[ key ].newValue ) return acc
 
-            let oldPrice, newPrice, diff
+            let oldPrice, newPrice, oldGroup, diff
 
             if( key === 'deliveryOption' ) {
-                oldPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
+                if( this.editedFields.deliveryOption.newValue === 'group' ) return acc
+                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
                 newPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).price
+            } else if( key === 'groupOption' ) {
+                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.oldValue ).price
+                newPrice = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].newValue ).price
             } else {
                 const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
 
@@ -266,7 +272,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
         selectOption: option => {
-            const price = ``//option.price ? ` &mdash; ${option.price}/week` : ``
+            const price = option.name === 'none'
+                ? ''
+                : option.name === 'group'
+                    ? ' &mdash; Varies'
+                    : ` &mdash; ${option.price}/week`
+
             return `<option value="${option.name}">${option.label}${price}</option>`
         }
     },
