@@ -66,7 +66,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         const rowsEl = this.els.rows
 
         const template = rows.map( row => {
-            const columns = this.columns.map( column => `<li>${row[column]}</li>` ).join('')
+            const columns = this.columns.map( column => `<li>${row[column] || ''}</li>` ).join('')
             return `<ol>${columns}</ol>`
         } ).join('')
 

@@ -45,6 +45,7 @@ Object.assign( Report.prototype, Base.prototype, {
         return this.Postgres.query( model.query( whereString ), values, { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
+//COPY (SELECT p.name, p.email, m.phonenumber, m.address, m.zipcode from member m join person p on m.personid = p.id JOIN membershare ms on ms.memberid = m.id where ms.id >1349 order by ms.id ASC) to STDOUT with CSV HEADER;
 
     model: {
         1: {
@@ -78,7 +79,7 @@ Object.assign( Report.prototype, Base.prototype, {
                 `JOIN share s on ms.shareid = s.id ` +
                 `JOIN membersharedelivery msd on ms.id = msd.membershareid ` +
                 `JOIN deliveryoption dop on msd.deliveryoptionid = dop.id ` +
-                `JOIN groupdropoff gd on msd.groupdropoffid = gd.id ` +
+                `LEFT JOIN groupdropoff gd on msd.groupdropoffid = gd.id ` +
                 `JOIN membershareoption mso on mso.membershareid = ms.id ` +
                 `JOIN shareoption so on mso.shareoptionid = so.id ` +
                 `JOIN shareoptionoption soo on mso.shareoptionoptionid = soo.id ` +
