@@ -1,5 +1,20 @@
 # Patchwork Gardens
 
+##Using the Collection Manager
+
+###Create a New Group Drop-off
+
+1) Navigate to `admin-plus/collection-manager` and choose the `Group Drop-Off` collection. Click on the Add button. Enter the drop-off details (now including price) and click Submit.
+
+2) Next you need to associate the group with the seasons for which it will be available. Click on the `Share Group Drop-offs` collection. You will need to create one new entry for each season. For the `groupdropoff` and `share` fields, start typing the name of the group or the share/season until a dropdown appears, then select it. Enter the rest of the fields normally.
+
+3) Go to the `Delivery Routes` collection and create a route for the new group with day of week and start and end times.
+
+4) Go to `Zip Code => Route` to associate a zip code with the route you just created. For `deliveryroute` start typing the label of the delivery route until a dropdown appears, then select.
+
+That should do it! The group will now appear as an option in the sign up as well as on the Locations page.
+
+
 ## Quick Start with Docker
 _(You need to have Docker and docker-compose installed)_
 
