@@ -712,6 +712,10 @@ button.submitting {
 .Csa .contact {
   margin: 1rem 0;
 }
+.Csa .text-and-image img {
+  height: 11rem;
+  margin-top: 0.5rem;
+}
 @media only screen and (max-width: 767px) {
   .Csa .delivery .delivery-matrix .cell {
     min-width: 8rem;
@@ -732,6 +736,16 @@ button.submitting {
   }
   .Csa .image-row >img:not(:first-child) {
     display: none;
+  }
+  .Csa .text-and-image {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .Csa .text-and-image p {
+    width: 100%;
+  }
+  .Csa .text-and-image image {
+    margin-left: 0;
   }
 }
 @media only screen and (max-width: 425px) {
@@ -3259,6 +3273,12 @@ div.header {
   font-size: 2rem;
   line-height: 3em;
   text-align: center;
+}
+.text-and-image {
+  display: flex;
+}
+.text-and-image img {
+  margin-left: 1rem;
 }
 .fd-hidden {
   display: none !important;
