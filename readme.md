@@ -1,8 +1,8 @@
 # Patchwork Gardens
 
-##Using the Collection Manager
+## Using the Collection Manager
 
-###Create a New Group Drop-off
+### Create a New Group Drop-off
 
 1) Navigate to `admin-plus/collection-manager` and choose the `Group Drop-Off` collection. Click on the Add button. Enter the drop-off details (now including price) and click Submit.
 
@@ -10,7 +10,7 @@
 
 3) Go to the `Delivery Routes` collection and create a route for the new group with day of week and start and end times.
 
-4) Go to `Zip Code => Route` to associate a zip code with the route you just created. For `deliveryroute` start typing the label of the delivery route until a dropdown appears, then select.
+4) Go to `Zip Code => Route` to associate a zip code with the route you just created. For `deliveryroute` start typing the label of the delivery route until a dropdown appears, then select it.
 
 That should do it! The group will now appear as an option in the sign up as well as on the Locations page.
 
