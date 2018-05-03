@@ -856,6 +856,7 @@ button.submitting {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
+  max-width: 26rem;
 }
 .DateSelection .share-dates >div:first-child >div:last-child .pickup-date {
   width: 5rem;
