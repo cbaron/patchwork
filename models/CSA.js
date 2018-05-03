@@ -105,6 +105,24 @@ module.exports = {
                 }
             ]
         }, {
+            name: 'recipes',
+            label: 'Recipes',
+            range: [
+                {
+                    name: 'heading',
+                    label: 'Heading',
+                    range: 'String'
+                }, {
+                    name: 'description',
+                    label: 'Description',
+                    range: 'Text'
+                }, {
+                    name: 'recipesImage',
+                    label: 'Image',
+                    range: 'ImageUrl'
+                }
+            ]
+        }, {
             name: 'payment',
             label: 'Payment',
             range: [

@@ -35,6 +35,13 @@ module.exports = p =>
         <p></p>
         <div data-js="addOnItems" class="add-ons"></div>
     </section>
+    <section data-js="recipes">
+        <h2></h2>
+        <div class="text-and-image">
+            <p></p>
+            <div data-js="recipesImage"></div>
+        </div>
+    </section>
     <section data-js="payment">
         <h2></h2>
         <p></p>

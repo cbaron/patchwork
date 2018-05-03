@@ -139,6 +139,10 @@
     .contact
         margin: 1rem 0
         
+    .text-and-image img
+        height: 11rem
+        margin-top: .5rem
+        
     @media only screen and (max-width: 767px)    
         .delivery
             .delivery-matrix
@@ -161,6 +165,14 @@
                 
                 &:not(:first-child)
                     display: none
+                    
+        .text-and-image
+            flex-wrap: wrap
+            justify-content: center
+            p
+                width: 100%
+            image
+                margin-left: 0
 
     @media only screen and (max-width: 425px)
         .csa-contents .share-examples >div
