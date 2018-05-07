@@ -145,7 +145,7 @@ Object.assign( Summary.prototype, View.prototype, {
                     address = ( selectedDelivery.get('name') === 'home' )
                         ? this.user.get('address')
                         : ( groupDropoff )
-                            ? groupDropoff.get('address')
+                            ? `${groupDropoff.get('street')}, ${groupDropoff.get('cityStateZip')}`
                             : this.ContactInfo.data.farmpickup
 
                 share.set( {
@@ -157,7 +157,7 @@ Object.assign( Summary.prototype, View.prototype, {
                                 spaceTwoTab,
                                 share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
                                 times.starttime, times.endtime, spaceTwoTab,
-                                address, spaceTwoTab, selectedDelivery.get('price') ) } ),
+                                address, spaceTwoTab, deliveryCost ) } ),
                     total: ( weeklyTotal * share.get('selectedDates').length ) + seasonalAddOnTotal
                 } )
 

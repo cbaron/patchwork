@@ -949,12 +949,14 @@ html.non-touch .DateSelection .share-dates >div:first-child >div:last-child .pic
   justify-content: center;
 }
 .Delivery .delivery-options .options .delivery-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   width: 11rem;
   background-color: #fff5df;
   color: #a00;
   border: 2px solid;
   cursor: pointer;
-  display: inline-block;
   padding: 0.5rem 0.75rem;
   margin: 0.25rem;
   text-align: center;
