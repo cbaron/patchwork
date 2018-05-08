@@ -102,7 +102,7 @@ Object.assign( Signup.prototype, Base.prototype, {
         } )
         .then( () => this.Q(
             this.Postgres.query(
-                `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description ) VALUES ( 'Season Signup', $1, ${membershareid}, $2 )`,
+                `INSERT INTO "csaTransaction" ( action, value, "memberShareId", description, initiator ) VALUES ( 'Season Signup', $1, ${membershareid}, $2, 'customer' )`,
                 [ share.total, this.getShareSignupDescription(share) ]
              )
         ) )
