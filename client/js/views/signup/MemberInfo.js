@@ -39,7 +39,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 valid = false
             }
 
-            return this.Q()
+            return this.Q( valid )
         } )
     },
 
@@ -315,8 +315,8 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                     url: "/user" } ) )
             }
         } )
-        .then( () => ( this.user.isLoggedIn() ? this.Q() : this.checkForAccount( valid ) ) )
-        .then( () => valid )
+        .then( () => ( this.user.isLoggedIn() ? this.Q( true ) : this.checkForAccount( valid ) ) )
+        .then( valid => valid )
         .fail( e => { console.log( e.stack || e ); return false } )
     },
     
