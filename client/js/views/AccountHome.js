@@ -41,6 +41,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
                     this.selectedCustomer.person.data.name = response.name
                     this.selectedCustomer.person.data.email = response.email
+                    this.selectedCustomer.person.data.secondaryEmail = response.secondaryEmail
                     this.selectedCustomer.member.data.phonenumber = response.phonenumber
                     this.selectedCustomer.member.data.address = response.address
                     this.selectedCustomer.member.data.extraaddress = response.extraaddress

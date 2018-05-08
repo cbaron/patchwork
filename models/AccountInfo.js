@@ -7,7 +7,7 @@ module.exports = {
             label: 'Secondary Email',
             range: 'Email',
             error: 'A valid email address is required',
-            validate: function( val ) { return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( val ) }
+            validate: function( val ) { return !val || /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( val ) }
         }, {
             name: 'phonenumber',
             label: 'Phone Number',

@@ -30,7 +30,7 @@ module.exports = Object.create( {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
 
-            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
+            if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'in', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
             if( operation === '~*' && !resource.user.roles.includes('admin') ) { throw new Error('Access Forbidden') }
             
             if( /join/i.test( operation ) ) {
@@ -38,6 +38,9 @@ module.exports = Object.create( {
                 if( fkCol === undefined ) throw Error( `Invalid join ${key}: ${datum}` )
                 joins.push( `${operation === 'leftJoin' ? 'LEFT' : ''} JOIN "${datum.value.table}" ON "${table}"."${key}" = "${datum.value.table}"."${datum.value.column}"` )
                 selects[ datum.value.table ] = true
+            } else if( operation === 'in' ) {
+                where.push(`"${datum.table || table}"."${key}" = ANY ($${paramCtr++})`)
+                params.push( datum.value )
             } else {
                 where.push(`"${table}"."${key}" ${operation} $${paramCtr++}`)
                 params.push( typeof datum === 'object' ? datum.value : datum )
