@@ -293,6 +293,7 @@ module.exports = new Router( {
             'Collection': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,
+            'currentGroups': true,
             'currentShare': true,
             'document': true,
             'food': true,

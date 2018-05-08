@@ -10,7 +10,7 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
     model: require('../models/Locations'),
 
     models: {
-        groupLocation: require('../models/CurrentShare'),
+        groupLocation: require('../models/CurrentGroups'),
         farmerMarket: require('../models/FarmerMarket'),
         retailOutlet: require('../models/RetailOutlet'),
         restaurant: require('../models/Restaurant'),
@@ -71,15 +71,13 @@ module.exports = Object.assign( {}, require('./__proto__'), CustomContent, {
             chain = chain.then( () => 
                 this.models[ name ].get()
                 .then( () =>
-                    name === 'groupLocation'
-                        ? this.models.groupLocation.getCurrentGroupDropoffs()
-                        : name === 'farmPickup'
-                            ? this.models.farmPickup.getHours()
-                            : Promise.resolve()
+                    name === 'farmPickup'
+                        ? this.models.farmPickup.getHours()
+                        : Promise.resolve()
                 )
-                .then( dropoffData => {
+                .then( () => {
                     const modelAttr = this.model.attributes.find( attr => attr.name === name ),
-                        data = dropoffData || this.models[ name ].data
+                        data = this.models[ name ].data
 
                     this.insertListLocations( data, this.els[ modelAttr.el ] )
                     this.createMarkers( data, name )
