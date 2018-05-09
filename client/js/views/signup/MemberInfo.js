@@ -37,7 +37,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 this.templateData.existingAccountNotice.removeClass('fd-hidden')
                 this.templateData.container.get(0).scrollIntoView( { behavior: 'smooth' } )
                 valid = false
-            }
+            } else this.templateData.existingAccountNotice.addClass('fd-hidden')
 
             return this.Q( valid )
         } )

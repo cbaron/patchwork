@@ -233,7 +233,7 @@ Object.assign( Summary.prototype, View.prototype, {
     onInputFocus( e ) {
         var $el = this.$( e.currentTarget )
         if( $el.next().hasClass('glyphicon-remove') ) this.removeError( this.$( e.currentTarget ) )
-        // if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
+        if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
     },
 
     paymentUnselected() {

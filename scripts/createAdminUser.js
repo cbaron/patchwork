@@ -15,7 +15,7 @@ const bcrypt = require('bcrypt-nodejs');
  **/
 
 if (!process.argv[2] || !process.argv[3] || !process.argv[4]) {
-	console.log('Usage: node createAdminUser.js "Real Name" myUsername myPassword');
+	console.log('Usage: node createAdminUser.js "Real Name" email myPassword');
 	return 0;
 }
 const realName = process.argv[2];
@@ -24,7 +24,7 @@ const plainPassword = process.argv[4];
 const encryptedPassword = bcrypt.hashSync( plainPassword );
 
 Postgres.initialize().then(() => {
-	return Postgres.query( `INSERT INTO person (password, name, email) values ('${encryptedPassword}', '${realName}', '${email}');`, {}, {});
+	return Postgres.query( `INSERT INTO person (password, name, email, "emailVerified") values ('${encryptedPassword}', '${realName}', '${email}', 'true');`, {}, {});
 })
 .then((result) => {
 	return Postgres.query(`INSERT INTO personrole (personid, roleid) SELECT person.id, role.id from person, role where person.email = '${email}' and role.name = 'admin';`, {}, {});
