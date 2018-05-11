@@ -1,7 +1,18 @@
-module.exports = function(Handlebars) {
-
-return Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<li data-js=\"container\" class=\"col-xs-12\"><div data-js=\"row\" class=\"single-share row\"><div data-js=\"shareBox\" class=\"vcenter col-sm-3\"></div><div data-js=\"options\" class=\"option vcenter col-sm-9\"></div></div><div data-js=\"total\" class=\"price\"></div></li>";
-},"useData":true});
-
-};
+module.exports = p =>
+`<li data-js="container">
+    <div class="single-share">
+        <div data-js="shareBox"></div>
+        <div>
+            <h4 data-js="weeklyHeader">Weekly Options</h4>
+            <div data-js="options"></div>
+        </div>
+        <div data-js="seasonalContainer">
+            <h4>Seasonal Items</h4>
+            <div data-js="seasonalOptions"></div>
+        </div>
+    </div>
+    <div>
+        <div><span>Share Total: </span><span data-js="weeklyTotal"></span></div>
+        <div><span>Seasonal Items Total: </span><span data-js="seasonalTotal"></span></div>
+    </div>
+</li>`

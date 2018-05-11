@@ -35,6 +35,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 memberShareId: this.memberShareId,
                 name: this.selectedCustomer.person.data.name,
                 orderOptions: this.views.orderOptions.getPatchData(),
+                previousBalance: this.views.sharePatch.balance,
                 shareLabel: this.selectedShare.label,
                 weekOptions: weekPatch.allRemoved,
                 weekDetail,
@@ -63,6 +64,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.weekOptions.hide()
             this.views.transactions.hide()
             this.views.sharePatch.reset()
+            this.views.seasons.els.totals.classList.add('fd-hidden')
         } )
 
         this.views.seasons.on( 'selected', data => {
@@ -80,14 +82,21 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             .then( () => {
                 //TODO:If no delivery, Toast, or some UI
                 Object.assign( data, { delivery: this.Delivery } )
-                this.views.orderOptions.update( data ).then( () => this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice ) ).catch(this.Error)
-                this.views.weekOptions.update( data ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
-                this.views.transactions.update( data )
+
+                this.views.orderOptions.update( { ...data, isAdmin: true } ).then( () => {
+                    this.views.seasons.els.totals.classList.remove('fd-hidden')
+                    this.views.seasons.updateWeeklyPriceAndTotal( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label, this.views.weekOptions.getTotalDates() )
+                    this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.views.weekOptions.getTotalDates() )
+                } ).catch(this.Error)
+
+                this.views.weekOptions.update( { ...data, isAdmin: true } ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
+                this.views.transactions.update( data ).then( () => this.views.sharePatch.balance = this.views.transactions.model.getBalance() ).catch( this.Error )
             } )
         } )
 
         this.views.orderOptions.on( 'deliveryChanged', data => {
             this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() )
+            this.views.sharePatch.onWeeksReset()
             this.views.weekOptions.updateDelivery( data )
         } )
 
@@ -108,8 +117,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     requiresLogin: true,
     
-    requiresRole: 'admin',
-
-    
+    requiresRole: 'admin'    
 
 } )

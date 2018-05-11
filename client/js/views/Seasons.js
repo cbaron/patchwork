@@ -2,10 +2,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     MemberSeason: require('../models/MemberSeason'),
 
-    clear() { this.els.list.innerHTML = '' },
+    clear() {
+        this.els.list.innerHTML = ''
+        this.els.balanceNotice.classList.add('fd-hidden')
+    },
 
     events: {
-        list: 'click'
+        list: 'click',
+        payment: 'click'
     },
 
     insertShareLabels() {
@@ -31,9 +35,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'selected', { customer: this.customer, share: this.MemberSeason.data.find( season => season.membershareid == el.getAttribute('data-id') ) } )
     },
 
+    onPaymentClick() {
+        this.emit('payBalance')
+    },
+
     select( memberShareId ) {
         this.els.list.querySelector(`div.share-label[data-id="${memberShareId}"]`).click()
     },
+
+    templateOpts() { return { isAdmin: window.location.pathname.split('/').includes('admin-plus') } },
 
     templates: {
         ShareBox: require('./templates/ShareBox')
@@ -44,10 +54,23 @@ module.exports = Object.assign( {}, require('./__proto__'), {
       
         this.clear()
          
-        this.MemberSeason.get( { query: { memberid: customer.member.data.id, shareid: { operation: 'join', value: { table: 'share', column: 'id' } } } } )
+        return this.MemberSeason.get( { query: { memberid: customer.member.data.id, shareid: { operation: 'join', value: { table: 'share', column: 'id' } } } } )
         .then( () => this.insertShareLabels() )
         .then( () => this.show() )
         .catch( this.Error )
+    },
+
+    updateBalanceNotice( amount ) {
+        this.els.balanceNotice.classList.toggle( 'fd-hidden', amount <= 0 )
+        this.els.balanceAmount.textContent = this.Currency.format( amount )
+    },
+
+    updateWeeklyPriceAndTotal( amount, label, weeks ) {
+        this.els.seasonLabel.textContent = label
+        this.els.weeklyPrice.textContent = `${this.Currency.format(amount)}/week`
+        this.els.weekNumber.textContent = `Number of Weeks: ${weeks}`
+        this.els.orderTotal.textContent = `Order Total: ${this.Currency.format( amount * weeks )}`
+        this.els.totals.classList.remove('fd-hidden')
     }
 
 } )

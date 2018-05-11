@@ -2,116 +2,97 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     Nav: require( '../models/Nav'),
 
-    bindHeaderEvents() {
-        this.onMouseEnterLink = e => this.loadHoverColor( e )
-        this.onMouseLeaveLink = e => this.loadColor( e )
-        this.onNavigate = e => this.navigate(e)
-
-        Array.from( this.els.navLinks.children ).forEach( li => {
-            li.addEventListener( 'mouseenter', this.onMouseEnterLink )
-            li.addEventListener( 'mouseleave', this.onMouseLeaveLink )
-        } )
-        
-        this.els.headerTitle.addEventListener( 'click', this.onNavigate )
-        this.els.headerTitle.addEventListener( 'mouseenter', this.onMouseEnterLink )
-        this.els.headerTitle.addEventListener( 'mouseleave', this.onMouseLeaveLink )
-    },
-
     events: {
-        'hamburger': 'click',
-        'navLinks': 'click'
+        accountBtn: 'click',
+        csaSignUpBtn: 'click',
+        justify: 'click',
+        navLinks: 'click',
+        signInBtn: 'click',
+        signOutBtn: 'click',
+        title: 'click',
+        userName: 'click'
     },
 
-    onNavigation( resource ) {
-        this.modelPromise.then( () =>
-            this.model.data.forEach( datum => {
-                if( datum.page === resource ) {
-                    this.currentlySelected = datum
-                    this.size()                                      
-                }
-            } )
-        )
-
-        return this
+    onAccountBtnClick() {
+        this.toggleAccountMenu()
+        this.emit( 'navigate', 'account-home' )
     },
 
-    insertionMethod: 'before',
+    onCsaSignUpBtnClick() { this.emit( 'navigate', 'sign-up' ) },
 
-    loadColor( e ) { e.target.style.color = this.currentlySelected.color },
+    onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
 
-    loadHoverColor( e ) {
-        if( e.target.getAttribute( 'data-id' ) !== 'home') e.target.style.color = this.currentlySelected.hovercolor
-    },
-
-    loadHeader() {
-        this.els.container.style.backgroundImage = `url( /file/header/image/${this.currentlySelected.id} )`
-    },
-
-    loadMobileHeader() {
-        this.els.container.style.backgroundImage = `url( /file/header/mobileimage/${this.currentlySelected.id})`
-    },
-
-    onHamburgerClick() {
-        this.toggleLogo()
+    onLogin() {
+        this.onUser()
+        this.displayingLogin = false
+        this.toggleAccountUI()
+        return Promise.resolve()
     },
 
     onNavLinksClick( e ) {
-        this.emit( 'navigate', `/${e.target.getAttribute('data-id')}` )
+        if( this.displayingLogin ) this.emit('removeLogin')
+        const el = e.target.closest('li')
+
+        if( !el ) return
+
+        this.emit( 'navigate', el.getAttribute('data-name') )
+        if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
+    onSignInBtnClick() {
+        this.emit('signInClicked')
+        this.displayingLogin = true
+    },
+
+    onSignOutBtnClick() {
+        document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+
+        this.user.clear()
+
+        this.user.set( this.user.defaults() )
+
+        this.toggleAccountUI()
+        this.toggleAccountMenu()
+
+        this.emit('signOutClicked')
+
+        this.Toast.showMessage( 'success', 'You are now signed out.' )
+    },
+
+    onTitleClick() {
+        if( this.displayingLogin ) this.emit('removeLogin')
+        this.emit( 'navigate', '/' )
+    },
+
+    onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
+
+    onUserNameClick() { this.toggleAccountMenu() },
+
     postRender() {
-        this.model = Object.create( this.Model, { resource: { value: 'header' } } )
-        this.modelPromise = this.model.get()
+        this.on( 'imgLoaded', () => this.els.nav.classList.remove('fd-hidden') )
+
+        this.toggleAccountUI()
+
+        if( this.user.isLoggedIn() ) this.onUser()
 
         return this
     },
 
-    navigate( e ) {
-        this.emit( 'navigate', `/${e.target.getAttribute('data-id')}` )
-    },
-
-    removeHeaderEvents() {
-        this.templateData.navLinks.children.forEach( li => {
-            li.removeEventListener( 'mouseenter', this.onMouseEnterLink )
-            li.removeEventListener( 'mouseleave', this.onMouseLeaveLink )
-        } )
-        
-        this.els.headerTitle.removeEventListener( 'click', this.onNavigate )
-        this.els.headerTitle.removeEventListener( 'mouseenter', this.onMouseEnterLink )
-        this.els.headerTitle.removeEventListener( 'mouseleave', this.onMouseLeaveLink )
-    },
-
-    size() {
-        const model = this.currentlySelected,
-            width = this.els.container.clientWidth,
-            height = this.els.container.clientHeight,
-            aspectRatio = width / height
-        
-        if( window.innerWidth > 767 && model ) {
-
-            this.loadHeader()
-            this.bindHeaderEvents()
-            Array.from( this.els.navLinks.children ).forEach( li => li.style.color = this.currentlySelected.color )
-            this.els.headerTitle.style.color = this.currentlySelected.color
-        
-            if( this.els.headerTitle.style.display === "none" ) this.els.headerTitle.style.display = 'inline-block'
-
-        } else if( window.innerWidth < 768 && model ) {
-
-            ( aspectRatio > 1.6 ) ? this.loadHeader() : this.loadMobileHeader()
-
-            this.removeHeaderEvents()
-            Array.from( this.els.navLinks.children ).forEach( li => li.style.color = '#ccc' )
-            this.els.headerTitle.style.color = this.currentlySelected.color
-            
-            if( this.els.navbarCollapse.hasClass('in') ) this.els.headerTitle.style.display = 'none'
-        }
-    },
-
     templateOpts() {
-        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', footerLabel: 'Home', name: 'home' } }
+        return { fields: this.Nav.data, home: { label: 'Patchwork Gardens', name: 'home' } }
     },
 
-    toggleLogo() { this.els.headerTitle.classList.toggle('hidden') }
+    toggleAccountUI() {
+        this.els.signInBtn.classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.els.memberMenu.classList.toggle( 'fd-hidden', !this.user || !this.user.id )
+    },
+
+    toggleAccountMenu() {
+        this.els.accountMenu.classList.toggle( 'fd-hidden', !this.els.accountMenu.classList.contains('fd-hidden') )
+    },
+
+    toggleSignUpBtn( view ) {
+        this.els.csaSignUpBtn.parentNode.classList.toggle( 'fd-hidden', view === 'home' )
+    }
 
 } )

@@ -1,0 +1,50 @@
+.GetInvolved
+    
+    section
+        padding-bottom: 2.5rem
+        
+        &:not(:first-of-type)
+          border-top: 1px solid $divider-grey
+        
+    h2
+        margin-bottom: .25rem
+    
+    h3
+        font-size: 1rem
+        margin-bottom: .15rem
+        color: $sun-red
+        
+    a
+        color: $sun-red
+        cursor: pointer
+        font-weight: bold
+        
+        &:hover
+            text-decoration: underline
+            
+    .positions
+        margin-top: 1.5rem
+        font-weight: bold
+        
+    .internships >div
+        margin: 2rem 0
+        
+        >div
+            margin: 1rem 2rem
+        
+        ul
+            list-style: none
+            
+            >li
+                position: relative
+                margin-left: 1.25rem
+            
+                &::before
+                    listCircle($sun-red)
+                    
+    @media only screen and (max-width: 767px)            
+        .internship-description >div
+            margin: 1rem
+            
+
+        

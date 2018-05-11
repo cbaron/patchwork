@@ -1,0 +1,71 @@
+.DateSelection
+
+    .share-dates
+        padding: 3rem 0
+        
+        .error
+            margin-top: 2rem
+        
+        &:not(:first-child)
+            border-top: 1px solid $grey
+            
+        >div:first-child
+            display: flex
+            align-items: center
+            
+            .share-label
+                margin-right: 2rem
+            
+            >div:last-child
+                flex: 1
+                display: flex
+                flex-wrap: wrap
+                max-width: 26rem
+
+                .pickup-date
+                    width: 5rem
+                    background-color: $dark-grey
+                    box-shadow: 1px 2px 5px $dark-grey
+                    color: $grey
+                    cursor: pointer
+                    padding: .65rem
+                    margin: 1px
+                    text-align: center
+                    line-height: 1.2
+                    
+                    &:not(.unselectable)
+                        html.non-touch &
+                            &:hover
+                                color: $light-grey
+                    
+                    &.selected
+                        background-color: $sun-red
+                        color: white
+                    
+                    &.unselectable
+                        background-color: $dark-grey
+                        color: black
+                        cursor: not-allowed
+                        opacity: .4
+                        
+                    >div:not(:first-child)
+                        font-weight: bold
+
+    
+    @media only screen and (max-width: 767px)
+        .share-dates >div:first-child >div:last-child .pickup-date
+            width: 3.5rem
+            font-size: .8rem
+            line-height: 1.05
+            
+    @media only screen and (max-width: 500px)
+        .share-dates >div:first-child
+            flex-direction: column
+            
+            .share-label
+                margin-right: 0
+                margin-bottom: 2rem
+            
+            >div:last-child
+                justify-content: center
+

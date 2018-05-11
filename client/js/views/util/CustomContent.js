@@ -1,51 +1,91 @@
-var MyView = require('../MyView'),
-    CustomContent = function() { return MyView.apply( this, arguments ) }
-
-Object.assign( CustomContent.prototype, MyView.prototype, {
-
-    loadImageTable( table, model ) {
-        return new Promise( ( resolve, reject ) => {
-            var imageEl = new Image();
-            imageEl.src = `/file/${table.name}/image/${model.id}`
-            imageEl.onload = () => {
-                model.set( 'tableName', table.name )
-                if( table.name === "carousel" && model.get('position') === 1 ) model.set( 'first', true )
-                this.templateData[ table.el ].append( this.templates[ table.template ]( model.attributes ) )
-                this.emit( `inserted${table.name}Template` )
-                resolve()
-            }
-        } )     
-    },
+module.exports = {
 
     loadTableData( table ) {
-        this.collections[ table.name ] = new ( this.Collection.extend( { comparator: table.comparator, url: `/${table.name}` } ) )()
-        this.collections[ table.name ].fetch().then( () => {
+        this.models[ table.name ] = Object.create( require('../../models/__proto__'), { resource: { value: table.name } } )
 
+        const query = table.sort ? { sort: table.sort } : { }
+        
+        this.models[ table.name ].get( { query } ).then( () => {
             if( table.image ) {
                 let promise = Promise.resolve()
-                this.collections[ table.name ].forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
+                this.models[ table.name ].data.forEach( model => promise = promise.then( () => this.loadImageTable( table, model ) ) )
                 return promise
             } else {
-                this.collections[ table.name ].forEach( model =>
+                this.models[ table.name ].data.forEach( model =>
                     this.slurpTemplate( {
-                        insertion: { $el: this.templateData[ table.el ] },
-                        template: this.templates[ table.template ]( model.attributes )
+                        insertion: { el: this.els[ table.el ] },
+                        template: this.templates[ table.template ]( model )
                     } )
                 )
-                this.emit( `inserted${table.name}Template` )
+            }
+        } )
+        .catch( this.Error )       
+    },
+
+    processObject( name, data ) {
+        Object.keys( data ).forEach( key => {
+            const val = data[ key ]
+
+            if( typeof val === 'object' ) return Array.isArray( val ) ? this.insertArrayData( name, key, val ) : this.processObject( key, val )
+
+            if( this.els[ key ] ) return /image/i.test( key )
+                ? this.slurpTemplate( {
+                    insertion: { el: this.els[ key ] },
+                    template: `<img data-src="${this.Format.ImageSrc( data[ key ] )}" />`
+                  } )
+                : this.els[ key ].innerHTML = this.Format.ParseTextLinks( data[ key ] )
+
+            if( this.nameToTagName[ key ] ) {
+                this.els[ name ].querySelector( this.nameToSelector[ key ] || this.nameToTagName[ key ] ).innerHTML = this.Format.ParseTextLinks( data[ key ] )
             }
 
         } )
-        .fail( err => new this.Error(err) )       
+    },
+
+    insertArrayData( sectionName, key, data ) {
+        const el = this.els[ key ] || this.els[ sectionName ],
+            hasImages = /image/i.test(key)
+
+        data.forEach( datum =>
+            this.slurpTemplate( {
+                insertion: { el },
+                template: hasImages
+                    ? `<img data-src="${this.Format.ImageSrc( datum )}" />`
+                    : `<${this.nameToTagName[ key ] || 'li'}>${this.Format.ParseTextLinks( datum )}</${this.nameToTagName[ key ] || 'li'}>`
+            } )
+        )
+    },
+
+    nameToSelector: {
+        heading: 'h2, h3, h4'
+    },
+
+    nameToTagName: {
+        heading: 'h2',
+        description: 'p'
+    },
+
+    onLinkClick( el ) {
+        if( !el.hasAttribute('data-name') ) return
+        this.emit( 'navigate', el.getAttribute('data-name') )
     },
 
     postRender() {
-        this.collections = { }
-        this.tables.forEach( table => this.loadTableData( table ) )
+        if( this.tables.length ) {
+            this.models = { }
+            this.tables.forEach( table => this.loadTableData( table ) )
+        }
+
+        this.Xhr( { method: 'get', resource: 'Pages', qs: JSON.stringify( { name: this.documentName } ) } )
+        .then( data => {
+            this.processObject( null, data );
+            [ ...this.els.container.querySelectorAll('.link') ].forEach( el => el.addEventListener( 'click', () => this.onLinkClick( el ) ) )
+        } )
+        .catch( this.Error )
+
+        return this
     },
 
     tables: [ ]
 
-} )
-
-module.exports = CustomContent
+}

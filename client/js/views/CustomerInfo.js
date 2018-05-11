@@ -28,12 +28,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         { table: 'member', type: 'text', name: 'phonenumber', label: 'Phone' },
         { table: 'member', type: 'text', name: 'zipcode', label: 'Zip Code' },
         { table: 'member', type: 'text', name: 'address', label: 'Address' },
-        { table: 'memberFoodOmission', type: 'select', name: 'neverReceive', label: 'Vegetable to Never Receive' },
+        { table: 'memberFoodOmission', type: 'select', name: 'neverReceive', label: 'Opt-out Vegetable' },
         { table: 'member', type: 'select', name: 'onpaymentplan', label: 'On Payment Plan' }
     ],
 
     getTemplateOptions() {
-        return { fields: this.fields }
+        const isAdmin = window.location.pathname.indexOf('admin') !== -1
+        if( !isAdmin ) this.fields.pop()
+        return { fields: this.fields, isAdmin }
     },
 
     handleBlur( e ) {
@@ -137,12 +139,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             }
         }
 
-        this.els.onpaymentplan.selectedIndex = this.model.member.data.onpaymentplan ? 0 : 1
+        if( this.els.onpaymentplan ) this.els.onpaymentplan.selectedIndex = this.model.member.data.onpaymentplan ? 0 : 1
     },
 
     postRender() {
 
-        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { value: { el: this.els.neverReceive, method: 'after' } } } )
+        this.FoodOmission = this.factory.create( 'foodOmission', { insertion: { el: this.els.neverReceive, method: 'after' } } )
 
         this.els.neverReceive.remove()
 
@@ -165,7 +167,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     reset( customer ) {
         this.els.resetBtn.classList.add('fd-hidden')
-        this.els.editSummary.classList.add('fd-hidden')
         this.update( customer )
     },
 
@@ -196,7 +197,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
 
         this.els.resetBtn.classList.toggle( 'fd-hidden', !hasEdits )
-        this.els.editSummary.classList.toggle( 'fd-hidden', !hasEdits )
+
+        if( !this.isHidden( this.els.editSummary ) && hasEdits ) return
+
+        this[ `slide${hasEdits ? 'In' : 'Out'}` ]( this.els.editSummary, 'right' )
     },
 
     Templates: {

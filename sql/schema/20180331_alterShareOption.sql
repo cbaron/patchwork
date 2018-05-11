@@ -1,0 +1,1 @@
+ALTER TABLE shareoption RENAME COLUMN label TO prompt;

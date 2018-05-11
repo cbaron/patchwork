@@ -1,5 +1,5 @@
 module.exports = p => 
-`<div class="fd-hide fd-hidden">
+`<div class="fd-hidden">
     <div class="section-heading">
         <h3>Week Options</h3>
         <div>
@@ -12,7 +12,7 @@ module.exports = p =>
         <div class="data">
             <ol data-js="dates"></ol>
         </div>
-        <div data-js="editSummary" class="edit-summary hidden">
+        <div data-js="editSummary" class="edit-summary fd-hidden">
             <div>Summary of Changes</div>
             <div data-js="changes">
                 <div class="column">

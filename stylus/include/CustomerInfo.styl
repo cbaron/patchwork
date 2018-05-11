@@ -1,0 +1,94 @@
+.CustomerInfo
+
+    .content
+        display: block
+
+        .data
+            .customer-table 
+                text-align: left
+                display: flex
+                flex-direction: column
+                align-items: center
+                            
+                .table-row
+                    align-items: center
+                    margin: .5rem 0
+                    display: flex
+                    
+                    &:not(:first-child)
+                        border-top: none
+
+                    select
+                        border: none
+                        background-color: white
+                        
+                        
+                    >.cell:first-child
+                        border: none
+                        width: 9rem
+                        text-align: right
+                        margin-right: 1rem
+                    >*:last-child
+                        flex: 1
+                        min-width: 25rem
+                        border: 1px solid #ccc
+                        font-weight: normal
+                        color: black
+                        background-color: #fff
+                        overflow-x: hidden
+                        padding: .5rem
+                                               
+                    .ms-ctn
+                        margin: 0
+                        overflow: visible
+                        padding-right: 0
+                        
+                        .ms-res-item
+                            .produce-family
+                                font-weight: bold
+
+                            .produce-in-family
+                                margin-left: 1rem
+                                font-weight: normal
+                        
+                        .ms-sel-ctn
+                            margin-left: 0
+                            >input
+                                height: auto
+
+                        .ms-trigger
+                            background-color: #eee
+                            .ms-trigger-ico
+                                margin-top: 12px
+                    
+                    .ms-ctn-focus
+                        box-shadow: none
+
+                    &.neverReceive
+                        white-space: inherit
+
+        .edit-summary
+            margin: 1.5rem 3rem
+            display: block
+            
+            button
+                font-weight: normal
+
+                
+@media only screen and (max-width: 767px)
+    .CustomerInfo .content
+        .data
+            .customer-table
+                display: block
+                
+                .table-row
+                    display: block
+                    >.cell:first-child
+                        text-align: left
+                    >*:last-child
+                        width: 100%
+                        min-width: 0
+        
+        .edit-summary
+            margin: 1.5rem 0
+

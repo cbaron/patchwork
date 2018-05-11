@@ -1,0 +1,102 @@
+.SharePatch
+    padding: 1rem
+    border-radius: 1rem
+    margin: 3rem 2rem
+    background-color: $light-manila
+
+    .section-heading
+        display: block
+        text-align: center
+        margin: 0 0 2rem
+        
+        h3
+            color: inherit
+            font-size: 1.3rem
+            line-height: 1.8rem
+
+    .content
+        >div
+            margin: auto
+
+            li
+                .adjustment
+                    float: right
+                    font-size: 1.1rem
+                    font-weight: bold
+
+                &.line-item
+                    display: flex
+                    justify-content: space-between
+                    border-bottom: 1px solid lightgray
+                    padding: .25rem .5rem
+                    margin-bottom: 1rem
+                    
+                    &:first-child
+                        font-weight: bold
+                        text-transform: uppercase
+                            
+                    &.options
+                        display: block
+                        ul
+                            margin-left: 2rem
+                            margin-bottom: 1rem
+                            >li
+                                list-style-type: disc
+                            
+                        >div:last-child
+                            display: flex
+                            justify-content: space-between
+
+            .total
+                margin-top: 1rem
+                
+                >div
+                    display: flex
+                    justify-content: center
+                    >span
+                        &:first-child
+                            width: 12rem
+                        &:last-child
+                            width: 5rem
+                    &:nth-child(2)
+                        margin-bottom: .2rem
+                
+                >div:last-child
+                    font-weight: bold
+                    font-size: 1.2rem
+                    >span
+                        border-top: 1px solid
+                        padding-top: .2rem
+
+            .email
+                margin-top: 1rem
+                text-align: center
+
+                input
+                    margin: 0 .5rem
+
+            .ButtonFlow 
+                margin: 1rem
+                text-align: center
+                
+                button
+                    padding: .75rem
+                    font-size: 1rem
+                    margin: .5rem 1rem 0
+
+                
+    @media only screen and (max-width: 767px)
+        margin: 3rem 0
+        
+    @media only screen and (max-width: 500px)
+        .section-heading
+            h3
+                font-size: 1.1rem
+                line-height: 1.5rem
+                
+        .content >div
+            .total >div:last-child
+                font-size: 1rem
+                
+    @media only screen and (max-width: 400px)
+        font-size: .8rem

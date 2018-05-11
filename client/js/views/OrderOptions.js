@@ -11,18 +11,24 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     calculateWeeklyPrice() {
         let optionPrice = this.MemberSelection.data.reduce( ( sum, selection ) => sum + Model.moneyToReal( selection.price ), 0 )
-        return optionPrice + Model.moneyToReal( this.model.delivery.data[0].deliveryoption.price )
+        return optionPrice + Model.moneyToReal( this.model.delivery.data[0].groupdropoff.price || this.model.delivery.data[0].deliveryoption.price )
     },
 
     calculatePriceAdjustment() {
         return Object.keys( this.editedFields ).reduce( ( acc, key ) => {
-            if( ! this.editedFields[ key ].newValue || key === 'groupOption' ) return acc
+            if( ! this.editedFields[ key ].newValue ) return acc
 
-            let oldPrice, newPrice, diff
+            let oldPrice, newPrice, oldGroup, diff
 
             if( key === 'deliveryOption' ) {
-                oldPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
+                if( this.editedFields.deliveryOption.newValue === 'group' ) return acc
+                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
                 newPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).price
+            } else if( key === 'groupOption' ) {
+                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.oldValue ).price
+                newPrice = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].newValue ).price
             } else {
                 const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
 
@@ -77,7 +83,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                   newValue = this.editedFields[ fieldName ].newValue.toString()
 
             return `${fieldLabel}: ${oldValue} to ${newValue}`
-        } ).join(', ')
+        } ).join('\n\t')
     },
 
     getDeliveryData( ) {
@@ -237,7 +243,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( edits.length === 0 ) {
             this.emit( 'reset', this.model )
             this.els.resetBtn.classList.add('fd-hidden')
-            return this.els.editSummary.classList.add('fd-hidden')
+            return this.slideOut( this.els.editSummary, 'right' )
         }
         
         edits.forEach( el => {
@@ -254,25 +260,35 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.originalWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice )
         this.els.newWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice + priceAdjustment )
 
-        this.els.editSummary.classList.remove('fd-hidden')
-
         this.emit( 'adjustment', { description: this.getAdjustmentDescription(), originalWeeklyPrice: this.originalWeeklyPrice, priceAdjustment } )
+    
+        if( !this.isHidden( this.els.editSummary ) && edits.length ) return
+
+        this.slideIn( this.els.editSummary, 'right' )
     },
 
     templates: {
         fieldEdit: require('./templates/FieldEdit'),
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
-        selectOption: option => `<option value="${option.name}">${option.label}</option>`
+        selectOption: option => {
+            const price = option.name === 'none'
+                ? ''
+                : option.name === 'group'
+                    ? ' &mdash; Varies'
+                    : ` &mdash; ${option.price}/week`
+
+            return `<option value="${option.name}">${option.label}${price}</option>`
+        }
     },
 
-    update( { customer, delivery, share } ) {
+    update( { customer, delivery, share, isAdmin } ) {
         this.clear()
         this.editedFields = { }
 
         this.model = arguments[0]
 
-        this.editable = ( this.Moment() < this.Moment( share.enddate ) )
+        this.editable = isAdmin && ( this.Moment() < this.Moment( share.enddate ) )
         this.optionTemplate = this.editable ? 'editableOption' : 'archivedOption'
 
         this.els.seasonLabel.textContent = share.label

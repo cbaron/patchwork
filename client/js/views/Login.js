@@ -1,66 +1,72 @@
-var MyView = require('./MyView'),
-    Login = function() { return MyView.apply( this, arguments ) };
+module.exports = Object.assign( {}, require('./__proto__'), {
 
-Object.assign( Login.prototype, MyView.prototype, require('./util/Form').prototype, {
+    Views: {
 
-    checkForEnter( e ) { if( e.keyCode === 13 ) this.login() },
+        loginForm() {
+            return {
+                handleSubmissionError( err ) {
+                    this.emit( 'loginError', err )
+                    this.Error( err )
+                    this.onSubmitEnd()
+                },
+                model: Object.create( this.Model ).constructor( { }, {
+                    attributes: require('../../../models/Login').attributes,
+                    resource: 'auth'
+                } ),
+                templateOpts() {
+                    return {
+                        heading: 'Sign In',
+                    }
+                },
+                onCancelBtnClick() { this.emit('cancel') },
+                toastSuccess: 'You are signed in!'
+            }
+        },
+        forgotPassword() {
+            return {
+                model: Object.create( this.Model ).constructor( { }, {
+                    attributes: [ require('../../../models/Email') ],
+                    resource: 'reset-password'
+                } ),
+                templateOpts() {
+                    return {
+                        heading: 'Reset Password',
+                        prompt: 'Please enter your email address'
+                    }
+                },
+                onCancelBtnClick() { this.emit('cancel') }
+            } 
+        }
+
+    },
 
     events: {
-        'loginBtn': { method: 'login' }
-    },
+        forgotPassword: 'click',
 
-    fields: [ {
-        name: "email",
-        label: 'Email',
-        type: 'text',
-        validate: function( val ) { return true }
-    }, {
-        name: "password",
-        label: 'Password',
-        type: 'password',
-        error: "Passwords must be at least 6 characters long.",
-        validate: function( val ) { return val.length >= 6 }
-    } ],
-
-    getTemplateOptions() { return { fields: this.fields } },
-
-    initialize() {
-        if( window.location.pathname === "/admin" || window.location.pathname === "/admin-plus" ) {
-            Object.assign( this.fields[0], {
-                label: 'Email or Username',
-                error: "Username must be at least 6 characters long.",
-                validate: val => val.length >= 6 } )
+        views: {
+            loginForm: [
+                [ 'posted', function( data ) {
+                    this.user.set( data )
+                    this.emit( "success", data )
+                    this.delete().catch( this.Error )
+                } ],
+                [ 'loginError', function( err ) {
+                    this.els.errorMessage.textContent = err
+                    this.slideIn( this.els.errorMessage, 'right' )
+                } ],
+                [ 'cancel', function() { this.delete().then( () => this.emit('loginCancelled') ).catch( this.Error ) } ]
+            ],
+            forgotPassword: [
+                [ 'posted', function( data ) { this.Toast.showMessage( 'success', data.message ) } ],
+                [ 'cancel', function() { this.views.forgotPassword.hide().then( () => this.showEl( this.els.loginWrapper ) ).catch( this.Error ) } ]
+            ]
         }
-
-        MyView.prototype.initialize.call(this)
     },
 
-    login() { this.submitForm( { resource: "auth" } ) },
-
-    name: "Login",
-
-    onSubmissionResponse( response ) {
-        
-        if( Object.keys( response ).length === 0 ) {
-            return this.slurpTemplate( { template: this.templates.invalidLoginError( response ), insertion: { $el: this.templateData.container } } )
-        }
-        
-        this.$(document).off( 'keyup', this.checkForEnter.bind(this) )
-    
-        require('../models/User').set( response );
-        this.emit( "success", response );
-        this.hide().done();
-    },
-
-    postRender() {
-        this.templateData.container.find( 'input' ).on( 'focus', this.removeErrors.bind(this) )
-        this.$(document).on( 'keyup', this.checkForEnter.bind(this) )
-    },
-
-    requiresLogin: false,
-
-    template: require('../templates/login')( require('handlebars') )
+    onForgotPasswordClick() {
+        return this.hideEl( this.els.loginWrapper )
+        .then( () => this.views.forgotPassword.show() )
+        .catch( this.Error )
+    }
 
 } )
-
-module.exports = new Login()

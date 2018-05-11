@@ -48,6 +48,7 @@ Object.assign( Summary.prototype, View.prototype, {
                         share.get('humanStartdate'), share.get('humanEnddate'), selectedWeeks, selectedWeeks + skipDaysTotal),
                 label: share.get('label'),
                 options: share.get('selectedOptions'),
+                seasonalAddOns: share.get('seasonalAddOns'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
                 skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
                 total: share.get('total')
@@ -124,25 +125,28 @@ Object.assign( Summary.prototype, View.prototype, {
             shares: this.signupData.shares.map( share => {
                 var selectedDelivery = share.get('deliveryoptions').get( share.get('selectedDelivery').deliveryoptionid ),
                     groupDropoff = ( share.get('selectedDelivery').groupdropoffid )
-                        ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
-                        : undefined,
-                times = ( groupDropoff )
-                    ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
-                    : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
-                shareOptionWeeklyTotal = share.get('selectedOptions')
-                    .map( selectedOption =>
-                        parseFloat( share.get('shareoptions')
-                             .get( selectedOption.shareoptionid )
-                             .get( 'options' )
-                             .get( selectedOption.shareoptionoptionid )
-                             .get('price').replace(/\$|,/g, "") ) )
-                    .reduce( ( a, b ) => a + b ),
-                weeklyTotal =  shareOptionWeeklyTotal + parseFloat( selectedDelivery.get('price').replace(/\$|,/g,"") ),
-                address = ( selectedDelivery.get('name') === 'home' )
-                    ? this.user.get('address')
-                    : ( groupDropoff )
-                        ? groupDropoff.get('address')
-                        : this.ContactInfo.data.farmpickup
+                            ? share.get('groupdropoffs').get(share.get('selectedDelivery').groupdropoffid)
+                            : undefined,
+                    times = ( groupDropoff )
+                        ? groupDropoff.pick( [ 'starttime', 'endtime' ] )
+                        : this._( share.get('selectedDelivery') ).pick( [ 'starttime', 'endtime' ] ),
+                    shareOptionWeeklyTotal = share.get('selectedOptions')
+                        .map( selectedOption =>
+                            parseFloat( share.get('shareoptions')
+                                 .get( selectedOption.shareoptionid )
+                                 .get( 'options' )
+                                 .get( selectedOption.shareoptionoptionid )
+                                 .get('price').replace(/\$|,/g, "") ) )
+                        .reduce( ( a, b ) => a + b ),
+                    deliveryCost = groupDropoff ? groupDropoff.get('price') : selectedDelivery.get('price'),
+                    weeklyTotal =  shareOptionWeeklyTotal + parseFloat( deliveryCost.replace(/\$|,/g,"") ),
+                    seasonalAddOnTotal = share.get( 'seasonalAddOns' ).map( addon =>
+                       parseFloat( addon.price.replace(/\$|,/g, "") ) ).reduce( ( a, b ) => a + b, 0 ),
+                    address = ( selectedDelivery.get('name') === 'home' )
+                        ? this.user.get('address')
+                        : ( groupDropoff )
+                            ? `${groupDropoff.get('street')}, ${groupDropoff.get('cityStateZip')}`
+                            : this.ContactInfo.data.farmpickup
 
                 share.set( {
                     selectedDelivery: Object.assign( share.get('selectedDelivery'), {
@@ -153,8 +157,8 @@ Object.assign( Summary.prototype, View.prototype, {
                                 spaceTwoTab,
                                 share.dayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
                                 times.starttime, times.endtime, spaceTwoTab,
-                                address, spaceTwoTab, selectedDelivery.get('price') ) } ),
-                    total: weeklyTotal * share.get('selectedDates').length
+                                address, spaceTwoTab, deliveryCost ) } ),
+                    total: ( weeklyTotal * share.get('selectedDates').length ) + seasonalAddOnTotal
                 } )
 
                 share.set( 'selectedOptions', share.get( 'selectedOptions' ).map( selectedOption => {
@@ -172,6 +176,7 @@ Object.assign( Summary.prototype, View.prototype, {
 
                 return {
                     shareBox: this.templates.ShareBox( share.attributes ),
+                    seasonalAddOns: share.get('seasonalAddOns'),
                     selectedOptions: share.get('selectedOptions').map( selectedOption => {
                         var shareOption = share.get('shareoptions').get( selectedOption.shareoptionid ),
                             shareOptionOption = shareOption.get('options').get( selectedOption.shareoptionoptionid )
@@ -185,21 +190,23 @@ Object.assign( Summary.prototype, View.prototype, {
                     } ),
                     selectedDelivery: {
                         deliveryType: selectedDelivery.get('label'),
-                        weeklyCost: selectedDelivery.get('price'),
+                        weeklyCost: deliveryCost,
                         groupdropoff: ( groupDropoff ) ? groupDropoff.get('label') : undefined,
                         address: ( groupDropoff )
-                            ? groupDropoff.get('address')
+                            ? groupDropoff.get('street') + ', ' + groupDropoff.get('cityStateZip')
                             : ( selectedDelivery.get('name') === 'farm' )
                                 ? this.ContactInfo.data.farmpickup
                                 : this.user.get('address'),
-                        dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery') ],
+                        dayOfWeek: this.DayOfWeekMap[ share.get('selectedDelivery').dayofweek ],
                         starttime: times.starttime,
                         endtime: times.endtime
                     },
                     weeklyPrice: this.util.format( '$%s', weeklyTotal.toFixed(2) ),
-                    selectedDates: share.get('selectedDates').map( date => date.attributes ),
+                    seasonalOptionsTotal: `$${seasonalAddOnTotal.toFixed(2)}`,
+                    selectedDates: share.get('selectedDates').map( date => this.templates.PickupDate( Object.assign( { selected: true }, date.attributes ) ) ),
                     weeksSelected: share.get('selectedDates').length,
-                    skipDays: ( share.has('skipDays') ) ? share.get('skipDays').map( skipDayId => share.get('deliveryDates').get(skipDayId).attributes ) : undefined,
+                    skipDays: ( share.has('skipDays') )
+                        ? share.get('skipDays').map( skipDayId => this.templates.PickupDate( share.get('deliveryDates').get(skipDayId).attributes ) ) : undefined,
                     total: this.util.format( '$%s', share.get('total').toFixed(2) )
                 }
             } ) 
@@ -226,7 +233,7 @@ Object.assign( Summary.prototype, View.prototype, {
     onInputFocus( e ) {
         var $el = this.$( e.currentTarget )
         if( $el.next().hasClass('glyphicon-remove') ) this.removeError( this.$( e.currentTarget ) )
-        // if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
+        if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
     },
 
     paymentUnselected() {
@@ -345,6 +352,13 @@ Object.assign( Summary.prototype, View.prototype, {
             this.emit('done')
             this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
             this.templateData.signupBtn.text('Thank you')
+            this.user.set( 'state', { } )
+
+            if( !this.user.isLoggedIn() ) {
+                this.user.set( this.user.defaults() )
+                document.cookie = `patchworkjwt=; domain=${window.location.hostname}; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+            }
+            
             this.showSuccessModal()
         } )
         .fail( () => {
@@ -366,9 +380,10 @@ Object.assign( Summary.prototype, View.prototype, {
         ],
     },
 
-    template: require('../../templates/signup/summary')( require('handlebars') ),
+    template: require('../../templates/signup/summary'),
 
     templates: {
+        PickupDate: require('../../templates/signup/pickupDate'),
         ShareBox: require('../templates/ShareBox')
     },
 

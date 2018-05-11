@@ -29,8 +29,6 @@ Object.assign( Signup.prototype, MyView.prototype, {
         window.setTimeout( () => this.delegateEvents( 'leftBtn', this.templateData.leftBtn ), 1000 )
     },
 
-    instances: { },
-
     noShares() {
         this.templateData.leftBtn.hide()
         this.templateData.rightBtn.hide()
@@ -38,24 +36,33 @@ Object.assign( Signup.prototype, MyView.prototype, {
         this.instances.shares.templateData.header.text('There are no shares available at this time')
     },
 
-    postRender() {
+    onNavigation( path ) {
+        const instance = this.instances[ this.views[ this.currentIndex ].name ]
+        if( instance.onSignupNavigation ) instance.onSignupNavigation()
+        return this.show()
+    },
 
+    postRender() {
         this.signupData = { }
+        this.instances = { }
 
         this.state = this.user.get('state')
+        if( !this.state ) this.user.set( 'state', { } )
 
         if( this.state.signup && Object.keys( this.state.signup ).length ) return this.updateState( this.state.signup )
 
         if( ! this.currentIndex ) this.currentIndex = 0
         this.state.signup = { index: this.currentIndex, shares: [ ] }
+
         this.showProperView()
     },
 
     requiresLogin: false,
 
     saveState() {
+        const data = this.user.isLoggedIn() ? this.user.attributes : { state: this.state }
         this.$.ajax( {
-            data: JSON.stringify( { state: this.state } ),
+            data: JSON.stringify( data ),
             method: "PATCH",
             url: "/user" } )
         .fail( e => new this.Error(e) )
@@ -64,6 +71,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
     serializeShare( share ) {
         return {
             id: share.id,
+            seasonalAddOns: share.get('seasonalAddOns'),
             selectedDelivery: share.get('selectedDelivery'),
             selectedOptions: share.get('selectedOptions'),
             skipDays: share.get('skipDays')
@@ -134,7 +142,7 @@ Object.assign( Signup.prototype, MyView.prototype, {
         return this
     },
 
-    template: require('../templates/signup')( require('handlebars') ),
+    template: require('../templates/signup'),
 
     updateState( data ) {
         this.currentIndex = data.index

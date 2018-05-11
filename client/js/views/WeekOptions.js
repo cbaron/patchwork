@@ -16,9 +16,7 @@ module.exports = Object.assign( {}, Super, {
 
     clear() {
         this.els.dates.innerHTML = ''
-
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
     },
 
     determineDates( dayOfWeek ) {
@@ -94,7 +92,7 @@ module.exports = Object.assign( {}, Super, {
                     method: 'get',
                     resource: 'zipcoderoute',
                     qs: JSON.stringify( {
-                        zipcode: this.model.customer.member.zipcode,
+                        zipcode: this.model.customer.member.data.zipcode,
                         routeid: { operation: 'join', value: { table: 'deliveryroute', column: 'id' } }
                     } )
                   } )
@@ -106,6 +104,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     onDatesClick( e ) {
+        if( !this.isAdmin ) return
         const el = e.target.closest('li'),
               date = el.getAttribute('data-date')
         
@@ -130,7 +129,7 @@ module.exports = Object.assign( {}, Super, {
         if( ! Object.keys( this.changedDates ).find( key => this.changedDates[key].editedStatus !== undefined ) ) {
             this.els.resetBtn.classList.add('hidden')
             this.emit( 'reset', this.model )
-            return this.els.editSummary.classList.add('hidden')
+            return this.slideOut( this.els.editSummary, 'right' )
         }
 
         this.showEditSummary()
@@ -138,7 +137,6 @@ module.exports = Object.assign( {}, Super, {
 
     onResetBtnClick() {
         this.els.resetBtn.classList.add('hidden')
-        this.els.editSummary.classList.add('hidden')
 
         Object.keys( this.changedDates ).forEach( key => {
             if( this.changedDates[key].editedStatus ) {
@@ -153,7 +151,7 @@ module.exports = Object.assign( {}, Super, {
     },
 
     renderDates() {
-        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( datum ), insertion: { el: this.els.dates } } ) )
+        this.dates.forEach( datum => this.slurpTemplate( { template: this.templates.date( { ...datum, isAdmin: this.isAdmin } ), insertion: { el: this.els.dates } } ) )
         return this
     },
 
@@ -185,7 +183,7 @@ module.exports = Object.assign( {}, Super, {
         this.els.weekChange.textContent = result
         this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
-        this.els.editSummary.classList.remove('hidden')
+        if( this.isHidden( this.els.editSummary ) ) this.slideIn( this.els.editSummary, 'right' )
 
         this.emit( 'adjustment', { added, removed } )
     },
@@ -195,8 +193,11 @@ module.exports = Object.assign( {}, Super, {
         summaryColumn: date => `<li>${date.value}</li>`
     },
 
-    update( { customer, delivery, share } ) {
+    update( { customer, delivery, share, isAdmin } ) {
         if( this.updating ) return
+
+        this.isAdmin = isAdmin
+        this.els.editSummary.classList.add('fd-hidden')
 
         this.updating = true
 

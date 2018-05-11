@@ -3,16 +3,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     Pikaday: require('pikaday'),
 
     Views: {
-        buttonFlow: { model: { value: {
-            disabled: true,
-            states: {
-                start: [ { name: 'addTransaction', class: 'save-btn', text: 'Add Transaction', nextState: 'confirm' } ],
-                confirm: [
-                    { name: 'confirmAdd', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
-                    { name: 'cancel', class: 'reset-btn', nextState: 'start', text: 'Cancel', emit: true }
-                ]
+        buttonFlow() {
+            return { 
+                model: Object.create( this.Model ).constructor( {
+                    disabled: true,
+                    states: {
+                        start: [ { name: 'addTransaction', class: 'save-btn', text: 'Add Transaction', nextState: 'confirm' } ],
+                        confirm: [
+                            { name: 'confirmAdd', class: 'save-btn', text: 'Are you Sure?', emit: true, nextState: 'start' },
+                            { name: 'cancel', class: 'reset-btn', nextState: 'start', text: 'Cancel', emit: true }
+                        ]
+                    }
+                } )
             }
-        } } }
+        }
     },
 
     addTransaction() {
@@ -27,7 +31,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 { }
             ) 
         ) )
-        .then( () => this.Toast.showMessage( 'success', 'Transaction added!' ) )
+        .then( response => this.emit( 'transactionAdded', response ) )
         .catch( e => { this.Error(e); this.Toast.showMessage( 'error', 'Error adding transaction' ) } )
     },
 
@@ -66,9 +70,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.els[ attr ].value =
                 attr === 'action'
                     ? this.model.actions[0]
-                    : attr === 'created'
-                        ? now
-                        : '' )
+                    : attr === 'initiator'
+                        ? 'admin'
+                        : attr === 'created'
+                            ? now
+                            : '' )
 
         this.created.setMoment( now )
     },

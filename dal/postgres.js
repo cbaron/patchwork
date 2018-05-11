@@ -2,6 +2,26 @@ const MyObject = require('../lib/MyObject').prototype
 
 module.exports = Object.create( Object.assign( {}, MyObject, {
 
+    Enum: require('../lib/Enum'),
+
+    enumReference: {
+        contactinfo: {
+            location: "Geography"
+        },
+        farmermarket: {
+            location: "Geography"
+        },
+        groupdropoff: {
+            location: "Geography"
+        },
+        restaurant: {
+            location: "Geography"
+        },
+        retailoutlet: {
+            location: "Geography"
+        }
+    },
+
     initialize() {
         return this.getTableData()
     },
@@ -36,6 +56,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
               range = isEnum
                 ? this.enumReference[ table.table_name ][ column.column_name ]
                 : this.dataTypeToRange[column.data_type]
+
         return {
             isEnum,
             isNullable: column.is_nullable,
@@ -43,7 +64,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
             name: column.column_name,
             range
         }
-    }, 
+    },
 
     getSelectList( table, opts={} ) {
         const tableAlias = opts.alias ? opts.alias : table
@@ -72,9 +93,10 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
             .then( result =>
                 Promise.resolve(
                     result.rows.forEach( row => {
-                        const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES (\w+)\((\w+)\)/.exec( row.pg_get_constraintdef )
+                        const match = /FOREIGN KEY \("?(\w+)"?\) REFERENCES ("?[a-zA-Z-]+"?)\((\w+)\)/.exec( row.pg_get_constraintdef )
                         let column = this.tables[ row.tablefrom.replace(/"/g,'') ].columns.find( column => column.name === match[1] )
-                        
+                        match[2] = match[2].replace( /"/g, '' ) 
+
                         column.fk = {
                             table: match[2],
                             column: match[3],
@@ -183,6 +205,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
         "integer": "Integer",
         "money": "Float",
         "real": "Float",
+        "time without time zone": "Time",
         "timestamp with time zone": "DateTime",
         "text": "Text"
     }
