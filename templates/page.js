@@ -7,7 +7,7 @@ module.exports = p =>
         <link rel="stylesheet" type="text/css" href="/static/css/magicsuggest.css">
         <link rel="stylesheet" type="text/css" href="/static/css/auto-complete.css">
         <link rel="stylesheet" type="text/css" href="/static/css/pikaday.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/flatpickr.min.css">
         <link rel="stylesheet" type="text/css" href="/dist/css/main.css.gz">
 
         <meta charset="UTF-8">
