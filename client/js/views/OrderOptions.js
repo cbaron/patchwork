@@ -48,6 +48,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }, 0 )
     },
 
+    checkHomeDelivery() {
+        return this.Xhr( {
+            method: 'get',
+            resource: 'zipcoderoute',
+            qs: JSON.stringify( {
+                zipcode: this.model.customer.member.data.zipcode,
+                routeid: { operation: 'join', value: { table: 'deliveryroute', column: 'id' } }
+            } )
+        } )
+        .then( response =>
+            Promise.resolve( this.homeDeliveryAvailable = response.length && response[0][ 'deliveryroute.dayofweek' ] )
+        )
+    },
+
     clear() {
         this.els.changes.innerHTML = ''
         this.els.options.innerHTML = ''
@@ -87,7 +101,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getDeliveryData( ) {
-
         const patchId = this.model.delivery.data[0].membersharedelivery.id,
               newDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.newValue ).id,
               dropoffId = ( this.editedFields.deliveryOption.newValue === 'group' )
@@ -182,7 +195,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.optionTemplate === 'editableOption' ) {
 
             this.DeliveryOptions.data.forEach( option =>
-                this.slurpTemplate( { template: this.templates.selectOption( option ), insertion: { el: this.els.deliveryOption } } )
+                option.name === 'home' && !this.homeDeliveryAvailable
+                    ? this.slurpTemplate( { template: this.templates.selectOption( { disabled: true, name: 'none', label: 'Out of Home Delivery Range' } ), insertion: { el: this.els.deliveryOption } } )
+                    : this.slurpTemplate( { template: this.templates.selectOption( option ), insertion: { el: this.els.deliveryOption } } )
             )
 
             this.els.deliveryOption.querySelector(`option[value=${CSS.escape( option.deliveryoption.name )}`).selected = true
@@ -272,13 +287,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
         selectOption: option => {
+            const disabled = option.disabled ? `disabled` : ''
             const price = option.name === 'none'
                 ? ''
                 : option.name === 'group'
                     ? ' &mdash; Varies'
                     : ` &mdash; ${option.price}/week`
 
-            return `<option value="${option.name}">${option.label}${price}</option>`
+            return `<option ${disabled} value="${option.name}">${option.label}${price}</option>`
         }
     },
 
@@ -293,7 +309,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.els.seasonLabel.textContent = share.label
 
-        return this.OrderOption.get( { query: { shareid: share.id, shareoptionid: { operation: 'join', value: { table: 'shareoption', column: 'id' } } } } )
+        return ( this.editable ? this.checkHomeDelivery() : Promise.resolve() )
+        .then( () => this.OrderOption.get( { query: { shareid: share.id, shareoptionid: { operation: 'join', value: { table: 'shareoption', column: 'id' } } } } ) )
         .then( () => this.ShareOptionOption.get() )
         .then( () => this.MemberSelection.get( { query: { membershareid: share.membershareid, shareoptionoptionid: { operation: 'join', value: { table: 'shareoptionoption', column: 'id' } } } } ) )
         .then( () => this.renderShareOptions() )
