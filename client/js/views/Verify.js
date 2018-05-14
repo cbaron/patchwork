@@ -6,11 +6,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             resource: 'verify',
             qs: `{ "token": "${this.path[1]}" }`
         } )
-        .then( () => this.Toast.showMessage( 'success', 'Email verified! You are now free to log in.' ) )
-        .then( () => this.delete().then( () => this.emit( 'navigate', '' ) ).catch( this.Error ) )
+        .then( () => this.els.message.textContent = 'Your email address has been successfully verified! You are now free to log in.' )
         .catch( e => {
             this.Error( e )
-            this.Toast.showMessage( 'error', `Failed to verify email. Please try again or contact us.` )
+            this.els.message.textContent = `We were unable to verify your email address. Please try again or contact us.`
         } )
 
         return this

@@ -23,13 +23,25 @@
 
     >div:last-child
         display: flex
-        justify-content: center
+        align-items: center
+        flex-direction: column
+
         .form-wrap
             width: 35rem
             padding: 0 3rem 1.5rem
             border-radius: 1rem
             background-color: $light-manila
-            
+
+            .home-link
+                text-align: center
+                padding-top: 1.5rem
+
+                a
+                    color: black
+                    font-size: 2rem
+                    margin-bottom: 3rem
+                    text-transform: uppercase
+
             .Form
             
                 .heading

@@ -13,12 +13,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         userName: 'click'
     },
 
+    checkForLogin() {
+        if( this.displayingLogin ) { this.displayingLogin = false; this.emit('removeLogin') }
+    },
+
     onAccountBtnClick() {
         this.toggleAccountMenu()
         this.emit( 'navigate', 'account-home' )
     },
 
-    onCsaSignUpBtnClick() { this.emit( 'navigate', 'sign-up' ) },
+    onCsaSignUpBtnClick() {
+        this.checkForLogin()
+        this.emit( 'navigate', 'sign-up' )
+    },
 
     onJustifyClick() { this.els.navLinks.classList.toggle('is-mobile') },
 
@@ -30,7 +37,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onNavLinksClick( e ) {
-        if( this.displayingLogin ) this.emit('removeLogin')
+        this.checkForLogin()
         const el = e.target.closest('li')
 
         if( !el ) return
@@ -40,6 +47,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onSignInBtnClick() {
+        if( this.displayingLogin ) return
         this.emit('signInClicked')
         this.displayingLogin = true
     },
@@ -60,7 +68,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onTitleClick() {
-        if( this.displayingLogin ) this.emit('removeLogin')
+        this.checkForLogin()
         this.emit( 'navigate', '/' )
     },
 
