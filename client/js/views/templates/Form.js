@@ -17,7 +17,7 @@ return `<section>
     ${heading}
     <div class="form-box">
         ${prompt}
-        <form>${fields}</form>
+        <form data-js="form">${fields}</form>
         ${buttonRow}  
     </div>
 </section>`

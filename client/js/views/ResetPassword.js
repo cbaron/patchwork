@@ -24,21 +24,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     .then( response => {
                         this.model.data = { }
                         this.clear()
+                        this.emit('patched')
                         return this.Toast.showMessage( 'success', response.message )
                     } )
-                    .then( () => Promise.resolve( this.emit('patched') ) )
                 }
             }
         }
 
-    },
-
-    events: {
-        views: {
-            resetPassword: [
-                [ 'patched', function() { this.delete().then( () => this.emit( 'navigate', '' ) ).catch( this.Error ) } ]
-            ]
-        }
     },
 
     postRender() {

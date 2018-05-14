@@ -31,7 +31,8 @@ module.exports = Object.create( {
     },
 
     handleHeader( resource ) {
-        if( /admin/.test(resource) ) {
+        if( /verify|resetPassword/.test(resource) ) return
+        else if( /admin/.test(resource) ) {
             if( this.adminHeader ) { this.adminHeader.onNavigation() }
             else {
                 this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { el: this.content, method: 'insertBefore' } } )
@@ -60,13 +61,13 @@ module.exports = Object.create( {
                 .then( () => this.handle() )
                 .catch( this.Error )
             } )
-            .on( 'loginCancelled', () => this.handle() )
+            .on( 'loginCancelled', () => { this.header.displayingLogin = false; this.handle() } )
         } )
         .catch( this.Error )
     },
 
     handleFooter( resource ) {
-        this.footer.els.container.classList.toggle( 'fd-hidden', /admin/.test( resource ) )
+        this.footer.els.container.classList.toggle( 'fd-hidden', /admin|verify|resetPassword/.test( resource ) )
     },
 
     handler( path ) {
@@ -119,7 +120,6 @@ module.exports = Object.create( {
             location = path.join('/')
         } else if( options.append ) { location = `${window.location.pathname}/${location}` }
 
-        if( path.includes('resetPassword') || path.includes('verify') ) { window.location.pathname = `/${location}` }
         if( location !== window.location.pathname ) history.pushState( {}, '', location )
         if( !options.silent ) this.handle()
     },

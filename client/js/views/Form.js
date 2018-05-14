@@ -4,7 +4,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
     Flatpickr: require('flatpickr'),
 
-    events: Object.assign( Submitter.events, { previewBtn: 'click' } ),
+    events: Object.assign( Submitter.events, { form: 'submit', previewBtn: 'click' } ),
 
     onPreviewBtnClick( e ) {
         e.target.nextElementSibling.src = this.Format.ImageSrc( e.target.parentElement.previousElementSibling.value )
@@ -111,6 +111,8 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
             }
         } )
     },
+
+    onFormSubmit( e ) { e.preventDefault() },
 
     postRender() {
         if( this.model.meta.isNested && this.els.container.closest('.form-group') ) this.els.container.closest('.form-group').classList.add('vertical')

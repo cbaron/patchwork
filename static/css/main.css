@@ -1866,7 +1866,8 @@ html.non-touch .Header .member-ui >ul >li:hover {
 .Login >div:last-child,
 .ResetPassword >div:last-child {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .Login >div:last-child .form-wrap,
 .ResetPassword >div:last-child .form-wrap {
@@ -1874,6 +1875,18 @@ html.non-touch .Header .member-ui >ul >li:hover {
   padding: 0 3rem 1.5rem;
   border-radius: 1rem;
   background-color: #fff5df;
+}
+.Login >div:last-child .form-wrap .home-link,
+.ResetPassword >div:last-child .form-wrap .home-link {
+  text-align: center;
+  padding-top: 1.5rem;
+}
+.Login >div:last-child .form-wrap .home-link a,
+.ResetPassword >div:last-child .form-wrap .home-link a {
+  color: #000;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
 }
 .Login >div:last-child .form-wrap .Form .heading,
 .ResetPassword >div:last-child .form-wrap .Form .heading {
@@ -3033,8 +3046,26 @@ html.non-touch .AccountHome button:hover {
   padding-left: 0.25rem;
 }
 .Verify {
+  padding: 3rem;
   border: 1px solid transparent;
-  height: 20rem;
+  min-height: 15rem;
+  font-size: 1.2rem;
+}
+.Verify >div:first-child {
+  background-color: #fff5df;
+  padding: 2rem;
+  border-radius: 0.5rem;
+}
+.Verify >div:first-child >div:first-child {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background-color: #a00;
+  color: #fff;
+  border-radius: 0.5rem;
+}
+.Verify >div:first-child a {
+  color: #000;
+  font-size: 2rem;
 }
 .WeekOptions .content {
   display: flex;
