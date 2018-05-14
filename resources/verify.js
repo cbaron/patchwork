@@ -9,7 +9,7 @@ Object.assign( Verify.prototype, BaseResource.prototype, {
         this.token = this.query.token
 
         return this.validate.User.call(this)
-        .then( () => this.Postgres.query( 'SELECT id, email FROM person WHERE id = $1 and email = $2', [ this.user.id, this.user.email ] ) )
+        .then( () => this.Postgres.query( 'SELECT id, email FROM person WHERE id = $1 and email = $2', [ this.user.id, this.user.email.toLowerCase() ] ) )
         .then( result => {
             if( result.rows.length !== 1 ) return this.respond( { stopChain: true, code: 404 } )
 
