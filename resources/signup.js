@@ -232,7 +232,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.token = token
                 
                 return this.Q( this.Email.send( {
-                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
@@ -242,18 +242,15 @@ Object.assign( Signup.prototype, Base.prototype, {
             .then( () => {
                 if( !this.newMember ) return this.Q()
 
-                const isProd = process.env.NODE_ENV === 'production'
-                const port = isProd ? '' : `:${process.env.PORT}`
-
                 return this.Q( this.Email.send( {
-                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: `Patchwork Gardens Email Verification`,
                     bodyType: 'html',
                     body:
                         `<div>Dear ${this.body.member.name},</div>
                         <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email. Please click the following link to do so:</div>
-                        <div><a href="http://${process.env.DOMAIN}${port}/verify/${this.token}">http://${process.env.DOMAIN}${port}/verify/${this.token}</a></div>`
+                        <div><a href="${this.reflectUrl()}/verify/${this.token}">${this.reflectUrl()}/verify</a></div>`
                     } )
                 )
                 .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )

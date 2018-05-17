@@ -151,6 +151,8 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             .done();
     },
 
+    isProd: process.env.NODE_ENV === 'production',
+
     jws: require('jws'),
 
     PATCH() {
@@ -178,6 +180,10 @@ Object.assign( Resource.prototype, MyObject.prototype, {
     },
 
     queryBuilder: require('../lib/queryBuilder'),
+
+    reflectUrl: () => this.isProd
+        ? `https://${process.env.DOMAIN}`
+        : `http://${process.env.DOMAIN}:${process.env.PORT}`,
 
     relations: [ ],
 

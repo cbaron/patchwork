@@ -71,12 +71,11 @@ module.exports = Object.create( {
     },
 
     handler( path ) {
+        if( path[0] === 'admin' ) path[0] = 'admin-plus'
         let name = this.pathToView( path[0] ),
-            view = this.Views[ name ] ? path[0] : path[0] === 'admin' ? 'admin' : 'home'
+            view = this.Views[ name ] ? path[0] : 'home'
 
         if( this.resources[ path[0] ] ) view = path[0]
-
-        if( view === 'admin' ) return this.navigate( 'admin-plus', {} )
 
         this.userPromise.then( () => {
             this.handleHeader( path[0] )
