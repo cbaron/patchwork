@@ -12,11 +12,11 @@ Object.assign( ResetPassword.prototype, Base.prototype, {
 
         return this.slurpBody()
         .then( () =>
-            this.Postgres.query( "SELECT id FROM person WHERE email = $1", [ this.body.email.toLowerCase() ] )
-            .then( result => {
-                if( result.rows.length !== 1 ) return this.respond( { stopChain: true, body: { message } } )
+            this.Postgres.query( "SELECT * FROM person WHERE email = $1", [ this.body.email.toLowerCase() ], { rowsOnly: true } )
+            .then( rows => {
+                if( rows.length !== 1 ) return this.respond( { stopChain: true, body: { message } } )
 
-                this.user.id = result.rows[0].id
+                this.user.id = rows[0].id
                 this.user.time = new Date().getTime()
 
                 return this.User.createToken.call(this)
@@ -27,8 +27,8 @@ Object.assign( ResetPassword.prototype, Base.prototype, {
                         bodyType: 'html',
                         subject: `Patchwork Gardens Password Reset`,
                         body:
-                            `<div>Please click the following link to reset your password: </div>
-                            <div><a href="${this.reflectUrl()}/resetPassword/${token}">${this.reflectUrl()}/resetPassword</a></div>`
+                            `<div>Dear ${rows[0].name},</div>
+                            <div>Please click <a href="${this.reflectUrl()}/resetPassword/${token}">HERE</a> to reset your Patchwork Gardens password.</div>`
                     } )
                 )
             } )

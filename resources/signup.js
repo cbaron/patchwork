@@ -249,8 +249,8 @@ Object.assign( Signup.prototype, Base.prototype, {
                     bodyType: 'html',
                     body:
                         `<div>Dear ${this.body.member.name},</div>
-                        <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email. Please click the following link to do so:</div>
-                        <div><a href="${this.reflectUrl()}/verify/${this.token}">${this.reflectUrl()}/verify</a></div>`
+                        <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email.</div>
+                        <div>Please click <a href="${this.reflectUrl()}/verify/${this.token}">HERE</a> to do so.</div>`
                     } )
                 )
                 .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
