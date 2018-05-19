@@ -232,7 +232,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.token = token
                 
                 return this.Q( this.Email.send( {
-                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
@@ -243,14 +243,14 @@ Object.assign( Signup.prototype, Base.prototype, {
                 if( !this.newMember ) return this.Q()
 
                 return this.Q( this.Email.send( {
-                    to: process.env.NODE_ENV === 'production' ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: `Patchwork Gardens Email Verification`,
+                    bodyType: 'html',
                     body:
-                        `Dear ${this.body.member.name},\n\n` +
-                        `Thank you for your Patchwork Gardens CSA purchase! ` +
-                        `In order for you to log in to the site, we will need to verify your email. Please click the following link to do so:\n` +
-                        `http://${process.env.DOMAIN}:${process.env.PORT}/verify/${this.token}`
+                        `<div>Dear ${this.body.member.name},</div>
+                        <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email.</div>
+                        <div>Please click <a href="${this.reflectUrl()}/verify/${this.token}">HERE</a> to do so.</div>`
                     } )
                 )
                 .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )

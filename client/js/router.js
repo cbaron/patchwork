@@ -32,7 +32,7 @@ module.exports = Object.create( {
 
     handleHeader( resource ) {
         if( /verify|resetPassword/.test(resource) ) return
-        else if( /admin/.test(resource) ) {
+        else if( resource === 'admin-plus' ) {
             if( this.adminHeader ) { this.adminHeader.onNavigation() }
             else {
                 this.adminHeader = this.ViewFactory.create( 'adminHeader', { insertion: { el: this.content, method: 'insertBefore' } } )
@@ -67,10 +67,11 @@ module.exports = Object.create( {
     },
 
     handleFooter( resource ) {
-        this.footer.els.container.classList.toggle( 'fd-hidden', /admin|verify|resetPassword/.test( resource ) )
+        this.footer.els.container.classList.toggle( 'fd-hidden', /admin-plus|verify|resetPassword/.test( resource ) )
     },
 
     handler( path ) {
+        if( path[0] === 'admin' ) path[0] = 'admin-plus'
         let name = this.pathToView( path[0] ),
             view = this.Views[ name ] ? path[0] : 'home'
 
@@ -80,7 +81,7 @@ module.exports = Object.create( {
             this.handleHeader( path[0] )
             this.handleFooter( path[0] )
 
-            if( this.user.id && /admin/.test( path[0] ) ) this.adminHeader.onUser( this.user )
+            if( this.user.id && path[0] === 'admin-plus' ) this.adminHeader.onUser( this.user )
 
             if( view === this.currentView ) return this.views[ view ].onNavigation( path.slice(1) )
 
@@ -103,7 +104,7 @@ module.exports = Object.create( {
                         .on( 'navigate', ( route, options ) => this.navigate( route, options ) )
                         .on( 'deleted', () => delete this.views[ view ] )
                         
-                if( !/admin/.test( path[0] ) ) document.body.scrollTop = 0
+                if( path[0] !== 'admin-plus' ) document.body.scrollTop = 0
 
                 return Promise.resolve()
             } )
