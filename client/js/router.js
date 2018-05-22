@@ -8,6 +8,14 @@ module.exports = Object.create( {
 
     capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
+    async clearAndNavigate( route ) {
+        try {
+            await Promise.all( Object.entries( this.views ).map( ( [ key, val ] ) => val.delete() ) )
+            this.currentView = undefined
+            this.navigate( route )
+        } catch( err ) { this.Error( err ) }
+    },
+
     initialize() {
         this.content = document.querySelector('#content')
 
@@ -16,6 +24,8 @@ module.exports = Object.create( {
         this.user = require('./models/User')
 
         this.user.on( 'loggedIn', () => this.onLogin() )
+
+        this.user.on( 'loginAsCustomer', () => this.clearAndNavigate('/sign-up') )
 
         this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
@@ -132,14 +142,7 @@ module.exports = Object.create( {
 
     onViewNavigate( route ) { this.navigate( route, { trigger: true } ) },
 
-    onSignout() {
-        return Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
-        .then( () => {
-            this.currentView = undefined    
-            this.navigate( "/" )
-        } )
-        .catch( this.Error )
-    },
+    onSignout() { this.clearAndNavigate('/') },
 
     onUser( user ) {
         this.adminHeader ? this.adminHeader.onUser( this.user ) : this.header.onUser( this.user )

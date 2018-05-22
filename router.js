@@ -295,6 +295,7 @@ module.exports = new Router( {
             'currentGroupDelivery': true,
             'currentGroups': true,
             'currentShare': true,
+            'customer-login': true,
             'document': true,
             'food': true,
             'mail': true,
