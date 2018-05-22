@@ -2292,6 +2292,15 @@ html.non-touch .Header .member-ui >ul >li:hover {
 .AccountHome {
   margin: 2rem 3rem 4rem;
 }
+.ManageCustomer .customer-login,
+.AccountHome .customer-login {
+  text-align: center;
+  margin-top: 6rem;
+}
+.ManageCustomer .customer-login >button,
+.AccountHome .customer-login >button {
+  background-color: #ffc502;
+}
 .ManageCustomer .main-search,
 .AccountHome .main-search {
   display: flex;

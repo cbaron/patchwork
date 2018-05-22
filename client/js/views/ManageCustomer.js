@@ -3,6 +3,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     Customer: require('../models/Customer'),
     Delivery: require('../models/Delivery'),
 
+    events: {
+        customerLoginBtn: 'click'
+    },
+
     patchMemberShare() {
         const weekPatch = this.views.weekOptions.getPatchData()
 
@@ -52,6 +56,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
     },
 
+    onCustomerLoginBtnClick() {
+        return this.Xhr( { method: 'PATCH', resource: 'customer-login', data: JSON.stringify( this.selectedCustomer.person.data ) } )
+        .then( () => this.user.trigger( 'loginAsCustomer' ) )
+        .catch( this.Error )
+    },
+
     postRender() {
 
         this.views.memberTypeahead.focus()
@@ -65,6 +75,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.transactions.hide()
             this.views.sharePatch.reset()
             this.views.seasons.els.totals.classList.add('fd-hidden')
+            this.els.customerLogin.classList.remove('fd-hidden')
         } )
 
         this.views.seasons.on( 'selected', data => {

@@ -296,7 +296,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             
             this.validate.Token.call(this)
 
-            if( this.path[1] !== 'reset-password' && ( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) ) throw new Error("Invalid resource id")
+            if( this.path[1] !== 'reset-password' && this.path[1] !== 'customer-login' && ( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) ) throw new Error("Invalid resource id")
 
             return this.validate.User.call(this)
         },
@@ -350,7 +350,9 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     validateUser() {
         const permissions = this.Permissions[ this.path[1] ] && this.Permissions[ this.path[1] ][ this.request.method ]
-
+        console.log( 'validateUser' )
+        console.log( permissions )
+        console.log( this.user.roles )
         if( this.user.id === undefined ||
             permissions && this.user.roles.find( role => permissions.has( role ) ) === undefined
           ) { return this.respond( { stopChain: true, code: 401, body: { } } ) }

@@ -16,6 +16,7 @@ module.exports = Object.create( {
         this.user = require('./models/User')
 
         this.user.on( 'loggedIn', () => this.onLogin() )
+        this.user.on( 'loginAsCustomer', personData => this.loginAsCustomer( personData ) )
 
         this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
@@ -110,6 +111,15 @@ module.exports = Object.create( {
             } )
         } )
         .catch( err => new this.Error(err) )
+    },
+
+    loginAsCustomer( personData ) {
+        console.log( 'loginAsCustomer' )
+        console.log( personData )
+        
+        //.then( () => Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) ) )
+        //.then( () => this.navigate( 'sign-up' ) )
+        //.catch( this.Error )
     },
 
     navigate( location, options={} ) {
