@@ -296,7 +296,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
             
             this.validate.Token.call(this)
 
-            if( this.path[1] !== 'person' && ( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) ) throw new Error("Invalid resource id")
+            if( this.path[1] !== 'reset-password' && ( this.path.length !== 3 || Number.isNaN( parseInt( this.path[2], 10 ) ) ) ) throw new Error("Invalid resource id")
 
             return this.validate.User.call(this)
         },
