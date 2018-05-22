@@ -20,7 +20,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 submit() {
                     if( !this.validate( this.getFormValues() ) || !this.model.validateRepeatPassword() ) return Promise.resolve( this.onSubmitEnd() )
 
-                    return this.Xhr( { method: 'patch', resource: 'person', data: JSON.stringify( this.model.data ) } )
+                    return this.Xhr( { method: 'patch', resource: 'reset-password', data: JSON.stringify( this.model.data ) } )
                     .then( response => {
                         this.model.data = { }
                         this.clear()
