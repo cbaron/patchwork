@@ -3,19 +3,19 @@ var BaseResource = require('./__proto__'),
 
 Object.assign( CustomerLogin.prototype, BaseResource.prototype, {
 
+    User: require('./util/User'),
+
     PATCH() {
         return this.slurpBody()
         .then( () => this.validateUser() )
         .then( () => {
-            console.log( this.body )
-            console.log( this.user )
             this.user = { }
             Object.keys( this.body ).forEach( key => this.user[ key ] = this.body[ key ] )
-            console.log( this.user )
-            return this.respond( { body: { user: this.user } } )
-            //return this.User.createToken.call(this)
+
+            return this.User.attachUserRoles.call(this)
+            .then( () => this.User.createToken.call(this) )
+            .then( token => this.User.respondSetCookie.call( this, token, this.user ) )
         } )
-        //.then( token => this.User.respondSetCookie.call( this, token, { } ) )
     }
 
 } )

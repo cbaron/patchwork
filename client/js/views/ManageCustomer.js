@@ -58,7 +58,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onCustomerLoginBtnClick() {
         return this.Xhr( { method: 'PATCH', resource: 'customer-login', data: JSON.stringify( this.selectedCustomer.person.data ) } )
-        .then( () => this.user.trigger( 'loginAsCustomer' ) )
+        .then( data => {
+            this.user.set( data )
+            return Promise.resolve( this.user.trigger( 'loginAsCustomer' ) )
+        } )
         .catch( this.Error )
     },
 

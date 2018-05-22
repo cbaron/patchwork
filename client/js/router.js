@@ -8,6 +8,15 @@ module.exports = Object.create( {
 
     capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
+    clearAndNavigate( route ) {
+        return Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
+        .then( () => {
+            this.currentView = undefined
+            return Promise.resolve( this.navigate( route ) )
+        } )
+        .catch( this.Error )
+    },
+
     initialize() {
         this.content = document.querySelector('#content')
 
@@ -16,7 +25,8 @@ module.exports = Object.create( {
         this.user = require('./models/User')
 
         this.user.on( 'loggedIn', () => this.onLogin() )
-        this.user.on( 'loginAsCustomer', personData => this.loginAsCustomer( personData ) )
+
+        this.user.on( 'loginAsCustomer', () => this.clearAndNavigate('/sign-up') )
 
         this.userPromise = new Promise( ( resolve, reject ) => this.user.fetch().done( resolve ).fail( reject ) )
 
@@ -113,15 +123,6 @@ module.exports = Object.create( {
         .catch( err => new this.Error(err) )
     },
 
-    loginAsCustomer( personData ) {
-        console.log( 'loginAsCustomer' )
-        console.log( personData )
-        
-        //.then( () => Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) ) )
-        //.then( () => this.navigate( 'sign-up' ) )
-        //.catch( this.Error )
-    },
-
     navigate( location, options={} ) {
         let path = `${window.location.pathname}`.split('/')
 
@@ -142,14 +143,7 @@ module.exports = Object.create( {
 
     onViewNavigate( route ) { this.navigate( route, { trigger: true } ) },
 
-    onSignout() {
-        return Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
-        .then( () => {
-            this.currentView = undefined    
-            this.navigate( "/" )
-        } )
-        .catch( this.Error )
-    },
+    onSignout() { this.clearAndNavigate('/') },
 
     onUser( user ) {
         this.adminHeader ? this.adminHeader.onUser( this.user ) : this.header.onUser( this.user )

@@ -350,9 +350,7 @@ Object.assign( Resource.prototype, MyObject.prototype, {
 
     validateUser() {
         const permissions = this.Permissions[ this.path[1] ] && this.Permissions[ this.path[1] ][ this.request.method ]
-        console.log( 'validateUser' )
-        console.log( permissions )
-        console.log( this.user.roles )
+
         if( this.user.id === undefined ||
             permissions && this.user.roles.find( role => permissions.has( role ) ) === undefined
           ) { return this.respond( { stopChain: true, code: 401, body: { } } ) }
