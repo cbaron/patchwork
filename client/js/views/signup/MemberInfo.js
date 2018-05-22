@@ -285,13 +285,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 }
             } )
         } ) )
-        .then( () => valid
-            ? this.Q( this.$.ajax( {
+        .then( () => Promise.resolve( valid
+            ? this.$.ajax( {
                 data: JSON.stringify( this.user.attributes ),
                 method: "PATCH",
-                url: "/user" } ) )
-            : this.Q()
-        )
+                url: "/user" } )
+            : ''
+        ) )
         .then( () => ( this.user.isLoggedIn() ? this.Q( true ) : this.checkForAccount( valid ) ) )
         .then( valid => valid )
         .fail( e => { console.log( e.stack || e ); return false } )

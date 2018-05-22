@@ -56,13 +56,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
     },
 
-    onCustomerLoginBtnClick() {
-        return this.Xhr( { method: 'PATCH', resource: 'customer-login', data: JSON.stringify( this.selectedCustomer.person.data ) } )
-        .then( data => {
+    async onCustomerLoginBtnClick() {
+        try {
+            const data = await this.Xhr( { method: 'PATCH', resource: 'customer-login', data: JSON.stringify( { customerId: this.selectedCustomer.person.data.id } ) } )
             this.user.set( data )
-            return Promise.resolve( this.user.trigger( 'loginAsCustomer' ) )
-        } )
-        .catch( this.Error )
+            this.user.trigger( 'loginAsCustomer' )
+        } catch( err ) { this.Error( err ) }
     },
 
     postRender() {

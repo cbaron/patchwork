@@ -8,13 +8,12 @@ module.exports = Object.create( {
 
     capitalizeFirstLetter: string => string.charAt(0).toUpperCase() + string.slice(1),
 
-    clearAndNavigate( route ) {
-        return Promise.all( Object.keys( this.views ).map( name => this.views[ name ].delete() ) )
-        .then( () => {
+    async clearAndNavigate( route ) {
+        try {
+            await Promise.all( Object.entries( this.views ).map( ( [ key, val ] ) => val.delete() ) )
             this.currentView = undefined
-            return Promise.resolve( this.navigate( route ) )
-        } )
-        .catch( this.Error )
+            this.navigate( route )
+        } catch( err ) { this.Error( err ) }
     },
 
     initialize() {

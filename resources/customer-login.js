@@ -5,17 +5,22 @@ Object.assign( CustomerLogin.prototype, BaseResource.prototype, {
 
     User: require('./util/User'),
 
-    PATCH() {
-        return this.slurpBody()
-        .then( () => this.validateUser() )
-        .then( () => {
-            this.user = { }
-            Object.keys( this.body ).forEach( key => this.user[ key ] = this.body[ key ] )
+    async PATCH() {
+        await this.slurpBody()
+        await this.validateUser()
 
-            return this.User.attachUserRoles.call(this)
-            .then( () => this.User.createToken.call(this) )
-            .then( token => this.User.respondSetCookie.call( this, token, this.user ) )
-        } )
+        const rows = await this.Postgres.query( `SELECT * FROM person WHERE id = $1`, [ this.body.customerId ], { rowsOnly: true } )
+        if( rows.length !== 1 ) return this.respond( { stopChain: true, code: 500 } )
+
+        this.user = Object.entries( rows[0] ).reduce( ( memo, [ key, val ] ) => {
+            if( key === 'password' ) return memo
+            memo[ key ] = val
+            return memo
+        }, { } )
+
+        await this.User.attachUserRoles.call(this)
+        const token = await this.User.createToken.call(this)
+        this.User.respondSetCookie.call( this, token, this.user )
     }
 
 } )
