@@ -1,7 +1,7 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
     Views: {
-        buttonFlow() {
+        orderDeleteButtonFlow() {
             return { 
                 model: Object.create( this.Model ).constructor( {
                     states: {
@@ -21,18 +21,16 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     clear() {
         this.els.list.innerHTML = ''
         this.els.balanceNotice.classList.add('fd-hidden')
-        this.views.buttonFlow.hideSync()
+        this.views.orderDeleteButtonFlow.hideSync()
         this.els.totals.classList.add('fd-hidden')
     },
 
     async deleteOrder() {
-        try {
-            await this.Xhr( { method: 'DELETE', resource: 'delete-order', id: this.currentSelection.getAttribute('data-id') } )
-            this.Toast.showMessage( 'success', 'Order deleted.' )
-            this.currentSelection.remove()
-            if( !this.els.list.firstChild ) { this.emit('noSeasons'); return this.showNoSeasons() }
-            this.els.list.firstChild.click()
-        } catch( err ) { this.Error( err ) }
+        await this.Xhr( { method: 'DELETE', resource: 'delete-order', id: this.currentSelection.getAttribute('data-id') } )
+        this.Toast.showMessage( 'success', 'Order deleted.' )
+        this.currentSelection.remove()
+        if( !this.els.list.firstChild ) { this.emit('noSeasons'); return this.showNoSeasons() }
+        this.els.list.firstChild.click()
     },
 
     events: {
@@ -40,7 +38,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         payment: 'click',
         views: {
             buttonFlow: [
-                [ 'confirmBtnClicked', function() { this.deleteOrder() } ]
+                [ 'confirmBtnClicked', function() { this.deleteOrder().catch( this.Error ) } ]
             ]
         }
     },
