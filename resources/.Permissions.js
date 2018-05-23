@@ -12,6 +12,10 @@ module.exports = {
         PATCH: AdminOnly
     },
 
+    'delete-order': {
+        DELETE: AdminOnly
+    },
+
     Document: {
         PATCH: AdminOnly
     }

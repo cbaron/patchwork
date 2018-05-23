@@ -1,19 +1,53 @@
 module.exports = Object.assign( {}, require('./__proto__'), {
 
+    Views: {
+        buttonFlow() {
+            return { 
+                model: Object.create( this.Model ).constructor( {
+                    states: {
+                        start: [ { name: 'save', text: 'Delete Order', class:'delete-btn', nextState: 'confirm' } ],
+                        confirm: [
+                            { name: 'confirmBtn', class:'delete-btn', text: 'Are You Sure?', emit: true, nextState: 'start' },
+                            { name: 'cancel', class:'reset-btn', nextState: 'start', text: 'Cancel' }
+                        ]
+                    }
+                } )
+            }
+        }
+    },
+
     MemberSeason: require('../models/MemberSeason'),
 
     clear() {
         this.els.list.innerHTML = ''
         this.els.balanceNotice.classList.add('fd-hidden')
+        this.views.buttonFlow.hideSync()
+        this.els.totals.classList.add('fd-hidden')
+    },
+
+    async deleteOrder() {
+        try {
+            await this.Xhr( { method: 'DELETE', resource: 'delete-order', id: this.currentSelection.getAttribute('data-id') } )
+            this.Toast.showMessage( 'success', 'Order deleted.' )
+            this.currentSelection.remove()
+            if( !this.els.list.firstChild ) { this.emit('noSeasons'); return this.showNoSeasons() }
+            this.els.list.firstChild.click()
+        } catch( err ) { this.Error( err ) }
     },
 
     events: {
         list: 'click',
-        payment: 'click'
+        payment: 'click',
+        views: {
+            buttonFlow: [
+                [ 'confirmBtnClicked', function() { this.deleteOrder() } ]
+            ]
+        }
     },
 
     insertShareLabels() {
         const countPerShare = { }
+        if( !this.MemberSeason.data.length ) return this.showNoSeasons()
 
         this.MemberSeason.data.forEach( season => {
             countPerShare[ season.name ] ? ++countPerShare[ season.name ] : countPerShare[ season.name ] = 1
@@ -41,6 +75,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     select( memberShareId ) {
         this.els.list.querySelector(`div.share-label[data-id="${memberShareId}"]`).click()
+    },
+
+    showNoSeasons() {
+        this.clear()
+        this.slurpTemplate( { template: `<li>No orders.</li>`, insertion: { el: this.els.list } } )
     },
 
     templateOpts() { return { isAdmin: window.location.pathname.split('/').includes('admin-plus') } },
