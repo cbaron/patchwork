@@ -2292,6 +2292,15 @@ html.non-touch .Header .member-ui >ul >li:hover {
 .AccountHome {
   margin: 2rem 3rem 4rem;
 }
+.ManageCustomer .customer-login,
+.AccountHome .customer-login {
+  text-align: center;
+  margin-top: 6rem;
+}
+.ManageCustomer .customer-login >button,
+.AccountHome .customer-login >button {
+  background-color: #ffc502;
+}
 .ManageCustomer .main-search,
 .AccountHome .main-search {
   display: flex;
@@ -2682,13 +2691,23 @@ html.non-touch .AccountHome button:hover {
 .Seasons .share-label.selected {
   background-color: #ffdc00;
 }
-.Seasons >.totals {
+.Seasons .totals {
   margin-bottom: 1.5rem;
 }
-.Seasons >.totals >div:first-child {
+.Seasons .totals >div:first-child {
   color: #a00;
   margin-bottom: 0.15rem;
   font-size: 1.2rem;
+}
+.Seasons .ButtonFlow .state {
+  width: 22rem;
+}
+.Seasons .ButtonFlow .delete-btn {
+  background-color: #a00;
+  color: #fff;
+}
+.Seasons .ButtonFlow .reset-btn {
+  margin-left: 1rem;
 }
 .Seasons >div:last-child {
   font-weight: bold;

@@ -3,6 +3,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     Customer: require('../models/Customer'),
     Delivery: require('../models/Delivery'),
 
+    events: {
+        customerLoginBtn: 'click'
+    },
+
     patchMemberShare() {
         const weekPatch = this.views.weekOptions.getPatchData()
 
@@ -52,11 +56,20 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         } )
     },
 
+    async onCustomerLoginBtnClick() {
+        try {
+            const data = await this.Xhr( { method: 'PATCH', resource: 'customer-login', data: JSON.stringify( { customerId: this.selectedCustomer.person.data.id } ) } )
+            this.user.set( data )
+            this.user.trigger( 'loginAsCustomer' )
+        } catch( err ) { this.Error( err ) }
+    },
+
     postRender() {
 
         this.views.memberTypeahead.focus()
 
         this.views.memberTypeahead.on( 'customerSelected', customer => {
+            this.views.seasons.views.orderDeleteButtonFlow.hideSync()
             this.selectedCustomer = customer
             this.views.customerInfo.reset( customer )
             this.views.seasons.update( customer )
@@ -65,6 +78,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.transactions.hide()
             this.views.sharePatch.reset()
             this.views.seasons.els.totals.classList.add('fd-hidden')
+            this.els.customerLogin.classList.remove('fd-hidden')
         } )
 
         this.views.seasons.on( 'selected', data => {
@@ -87,12 +101,18 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     this.views.seasons.els.totals.classList.remove('fd-hidden')
                     this.views.seasons.updateWeeklyPriceAndTotal( this.views.orderOptions.originalWeeklyPrice, this.selectedShare.label, this.views.weekOptions.getTotalDates() )
                     this.views.sharePatch.setOriginalWeeklyPrice( this.views.orderOptions.originalWeeklyPrice, this.views.weekOptions.getTotalDates() )
+                    this.views.seasons.views.orderDeleteButtonFlow.showSync()
                 } ).catch(this.Error)
 
                 this.views.weekOptions.update( { ...data, isAdmin: true } ).then( () => this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() ) ).catch(this.Error)
                 this.views.transactions.update( data ).then( () => this.views.sharePatch.balance = this.views.transactions.model.getBalance() ).catch( this.Error )
             } )
         } )
+
+        this.views.seasons.on( 'noSeasons', () =>
+            Promise.all( [ 'orderOptions', 'weekOptions', 'sharePatch', 'transactions' ].map( view => this.views[ view ].hide() ) )
+            .catch( this.Error )
+        )
 
         this.views.orderOptions.on( 'deliveryChanged', data => {
             this.views.sharePatch.setWeeksAffected( this.views.weekOptions.getWeeksAffected() )

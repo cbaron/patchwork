@@ -8,6 +8,14 @@ module.exports = {
         POST: AdminOnly
     },
 
+    'customer-login': {
+        PATCH: AdminOnly
+    },
+
+    'delete-order': {
+        DELETE: AdminOnly
+    },
+
     Document: {
         PATCH: AdminOnly
     }

@@ -83,13 +83,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         label: 'Password',
         type: 'password',
         error: "Password must be at least six characters.",
-        validate: function(val) { return this.user.isAdmin() || this.user.isLoggedIn() || val.length > 5 }
+        validate: function(val) { return this.user.isLoggedIn() || val.length > 5 }
     }, {
         name: 'repeatpassword',
         label: 'Repeat Password',
         type: 'password',
         error: "Passwords must match.",
-        validate: function( val ) { return this.user.isAdmin() || this.user.isLoggedIn() || ( val === this.templateData.password.val() ) }
+        validate: function( val ) { return this.user.isLoggedIn() || ( val === this.templateData.password.val() ) }
     }, {
         name: 'omission',
         label: 'Opt-out Vegetable',
@@ -190,28 +190,6 @@ Object.assign( MemberInfo.prototype, View.prototype, {
     postRender() {
         var self = this;
 
-        if( this.user.isAdmin() ) {
-            this.views = { memberTypeahead: this.factory.create( 'memberTypeahead', Object.assign( { insertion: { el: this.templateData.container.get(0).firstChild, method: 'insertBefore' } } ) ) }
-            this.views.memberTypeahead.focus()
-
-            this.views.memberTypeahead.on( 'customerSelected', customer => {
-                this.selectedCustomer = customer
-                this.templateData.name.val( customer.person.data.name )
-                this.templateData.email.val(
-                    customer.person.data.secondaryEmail
-                        ? [ customer.person.data.email, customer.person.data.secondaryEmail ].join(', ')
-                        : customer.person.data.email
-                )
-                this.templateData.phonenumber.val( customer.member.data.phonenumber )
-                this.templateData.address.val( customer.member.data.address )
-                this.templateData.extraaddress.val( customer.member.data.extraaddress )
-                this.templateData.heard.val( customer.member.data.heard )
-
-                this.setFoodOmission( customer )
-                .catch( e => { this.Toast.showMessage( 'error', 'Error retrieving Food Omission Data' ); this.Error } )
-            } );
-        }
-
         ( window.google && window.google.maps ) 
             ? this.initAutocomplete()
             : window.initGMap = () => this.initAutocomplete()
@@ -307,14 +285,13 @@ Object.assign( MemberInfo.prototype, View.prototype, {
                 }
             } )
         } ) )
-        .then( () => {
-            if( valid && (!this.user.isAdmin()) ) {
-                return this.Q( this.$.ajax( {
-                    data: JSON.stringify( this.user.attributes ),
-                    method: "PATCH",
-                    url: "/user" } ) )
-            }
-        } )
+        .then( () => Promise.resolve( valid
+            ? this.$.ajax( {
+                data: JSON.stringify( this.user.attributes ),
+                method: "PATCH",
+                url: "/user" } )
+            : ''
+        ) )
         .then( () => ( this.user.isLoggedIn() ? this.Q( true ) : this.checkForAccount( valid ) ) )
         .then( valid => valid )
         .fail( e => { console.log( e.stack || e ); return false } )
