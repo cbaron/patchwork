@@ -10,22 +10,21 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
         return this
     },
 
-    delete( id ) {
-        return this.Xhr( { method: 'DELETE', resource: this.resource, id } )
-        .then( () => {
-            const datum = this.data.find( datum => datum.id == id )
+    async delete( id ) {
+        await this.Xhr( { method: 'DELETE', resource: this.resource, id } )
 
-            if( this.store ) {
-                Object.keys( this.store ).forEach( attr => {
-                    this.store[ attr ][ datum[ attr ] ] = this.store[ attr ][ datum[ attr ] ].filter( datum => datum.id != id )
-                    if( this.store[ attr ][ datum[ attr ] ].length === 0 ) { this.store[ attr ][ datum[ attr ] ] = undefined }
-                } )
-            }
+        const datum = this.data.find( datum => datum.id == id )
 
-            this.data = this.data.filter( datum => datum.id != id )
+        if( this.store ) {
+            Object.keys( this.store ).forEach( attr => {
+                this.store[ attr ][ datum[ attr ] ] = this.store[ attr ][ datum[ attr ] ].filter( datum => datum.id != id )
+                if( this.store[ attr ][ datum[ attr ] ].length === 0 ) { this.store[ attr ][ datum[ attr ] ] = undefined }
+            } )
+        }
 
-            return Promise.resolve(id)
-        } )
+        this.data = this.data.filter( datum => datum.id != id )
+
+        return Promise.resolve(id)
     },
 
     get( opts={ query:{} } ) {
