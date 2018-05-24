@@ -24,7 +24,7 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
 
         this.data = this.data.filter( datum => datum.id != id )
 
-        return Promise.resolve(id)
+        return datum
     },
 
     get( opts={ query:{} } ) {
