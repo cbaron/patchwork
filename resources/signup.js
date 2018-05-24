@@ -70,6 +70,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     executeShareQueries( share ) {
+        console.log( 'executeShareQueries' )
         let membershareid
 
         return this.dbQuery( {
@@ -171,7 +172,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     handleFoodOmission( memberid ) {
-        if( this.body.member.omission.length === 0 ) return this.Q()
+        if( this.body.member.omission.length === 0 ) return this.Postgres.query( `DELETE FROM memberfoodomission WHERE memberid = $1`, [ memberid ] )
 
         return this.dbQuery( {
             query: `SELECT * FROM memberfoodomission WHERE memberid = $1`,

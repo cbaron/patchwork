@@ -10,27 +10,21 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
         return this
     },
 
-    delete() {
-        const keyValue = this.data[ this.meta.key ]
-
-        return this.Xhr( { method: 'DELETE', resource: this.resource, id: keyValue } )
+    delete( id ) {
+        return this.Xhr( { method: 'DELETE', resource: this.resource, id } )
         .then( () => {
-            const key = this.meta.key
+            const datum = this.data.find( datum => datum.id == id )
 
-            if( Array.isArray( this.data ) ) {
-                const datum = this.data.find( datum => datum[ key ] == keyValue )
-
-                if( this.store ) {
-                    Object.keys( this.store ).forEach( attr => {
-                        this.store[ attr ][ datum[ attr ] ] = this.store[ attr ][ datum[ attr ] ].filter( datum => datum[ key ] != keyValue )
-                        if( this.store[ attr ][ datum[ attr ] ].length === 0 ) { this.store[ attr ][ datum[ attr ] ] = undefined }
-                    } )
-                }
-
-                this.data = this.data.filter( datum => datum[ key ] != keyValue )
+            if( this.store ) {
+                Object.keys( this.store ).forEach( attr => {
+                    this.store[ attr ][ datum[ attr ] ] = this.store[ attr ][ datum[ attr ] ].filter( datum => datum.id != id )
+                    if( this.store[ attr ][ datum[ attr ] ].length === 0 ) { this.store[ attr ][ datum[ attr ] ] = undefined }
+                } )
             }
 
-            return Promise.resolve( this.data )
+            this.data = this.data.filter( datum => datum.id != id )
+
+            return Promise.resolve(id)
         } )
     },
 
