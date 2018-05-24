@@ -70,7 +70,6 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     executeShareQueries( share ) {
-        console.log( 'executeShareQueries' )
         let membershareid
 
         return this.dbQuery( {
