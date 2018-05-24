@@ -45,21 +45,24 @@ Object.assign( Report.prototype, Base.prototype, {
         return this.Postgres.query( model.query( whereString ), values, { rowsOnly: true } )
         .then( body => this.respond( { body } ) )
     },
-//COPY (SELECT p.name, p.email, m.phonenumber, m.address, m.zipcode from member m join person p on m.personid = p.id JOIN membershare ms on ms.memberid = m.id where ms.id >1349 order by ms.id ASC) to STDOUT with CSV HEADER;
 
     model: {
+
         1: {
             id: 1,
             name: 'get-member-info',
             label: 'Get Member Info',
             query( where ) {
                 return `` +
-                `SELECT p.name as "Name", p.email as "Email", m.phonenumber as "Phone", m.address as "Address", m.zipcode as "Zip", s.label as "Season", ct.created as "Signup Date" ` +
+                `SELECT p.name as "Name", p.email as "Email", m.phonenumber as "Phone", m.address as "Address", m.zipcode as "Zip", s.label as "Season", pr.name as "Produce", prf.name as "Produce Family", ct.created as "Signup Date" ` +
                 `FROM member m ` +
                 `JOIN person p on m.personid = p.id ` +
                 `JOIN membershare ms on ms.memberid = m.id ` +
                 `JOIN "csaTransaction" ct ON ct."memberShareId" = ms.id ` +
                 `JOIN share s on ms.shareid = s.id ` +
+                `LEFT JOIN memberfoodomission mfo ON mfo.memberid = m.id ` +
+                `LEFT JOIN produce pr on pr.id = mfo.produceid ` +
+                `LEFT JOIN producefamily prf on prf.id = mfo.producefamilyid ` +
                 `WHERE ct.action = 'Season Signup' AND ${where} ` +
                 `ORDER BY p.name, ct.created ASC`
             }
