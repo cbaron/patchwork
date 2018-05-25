@@ -69,6 +69,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.views.memberTypeahead.focus()
 
         this.views.memberTypeahead.on( 'customerSelected', customer => {
+            console.log( customer )
             this.views.seasons.views.orderDeleteButtonFlow.hideSync()
             this.selectedCustomer = customer
             this.views.customerInfo.reset( customer )
