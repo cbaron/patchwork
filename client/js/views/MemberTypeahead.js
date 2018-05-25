@@ -1,4 +1,4 @@
-module.exports = Object.assign( {}, require('./__proto__'), {
+module.exports = { ...require('./__proto__'),
 
     AutoComplete: require('../AutoComplete'),
 
@@ -7,36 +7,45 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     focus() { this.els.customerInput.focus() },
 
     postRender() {
+        let searchResults
         new this.AutoComplete( {
             delay: 500,
             selector: this.els.customerInput,
             minChars: 3,
             cache: false,
-            source: ( term, suggest ) => {
-                this.search( 'name', term.trim(), suggest )
-                .then( found => found ? Promise.resolve(true) : this.search( 'email', term, suggest ) )
-                .then( found => found ? Promise.resolve(true) : this.search( 'secondaryEmail', term, suggest ) )
-                .then( found => found ? Promise.resolve(true) : suggest([]) )
-                .catch( this.Error )
+            renderItem: ( item, search ) => 
+                `<div class="autocomplete-suggestion" data-id="${item.id}">${item.name} - ${item.email}</div>`,
+            source: async ( term, suggest ) => {
+                term = term.trim()
+                let personIds = [ ]
+
+                const attrResults = await Promise.all( [ 'name', 'email', 'secondaryEmail' ].map( attr =>
+                    this.search( attr, term ).catch( this.Error ) 
+                ) )
+
+                searchResults = attrResults.reduce( ( memo, curr ) => {
+                    curr = curr.filter( customer => {
+                        if( personIds.includes( customer.person.data.id ) ) return false
+                        personIds.push( customer.person.data.id )
+                        return true
+                    } )
+
+                    return [ ...memo, ...curr ]
+                }, [ ] )
+
+                return suggest( searchResults.map( customer => customer.person.data ) )
             },
             onSelect: ( e, term, item ) => {
-                this.selectedCustomer = this.Customer.data.find( datum => datum.person.data[ this.attr ] === term )
+                this.selectedCustomer = searchResults.find( customer => customer.person.data.id == e.target.getAttribute('data-id') )            
                 this.emit( 'customerSelected', this.selectedCustomer )
             }
-
-        } )
+        } )    
 
         return this
     },
 
-    search( attr, term, suggest ) {
-        return this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )
-        .then( () => {
-            if( ! this.Customer.data.length ) return Promise.resolve( false )
-            
-            this.attr = attr     
-            suggest( this.Customer.data.map( datum => datum.person.data[ attr ] ) )
-            return Promise.resolve( true )
-        } )
+    async search( attr, term, suggest ) {
+        await this.Customer.get( { query: { [attr]: { operation: '~*', value: term }, 'id': { operation: 'join', value: { table: 'member', column: 'personid' } } } } )    
+        return this.Customer.data
     }
-} )
+}
