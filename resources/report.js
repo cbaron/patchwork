@@ -17,7 +17,7 @@ Object.assign( Report.prototype, Base.prototype, {
             whereString = `ct.created BETWEEN $1 AND $2`
         }
 
-        if( model.id === 5 || model.id === 6 || model.id === 7 || model.id === 8 ) { values = [ ]; whereString = `` }
+        if( [ 5, 6, 7, 8 ].includes( model.id ) ) { values = [ ]; whereString = `` }
 
         return { values, whereString }
     },
@@ -186,10 +186,10 @@ Object.assign( Report.prototype, Base.prototype, {
             label: 'Get Heard',
             query() {
                 return `` +
-                `SELECT p.name as "Name", p.email as "Email", m.heard as "Heard" ` +
-                `FROM member m ` +
-                `JOIN person p on m.personid = p.id ` +
-                `ORDER BY p.name ASC`
+                `SELECT p.name as "Name", p.email as "Email", m.heard as "Heard"
+                FROM member m
+                JOIN person p on m.personid = p.id
+                ORDER BY p.name ASC`
             }
         }
 
