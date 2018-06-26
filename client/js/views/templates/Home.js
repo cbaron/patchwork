@@ -1,6 +1,6 @@
 module.exports = p =>
 `<div>
-    <img data-src="${p.ImageSrc('cornucopia')}" />
+    <img data-src="${p.ImageSrc('cornucopia-home')}" />
     <div class="overlay">
         <div data-js="slogan"></div>
         <div>
