@@ -113,7 +113,7 @@ module.exports = {
     
     IconDataJs( p ) { return p.name ? `data-js="${p.name}"` : `` },
 
-    ImageSrc( name ) { return `https://storage.googleapis.com/double-quill-3243/${name}` },
+    ImageSrc( name ) { return `https://storage.googleapis.com/thoreau-would-be-proud/${name}` },
 
     ParseTextLinks( text ) {
         let start = text.indexOf('{{'),
