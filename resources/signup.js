@@ -11,18 +11,21 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     bcrypt: require('bcrypt-nodejs'),
 
-    db: Object.assign( {}, Base.prototype.db, {
-        POST() {
+    db: { ...Base.prototype.db,
+        async POST() {
             this.membershareids = [ ]
-            return this.executeUserQueries()
-            .then( memberid => {
-                this.memberid = memberid
-                return this.handleFoodOmission( memberid )
-            } )
-            .then( () => this.Q.all( this.body.shares.map( share => this.executeShareQueries( share ) ) ) )
-            .then( () => { if( Object.keys( this.body.payment ).length ) return this.executePayment( ) } )
+            const memberid = await this.executeUserQueries()
+            this.memberid = memberid
+
+            await this.handleFoodOmission( memberid )
+
+            let chain = Promise.resolve()
+            this.body.shares.forEach( share => { chain = chain.then( () => this.executeShareQueries( share ) ) } )
+            await chain
+
+            if( Object.keys( this.body.payment ).length ) return this.executePayment()
         }
-    } ),
+    },
     
     context: Object.assign( {}, Base.prototype.context, {
         POST() {
