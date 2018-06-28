@@ -19,7 +19,7 @@ module.exports = Object.assign( { }, require('./__proto__'), require('./Submitte
     },
 
     submit() {
-        return this.model.delete()
+        return this.model.deleteByKey()
         .then( keyValue => {
             this.emit( 'modelDeleted', this.model.data )
             this.Toast.showMessage( 'success', this.toastSuccess || `Success` )
