@@ -218,7 +218,12 @@ module.exports = Object.assign( { }, require('./__proto__'), {
 
         schema.attributes.forEach( attr => {
             if( attr.range === 'Geography' && data[ attr.name ] && !Array.isArray( data[ attr.name ] ) ) data[ attr.name ] = JSON.parse( data[ attr.name ] ).coordinates
-            if( meta.validate && meta.validate[ attr.name || attr.fk ] ) attr.validate = meta.validate[ attr.name || attr.fk ]
+            if( attr.fk ) {
+                if( !meta.validate ) meta.validate = { }
+                meta.validate[ attr.columnName ] = val => val !== undefined
+                attr.error = `${attr.fk} is a required field.`
+            }
+            if( meta.validate && meta.validate[ attr.name || attr.columnName ] ) attr.validate = meta.validate[ attr.name || attr.columnName ]
         } )
 
         return Object.create( this.Model ).constructor(
@@ -249,11 +254,16 @@ module.exports = Object.assign( { }, require('./__proto__'), {
         if( meta.displayAttr ) {
             value = meta.displayAttr.map( attr => {
                 const fkColumn = schema.attributes.find( schemaAttr => schemaAttr.fk === attr )
-                if( fkColumn ) return this[ attr ].store.id[ datum[ fkColumn.columnName ] ].label || this[ attr ].store.id[ datum[ fkColumn.columnName ] ].name
+
+                if( fkColumn ) {
+                    if( !this[ attr ].store.id[ datum[ fkColumn.columnName ] ] ) return `No ${fkColumn.fk} value chosen`
+                    return this[ attr ].store.id[ datum[ fkColumn.columnName ] ].label || this[ attr ].store.id[ datum[ fkColumn.columnName ] ].name
+                }
 
                 return attr === 'createdAt'
                     ? this.Format.Moment.utc( datum[ meta.displayAttr ] ).format('YYYY-MM-DD hh:mm:ss')
                     : datum[ attr ]
+
             } ).join(' -- ')
         } else {
             value = datum.label || datum.name

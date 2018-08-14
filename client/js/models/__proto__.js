@@ -139,12 +139,12 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
 
     validate( data ) {
         let valid = true
-       
+      
         Object.keys( data ).forEach( name => { 
             const val = data[ name ],
-                attribute = this.attributes.find( attr => attr.name === name )       
-    
-            if( attribute === undefined || !attribute.validate ) {
+                attribute = this.attributes.find( attr => attr.name === name || attr.columnName === name )
+
+            if( ( attribute === undefined || !attribute.validate ) && !( attribute.fk && attribute.validate ) ) {
                 this.data[ name ] = val
                     ? typeof val === 'string'
                          ? val.trim() 
@@ -154,7 +154,7 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
                 this.emit( 'validationError', attribute )
                 valid = false
             } else if( this.validateDatum( attribute, val ) ) {
-                this.data[ name ] = val.trim()
+                this.data[ name ] = typeof val === 'string' ? val.trim() : val
             }
         } )
 
@@ -162,7 +162,7 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
     },
 
     validateDatum( attr, val ) {
-        return attr.validate.call( this, val.trim() )
+        return attr.validate.call( this, typeof val === 'string' ? val.trim() : val )
     },
 
     validateRepeatPassword() {
