@@ -3,8 +3,8 @@ module.exports = p => {
     const rows = p.fields.map( field => {
         const rowValue = field.name === 'neverReceive'
             ? `<div data-js="neverReceive" class="cell"></div>`
-            : field.name === 'onpaymentplan'
-                ? `<select data-js="onpaymentplan" class="cell">
+            : field.type === 'select'
+                ? `<select data-name="${field.name}" data-js="${field.name}" class="cell">
                         <option value="true">True</option>
                         <option value="false">False</option>
                     </select>`

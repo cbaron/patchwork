@@ -4,7 +4,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     clear() {
         this.fields.forEach( field => {
-            if( field.type !== 'select' ) this.els[ field.name ].textContent = ''
+            if( field.type === 'text' ) this.els[ field.name ].textContent = ''
         } )
 
         this.els.infoTable.querySelectorAll('.edited').forEach( el => el.classList.remove('edited') )
@@ -16,7 +16,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     events: {
-        onpaymentplan: 'change',
+        //onpaymentplan: 'change',
         resetBtn: 'click',
         saveBtn: 'click'
     },
@@ -25,10 +25,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         { table: 'person', type: 'text', name: 'name', label: 'Name' },
         { table: 'person', type: 'text', name: 'email', label: 'Email' },
         { table: 'person', type: 'text', name: 'secondaryEmail', label: 'Secondary Email' },
+        { table: 'person', type: 'select', name: 'emailVerified', label: 'Email Verified' },
         { table: 'member', type: 'text', name: 'phonenumber', label: 'Phone' },
         { table: 'member', type: 'text', name: 'zipcode', label: 'Zip Code' },
         { table: 'member', type: 'text', name: 'address', label: 'Address' },
-        { table: 'memberFoodOmission', type: 'select', name: 'neverReceive', label: 'Opt-out Vegetable' },
+        { table: 'memberFoodOmission', type: 'magicSuggest', name: 'neverReceive', label: 'Opt-out Vegetable' },
         { table: 'member', type: 'select', name: 'onpaymentplan', label: 'On Payment Plan' }
     ],
 
@@ -56,8 +57,22 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
     },
 
-    hasEdits() {
-        return Object.keys( this.editedFields ).filter( key => this.editedFields[ key ] !== undefined ).length > 0
+    handleChange( e ) {
+        const el = e.target,
+            field = this.fields.find( field => field.name === el.getAttribute('data-name') ),
+            fieldValue = Boolean( el.value === "true" ),
+            modelValue = this.model[ field.table ].data[ field.name ]
+
+        if( modelValue !== fieldValue ) {
+            el.classList.add('edited')
+            this.editedFields[ field.name ] = Boolean( el.value === "true" )
+            this.emit('edited')
+            this.showEditSummary()
+        } else if( this.editedFields[ field.name ] !== undefined ) {
+            el.classList.remove('edited')
+            this.editedFields[ field.name ] = undefined
+            this.showEditSummary()
+        }
     },
 
     handleEdit( e ) { this.els.resetBtn.classList.remove('fd-hidden') },
@@ -77,21 +92,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         }
     },
 
-    onOnpaymentplanChange( e ) {
-        const el = e.target,
-            fieldValue = Boolean( el.value === "true" ),
-            modelValue = this.model.member.data.onpaymentplan
-
-        if( modelValue !== fieldValue ) {
-            el.classList.add('edited')
-            this.editedFields[ 'onpaymentplan' ] = Boolean( el.value === "true" )
-            this.emit('edited')
-            this.showEditSummary()
-        } else if( this.editedFields.onpaymentplan !== undefined ) {
-            el.classList.remove('edited')
-            this.editedFields.onpaymentplan = undefined
-            this.showEditSummary()
-        }
+    hasEdits() {
+        return Object.keys( this.editedFields ).filter( key => this.editedFields[ key ] !== undefined ).length > 0
     },
 
     onResetBtnClick() { this.reset( this.model ) },
@@ -123,7 +125,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     populateTable() {
         this.fields.forEach( field => {
-            if( field.type !== 'select' ) this.els[ field.name ].textContent = this.model[ field.table ].data[ field.name ]
+            if( field.type === 'text' ) return this.els[ field.name ].textContent = this.model[ field.table ].data[ field.name ]
+            else if( field.name !== 'neverReceive' ) this.els[ field.name ].selectedIndex = this.model[ field.table ].data[ field.name ] ? 0 : 1
         } )
 
         if( this.MemberFoodOmission.data.length ) {
@@ -138,8 +141,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 this.FoodOmission.ms.setSelection( [ Object.assign( {}, foodDatum, { id: index } ) ] )
             }
         }
-
-        if( this.els.onpaymentplan ) this.els.onpaymentplan.selectedIndex = this.model.member.data.onpaymentplan ? 0 : 1
     },
 
     postRender() {
@@ -154,11 +155,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.FoodOmission.unstyle()
 
             this.FoodOmission.on( 'selectionChange', ( e, m ) => this.handleOmissionChange( e, m ) )
-        } )
+        } );
 
-        this.els.infoTable.querySelectorAll('div[contenteditable=true]').forEach( el => {
+        [ ...this.els.infoTable.querySelectorAll('div[contenteditable=true]') ].forEach( el =>
             el.addEventListener( 'blur', e => this.handleBlur(e) )
-        } )
+        );
+
+        [ ...this.els.infoTable.querySelectorAll('select') ].forEach( el =>
+            el.addEventListener( 'change', e => this.handleChange(e) )
+        )
 
         this.on( 'edited', e => this.handleEdit( e ) )
 
@@ -182,10 +187,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     : this.model[ field.table ].data[ field.name ]
                 let newValue = this.editedFields[ field.name ]
 
-                if( ! oldValue && field.name !== 'onpaymentplan' ) oldValue = 'EMPTY'
-                if( ! newValue && field.name !== 'onpaymentplan' ) newValue = 'EMPTY'
+                if( ! oldValue && field.type !== 'select' ) oldValue = 'EMPTY'
+                if( ! newValue && field.type !== 'select' ) newValue = 'EMPTY'
 
-                if( field.name === 'onpaymentplan' ) {
+                if( field.type === 'select' ) {
                     oldValue = oldValue.toString()
                     newValue = newValue.toString()
                 }
