@@ -16,7 +16,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     events: {
-        //onpaymentplan: 'change',
         resetBtn: 'click',
         saveBtn: 'click'
     },
