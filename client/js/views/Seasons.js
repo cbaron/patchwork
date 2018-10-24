@@ -75,6 +75,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.els.list.querySelector(`div.share-label[data-id="${memberShareId}"]`).click()
     },
 
+    showNoData() {
+        this.els.totals.classList.add('fd-hidden')
+        this.els.noDataMessage.classList.remove('fd-hidden')
+        this.views.orderDeleteButtonFlow.showSync()
+    },
+
     showNoSeasons() {
         this.clear()
         this.slurpTemplate( { template: `<li>No orders.</li>`, insertion: { el: this.els.list } } )
@@ -103,6 +109,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateWeeklyPriceAndTotal( amount, label, weeks ) {
+        this.els.noDataMessage.classList.add('fd-hidden')
         this.els.seasonLabel.textContent = label
         this.els.weeklyPrice.textContent = `${this.Currency.format(amount)}/week`
         this.els.weekNumber.textContent = `Number of Weeks: ${weeks}`

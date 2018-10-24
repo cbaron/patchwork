@@ -42,8 +42,8 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.Stripe.charge( {
                 amount: this.body.totalCents,
                 description: this.format( 'Purchase of CSA share(s) %s', this.body.shares.map( share => share.label ).join(', ') ),
-                metadata: { memberid: this.memberid, name: this.body.member.name, email: this.body.member.email },
-                receipt_email: this.body.member.email,
+                metadata: { memberid: this.memberid, name: this.body.member.name, email: this.body.member.email.toLowerCase() },
+                receipt_email: this.body.member.email.toLowerCase(),
                 source: Object.assign( { object: 'card' }, this.body.payment ),
                 statement_descriptor: 'Patchwork Gardens CSA'
             } )
@@ -55,9 +55,8 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
             } )
             .then( () => {
-                
                 console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
-                this.error = `Payment failed, please try again.`;
+                if( !this.error ) this.error = `Payment failed. Please try again or contact us at eat.patchworkgardens@gmail.com for support.`
             } ) 
         } )
         .then( charge => {
@@ -213,7 +212,7 @@ Object.assign( Signup.prototype, Base.prototype, {
         } )
         .then( result => {
             this.user.id = result.rows[0].id
-            this.user.email = this.body.member.email
+            this.user.email = this.body.member.email.toLowerCase()
             return this.insertMember( result.rows[0].id )
         } )
       
@@ -222,6 +221,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     responses: Object.assign( { }, Base.prototype.responses, {
         POST() {
             if( this.error ) return this.respond( { body: { error: this.error } } )
+
             this.user.state.signup = { }
             this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
 
@@ -230,7 +230,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 this.token = token
                 
                 return this.Q( this.Email.send( {
-                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     body: this.generateEmailBody() } )
@@ -241,7 +241,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 if( !this.newMember ) return this.Q()
 
                 return this.Q( this.Email.send( {
-                    to: this.isProd ? this.body.member.email : process.env.TEST_EMAIL,
+                    to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
                     from: 'eat.patchworkgardens@gmail.com',
                     subject: `Patchwork Gardens Email Verification`,
                     bodyType: 'html',
@@ -262,7 +262,7 @@ Object.assign( Signup.prototype, Base.prototype, {
     },
 
     rollbackSeasonalAddOns() {
-        return this.dbQuery( { query: `DELETE FROM "memberShareSeasonalAddOn" WHERE "memberShareId" IN ( ${this.membershareids.join(', ')}` } )
+        return this.dbQuery( { query: `DELETE FROM "memberShareSeasonalAddOn" WHERE "memberShareId" IN ( ${this.membershareids.join(', ')} )` } )
     },
 
     rollbackShareOptions() {
