@@ -94,7 +94,14 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                 }
             } )
             .then( () => {
-                //TODO:If no delivery, Toast, or some UI
+                if( !this.Delivery.data.length ) {
+                    this.views.orderOptions.hide()
+                    this.views.weekOptions.hide()
+                    this.views.transactions.hide()
+                    this.views.sharePatch.hide()
+                    return this.views.seasons.showNoData()
+                }
+
                 Object.assign( data, { delivery: this.Delivery } )
 
                 this.views.orderOptions.update( { ...data, isAdmin: true } ).then( () => {
