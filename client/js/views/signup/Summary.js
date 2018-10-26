@@ -28,7 +28,7 @@ Object.assign( Summary.prototype, View.prototype, {
             member: Object.assign(
                 this.user.pick( [ 'name', 'email', 'phonenumber', 'password', 'repeatpassword', 'address', 'extraaddress', 'heard', 'omission' ] ),
                 { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
-            payment: ( this.paymentSelected === 'card' ) ? this.getFormData() : {},
+            payment: ( this.selectedPayment === 'card' ) ? this.getFormData() : {},
             shares: this.buildShares(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal,
             isAdmin: this.user.isAdmin(),
@@ -57,45 +57,24 @@ Object.assign( Summary.prototype, View.prototype, {
     },
 
     cardPaymentSelected() {
-        this.signupHandler = () => { if( this.validateCardInfo() ) this.signup() }
-
         this.fee = false
-        this.paymentSelected = 'card'
+        this.selectedPayment = 'card'
         this.updateGrandTotal()
-
         this.templateData.paymentForm.removeClass('hide')
-
-        this.enableSignupBtn()
     },
 
     cashPaymentSelected() {
-        this.signupHandler = () => this.signup()
-
         this.fee = false
-        this.paymentSelected = 'cash'
-
-        this.enableSignupBtn()
-    },
-
-    disableSignupBtn() {
-        this.templateData.signupBtn
-            .addClass('disabled')
-            .removeClass('btn-success')
-            .off( 'click' )
-    },
-
-    enableSignupBtn() {
-        this.templateData.signupBtn
-            .removeClass('disabled')
-            .addClass('btn-success')
-            .off( 'click' )
-            .one( 'click', this.signupHandler )
+        this.selectedPayment = 'cash'
     },
 
     events: {
         'paymentForm': [
             { event: 'blur', 'selector': 'input', method: 'onInputBlur' },
             { event: 'focus', 'selector': 'input', method: 'onInputFocus' }
+        ],
+        'signupBtn': [
+            { event: 'click', method: 'signup' }
         ]
     },
 
@@ -226,35 +205,34 @@ Object.assign( Summary.prototype, View.prototype, {
             $el.siblings('.help-block').remove()
         } else {
             this.showError( $el, field.error )
-            // this.disableSignupBtn()
         }
     },
 
     onInputFocus( e ) {
         var $el = this.$( e.currentTarget )
         if( $el.next().hasClass('glyphicon-remove') ) this.removeError( this.$( e.currentTarget ) )
-        if( this.templateData.paymentForm.find('.has-error').length === 0 ) this.enableSignupBtn()
     },
 
     paymentUnselected() {
-
         this.fee = false
         this.selectedPayment = undefined
         this.updateGrandTotal()
 
-        // this.disableSignupBtn()
         this.templateData.paymentForm.addClass('hide')
+        this.templateData.signupBtn.addClass('hide')
     },
 
-    postRender() {
-        
+    postRender() {        
         this.fee = false
         this.selectedPayment = undefined
         
         View.prototype.postRender.call(this)
 
         this.paymentOptions
-            .on( 'itemSelected', model => this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]() )
+            .on( 'itemSelected', model => {
+                this.templateData.signupBtn.removeClass('hide')
+                this[ this.util.format( '%sPaymentSelected', model.get('name') ) ]()
+            } )
             .on( 'itemUnselected', model => this.paymentUnselected() )
 
         this.grandTotal = this.signupData.shares.map( share => share.get('total') ).reduce( ( a, b ) => a + b )
@@ -312,7 +290,7 @@ Object.assign( Summary.prototype, View.prototype, {
             title: 'Hmmm',
             body: ( opts && opts.error )
                 ? opts.error
-                : 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience',
+                : 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience.',
             hideCancelBtn: true,
             confirmText: 'Okay' } )
         .on( 'submit', () => this.modalView.hide() )
@@ -322,33 +300,38 @@ Object.assign( Summary.prototype, View.prototype, {
         this.modalView.show( {
             title: 'Great Success',
             body: this.util.format( 'Thanks for signing up.  We look forward to sharing the season with you. %s',
-                ( Object.keys( this.getFormData() ).length ) ?  'You should find a receipt in your email inbox' : '' ),
+                ( Object.keys( this.getFormData() ).length ) ?  'You should find a receipt in your email inbox.' : '' ),
             hideCancelBtn: true,
             confirmText: 'Okay' } )
         .on( 'submit', () => window.location = '/' )
         .on( 'hidden', () => window.location = '/' )
     },
 
-    signup() {
+    async signup() {
+        if( this.isSubmitting ) return
+
+        if( this.selectedPayment === 'card' ) {
+            if( !this.validateCardInfo() ) return
+        }
+
+        this.isSubmitting = true
+
         this.templateData.signupBtn
-            .off('click')
             .addClass('has-spinner')
             .append( this.spinner.spin().el )
 
-        this.$.ajax( {
-            data: this.buildRequest(),
-            headers: { 'Content-Type': 'application/json' },
-            method: "POST",
-            url: "/signup" } )
-        .done( response => {
+        try {
+            const response = await this.Xhr( {
+                data: this.buildRequest(),
+                method: "post",
+                resource: "signup"
+            } )
+
             if( response.error ) {
-                this.showErrorModal( { error: response.error } )
-                this.templateData.signupBtn
-                    .off('click')
-                    .one( 'click', this.signupHandler )
-                    .text('Become a Member!')   
+                this.showErrorModal( { error: response.error } )  
                 return
             }
+
             this.emit('done')
             this.paymentOptions.removeAllListeners( 'itemSelected' ).removeAllListeners( 'itemUnselected' )
             this.templateData.signupBtn.text('Thank you')
@@ -360,18 +343,13 @@ Object.assign( Summary.prototype, View.prototype, {
             }
             
             this.showSuccessModal()
-        } )
-        .fail( () => {
+        } catch(err) {
             this.showErrorModal()
-            this.templateData.signupBtn
-                .off('click')
-                .one( 'click', this.signupHandler )
-                .text('Become a Member!')
-        } )
-        .always( () => {
+        } finally {
             this.spinner.stop()
             this.templateData.signupBtn.removeClass('has-spinner')
-       } )
+            this.isSubmitting = false
+        }
     },
 
     subviews: {
@@ -406,8 +384,6 @@ Object.assign( Summary.prototype, View.prototype, {
                 valid = false
             }
         } )
-
-        // if( ! valid ) this.disableSignupBtn()
 
         return valid
     }
