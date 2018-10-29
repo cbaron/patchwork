@@ -151,7 +151,7 @@ return `` +
             </div>
         </form>
         <div class="button-row">
-            <button data-js="signupBtn" class="disabled">Become a Member!</button>
+            <button data-js="signupBtn" class="hide btn-success">Become a Member!</button>
         </div>
     </div>
 </div>`
