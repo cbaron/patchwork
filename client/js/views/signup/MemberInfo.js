@@ -62,6 +62,12 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         error: "Please enter a valid email address.",
         validate: function( val ) { return this.emailRegex.test(val) }
     }, {
+        name: 'secondaryEmail',
+        label: 'Secondary Email',
+        type: 'text',
+        error: "Please enter a valid email address.",
+        validate: function( val ) { return !val || this.emailRegex.test(val) }
+    }, {
         name: 'phonenumber',
         label: 'Phone Number',
         type: 'text',
@@ -161,6 +167,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         } )
 
         this.templateData.email.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
+        this.templateData.secondaryEmail.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
         this.templateData.password.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
         this.templateData.repeatpassword.get(0).closest('.form-group').classList.toggle( 'fd-hidden', this.user.isLoggedIn() )
     },

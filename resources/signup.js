@@ -37,7 +37,6 @@ Object.assign( Signup.prototype, Base.prototype, {
     } ),
 
     executePayment() {
-
         return this.Q(
             this.Stripe.charge( {
                 amount: this.body.totalCents,
@@ -110,6 +109,11 @@ Object.assign( Signup.prototype, Base.prototype, {
         ) )
     },
 
+    executeUserQueries() {
+        return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.member.email.toLowerCase() ] } )
+        .then( result => this[ `${ result.rows.length === 0 ? 'new' : 'update' }PersonQueries` ]( result.rows.length ? result.rows[0].id : undefined ) )
+    },
+
     getShareSignupDescription( share ) {
         const absent = share.skipDays.length ? `Absent: ${share.skipDays.map( day => day.slice(5) ).join(', ')}` : ``
 
@@ -133,11 +137,6 @@ Object.assign( Signup.prototype, Base.prototype, {
         if( match === null ) return description
 
         return match[1].trim()
-    },
-
-    executeUserQueries() {
-        return this.dbQuery( { query: "SELECT * FROM person WHERE email = $1", values: [ this.body.member.email.toLowerCase() ] } )
-        .then( result => this[ `${ result.rows.length === 0 ? 'new' : 'update' }PersonQueries` ]( result.rows.length ? result.rows[0].id : undefined ) )        
     },
 
     generateEmailBody() {
@@ -205,40 +204,43 @@ Object.assign( Signup.prototype, Base.prototype, {
 
     newPersonQueries() {
         return this.dbQuery( {
-            query: "INSERT INTO person ( email, password, name ) VALUES ( $1, $2, $3 ) RETURNING id",
-            values: [ this.body.member.email.toLowerCase(), this.body.member.password, this.body.member.name ]
+            query: `INSERT INTO person ( email, "secondaryEmail", password, name ) VALUES ( $1, $2, $3, $4 ) RETURNING id`,
+            values: [ this.body.member.email.toLowerCase(), this.body.member.secondaryEmail.toLowerCase(), this.body.member.password, this.body.member.name ]
         } )
         .then( result => {
-            return this.Q( this.Email.send( {
-                to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
-                from: 'eat.patchworkgardens@gmail.com',
-                subject: `Patchwork Gardens Email Verification`,
-                bodyType: 'html',
-                body:
-                    `<div>Dear ${this.body.member.name},</div>
-                    <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email.</div>
-                    <div>Please click <a href="${this.reflectUrl()}/verify/${this.token}">HERE</a> to do so.</div>`
-                } )
-            )
-            .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
-            .then( () => {
-                this.user.id = result.rows[0].id
-                this.user.email = this.body.member.email.toLowerCase()
-                return this.insertMember( result.rows[0].id )
-            } )
+            this.user.id = result.rows[0].id
+            this.user.email = this.body.member.email.toLowerCase()
+            this.newMember = true
+            return this.insertMember( result.rows[0].id )
         } )
     },
 
     responses: Object.assign( { }, Base.prototype.responses, {
         POST() {
-            if( this.error ) return this.respond( { body: { error: this.error } } )
-
             this.user.state.signup = { }
             this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
 
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
                 this.token = token
+
+                if( !this.newMember ) return Promise.resolve()
+
+                return this.Q( this.Email.send( {
+                    to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
+                    from: 'eat.patchworkgardens@gmail.com',
+                    subject: `Patchwork Gardens Email Verification`,
+                    bodyType: 'html',
+                    body:
+                        `<div>Dear ${this.body.member.name},</div>
+                        <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email.</div>
+                        <div>Please click <a href="${this.reflectUrl()}/verify/${this.token}">HERE</a> to do so.</div>`
+                    } )
+                )
+                .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
+            } )
+            .then( () => {
+                if( this.error ) return this.respond( { body: { error: this.error } } )
                 
                 return this.Q( this.Email.send( {
                     to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,

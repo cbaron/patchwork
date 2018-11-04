@@ -54,7 +54,7 @@ Object.assign( Report.prototype, Base.prototype, {
             label: 'Get Member Info',
             query( where ) {
                 return `` +
-                `SELECT p.name as "Name", p.email as "Email", m.phonenumber as "Phone", m.address as "Address", m.zipcode as "Zip", s.label as "Season", pr.name as "Produce", prf.name as "Produce Family", ct.created as "Signup Date" ` +
+                `SELECT p.name as "Name", p.email as "Email", p."secondaryEmail" as "Secondary Email", m.phonenumber as "Phone", m.address as "Address", m.zipcode as "Zip", s.label as "Season", pr.name as "Produce", prf.name as "Produce Family", ct.created as "Signup Date" ` +
                 `FROM member m ` +
                 `JOIN person p on m.personid = p.id ` +
                 `JOIN membershare ms on ms.memberid = m.id ` +
