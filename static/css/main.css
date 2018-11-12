@@ -3515,6 +3515,12 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+}
+.WeeklyReminder >div:first-child {
+  background-color: #fff5df;
+  padding: 2rem 3rem 1rem;
+  border-radius: 0.5rem;
 }
 .WeeklyReminder h2 {
   font-size: 1.75rem;
@@ -3533,6 +3539,7 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   width: 12rem;
   font-size: 1.25rem;
   padding: 0.5rem;
+  margin: 1.5rem 0;
 }
 .WeeklyReminder .send-btn:hover {
   background-color: #d00;
@@ -3552,16 +3559,13 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   margin: 1.5rem 0;
   text-align: center;
 }
-.WeeklyReminder .filters >div:last-child {
-  margin: 3rem 0;
-}
 .WeeklyReminder .upload {
   display: flex;
   align-items: center;
 }
 .WeeklyReminder .results {
   overflow: auto;
-  padding: 1rem;
+  padding: 0 1rem 2rem;
   width: 100%;
 }
 .WeeklyReminder .results .columns,
@@ -3578,19 +3582,17 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
 }
 .WeeklyReminder .results .columns {
   text-align: center;
-}
-.WeeklyReminder .results .columns li {
   background-color: #555;
   color: #fff;
   font-weight: bold;
-  border-color: #333;
+  padding: 0 0.5rem;
 }
 .WeeklyReminder .results .rows > ol {
   background-color: #fff5df;
   color: #666;
   margin: 0.2rem 0;
-  padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
 }
 .WeeklyReminder .results .rows > ol svg {
   position: absolute;
@@ -3598,17 +3600,11 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   display: none;
   width: 1.25rem;
   height: 1.25rem;
-  left: 1rem;
-  top: 0.5rem;
+  left: 0.6rem;
+  top: 0.6rem;
 }
 .WeeklyReminder .results .rows > ol svg:hover {
   cursor: pointer;
-}
-.WeeklyReminder .results .rows > ol .plus {
-  width: 1.25rem;
-  height: 1.25rem;
-  left: 1rem;
-  top: 0.5rem;
 }
 .WeeklyReminder .results .rows > ol.isSkipping {
   background-color: #d86558;
@@ -3617,7 +3613,7 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
 .WeeklyReminder .results .rows > ol:hover {
   box-shadow: 1px 1px 5px #666;
 }
-.WeeklyReminder .results .rows > ol:hover .minus {
+.WeeklyReminder .results .rows > ol:hover:not(.isSkipping) .minus {
   display: block;
 }
 .WeeklyReminder .results .rows > ol:hover.isSkipping .plus {

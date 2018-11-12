@@ -60,7 +60,10 @@ module.exports = { ...require('./__proto__'),
 
         this.handleColumns( emailList )
         this.handleRows( emailList )
+
         this.els.sendEmailBtn.parentNode.classList.remove('fd-hidden')
+        this.slideIn( this.els.sendEmailBtn.parentNode, 'right' )
+        this.slideIn( this.els.results, 'right' )
     },
 
     postRender() {
