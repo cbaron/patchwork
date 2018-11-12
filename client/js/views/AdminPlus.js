@@ -3,7 +3,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     events: {
         'collectionManagerBtn': 'click',
         'manageCustomerBtn': 'click',
-        'reportingBtn': 'click'
+        'reportingBtn': 'click',
+        'weeklyReminderBtn' : 'click'
     },
 
     model: {
@@ -16,7 +17,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             url: 'collection-manager'
         },
 
-        reporting: { label: '~_~ Reporting ~_~', roles: new Set( [ 'admin' ] ), url: 'reporting' }
+        reporting: { label: '~_~ Reporting ~_~', roles: new Set( [ 'admin' ] ), url: 'reporting' },
+
+        weeklyReminder: { label: 'Weekly Reminder', roles: new Set( [ 'admin' ] ), url: 'weekly-reminder' }
     },
 
     onCollectionManagerBtnClick() {
@@ -44,6 +47,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onReportingBtnClick() {
         this.emit( 'navigate', 'admin-plus/reporting' )
+    },
+
+    onWeeklyReminderBtnClick() {
+        console.log( 'onWeeklyReminderBtnClick' )
+        this.emit( 'navigate', 'admin-plus/weekly-reminder' )
     },
 
     postRender() {

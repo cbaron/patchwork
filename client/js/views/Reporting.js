@@ -121,10 +121,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this
     },
 
-    removeChildren( el ) {
-        while( el.firstChild ) { el.removeChild( el.firstChild ) }
-    },
-
     toggleDateTypes( type ) {
         this.els.custom.classList.toggle( 'fd-hidden', type !== 'custom' )
         this.els.season.parentNode.classList.toggle( 'fd-hidden', type !== 'season' )

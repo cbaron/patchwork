@@ -1,0 +1,108 @@
+.WeeklyReminder
+    margin-top: 6rem
+    display: flex
+    flex-direction: column
+    align-items: center
+    
+    h2
+        font-size: 1.75rem
+        font-weight: bold
+        margin-bottom: 1.5rem
+    
+    button
+        font-size: 1rem
+        margin: 0 .5rem
+        padding: .5rem
+        
+    .send-btn
+        background-color: $sun-red
+        color: white
+        text-align: center
+        width: 12rem
+        font-size: 1.25rem
+        padding: .5rem
+        &:hover
+            background-color: lighten($sun-red, 15%)
+            
+        
+    label
+        margin-right: .5rem
+        margin-left: 1rem
+
+    h4
+        text-align: center
+        font-size: 1.2rem
+        font-weight: bold
+        color: $sun-red
+
+    .filters
+        >div, >div >div
+            margin: 1.5rem 0
+            text-align: center
+            
+        >div:last-child
+            margin: 3rem 0
+                
+    .upload
+        display: flex
+        align-items: center
+
+    .results
+        overflow: auto
+        padding: 1rem
+        width: 100%
+        
+        .columns, .rows > ol
+            display: flex
+            position: relative
+
+            li
+                text-align: center
+                flex: 1
+                padding: .25rem
+                overflow-x: auto
+
+        .columns
+            text-align: center
+            
+            li
+                background-color: #555
+                color: white
+                font-weight: bold
+                border-color: $dark-grey
+                
+        .rows > ol
+            background-color: $light-manila
+            color: #666
+            margin: .2rem 0
+            padding: .25rem .5rem
+            border-radius: .25rem
+            
+            svg
+                position: absolute
+                z-index: 1000
+                display: none
+                width: 1.25rem
+                height: 1.25rem
+                left: 1rem
+                top: .5rem
+                &:hover
+                    cursor: pointer
+            
+            .plus
+                width: 1.25rem
+                height: 1.25rem
+                left: 1rem
+                top: .5rem
+
+            &.isSkipping
+                background-color: #D86558//#FF4639
+                color: white
+                
+            &:hover
+                box-shadow: 1px 1px 5px #666
+                .minus
+                    display: block
+                &.isSkipping
+                    .plus
+                        display: block

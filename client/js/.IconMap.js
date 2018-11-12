@@ -7,5 +7,7 @@ module.exports={
 	"garbage": require('./views/templates/lib/garbage'),
 	"justify": require('./views/templates/lib/justify'),
 	"leftArrow": require('./views/templates/lib/leftArrow'),
+	"minus": require('./views/templates/lib/minus'),
+	"plus": require('./views/templates/lib/plus'),
 	"search": require('./views/templates/lib/search')
 }

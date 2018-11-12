@@ -309,7 +309,8 @@ module.exports = new Router( {
             'seasonalAddOnOption': true,
             'signup': true,
             'user': true,
-            'verify': true
+            'verify': true,
+            'weekly-reminder': true
         }
     },
     tables: { } 
