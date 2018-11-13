@@ -1,6 +1,7 @@
 module.exports = { ...require('./__proto__'),
 
     CurrentGroups: require('../models/CurrentGroups'),
+    DeliveryRoute: Object.create( require('./__proto__'), { resource: { value: 'deliveryroute' } } ),
     SkipWeeks: Object.create( require('./__proto__'), { resource: { value: 'membershareskipweek' } } ),
 
     async getSkipWeekStatus( customer ) {
@@ -39,8 +40,8 @@ module.exports = { ...require('./__proto__'),
             { name: 'name', label: 'Name' },
             { name: 'email', label: 'Email' },
             { name: 'secondaryEmail', label: 'Secondary Email' },
-            { name: 'delivery', label: 'Delivery Type' }
-            //{ name: 'isSkipping', label: 'Skipping' }
+            { name: 'delivery', label: 'Delivery Type' },
+            { name: 'dayofweek', label: 'Delivery Day' }
         ],
         options: {
             days: [
@@ -53,6 +54,20 @@ module.exports = { ...require('./__proto__'),
                 { value: '7', label: 'Sunday' }
             ]
         }
+    },
+
+    parse( response ) {
+        const farmPickupInfo = this.DeliveryRoute.data[0]
+
+        return response.map( row => {
+            if( row.delivery === 'On-farm Pickup') {
+                row = { ...row, dayofweek: farmPickupInfo.dayofweek, starttime: farmPickupInfo.starttime, endtime: farmPickupInfo.endtime }
+            }
+
+            if( row.dayofweek ) row.dayofweek = this.metadata.options.days.find( opt => opt.value == row.dayofweek ).label
+
+            return row
+        } )
     },
 
     resource: 'weekly-reminder'

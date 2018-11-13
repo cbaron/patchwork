@@ -53,7 +53,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         const vals = filterByDay ? [ this.query.selection ] : [ ]
 
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery"
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", gd.label as "dropoffName", sgd.dayofweek, sgd.starttime, sgd.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -74,7 +74,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         const vals = filterByDay ? [ this.query.selection ] : [ ]
 
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery"
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", dr.dayofweek, dr.starttime, dr.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -94,7 +94,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
     singleGroupQuery() {
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery"
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", gd.label as "dropoffName", sgd.dayofweek, sgd.starttime, sgd.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
