@@ -18,6 +18,11 @@ module.exports = {
 
     Document: {
         PATCH: AdminOnly
+    },
+
+    'weekly-reminder': {
+        GET: AdminOnly,
+        POST: AdminOnly
     }
 
 }

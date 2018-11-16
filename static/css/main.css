@@ -3585,14 +3585,14 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   background-color: #555;
   color: #fff;
   font-weight: bold;
-  padding: 0 0.5rem;
+  padding: 0 2rem;
 }
 .WeeklyReminder .results .rows > ol {
   background-color: #fff5df;
   color: #666;
   margin: 0.2rem 0;
   border-radius: 0.25rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 2rem;
 }
 .WeeklyReminder .results .rows > ol svg {
   position: absolute;

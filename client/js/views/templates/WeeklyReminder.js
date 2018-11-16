@@ -32,7 +32,7 @@ return `` +
                 </div>
                 <div class="upload">
                     <label for="upload">Upload an Attachment:</label>
-                    <input type="file" data-js="uploadBtn" />
+                    <input type="file" data-js="upload" />
                 </div>
             </div>
             <div>

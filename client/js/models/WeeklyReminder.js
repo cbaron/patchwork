@@ -1,6 +1,8 @@
 module.exports = { ...require('./__proto__'),
 
-    CurrentGroups: require('../models/CurrentGroups'),
+    ContactInfo: require('./ContactInfo'),
+    CurrentGroups: require('./CurrentGroups'),
+    DayOfWeekMap: require('./DayOfWeek'),
     DeliveryRoute: Object.create( require('./__proto__'), { resource: { value: 'deliveryroute' } } ),
     SkipWeeks: Object.create( require('./__proto__'), { resource: { value: 'membershareskipweek' } } ),
 
@@ -19,57 +21,66 @@ module.exports = { ...require('./__proto__'),
     },
 
     getDayOptions() {
-        return this.metadata.options.days.map( opt => `<option value="${opt.value}">${opt.label}</option>` ).join('')
+        return Object.entries( this.DayOfWeekMap ).map( ( [ k, v ] ) => `<option value="${k}">${v}</option>` ).join('')
     },
 
     getGroupNameOptions() {
         return this.CurrentGroups.data.map( datum => `<option value="${datum.name}">${datum.name}</option>` ).join('')
     },
 
-    /*getLocationOptions() {
-        const locations = [ ]
-
-        return this.CurrentGroups.data.reduce( ( memo, datum ) => {
-            if( locations.includes( datum.street ) ) return memo
-            return memo += `<option value="${datum.street}">${datum.street}, ${datum.cityStateZip}</option>`
-        }, `` )
-    },*/
-
     metadata: {
         columns: [
             { name: 'name', label: 'Name' },
             { name: 'email', label: 'Email' },
             { name: 'secondaryEmail', label: 'Secondary Email' },
-            { name: 'delivery', label: 'Delivery Type' },
+            { name: 'deliveryLabel', label: 'Delivery Type' },
             { name: 'dayofweek', label: 'Delivery Day' }
-        ],
-        options: {
-            days: [
-                { value: '1', label: 'Monday' },
-                { value: '2', label: 'Tuesday' },
-                { value: '3', label: 'Wednesday' },
-                { value: '4', label: 'Thursday' },
-                { value: '5', label: 'Friday' },
-                { value: '6', label: 'Saturday' },
-                { value: '7', label: 'Sunday' }
-            ]
-        }
+        ]
     },
 
     parse( response ) {
+        const contactInfo = this.ContactInfo.data
         const farmPickupInfo = this.DeliveryRoute.data[0]
-
+        console.log( 'contactInfo' )
+        console.log( contactInfo.farmpickup )
         return response.map( row => {
-            if( row.delivery === 'On-farm Pickup') {
-                row = { ...row, dayofweek: farmPickupInfo.dayofweek, starttime: farmPickupInfo.starttime, endtime: farmPickupInfo.endtime }
+
+            if( row.deliveryName === 'farm' ) {
+                row = { ...row, pickupAddress: contactInfo.farmpickup, dayofweek: farmPickupInfo.dayofweek, starttime: farmPickupInfo.starttime, endtime: farmPickupInfo.endtime }
             }
 
-            if( row.dayofweek ) row.dayofweek = this.metadata.options.days.find( opt => opt.value == row.dayofweek ).label
-
-            return row
+            return { ...row,
+                dayofweek: this.DayOfWeekMap[ row.dayofweek ],
+                starttime: row.starttime ? this.Moment( `${this.Moment().format('YYYY-MM-DD')} ${row.starttime}` ).format('h:mmA') : null,
+                endtime: row.endtime ? this.Moment( `${this.Moment().format('YYYY-MM-DD')} ${row.endtime}` ).format('h:mmA') : null
+            }
         } )
     },
 
-    resource: 'weekly-reminder'
+    sortIntoEmails( list ) {
+        return list.reduce( ( memo, customer ) => {
+            const key = customer.dropoffName || customer.deliveryName
+
+            if( !memo[ key ] ) {
+                memo[ key ] = { }
+                memo[ key ].recipients = [ ]
+                memo[ key ].template = this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment: Boolean( this.attachment ) } )
+            }
+
+            memo[ key ].recipients.push( customer.email )
+            if( customer.secondaryEmail ) memo[ key ].recipients.push( customer.secondaryEmail )
+
+            return memo
+
+        }, { } )
+    },
+
+    resource: 'weekly-reminder',
+
+    Templates: {
+        farm: require('../views/templates/FarmReminder'),
+        group: require('../views/templates/GroupReminder'),
+        home: require('../views/templates/HomeReminder')
+    }
 
 }

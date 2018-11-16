@@ -3,6 +3,8 @@ const Base = require('./__proto__'),
 
 Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
+    SendGrid: require('../lib/SendGrid'),
+
     db: {
         GET() {
             return this.query.category === 'deliveryType'
@@ -33,7 +35,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
     farmQuery() {
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery"
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.name as "deliveryName", dop.label as "deliveryLabel"
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -53,7 +55,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         const vals = filterByDay ? [ this.query.selection ] : [ ]
 
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", gd.label as "dropoffName", sgd.dayofweek, sgd.starttime, sgd.endtime
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.name as "deliveryName", dop.label as "deliveryLabel", gd.label as "dropoffName", gd.street, sgd.dayofweek, sgd.starttime, sgd.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -74,7 +76,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         const vals = filterByDay ? [ this.query.selection ] : [ ]
 
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", dr.dayofweek, dr.starttime, dr.endtime
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.name as "deliveryName", dop.label as "deliveryLabel", dr.dayofweek, dr.starttime, dr.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -94,7 +96,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
     singleGroupQuery() {
         return this.Postgres.query(
-            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.label as "delivery", gd.label as "dropoffName", sgd.dayofweek, sgd.starttime, sgd.endtime
+            `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.name as "deliveryName", dop.label as "deliveryLabel", gd.label as "dropoffName", gd.street, sgd.dayofweek, sgd.starttime, sgd.endtime
             FROM member m
             JOIN person p on m.personid = p.id
             JOIN membershare ms on ms.memberid = m.id
@@ -108,6 +110,35 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             [ this.query.selection ],
             { rowsOnly: true }
         )
+    },
+
+    async POST() {
+        await this.slurpBody()
+        await this.validateUser()
+
+        const attachment = this.body.attachment
+
+        const emails = Object.entries( this.body.emails ).map( ( [ key, val ] ) => {
+            const opts = {
+                to: this.isProd ? val.recipients : process.env.TEST_EMAIL,
+                from: 'eat.patchworkgardens@gmail.com',
+                subject: 'Weekly Reminder from Patchwork Gardens',
+                html: val.template
+            }
+
+            if( this.body.attachment ) opts.attachments = [ this.body.attachment ]
+
+            return opts
+
+        } )
+
+        const result = await this.SendGrid.send( emails )
+        .catch( err => {
+            console.log( `Error generating reminder email : ${err.stack || err}` )
+            this.respond( { body: { error: 'Error generating reminder email.' } } )
+        } )
+
+        this.respond( { body: { } } )
     }
 
 } )

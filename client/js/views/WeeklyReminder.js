@@ -4,10 +4,13 @@ module.exports = { ...require('./__proto__'),
         listSelect: 'change',
         viewBtn: 'click',
         rows: 'click',
-        sendEmailBtn: 'click'
+        sendEmailBtn: 'click',
+        upload: 'change'
     },
 
     model: require('../models/WeeklyReminder'),
+
+    Spinner: require('../plugins/spinner.js'),
 
     clearTable() {
         this.removeChildren( this.els.columns )
@@ -54,12 +57,46 @@ module.exports = { ...require('./__proto__'),
         console.log( datum.isSkipping )
     },
 
-    onSendEmailBtnClick() {
+    async onSendEmailBtnClick() {
         console.log( 'onSendEmailBtn' )
+        console.log( this.isSubmitting )
+        if( this.isSubmitting ) return
+        this.isSubmitting = true
+        this.spinner.spin()
+        this.els.sendEmailBtn.appendChild( this.spinner.el )
+        console.log( this.els.upload.files[0] )
         console.log( this.model.data.length )
         const emailList = this.model.data.filter( datum => !datum.isSkipping )
         console.log( emailList.length )
         console.log( this.model.data )
+        const emails = this.model.sortIntoEmails( emailList )
+        console.log( emails )
+
+        const response = await this.Xhr( { method: 'post', resource: 'weekly-reminder', data: JSON.stringify( { emails, attachment: this.model.attachment } ) } )
+        console.log( response )
+        this.isSubmitting = false
+        this.spinner.stop()
+        return response.error ? this.Toast.showMessage( 'error', response.error ) : this.Toast.showMessage( 'success', 'Emails sent!' )
+    },
+
+    onUploadChange() {
+        const file = this.els.upload.files[0]
+        const reader = new FileReader()
+
+        reader.addEventListener( 'load', () => {
+            console.log( 'ready' )
+            const base64String = reader.result.slice( reader.result.indexOf('base64') + 7 )
+
+            this.model.attachment = {
+                content: base64String,
+                filename: file.name,
+                type: file.type,
+                disposition: 'attachment'
+            }
+
+        } )
+
+        reader.readAsDataURL( file )
     },
 
     async onViewBtnClick() {
@@ -82,7 +119,7 @@ module.exports = { ...require('./__proto__'),
     },
 
     postRender() {
-        Promise.all( [ this.model.CurrentGroups.get(), this.model.DeliveryRoute.get( { query: { label: 'farm' } } ) ] )
+        Promise.all( [ this.model.ContactInfo.get(), this.model.CurrentGroups.get(), this.model.DeliveryRoute.get( { query: { label: 'farm' } } ) ] )
         .then( () => {
             this.slurpTemplate( {
                 insertion: { el: this.els.daySelect },
@@ -94,13 +131,16 @@ module.exports = { ...require('./__proto__'),
                 template: this.model.getGroupNameOptions()
             } )
 
-            //this.slurpTemplate( {
-              //  insertion: { el: this.els.locationSelect },
-                //template: this.model.getLocationOptions()
-            //} )
-            console.log( this.model.DeliveryRoute.data )
             this.selectedCategory = 'day'
             this.selectedCategoryEl = this.els.daySelect
+
+            this.spinner = new this.Spinner( {
+                color: '#fff',
+                lines: 7,
+                length: 2,
+                radius: 14,
+                scale: 0.5
+            } )
         } )
         .catch( this.Error )
 
