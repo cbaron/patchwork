@@ -3533,6 +3533,7 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   padding: 0.5rem;
 }
 .WeeklyReminder .send-btn {
+  position: relative;
   background-color: #a00;
   color: #fff;
   text-align: center;
@@ -3541,8 +3542,13 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   padding: 0.5rem;
   margin: 1.5rem 0;
 }
-.WeeklyReminder .send-btn:hover {
+.WeeklyReminder .send-btn:hover,
+.WeeklyReminder .send-btn.has-spinner {
   background-color: #d00;
+}
+.WeeklyReminder .send-btn.has-spinner {
+  background-color: #f00;
+  opacity: 0.6;
 }
 .WeeklyReminder label {
   margin-right: 0.5rem;
@@ -3554,10 +3560,21 @@ html.non-touch .WeekOptions .content .data ol .delivery-date:not(.unselectable):
   font-weight: bold;
   color: #a00;
 }
-.WeeklyReminder .filters >div,
-.WeeklyReminder .filters >div >div {
+.WeeklyReminder .form div:not(.custom-area) {
   margin: 1.5rem 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+}
+.WeeklyReminder .form div:not(.custom-area) >input:not([type="checkbox"]),
+.WeeklyReminder .form div:not(.custom-area) >textarea {
+  flex: 1;
+}
+.WeeklyReminder .form >div:last-child {
+  display: block;
+}
+.WeeklyReminder .form .custom-area >div:first-child {
+  align-items: flex-start;
 }
 .WeeklyReminder .upload {
   display: flex;

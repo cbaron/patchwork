@@ -116,17 +116,15 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         await this.slurpBody()
         await this.validateUser()
 
-        const attachment = this.body.attachment
-
         const emails = Object.entries( this.body.emails ).map( ( [ key, val ] ) => {
             const opts = {
                 to: this.isProd ? val.recipients : process.env.TEST_EMAIL,
-                from: 'eat.patchworkgardens@gmail.com',
-                subject: 'Weekly Reminder from Patchwork Gardens',
+                from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                subject: val.subject,
                 html: val.template
             }
 
-            if( this.body.attachment ) opts.attachments = [ this.body.attachment ]
+            if( this.body.attachments ) opts.attachments = this.body.attachments
 
             return opts
 

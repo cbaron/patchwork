@@ -1,10 +1,8 @@
-module.exports = p => {
-
-return `` +
+module.exports = p =>
 `<div>
     <div>
         <h2>Weekly Reminder</h2>
-        <div class="filters">
+        <div class="form">
             <div>
                 <label>Get List By:</label>
                 <select data-js="listSelect">
@@ -14,25 +12,41 @@ return `` +
                 </select>
             </div>
             <div>
+                <label>Choose Day:</label>
+                <select data-js="daySelect"></select>
+            </div>
+            <div class="fd-hidden">
+                <label>Choose Group:</label>
+                <select data-js="singleGroupSelect"></select>
+            </div>
+            <div class="fd-hidden">
+                <label>Choose Delivery Type:</label>
+                <select data-js="deliveryTypeSelect">
+                    <option value="home">Home Delivery</option>
+                    <option value="groupDropoffs">Group Dropoff</option>
+                    <option value="farm">Farm Pickup</option>
+                </select>
+            </div>
+            <div>
+                <label>Subject Line:</label>
+                <input data-js="subjectLine" type="text" value="Weekly Reminder from Patchwork Gardens" />
+            </div>
+            <div class="upload">
+                <label for="upload">Upload Attachment(s):</label>
+                <input type="file" multiple="true" data-js="upload" />
+            </div>
+            <div>
+                <label>Create Custom Text</label>
+                <input data-js="customizeBtn" type="checkbox" />
+            </div>
+            <div class="fd-hidden custom-area" data-js="customArea">
                 <div>
-                    <label>Choose Day:</label>
-                    <select data-js="daySelect"></select>
+                    <label>Custom Text:</label>
+                    <textarea data-js="customText" rows="10"></textarea>
                 </div>
-                <div class="fd-hidden">
-                    <label>Choose Group:</label>
-                    <select data-js="singleGroupSelect"></select>
-                </div>
-                <div class="fd-hidden">
-                    <label>Choose Delivery Type:</label>
-                    <select data-js="deliveryTypeSelect">
-                        <option value="home">Home Delivery</option>
-                        <option value="groupDropoffs">Group Dropoff</option>
-                        <option value="farm">Farm Pickup</option>
-                    </select>
-                </div>
-                <div class="upload">
-                    <label for="upload">Upload an Attachment:</label>
-                    <input type="file" data-js="upload" />
+                <div>
+                    <label>Replace default reminder template</label>
+                    <input data-js="replaceDefaultBtn" type="checkbox" />
                 </div>
             </div>
             <div>
@@ -49,4 +63,3 @@ return `` +
         <div class="rows" data-js="rows"></div>
     </div>
 </div>`
-}

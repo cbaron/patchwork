@@ -9,6 +9,7 @@
         background-color: $light-manila
         padding: 2rem 3rem 1rem
         border-radius: .5rem
+
     
     h2
         font-size: 1.75rem
@@ -21,6 +22,7 @@
         padding: .5rem
         
     .send-btn
+        position: relative
         background-color: $sun-red
         color: white
         text-align: center
@@ -28,8 +30,11 @@
         font-size: 1.25rem
         padding: .5rem
         margin: 1.5rem 0
-        &:hover
+        &:hover, &.has-spinner
             background-color: lighten($sun-red, 15%)
+        &.has-spinner
+            background-color: lighten($sun-red, 25%)
+            opacity: .6
             
         
     label
@@ -42,10 +47,21 @@
         font-weight: bold
         color: $sun-red
 
-    .filters
-        >div, >div >div
+    .form
+        div:not(.custom-area)
             margin: 1.5rem 0
             text-align: center
+            display: flex
+            align-items: center
+            
+            >input:not([type="checkbox"]), >textarea
+                flex: 1
+                
+        >div:last-child
+            display: block
+                
+        .custom-area >div:first-child
+            align-items: flex-start
                 
     .upload
         display: flex

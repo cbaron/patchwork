@@ -1,6 +1,7 @@
 module.exports = { ...require('./__proto__'),
 
     events: {
+        customizeBtn: 'click',
         listSelect: 'change',
         viewBtn: 'click',
         rows: 'click',
@@ -38,6 +39,10 @@ module.exports = { ...require('./__proto__'),
         this.els.empty.classList.remove('fd-hidden')
     },
 
+    onCustomizeBtnClick() {
+        this.els.customArea.classList.toggle('fd-hidden')
+    },
+
     onListSelectChange( e ) {
         this.selectedCategory = e.target.value
         this.selectedCategoryEl.parentNode.classList.add('fd-hidden')
@@ -54,49 +59,61 @@ module.exports = { ...require('./__proto__'),
 
         row.classList.toggle('isSkipping')
         datum.isSkipping = row.classList.contains('isSkipping')
-        console.log( datum.isSkipping )
     },
 
     async onSendEmailBtnClick() {
-        console.log( 'onSendEmailBtn' )
-        console.log( this.isSubmitting )
         if( this.isSubmitting ) return
         this.isSubmitting = true
+
         this.spinner.spin()
         this.els.sendEmailBtn.appendChild( this.spinner.el )
-        console.log( this.els.upload.files[0] )
-        console.log( this.model.data.length )
-        const emailList = this.model.data.filter( datum => !datum.isSkipping )
-        console.log( emailList.length )
-        console.log( this.model.data )
-        const emails = this.model.sortIntoEmails( emailList )
-        console.log( emails )
+        this.els.sendEmailBtn.classList.add('has-spinner')
 
-        const response = await this.Xhr( { method: 'post', resource: 'weekly-reminder', data: JSON.stringify( { emails, attachment: this.model.attachment } ) } )
-        console.log( response )
+        const emailList = this.model.data.filter( datum => !datum.isSkipping )
+
+        this.model.emailIsCustom = this.els.customizeBtn.checked
+        this.model.customTextValue = this.els.customText.value
+        this.model.replaceDefaultTemplate = this.els.replaceDefaultBtn.checked
+        this.model.subjectLine = this.els.subjectLine.value
+
+        const emails = this.model.sortIntoEmails( emailList )
+
+        const response = await this.Xhr( {
+            method: 'post',
+            resource: 'weekly-reminder',
+            data: JSON.stringify( { emails, attachments: this.model.attachments } )
+        } )
+
         this.isSubmitting = false
         this.spinner.stop()
+        this.els.sendEmailBtn.classList.remove('has-spinner')
         return response.error ? this.Toast.showMessage( 'error', response.error ) : this.Toast.showMessage( 'success', 'Emails sent!' )
     },
 
     onUploadChange() {
-        const file = this.els.upload.files[0]
-        const reader = new FileReader()
+        const files = Array.from( this.els.upload.files )
 
-        reader.addEventListener( 'load', () => {
-            console.log( 'ready' )
-            const base64String = reader.result.slice( reader.result.indexOf('base64') + 7 )
+        if( !files.length ) {
+            this.model.attachments = [ ]
+            return
+        }
 
-            this.model.attachment = {
-                content: base64String,
-                filename: file.name,
-                type: file.type,
-                disposition: 'attachment'
-            }
+        files.forEach( file => {
+            const reader = new FileReader()
 
+            reader.addEventListener( 'load', e => {
+                const base64String = reader.result.slice( reader.result.indexOf('base64') + 7 )
+
+                this.model.attachments.push( {
+                    content: base64String,
+                    filename: file.name,
+                    type: file.type,
+                    disposition: 'attachment'
+                } )
+            } )
+
+            reader.readAsDataURL( file )
         } )
-
-        reader.readAsDataURL( file )
     },
 
     async onViewBtnClick() {
@@ -135,11 +152,11 @@ module.exports = { ...require('./__proto__'),
             this.selectedCategoryEl = this.els.daySelect
 
             this.spinner = new this.Spinner( {
-                color: '#fff',
+                color: '#000',
                 lines: 7,
-                length: 2,
-                radius: 14,
-                scale: 0.5
+                length: 4,
+                radius: 16,
+                scale: 0.6
             } )
         } )
         .catch( this.Error )

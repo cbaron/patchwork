@@ -6,6 +6,8 @@ module.exports = { ...require('./__proto__'),
     DeliveryRoute: Object.create( require('./__proto__'), { resource: { value: 'deliveryroute' } } ),
     SkipWeeks: Object.create( require('./__proto__'), { resource: { value: 'membershareskipweek' } } ),
 
+    attachments: [ ],
+
     async getSkipWeekStatus( customer ) {
         customer.isSkipping = false
         const skipWeeks = await this.SkipWeeks.get( { query: { membershareid: customer.memberShareId } } )
@@ -41,8 +43,7 @@ module.exports = { ...require('./__proto__'),
     parse( response ) {
         const contactInfo = this.ContactInfo.data
         const farmPickupInfo = this.DeliveryRoute.data[0]
-        console.log( 'contactInfo' )
-        console.log( contactInfo.farmpickup )
+
         return response.map( row => {
 
             if( row.deliveryName === 'farm' ) {
@@ -58,13 +59,28 @@ module.exports = { ...require('./__proto__'),
     },
 
     sortIntoEmails( list ) {
+        const hasAttachment = Boolean( this.attachments.length )
+        let customLinesArray, customLinesMarkup
+
+        if( this.emailIsCustom ) {
+            customLinesArray = this.customTextValue.split('\n')
+            customLinesMarkup = customLinesArray.reduce( ( memo, line ) => {
+                if( !line.length ) return memo
+                return `${memo}<p>${line}</p>`
+            }, `` )
+        }
+
         return list.reduce( ( memo, customer ) => {
             const key = customer.dropoffName || customer.deliveryName
+            const bodyTemplate = this.emailIsCustom && this.replaceDefaultTemplate
+                ? this.Templates.custom( { paragraphs: customLinesMarkup } )
+                : this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment, customText: customLinesMarkup } )
 
             if( !memo[ key ] ) {
                 memo[ key ] = { }
                 memo[ key ].recipients = [ ]
-                memo[ key ].template = this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment: Boolean( this.attachment ) } )
+                memo[ key ].subject = this.subjectLine
+                memo[ key ].template = this.Templates.emailHeader() + bodyTemplate
             }
 
             memo[ key ].recipients.push( customer.email )
@@ -78,8 +94,10 @@ module.exports = { ...require('./__proto__'),
     resource: 'weekly-reminder',
 
     Templates: {
+        custom: require('../views/templates/CustomEmail'),
         farm: require('../views/templates/FarmReminder'),
         group: require('../views/templates/GroupReminder'),
+        emailHeader: require('../views/templates/EmailHeader'),
         home: require('../views/templates/HomeReminder')
     }
 
