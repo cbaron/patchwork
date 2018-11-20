@@ -50,7 +50,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onWeeklyReminderBtnClick() {
-        console.log( 'onWeeklyReminderBtnClick' )
         this.emit( 'navigate', 'admin-plus/weekly-reminder' )
     },
 
