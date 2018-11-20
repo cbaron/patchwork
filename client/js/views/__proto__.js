@@ -189,6 +189,10 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
     postRender() { return this },
 
+    removeChildren( el ) {
+        while( el.firstChild ) { el.removeChild( el.firstChild ) }
+    },
+
     render() {
         if( this.data ) this.model = Object.create( this.Model, { } ).constructor( this.data )
 

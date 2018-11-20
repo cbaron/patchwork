@@ -37,5 +37,6 @@ module.exports={
 	TypeAhead: require('./views/TypeAhead'),
 	Verify: require('./views/Verify'),
 	WeekOptions: require('./views/WeekOptions'),
+	WeeklyReminder: require('./views/WeeklyReminder'),
 	modal: require('./views/modal')
 }

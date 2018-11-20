@@ -2,6 +2,8 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
 
     Xhr: require('../Xhr'),
 
+    Moment: require('moment'),
+
     add( datum ) {
         this.data.push( datum )
 
