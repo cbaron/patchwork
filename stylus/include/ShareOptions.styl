@@ -32,7 +32,7 @@
                     .share-label
                         margin-bottom: 2rem
                         
-            &.horizontal
+            &.no-seasonal-items
                 flex-direction: row
                 align-items: center
                 
@@ -61,6 +61,9 @@
     @media only screen and (max-width: 600px)
         li .single-share
             flex-direction: column
+            
+            &.no-seasonal-items
+                flex-direction: column
             
             .share-label
                 margin-right: 0

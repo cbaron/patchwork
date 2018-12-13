@@ -13,6 +13,6 @@ module.exports = p =>
     </div>
     <div>
         <div><span>Share Total: </span><span data-js="weeklyTotal"></span></div>
-        <div><span>Seasonal Items Total: </span><span data-js="seasonalTotal"></span></div>
+        <div><span>Seasonal Items Total: </span><span data-js="seasonalTotal">$0.00</span></div>
     </div>
 </li>`

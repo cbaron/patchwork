@@ -2584,6 +2584,19 @@ html.non-touch .AccountHome button:hover {
   color: #000;
   border-color: #f4bc00;
 }
+.modal-content .modal-body .img-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+}
+.modal-content .modal-body .img-row >div {
+  flex: 1;
+}
+.modal-content .modal-body .img-row >div >img {
+  width: 100%;
+}
 .OrderOptions .content {
   display: flex;
   flex-wrap: wrap;
@@ -2773,11 +2786,11 @@ html.non-touch .AccountHome button:hover {
 .ShareOptions li .single-share >div:first-child .share-label {
   margin-bottom: 2rem;
 }
-.ShareOptions li .single-share.horizontal {
+.ShareOptions li .single-share.no-seasonal-items {
   flex-direction: row;
   align-items: center;
 }
-.ShareOptions li .single-share.horizontal .share-label {
+.ShareOptions li .single-share.no-seasonal-items .share-label {
   margin-right: 1rem;
 }
 .ShareOptions li .single-share .share-option:not(:first-child) {
@@ -2800,6 +2813,9 @@ html.non-touch .AccountHome button:hover {
 }
 @media only screen and (max-width: 600px) {
   .ShareOptions li .single-share {
+    flex-direction: column;
+  }
+  .ShareOptions li .single-share.no-seasonal-items {
     flex-direction: column;
   }
   .ShareOptions li .single-share .share-label {

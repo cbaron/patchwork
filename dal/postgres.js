@@ -198,6 +198,7 @@ module.exports = Object.create( Object.assign( {}, MyObject, {
     },
 
     dataTypeToRange: {
+        "ARRAY": "Array",
         "bigint": "Integer",
         "boolean": "Boolean",
         "character varying": "Text",

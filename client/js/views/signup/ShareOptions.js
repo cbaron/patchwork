@@ -34,12 +34,14 @@ Object.assign( ShareOptions.prototype, List.prototype, {
                 shareoptionoptionid: this.itemViews[ share.id ].itemViews[ shareOption.id ].templateData.input.val()
             } ) ) )
 
-            share.set( 'seasonalAddOns', this.itemViews[ share.id ].seasonalAddOns.map( addon => {
+            share.set( 'seasonalAddOns', this.itemViews[ share.id ].seasonalAddOns.reduce( ( memo, addon ) => {
                 const option = this.itemViews[ share.id ].SeasonalAddOnOption.data.find( option =>
                     option.id == this.itemViews[ share.id ].templateData[ addon.name ].val() && option.seasonalAddOnId === addon.id
                 )
 
-                return {
+                if( !option ) return memo
+
+                memo.push( {
                     name: addon.name,
                     label: addon.label,
                     seasonalAddOnId: addon.id,
@@ -47,8 +49,12 @@ Object.assign( ShareOptions.prototype, List.prototype, {
                     price: option.price,
                     unit: option.unit,
                     selectedOptionLabel: option.label
-                }
-            } ) )
+                } )
+
+                return memo
+
+            }, [ ] ) )
+
         } )
 
         return true

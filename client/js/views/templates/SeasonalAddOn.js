@@ -11,6 +11,7 @@ return `` +
        </div>
         <div>
             <select data-js="${p.name}" class="form-control">
+                <option selected value="">None</option>
                 ${options}
             </select>    
         </div>

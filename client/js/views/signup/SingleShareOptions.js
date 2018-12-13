@@ -1,4 +1,5 @@
 var List = require('../util/List'),
+    Format = require('../../Format'),
     SingleShareOptions = function() { return List.apply( this, arguments ) }
 
 Object.assign( SingleShareOptions.prototype, List.prototype, {
@@ -26,18 +27,26 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
                 this.templateData.seasonalContainer.get(0).classList.add('fd-hidden')
                 this.templateData.seasonalTotal.get(0).parentNode.classList.add('fd-hidden')
                 this.templateData.weeklyHeader.get(0).classList.add('fd-hidden')
-                this.templateData.container.get(0).children[0].classList.add('horizontal')
+                this.templateData.container.get(0).children[0].classList.add('no-seasonal-items')
             }
 
             this.seasonalAddOns.forEach( addon => {
-                const options = this.SeasonalAddOnOption.data.filter( option => option.seasonalAddOnId === addon.id )
+                const options = this.SeasonalAddOnOption.data
+                    .filter( option => option.seasonalAddOnId === addon.id )
+                    .sort( ( a, b ) => {
+                        if( a.position === null && b.position === null ) return 0
+                        if( b.position === null ) return -1
+                        if( a.position === null ) return 1
+                        return a.position < b.position ? -1 : 1
+                    } )
 
                 this.slurpTemplate( {
                     insertion: { $el: this.templateData.seasonalOptions },
-                    template: this.Templates.SeasonalAddOn( { name: addon.name, label: addon.label, options } )
+                    template: this.Templates.SeasonalAddOn( { ...addon, options } )
                 } )
 
                 this.templateData[ addon.name ].on( 'change', () => this.updateSeasonalTotal() )
+                this.templateData[ `${addon.name}Icon` ].on( 'click', () => this.showAddOnInfo( addon ) )
             } )
 
             if( this.model.get('seasonalAddOns') && this.model.get('seasonalAddOns').length ) {
@@ -77,7 +86,6 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
         this.factory.create( 'shareBox', { insertion: { el: this.templateData.shareBox.get(0) }, model: share } )
 
-        //TODO: Write UI when no options exist.
         this.model.getShareOptions()
             .then( () => share.get('shareoptions').forEach( shareoption => this.items.add( shareoption ) ) )
             .fail( e => console.log( e.stack || e ) )
@@ -85,6 +93,19 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
     },
 
     requiresLogin: false,
+
+    showAddOnInfo( addon ) {
+        this.modalView.show( {
+            title: addon.label,
+            body: addon.description,
+            hideFooter: true
+        } )
+
+        if( addon.images ) {
+            const imagesMarkup = addon.images.map( filename => `<div><img src="${Format.ImageSrc(filename)}" /></div>` )
+            this.modalView.templateData.body.append( `<div class="img-row">${imagesMarkup}</div>` )
+        }
+    },
 
     template: require('../../templates/signup/singleShareOptions'),
 
@@ -97,13 +118,13 @@ Object.assign( SingleShareOptions.prototype, List.prototype, {
 
         this.seasonalAddOns.forEach( addon => {
             const selectedOption = this.SeasonalAddOnOption.data.find( option => option.id == this.templateData[ addon.name ].val() && option.seasonalAddOnId === addon.id ),
-                optionPrice = parseFloat( selectedOption.price.replace(/\$|,/g, "") )
+                optionPrice = selectedOption ? parseFloat( selectedOption.price.replace(/\$|,/g, "") ) : 0
 
             seasonalTotal += optionPrice
-            this.templateData[ `${addon.name}Total` ].text( `$${optionPrice.toFixed(2)} for the season` )
+            this.templateData[ `${addon.name}Total` ].text( `$${optionPrice.toFixed(2)}` )
         } )
 
-        this.templateData.seasonalTotal.text( `$${seasonalTotal.toFixed(2)} for the season`)
+        this.templateData.seasonalTotal.text( `$${seasonalTotal.toFixed(2)}`)
     },
 
     updateTotal() {

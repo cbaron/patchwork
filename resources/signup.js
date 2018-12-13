@@ -150,7 +150,7 @@ Object.assign( Signup.prototype, Base.prototype, {
             const shareOptions = this._( share.options ).pluck('description').join('\r\n\t\t')
 
             const seasonalAddOns = share.seasonalAddOns.length
-                ? `\r\n\tSeasonal Add-Ons: \r\n\t\t` + share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit} -- ${addon.price}` ).join('\r\n\t\t') + `\r\n`
+                ? `\r\n\tSeasonal Add-Ons: \r\n\t\t` + share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit || ''} -- ${addon.price}` ).join('\r\n\t\t') + `\r\n`
                 : `\r\n`
 
             return `Share: ${share.label}\r\n\t${share.description}${skipDays}\r\n\t${share.delivery.description}\r\n\tShareOptions:\r\n\t\t${shareOptions}${seasonalAddOns}`
