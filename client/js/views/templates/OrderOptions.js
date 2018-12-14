@@ -20,4 +20,8 @@ module.exports = p =>
             </div>
         </div>
     </div>
+    <div data-js="seasonalItems" class="fd-hidden seasonal-items">
+        <h3>Seasonal Items Purchased</h3>
+        <div data-js="seasonalItemsList"></div>
+    </div>
 </div>`

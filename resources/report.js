@@ -17,7 +17,7 @@ Object.assign( Report.prototype, Base.prototype, {
             whereString = `ct.created BETWEEN $1 AND $2`
         }
 
-        if( [ 5, 6, 7, 8 ].includes( model.id ) ) { values = [ ]; whereString = `` }
+        if( [ 5, 6, 7, 8, 9 ].includes( model.id ) ) { values = [ ]; whereString = `` }
 
         return { values, whereString }
     },
@@ -189,6 +189,23 @@ Object.assign( Report.prototype, Base.prototype, {
                 `SELECT p.name as "Name", p.email as "Email", m.heard as "Heard"
                 FROM member m
                 JOIN person p on m.personid = p.id
+                ORDER BY p.name ASC`
+            }
+        },
+
+        9: {
+            id: 9,
+            name: 'get-seasonal',
+            label: 'Get Seasonal Items',
+            query() {
+                return `` +
+                `SELECT p.name as "Name", p.email as "Email", sa.label as "Add-On", sao.label as "Add-On Option", sao.price as "Price"
+                FROM member m
+                JOIN person p on m.personid = p.id
+                JOIN membershare ms ON ms.memberid = m.id
+                JOIN "memberShareSeasonalAddOn" msa on msa."memberShareId" = ms.id
+                JOIN "seasonalAddOn" sa on sa.id = msa."seasonalAddOnId"
+                JOIN "seasonalAddOnOption" sao on sao.id = msa."seasonalAddOnOptionId"
                 ORDER BY p.name ASC`
             }
         }

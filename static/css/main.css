@@ -2620,6 +2620,20 @@ html.non-touch .AccountHome button:hover {
 .OrderOptions ol li select:disabled {
   opacity: 0.4;
 }
+.OrderOptions .seasonal-items {
+  margin-top: 1rem;
+}
+.OrderOptions .seasonal-items h3 {
+  color: #a00;
+  font-weight: bold;
+}
+.OrderOptions .seasonal-items >div >div {
+  padding-left: 1rem;
+}
+.OrderOptions .seasonal-items >div >div >span:first-child {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
 @media only screen and (max-width: 767px) {
   .OrderOptions .content .edit-summary {
     margin: 1.5rem 0;

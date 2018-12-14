@@ -6,8 +6,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     GroupDropoffs: Object.create( Model, { resource: { value: 'groupdropoff' } } ),
     MemberSelection: require('../models/MemberSelection'),
     MemberShareOption: Object.create( Model, { resource: { value: 'membershareoption' } } ),
+    MemberSeasonalSelection: require('../models/MemberSeasonalSelection'),
     OrderOption: require('../models/OrderOption'),
     ShareOptionOption: require('../models/ShareOptionOption'),
+
 
     calculateWeeklyPrice() {
         let optionPrice = this.MemberSelection.data.reduce( ( sum, selection ) => sum + Model.moneyToReal( selection.price ), 0 )
@@ -65,6 +67,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     clear() {
         this.els.changes.innerHTML = ''
         this.els.options.innerHTML = ''
+        this.els.seasonalItemsList.innerHTML = ''
 
         this.els.resetBtn.classList.add('fd-hidden')
         this.els.editSummary.classList.add('fd-hidden')
@@ -73,6 +76,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             editSummary: this.els.editSummary,
             changes: this.els.changes,
             container: this.els.container,
+            seasonalItems: this.els.seasonalItems,
+            seasonalItemsList: this.els.seasonalItemsList,
             seasonLabel: this.els.seasonLabel,
             options: this.els.options,
             resetBtn: this.els.resetBtn,
@@ -225,6 +230,19 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         return this
     },
 
+    renderSeasonalItems() {
+        if( !this.MemberSeasonalSelection.data.length ) return this.els.seasonalItems.classList.add('fd-hidden')
+
+        this.MemberSeasonalSelection.data.forEach( selection =>
+            this.slurpTemplate( {
+                insertion: { el: this.els.seasonalItemsList },
+                template: this.templates.seasonalItem( selection )
+            } )
+        )
+
+        this.els.seasonalItems.classList.remove('fd-hidden')
+    },
+
     renderShareOptions() {
         this.OrderOption.data.forEach( shareOption => {
             this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( shareOption ), insertion: { el: this.els.options } } )
@@ -286,6 +304,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         fieldEdit: require('./templates/FieldEdit'),
         archivedOption: option => `<li><div class="cell">${option.name}</div><div class="cell" data-js="${option.id}"></div></li>`,
         editableOption: option => `<li data-name="${option.key || option.id}" class="editable"><span>${option.name}</span><select data-js="${option.id}"></select></li>`,
+        seasonalItem: selection => `<div><span>${selection.addOn}: </span><span>${selection.addOnOption}</span></div>`,
         selectOption: option => {
             const disabled = option.disabled ? `disabled` : ''
             const price = option.name === 'none'
@@ -313,11 +332,17 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .then( () => this.OrderOption.get( { query: { shareid: share.id, shareoptionid: { operation: 'join', value: { table: 'shareoption', column: 'id' } } } } ) )
         .then( () => this.ShareOptionOption.get() )
         .then( () => this.MemberSelection.get( { query: { membershareid: share.membershareid, shareoptionoptionid: { operation: 'join', value: { table: 'shareoptionoption', column: 'id' } } } } ) )
+        .then( () => this.MemberSeasonalSelection.get( { query: {
+            memberShareId: share.membershareid,
+            seasonalAddOnId: { operation: 'join', value: { table: 'seasonalAddOn', column: 'id' } },
+            seasonalAddOnOptionId: { operation: 'join', value: { table: 'seasonalAddOnOption', column: 'id' } }
+        } } ) )
         .then( () => this.renderShareOptions() )
         .then( () => this.DeliveryOptions.get() )
         .then( () => this.GroupDropoffs.get() )
         .then( () => {
-            this.renderDeliveryOptions() 
+            this.renderDeliveryOptions()
+            this.renderSeasonalItems()
             this.originalWeeklyPrice = this.calculateWeeklyPrice()
             this.show()
             return Promise.resolve()
