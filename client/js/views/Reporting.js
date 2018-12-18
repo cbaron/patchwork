@@ -44,7 +44,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     getYearOptions() {
         const currentYear = new Date().getFullYear(),
-            range = this.Format.FillRange( currentYear - 10, currentYear ).reverse()
+            range = this.Format.FillRange( currentYear - 10, currentYear + 1 ).reverse()
 
         range.forEach( year =>
             this.slurpTemplate( {

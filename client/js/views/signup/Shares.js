@@ -37,7 +37,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
 
         this.on( 'itemSelected', model => {
             this.templateData.container.removeClass('has-error')
-            if( !this.user.isAdmin() && this.isSeason( 'summer', model ) ) {
+            if( !this.user.isAdmin() && !this.user.get('isAdminLogin') && this.isSeason( 'summer', model ) ) {
                 this.items.forEach( share => {
                     if( this.isSeason( 'spring', share ) ) {
                         this.itemViews[share.id].templateData.container
@@ -49,7 +49,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         } )
 
         this.on( 'itemUnselected', model => {
-            if( !this.user.isAdmin() && this.isSeason( 'summer', model ) ) {
+            if( !this.user.isAdmin() && !this.user.get('isAdminLogin') && this.isSeason( 'summer', model ) ) {
                 this.items.forEach( share => {
                     if( this.isSeason( 'spring', share ) ) {
                         this.itemViews[share.id].templateData.container.addClass('inactive').off('click')
