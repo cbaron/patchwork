@@ -10,7 +10,19 @@ Object.assign( ShareSelection.prototype, List.prototype, {
         Share: require('../../models/Share')
     },
 
-    collection: { comparator: 'startEpoch', model: require('../../models/Share'), url: "/share" },
+    collection: {
+        comparator: function( a, b ) {
+            return /spring/i.test( a.get('name') ) || /spring/i.test( a.get('label') )
+                ? 1
+                : /spring/i.test( b.get('name') ) || /spring/i.test( b.get('label') )
+                    ? -1
+                    : a.get('startEpoch') < b.get('startEpoch')
+                        ? -1
+                        : 1
+        },
+        model: require('../../models/Share'),
+        url: "/share"
+    },
 
     events: {
         csaInfoBtn: { method: 'showCSAInfoPageInNewTab' }
@@ -42,6 +54,7 @@ Object.assign( ShareSelection.prototype, List.prototype, {
                     if( this.isSeason( 'spring', share ) ) {
                         this.itemViews[share.id].templateData.container
                             .removeClass('inactive')
+                            .addClass('slide-in-right')
                             .on( 'click', () => this.itemViews[share.id].emit( 'clicked', this.itemViews[share.id].model ) )
                     }
                 } )
@@ -52,7 +65,10 @@ Object.assign( ShareSelection.prototype, List.prototype, {
             if( !this.user.isAdmin() && !this.user.get('isAdminLogin') && this.isSeason( 'summer', model ) ) {
                 this.items.forEach( share => {
                     if( this.isSeason( 'spring', share ) ) {
-                        this.itemViews[share.id].templateData.container.addClass('inactive').off('click')
+                        this.itemViews[share.id].templateData.container
+                            .addClass('inactive')
+                            .removeClass('slide-in-right')
+                            .off('click')
                         this.unselectItem( share )
                     }
                 } )

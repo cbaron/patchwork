@@ -2761,13 +2761,6 @@ html.non-touch .AccountHome button:hover {
   color: #fff;
   margin: 0.25rem 0;
 }
-.inactive .share-label >div:nth-child(2) {
-  color: #333;
-}
-.inactive .share-label {
-  background-color: #ccc;
-  color: #333;
-}
 .ShareOptions li {
   padding: 3rem 0;
 }
@@ -2958,14 +2951,12 @@ html.non-touch .AccountHome button:hover {
 .Shares .share:hover {
   border-color: rgba(201,135,2,0.7);
 }
-.Shares .share:hover.inactive {
-  border-color: transparent;
-}
 .Shares .share.selected {
   background-color: rgba(255,197,2,0.3);
 }
 .Shares .share.inactive {
   cursor: default;
+  visibility: hidden;
 }
 .Shares .share >div {
   display: flex;
