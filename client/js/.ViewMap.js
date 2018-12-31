@@ -35,6 +35,7 @@ module.exports={
 	Toast: require('./views/Toast'),
 	Transactions: require('./views/Transactions'),
 	TypeAhead: require('./views/TypeAhead'),
+	Unsubscribe: require('./views/Unsubscribe'),
 	Verify: require('./views/Verify'),
 	WeekOptions: require('./views/WeekOptions'),
 	WeeklyReminder: require('./views/WeeklyReminder'),

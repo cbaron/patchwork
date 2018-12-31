@@ -44,15 +44,16 @@ module.exports = { ...require('./__proto__'),
     },
 
     onListSelectChange( e ) {
-        this.selectedCategory = e.target.value
-        this.selectedCategoryEl.parentNode.classList.add('fd-hidden')
-        this.selectedCategoryEl = this.els[ `${e.target.value}Select` ]
-        this.selectedCategoryEl.parentNode.classList.remove('fd-hidden')
+        this.model.selectedCategory = e.target.value
+        if( this.selectedCategoryEl ) this.selectedCategoryEl.parentNode.classList.add('fd-hidden')
+        this.selectedCategoryEl = this.model.selectedCategory === 'newsletter' ? undefined : this.els[ `${e.target.value}Select` ]
+        this.els.subjectLine.value = `Weekly ${this.model.selectedCategory === 'newsletter' ? 'Newsletter' : 'Reminder'} from Patchwork Gardens`
+        if( this.selectedCategoryEl ) this.selectedCategoryEl.parentNode.classList.remove('fd-hidden')
     },
 
     onRowsClick( e ) {
         const svgEl = e.target.closest('SVG')
-        if( !svgEl ) return
+        if( !svgEl || this.model.selectedCategory === 'newsletter' ) return
 
         const row = e.target.closest('OL')
         const datum = this.model.data.find( datum => datum.memberShareId == row.getAttribute('data-id') )
@@ -117,7 +118,8 @@ module.exports = { ...require('./__proto__'),
     },
 
     async onViewBtnClick() {
-        await this.model.get( { query: { category: this.selectedCategory, selection: this.selectedCategoryEl.value } } )
+        const selection = this.selectedCategoryEl ? this.selectedCategoryEl.value : undefined
+        await this.model.get( { query: { category: this.model.selectedCategory, selection } } )
 
         this.clearTable()
 
@@ -125,7 +127,7 @@ module.exports = { ...require('./__proto__'),
     
         this.els.empty.classList.add('fd-hidden')
 
-        await Promise.all( this.model.data.map( customer => this.model.getSkipWeekStatus( customer ) ) )
+        if( this.model.selectedCategory !== 'newsletter' ) await Promise.all( this.model.data.map( customer => this.model.getSkipWeekStatus( customer ) ) )
 
         this.handleColumns( this.model.data )
         this.handleRows( this.model.data )
@@ -148,7 +150,7 @@ module.exports = { ...require('./__proto__'),
                 template: this.model.getGroupNameOptions()
             } )
 
-            this.selectedCategory = 'day'
+            this.model.selectedCategory = 'day'
             this.selectedCategoryEl = this.els.daySelect
 
             this.spinner = new this.Spinner( {

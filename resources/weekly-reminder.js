@@ -7,9 +7,11 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
     db: {
         GET() {
-            return this.query.category === 'deliveryType'
-                ? this[ `${this.query.selection}Query` ]()
-                : this[ `${this.query.category}Query` ]()
+            return this.query.category === 'newsletter'
+                ? this.newsletterQuery()
+                : this.query.category === 'deliveryType'
+                    ? this[ `${this.query.selection}Query` ]()
+                    : this[ `${this.query.category}Query` ]()
         }
     },
 
@@ -94,6 +96,10 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         )
     },
 
+    newsletterQuery() {
+        return this.Postgres.query( `SELECT email FROM newsletter`, [], { rowsOnly: true } )
+    },
+
     singleGroupQuery() {
         return this.Postgres.query(
             `SELECT p.name, p.email, p."secondaryEmail", ms.id as "memberShareId", dop.name as "deliveryName", dop.label as "deliveryLabel", gd.label as "dropoffName", gd.street, sgd.dayofweek, sgd.starttime, sgd.endtime
@@ -117,6 +123,11 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         await this.validateUser()
 
         const emails = Object.entries( this.body.emails ).map( ( [ key, val ] ) => {
+            if( val.isNewsletter ) {
+                val.template += `<div style="padding: .25rem 1rem; color: #222; background-color: #fff5df; border-top: 1px solid #ccc;">
+                <p>If you no longer wish to receive these emails, you may unsubscribe <a href="${this.reflectUrl()}/unsubscribe">HERE</a></p></div>`
+            }
+
             const opts = {
                 to: this.isProd ? val.recipients : process.env.TEST_EMAIL,
                 from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',

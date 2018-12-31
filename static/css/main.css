@@ -1823,6 +1823,26 @@ html.non-touch .Header .member-ui >ul >li:hover {
   font-size: 1.4rem;
   box-shadow: none;
 }
+.Home .newsletter {
+  margin-top: 5rem;
+}
+.Home .newsletter >div:first-child {
+  text-align: center;
+  padding-bottom: 0.35rem;
+  color: #fff;
+  font-size: 1.1rem;
+}
+.Home .newsletter >div:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Home .newsletter >div:last-child .btn-yellow {
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  margin-left: 0.25rem;
+  box-shadow: none;
+}
 @media only screen and (min-width: 1500px) {
   .Home .overlay >div:first-child {
     font-size: 2rem;
@@ -3424,6 +3444,24 @@ html.non-touch .AccountHome button:hover {
 }
 .TypeAhead.hiding-search input {
   padding-left: 0.25rem;
+}
+.Unsubscribe {
+  padding: 3rem;
+}
+.Unsubscribe >div:first-child {
+  text-align: center;
+  padding-bottom: 0.35rem;
+  font-size: 1.1rem;
+}
+.Unsubscribe >div:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Unsubscribe >div:last-child .btn-yellow {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.6rem;
+  margin-left: 0.35rem;
 }
 .Verify {
   padding: 3rem;

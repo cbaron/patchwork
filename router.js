@@ -302,6 +302,7 @@ module.exports = new Router( {
             'mail': true,
             'member-order': true,
             'never-receive': true,
+            'newsletter': true,
             'payment': true,
             'report': true,
             'reset-password': true,

@@ -60,6 +60,7 @@ module.exports = { ...require('./__proto__'),
 
     sortIntoEmails( list ) {
         const hasAttachment = Boolean( this.attachments.length )
+        const isNewsletter = this.selectedCategory === 'newsletter'
         let customLinesArray, customLinesMarkup
 
         if( this.emailIsCustom ) {
@@ -71,16 +72,19 @@ module.exports = { ...require('./__proto__'),
         }
 
         return list.reduce( ( memo, customer ) => {
-            const key = customer.dropoffName || customer.deliveryName
+            const key = isNewsletter ? 'newsletter' : customer.dropoffName || customer.deliveryName
             const bodyTemplate = this.emailIsCustom && this.replaceDefaultTemplate
                 ? this.Templates.custom( { paragraphs: customLinesMarkup } )
-                : this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment, customText: customLinesMarkup } )
+                : isNewsletter
+                    ? this.Templates.newsletter()
+                    : this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment, customText: customLinesMarkup } )
 
             if( !memo[ key ] ) {
                 memo[ key ] = { }
                 memo[ key ].recipients = [ ]
                 memo[ key ].subject = this.subjectLine
                 memo[ key ].template = this.Templates.emailHeader() + bodyTemplate
+                memo[ key ].isNewsletter = isNewsletter
             }
 
             memo[ key ].recipients.push( customer.email )
@@ -98,7 +102,8 @@ module.exports = { ...require('./__proto__'),
         farm: require('../views/templates/FarmReminder'),
         group: require('../views/templates/GroupReminder'),
         emailHeader: require('../views/templates/EmailHeader'),
-        home: require('../views/templates/HomeReminder')
+        home: require('../views/templates/HomeReminder'),
+        newsletter: require('../views/templates/NewsletterEmail')
     }
 
 }

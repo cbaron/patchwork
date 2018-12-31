@@ -9,6 +9,7 @@ module.exports = p =>
                     <option value="day">Day of Week</option>
                     <option value="deliveryType">Delivery Type</option>
                     <option value="singleGroup">Single Dropoff Group</option>
+                    <option value="newsletter">Newsletter Subscribers</option>
                 </select>
             </div>
             <div>
@@ -45,7 +46,7 @@ module.exports = p =>
                     <textarea data-js="customText" rows="10"></textarea>
                 </div>
                 <div>
-                    <label>Replace default reminder template</label>
+                    <label>Replace default template</label>
                     <input data-js="replaceDefaultBtn" type="checkbox" />
                 </div>
             </div>
