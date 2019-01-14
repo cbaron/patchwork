@@ -73,18 +73,22 @@ module.exports = { ...require('./__proto__'),
 
         return list.reduce( ( memo, customer ) => {
             const key = isNewsletter ? 'newsletter' : customer.dropoffName || customer.deliveryName
-            const bodyTemplate = this.emailIsCustom && this.replaceDefaultTemplate
-                ? this.Templates.custom( { paragraphs: customLinesMarkup } )
+            const type = this.emailIsCustom && this.replaceDefaultTemplate
+                ? 'custom'
                 : isNewsletter
-                    ? this.Templates.newsletter()
-                    : this.Templates[ customer.dropoffName ? 'group' : customer.deliveryName ]( { ...customer, hasAttachment, customText: customLinesMarkup } )
+                    ? 'newsletter'
+                    : customer.dropoffName ? 'group' : customer.deliveryName
 
             if( !memo[ key ] ) {
                 memo[ key ] = { }
                 memo[ key ].recipients = [ ]
                 memo[ key ].subject = this.subjectLine
-                memo[ key ].template = this.Templates.emailHeader() + bodyTemplate
-                memo[ key ].isNewsletter = isNewsletter
+                memo[ key ].type = type
+                memo[ key ].templateOpts = {
+                    ...this.omit( customer, ['name', 'email', 'secondaryEmail', 'memberShareId', 'deliveryName', 'deliveryLabel', 'isSkipping'] ),
+                    customText: customLinesMarkup,
+                    hasAttachment
+                }
             }
 
             memo[ key ].recipients.push( customer.email )
@@ -95,15 +99,6 @@ module.exports = { ...require('./__proto__'),
         }, { } )
     },
 
-    resource: 'weekly-reminder',
-
-    Templates: {
-        custom: require('../views/templates/CustomEmail'),
-        farm: require('../views/templates/FarmReminder'),
-        group: require('../views/templates/GroupReminder'),
-        emailHeader: require('../views/templates/EmailHeader'),
-        home: require('../views/templates/HomeReminder'),
-        newsletter: require('../views/templates/NewsletterEmail')
-    }
+    resource: 'weekly-reminder'
 
 }

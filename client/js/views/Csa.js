@@ -16,11 +16,15 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
         this.ShareOptions.data.filter( opt => opt.name !== 'Share size' ).forEach( shareOpt => {
             const addOnInfo = this.CurrentShare.data.produceOptions.find( produceOpt => produceOpt.shareoptionid === shareOpt.id && produceOpt.name === 'one' )
 
+            if( !addOnInfo ) return
+
             this.slurpTemplate( {
                 template: this.templates.csaItem( Object.assign( addOnInfo, { heading: shareOpt.name } ) ),
                 insertion: { el: this.els.addOnItems }
             } )
         } )
+
+        if( !this.els.addOnItems.children.length ) this.els.addOns.classList.add('fd-hidden')
     },
 
     insertDeliveryMatrix() {
@@ -38,7 +42,7 @@ module.exports = Object.assign( {}, require('./__proto__'), require('./util/Cust
             sharePrice = parseFloat( this.CurrentShare.data.produceOptions.find( opt => opt.prompt = 'Share size' && share.name === opt.name ).price.replace('$','') ),
             lowPrice = sharePrice + parseFloat( this.CurrentShare.data.deliveryOptions[0].price.replace('$','') ),
             highPrice = sharePrice + parseFloat( this.CurrentShare.data.deliveryOptions[ this.CurrentShare.data.deliveryOptions.length - 1 ].price.replace('$','') ),
-            priceRange = `$${lowPrice.toFixed(2)} - $${highPrice.toFixed(2)}`
+            priceRange = lowPrice === highPrice ? `$${lowPrice.toFixed(2)}` : `$${lowPrice.toFixed(2)} - $${highPrice.toFixed(2)}`
 
         this.slurpTemplate( {
             template: this.templates.csaItem( Object.assign( share.shareDescription, { price: priceRange } ) ),

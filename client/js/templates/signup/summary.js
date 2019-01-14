@@ -7,7 +7,7 @@ const shares = p.shares.map( share => {
             <div>${opt.optionName}</div>
             <div>
                 <span>${opt.selectedOptionLabel}</span>
-                <span>${p.unit || ''}</span>
+                <span>${opt.unit || ''}</span>
             </div>
             <div class="price">
                 <span>${opt.price}</span>

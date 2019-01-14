@@ -3,7 +3,7 @@ var Base = require('./__proto__'),
 
 Object.assign( Signup.prototype, Base.prototype, {
 
-    Email: require('../lib/Email'),
+    SendGrid: require('../lib/SendGrid'),
 
     Stripe: require('../lib/stripe'),
 
@@ -114,6 +114,16 @@ Object.assign( Signup.prototype, Base.prototype, {
         .then( result => this[ `${ result.rows.length === 0 ? 'new' : 'update' }PersonQueries` ]( result.rows.length ? result.rows[0].id : undefined ) )
     },
 
+    generateEmailBody() {
+        return this.Templates.SignupReceipt( {
+            name: this.body.member.name,
+            shares: this.body.shares,
+            foodOmission: this.body.member.omission.length ? this.body.member.omission[0].name : '',
+            payment: this.body.payment,
+            total: this.body.total.toFixed(2)
+        } )
+    },
+
     getShareSignupDescription( share ) {
         const absent = share.skipDays.length ? `Absent: ${share.skipDays.map( day => day.slice(5) ).join(', ')}` : ``
 
@@ -137,38 +147,6 @@ Object.assign( Signup.prototype, Base.prototype, {
         if( match === null ) return description
 
         return match[1].trim()
-    },
-
-    generateEmailBody() {
-        let body = `Hello ${this.body.member.name},\r\n\r\nThanks for signing up for our CSA program. Here is a summary for your records:\r\n\r\n`
-
-        body += this.body.shares.map( share => {
-            const skipDays = share.skipDays.length
-                ? `You have opted out of produce for the following dates: ${share.skipDays.map( day => day.slice(5) ).join(', ')}.`
-                : ""
-
-            const shareOptions = this._( share.options ).pluck('description').join('\r\n\t\t')
-
-            const seasonalAddOns = share.seasonalAddOns.length
-                ? `\r\n\tSeasonal Add-Ons: \r\n\t\t` + share.seasonalAddOns.map( addon => `${addon.label}: ${addon.selectedOptionLabel} ${addon.unit || ''} -- ${addon.price}` ).join('\r\n\t\t') + `\r\n`
-                : `\r\n`
-
-            return `Share: ${share.label}\r\n\t${share.description}${skipDays}\r\n\t${share.delivery.description}\r\n\tShareOptions:\r\n\t\t${shareOptions}${seasonalAddOns}`
-        }
-        ).join('\r\n\r\n')
-
-        if( this.body.member.omission.length ) body += `\r\nVegetable to never receive: ${this.body.member.omission[0].name}\r\n`
-
-        body += this.getEmailPaymentString()
-
-        return body
-    },
-
-    getEmailPaymentString( ) {
-        var total = this.body.total.toFixed(2)
-        return ( Object.keys( this.body.payment ).length )
-            ? this.format( "\r\n\r\nThank you for your online payment of $%s. If there is a problem with the transaction, we will be in touch.", total )
-            : this.format( "\r\n\r\nYour total comes to $%s.  Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417.  Thank you!", total )
     },
 
     handleFoodOmission( memberid ) {
@@ -226,28 +204,25 @@ Object.assign( Signup.prototype, Base.prototype, {
 
                 if( !this.newMember ) return Promise.resolve()
 
-                return this.Q( this.Email.send( {
+                const templateOpts = { name: this.body.member.name, token: this.token, url: this.reflectUrl() }
+
+                return this.Q( this.SendGrid.send( {
                     to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
-                    from: 'eat.patchworkgardens@gmail.com',
+                    from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                     subject: `Patchwork Gardens Email Verification`,
-                    bodyType: 'html',
-                    body:
-                        `<div>Dear ${this.body.member.name},</div>
-                        <div>Thank you for your Patchwork Gardens CSA purchase! In order for you to log in to the site, we will need to verify your email.</div>
-                        <div>Please click <a href="${this.reflectUrl()}/verify/${this.token}">HERE</a> to do so.</div>`
-                    } )
-                )
+                    html: this.Templates.EmailBase({ emailBody: this.Templates.EmailVerification( templateOpts ) })
+                } ) )
                 .fail( err => console.log( "Error generating verification email : " + err.stack || err ) )
             } )
             .then( () => {
                 if( this.error ) return this.respond( { body: { error: this.error } } )
-                
-                return this.Q( this.Email.send( {
+
+                return this.Q( this.SendGrid.send( {
                     to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
-                    from: 'eat.patchworkgardens@gmail.com',
+                    from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                     subject: 'Welcome to Patchwork Gardens CSA',
-                    body: this.generateEmailBody() } )
-                )
+                    html: this.Templates.EmailBase({ emailBody: this.generateEmailBody() })
+                } ) )
                 .fail( err => console.log( "Error generating confirmation email : " + err.stack || err ) )
             } )
             .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
@@ -283,6 +258,11 @@ Object.assign( Signup.prototype, Base.prototype, {
         return this.dbQuery( { query: this.format("DELETE from membershareskipweek WHERE membershareid IN ( %s )", this.membershareids.join(', ') ) } )
     },
 
+    Templates: {
+        EmailBase: require('../templates/EmailBase'),
+        EmailVerification: require('../templates/EmailVerification'),
+        SignupReceipt: require('../templates/SignupReceipt')
+    },
 
     updatePersonQueries( personid ) {
         return this.dbQuery( { query: "SELECT * FROM member WHERE personid = $1", values: [ personid ] } )

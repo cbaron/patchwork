@@ -30,16 +30,20 @@ Object.assign( Summary.prototype, View.prototype, {
                 { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
             payment: ( this.selectedPayment === 'card' ) ? this.getFormData() : {},
             shares: this.buildShares(),
+            templateOptions: this.getTemplateOptions(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal,
             isAdmin: this.user.isAdmin(),
         } )
     },
 
     buildShares() {
-        return this.signupData.shares.map( share => {
+        const templateOpts = this.getTemplateOptions()
+
+        return this.signupData.shares.map( ( share, i ) => {
             var selectedWeeks = share.get('selectedDates').length,
                 skipDays = share.get('skipDays'),
-                skipDaysTotal = ( skipDays ) ? skipDays.length : 0
+                skipDaysTotal = ( skipDays ) ? skipDays.length : 0,
+                templateOptShare = templateOpts.shares[i]
             
             return {
                 id: share.id,
@@ -51,7 +55,10 @@ Object.assign( Summary.prototype, View.prototype, {
                 seasonalAddOns: share.get('seasonalAddOns'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
                 skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
-                total: share.get('total')
+                total: share.get('total'),
+                selectedDelivery: templateOptShare.selectedDelivery,
+                selectedOptions: templateOptShare.selectedOptions,
+                formattedTotal: templateOptShare.total
             }
         } )
     },

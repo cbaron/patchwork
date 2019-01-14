@@ -123,16 +123,17 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         await this.validateUser()
 
         const emails = Object.entries( this.body.emails ).map( ( [ key, val ] ) => {
-            if( val.isNewsletter ) {
-                val.template += `<div style="padding: .25rem 1rem; color: #222; background-color: #fff5df; border-top: 1px solid #ccc;">
-                <p>If you no longer wish to receive these emails, you may unsubscribe <a href="${this.reflectUrl()}/unsubscribe">HERE</a></p></div>`
+            let emailBody = this.Templates[ val.type ]( val.templateOpts )
+
+            if( val.type === 'newsletter' ) {
+                emailBody += this.Templates.unsubscribe({ url: this.reflectUrl() })
             }
 
             const opts = {
                 to: this.isProd ? val.recipients : process.env.TEST_EMAIL,
                 from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                 subject: val.subject,
-                html: val.template
+                html: this.Templates.emailBase({ emailBody })
             }
 
             if( this.body.attachments ) opts.attachments = this.body.attachments
@@ -148,6 +149,16 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
         } )
 
         this.respond( { body: { } } )
+    },
+
+    Templates: {
+        emailBase: require('../templates/EmailBase'),
+        custom: require('../templates/CustomEmail'),
+        farm: require('../templates/FarmReminder'),
+        group: require('../templates/GroupReminder'),
+        home: require('../templates/HomeReminder'),
+        newsletter: require('../templates/NewsletterEmail'),
+        unsubscribe: require('../templates/UnsubscribeMessage')
     }
 
 } )
