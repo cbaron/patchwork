@@ -30,7 +30,6 @@ Object.assign( Summary.prototype, View.prototype, {
                 { zipcode: ( addressModel && addressModel.postalCode ) ? addressModel.postalCode : '' } ),
             payment: ( this.selectedPayment === 'card' ) ? this.getFormData() : {},
             shares: this.buildShares(),
-            templateOptions: this.getTemplateOptions(),
             total: ( this.fee ) ? this.grandTotalPlusFee : this.grandTotal,
             isAdmin: this.user.isAdmin(),
         } )
