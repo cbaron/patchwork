@@ -1,3 +1,11 @@
+const Format = require('../client/js/Format');
+const getYearOptions = function() {
+    const currentYear = new Date().getFullYear(),
+        range = Format.FillRange( currentYear, currentYear + 10 )
+
+    return range.map( year => ({ name: year, label: year }) )
+};
+
 module.exports = {
     attributes: [ {
         name: 'ccNo',
@@ -30,17 +38,7 @@ module.exports = {
         name: 'ccYear',
         label: 'Exp Year',
         metadata: {
-            options: [
-                { name: '2018', label: '2018' },
-                { name: '2019', label: '2019' },
-                { name: '2020', label: '2020' },
-                { name: '2021', label: '2021' },
-                { name: '2022', label: '2022' },
-                { name: '2023', label: '2023' },
-                { name: '2024', label: '2024' },
-                { name: '2025', label: '2025' },
-                { name: '2026', label: '2026' }
-            ]
+            options: getYearOptions()
         },
         range: 'String',
         error: 'A credit card year expiration is required'

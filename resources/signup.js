@@ -198,6 +198,9 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.user.state.signup = { }
             this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
 
+            const emailTo = [ this.body.member.email.toLowerCase() ]
+            if( this.body.member.secondaryEmail ) emailTo.push( this.body.member.secondaryEmail.toLowerCase() )
+
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
                 this.token = token
@@ -218,7 +221,7 @@ Object.assign( Signup.prototype, Base.prototype, {
                 if( this.error ) return this.respond( { body: { error: this.error } } )
 
                 return this.Q( this.SendGrid.send( {
-                    to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
+                    to: this.isProd ? emailTo : process.env.TEST_EMAIL,
                     from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     html: this.Templates.EmailBase({ emailBody: this.generateEmailBody() })

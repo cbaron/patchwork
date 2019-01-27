@@ -83,7 +83,7 @@ return `` +
 <p>Thanks for signing up for our CSA program. Here is a summary for your records:</p>
 ${shares}
 ${foodOmission}
-<p style="margin: 2rem 0; padding: 1rem; border-bottom: 1px solid #aa0000; border-top: 1px solid #aa0000; font-weight: bold; font-size: 1.2rem; text-align: center;">Grand Total: $${p.total}</p>
+<p style="margin-bottom: 2rem; padding: .25rem; background-color: #aa0000; color: white; font-weight: bold; font-size: 1.2rem; text-align: center;">Grand Total: $${p.total}</p>
 <p style="text-align: center;">${paymentMessage}</p>
 <p style="margin-top: 2rem; font-size: 1.3rem; color: #aa0000; text-align: center;">Thank you!</p>`
 }

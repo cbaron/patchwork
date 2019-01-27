@@ -3,13 +3,7 @@ var Base = require('./__proto__'),
 
 Object.assign( Payment.prototype, Base.prototype, {
 
-    Currency: new Intl.NumberFormat( 'en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    } ),
-
-    Email: require('../lib/Email'),
+    SendGrid: require('../lib/SendGrid'),
 
     Stripe: require('../lib/stripe'),
 
@@ -43,17 +37,20 @@ Object.assign( Payment.prototype, Base.prototype, {
     },
 
     notifyCustomer() {
-        return this.Email.send( {
-            to: process.env.NODE_ENV === 'production' ? this.body.person.email : process.env.TEST_EMAIL,
-            from: 'eat.patchworkgardens@gmail.com',
+        const emailTo = [ this.body.person.email ]
+        if( this.body.person.secondaryEmail ) emailTo.push( this.body.person.secondaryEmail )
+
+        return this.SendGrid.send( {
+            to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
+            from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
             subject: `Patchwork Gardens Payment Receipt`,
-            body:
-                `Dear ${this.body.person.name},\n\n` +
-                `We are sending you this email to confirm payment for the remaining balance on the following share:\n\n` +
-                `${this.body.share.label}\nAmount: ${this.Currency.format( this.body.total )}\n\n` +
-                `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com\n\n` +
-                `Thank you!\n` +
-                `Patchwork Gardens`
+            html: this.Templates.EmailBase({
+                emailBody: this.Templates.PaymentReceipt({
+                    name: this.body.person.name,
+                    shareLabel: this.body.share.label,
+                    total: this.body.total
+                })
+            })
         } )
         .catch( e => Promise.resolve( console.log( 'Failed to send payment details to customer.' ) ) )
     },
@@ -67,6 +64,11 @@ Object.assign( Payment.prototype, Base.prototype, {
         .then( () => this.executePayment() )
         .then( () => this.notifyCustomer() )
         .then( () => this.respond( { body: { } } ) )
+    },
+
+    Templates: {
+        EmailBase: require('../templates/EmailBase'),
+        PaymentReceipt: require('../templates/PaymentReceipt')
     },
 
     validateCreditInfo() {

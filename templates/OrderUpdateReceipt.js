@@ -67,8 +67,8 @@ return `` +
 <p>Your ${p.shareLabel} CSA order with Patchwork Gardens has been adjusted. Here are the details:</p>
 <table style="${tableStyles} margin-top: 2rem; margin-bottom: 1rem;">
     <tbody>
-        <tr style="${bold} font-size: .95rem;">
-            <td>SHARE CHANGE</td>
+        <tr style="${bold} font-size: .85rem;">
+            <td>ORDER CHANGE</td>
             <td style="text-align: right;">PRICE ADJUSTMENT</td>
         </tr>
     </tbody>
