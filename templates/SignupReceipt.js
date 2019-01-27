@@ -76,7 +76,7 @@ module.exports = p => {
     const grandTotal = `<span style="font-weight: bold; font-size: 1.2rem;">$${p.total}</span>`;
     const paymentMessage = Object.keys( p.payment ).length
         ? `We have received your online payment. If there is a problem with the transaction, we will be in touch.`
-        : `Please send payment at your earliest convenience to: <br /><br />Patchwork Gardens<br />9057 W Third St<br />Dayton, OH 45417`
+        : `Please send payment at your earliest convenience to: <br /><br />Patchwork Gardens<br />9057 W Third St<br />Dayton, OH 45417<br /><br />You may also log in to your account and pay online via credit card.`
 
 return `` +
 `<p>Hello ${p.name},</p>

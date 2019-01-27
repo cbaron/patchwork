@@ -93,7 +93,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getAdjustmentDescription() {
-        return Array.from( this.els.options.querySelectorAll('li.edited') ).map( el => {
+        const adjustment = Array.from( this.els.options.querySelectorAll('li.edited') ).reduce( (memo, el) => {
             const fieldName = el.getAttribute('data-name'),
                   fieldLabel = this.capitalizeFirstLetter( fieldName ),
                   oldValue = this.editedFields[ fieldName ].oldValue
@@ -101,8 +101,22 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     : 'none',
                   newValue = this.editedFields[ fieldName ].newValue.toString()
 
-            return `${fieldLabel}: ${oldValue} to ${newValue}`
-        } ).join('\n\t')
+            memo.textDescription.push(`${fieldLabel}: ${oldValue} to ${newValue}`)
+            memo.optionChanges.push({
+                label: fieldLabel,
+                oldValue,
+                newValue
+            })
+
+            return memo
+
+        }, { textDescription: [], optionChanges: [] } )
+
+        return {
+            textDescription: adjustment.textDescription.join('\n\t'),
+            optionChanges: adjustment.optionChanges
+        }
+
     },
 
     getDeliveryData( ) {

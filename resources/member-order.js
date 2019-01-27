@@ -3,22 +3,17 @@ var Base = require('./__proto__'),
 
 Object.assign( MemberOrder.prototype, Base.prototype, {
 
-    Currency: new Intl.NumberFormat( 'en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    } ),
+    SendGrid: require('../lib/SendGrid'),
 
-    Email: require('../lib/Email'),
+    async PATCH() {
+        await this.slurpBody()
 
-    PATCH() {
-        return this.slurpBody()
-        .then( () => {
-            if( !this.user.id ) throw Error("401")
-            return this.Q( this.Postgres.transaction( this.gatherQueries() ) )
-        } )
-        .then( () => this.notify() )
-        .then( () => this.respond( { body: { } } ) )
+        if( !this.user.id ) throw Error("401")
+
+        await this.Postgres.transaction( this.gatherQueries() )
+        await this.notify()
+        
+        this.respond( { body: { } } )
     },
 
     gatherQueries() {
@@ -55,29 +50,21 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
     },
 
     notify() {
-        if( this.user.roles.includes('admin') && !this.body.adjustment.sendEmail ) return this.Q()
+        if( this.user.roles.includes('admin') && !this.body.adjustment.sendEmail ) return Promise.resolve()
 
         const newBalance = this.body.previousBalance + this.body.adjustment.value
 
-        return this.Q(
-            this.Email.send( {
-                to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,
-                from: 'eat.patchworkgardens@gmail.com',
-                subject: `Patchwork Gardens CSA : ${this.body.shareLabel} Adjustment`,
-                body: [
-                    `Hello ${this.body.name},`,
-                    `Your ${this.body.shareLabel} CSA order with Patchwork Gardens has been adjusted.`,
-                    `Details:`,
-                    `${this.body.adjustment.description}`,
-                    `Prevous Share Balance: ${this.Currency.format( this.body.previousBalance )}\n${this.body.adjustment.value > 0 ? 'New Charges' : 'Price Reduction'}: ${this.Currency.format( Math.abs(this.body.adjustment.value ) )}`,
-                    `New Share Balance: ${this.Currency.format( newBalance )}`,
-                    ( newBalance > 0
-                        ? `Please send payment at your earliest convenience to Patchwork Gardens, 9057 W Third St, Dayton OH 45417. You may also log in to your account and pay online via credit card. Thank you!`
-                        : `If your overall balance with Patchwork is now negative, we will mail a check to you in the near future.` ),
-                    `If you believe a mistake has been made, or have any questions, please contact us at eat.patchworkgardens@gmail.com`
-                ].join( `${this.Email.newline}${this.Email.newline}` )
-            } )
-        )
+        return this.SendGrid.send( {
+            to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,
+            from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+            subject: `Patchwork Gardens CSA: ${this.body.shareLabel} Adjustment`,
+            html: this.Templates.EmailBase({ emailBody: this.Templates.OrderUpdateReceipt(this.body) })
+        } )
+    },
+
+    Templates: {
+        EmailBase: require('../templates/EmailBase'),
+        OrderUpdateReceipt: require('../templates/OrderUpdateReceipt')
     }
 
 } )

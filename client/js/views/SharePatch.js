@@ -62,8 +62,21 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     getPatchData() {
         return {
             value: this.total,
+            options: {
+                changes: this.optionChanges || [],
+                originalWeeklyPrice: this.originalWeeklyPrice,
+                weeklyPriceAdjustment: this.weeklyPriceAdjustment,
+                newWeeklyPrice: this.originalWeeklyPrice + this.weeklyPriceAdjustment,
+                weeksAffected: this.weeksAffected
+            },
             description: this.getDescription(),
-            sendEmail: this.els.sendEmail.checked
+            sendEmail: this.els.sendEmail.checked,
+            weeks: {
+                addedDates: this.weeksAdded,
+                addedPrice: this.weeksAddedPrice,
+                removedDates: this.weeksRemoved,
+                removedPrice: this.weeksRemovedPrice
+            }
         }
     },
 
@@ -80,11 +93,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     onWeeksReset() {
-        this.onWeekUpdate( { added: 0, removed: 0 } )
+        this.onWeekUpdate( { addedDates: [], removedDates: [] } )
     },
 
     onOptionsUpdate( { description, priceAdjustment } ) {
-        this.optionsDescription = description
+        this.optionsDescription = description.textDescription
+        this.optionChanges = description.optionChanges
 
         this.els.options.classList.remove('fd-hidden')
 
@@ -94,7 +108,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.slurpTemplate( {
             insertion: { el: this.els.shareOptionDescription },
-            template: description.split('\n\t').map( option => `<li>${option}</li>` ).join('')
+            template: description.textDescription.split('\n\t').map( option => `<li>${option}</li>` ).join('')
         } )
 
         this.els.originalWeeklyPrice.textContent = this.Currency.format( this.originalWeeklyPrice )
@@ -105,7 +119,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.displayTotal().show()
     },
 
-    onWeekUpdate( { added, removed } ) {
+    onWeekUpdate( { addedDates, removedDates } ) {
+        const added = addedDates.length
+        const removed = removedDates.length
+
+        this.weeksAdded = addedDates
+        this.weeksRemoved = removedDates
+
         this.weeksAffected = this.originalWeeksAffected - removed
         this.els.weeksAffected.textContent = this.weeksAffected
         
@@ -118,7 +138,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.weeksRemovedPrice = -1 * removed * this.originalWeeklyPrice
         this.els.weeksRemovedPrice.textContent = this.Currency.format( this.weeksRemovedPrice )
 
-        if( added == 0 && removed == 0 && !this.weeklyPriceAdjustment ) return this.els.container.classList.add('fd-hidden')
+        if( added === 0 && removed === 0 && !this.weeklyPriceAdjustment ) return this.els.container.classList.add('fd-hidden')
         
         this.updateOptionsAdjustment()
         
@@ -142,6 +162,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     reset() {
         this.els.sendEmail.checked = false
         this.optionsDescription = ``
+        this.weeksAdded = []
+        this.weeksRemoved = []
         this.els.weeksAdded.textContent = 0
         this.els.weeksRemoved.textContent = 0
         this.weeksRemovedPrice = 0

@@ -156,36 +156,38 @@ module.exports = Object.assign( {}, Super, {
     },
 
     showEditSummary() {
-        let result = 0,
-            added = 0,
-            removed = 0
+        const addedDates = []
+        const removedDates = []
+        let result = 0
 
         this.els.selectedDates.innerHTML = ''
         this.els.removedDates.innerHTML = ''
 
         Object.keys( this.changedDates ).forEach( date => {
             const editedStatus = this.changedDates[ date ].editedStatus
+            let formattedDate
 
             if( editedStatus ) {
+                formattedDate = this.Moment( date ).format("MMM D")
 
                 editedStatus === 'selected'
-                    ? added += 1
-                    : removed += 1
+                    ? addedDates.push(formattedDate)
+                    : removedDates.push(formattedDate)
 
                 this.slurpTemplate( {
                     insertion: { el: this.els[ `${editedStatus}Dates` ] },
-                    template: this.templates.summaryColumn( { value: this.Moment( date ).format("MMM D") } )
+                    template: this.templates.summaryColumn( { value: formattedDate  } )
                 } )
             }
         } )
 
-        result = added - removed
+        result = addedDates.length - removedDates.length
         this.els.weekChange.textContent = result
         this.els.weekChange.classList.toggle( 'is-negative', Boolean( result < 0 ) )
 
         if( this.isHidden( this.els.editSummary ) ) this.slideIn( this.els.editSummary, 'right' )
 
-        this.emit( 'adjustment', { added, removed } )
+        this.emit( 'adjustment', { addedDates, removedDates } )
     },
 
     templates: {
