@@ -18,21 +18,24 @@ module.exports = p => {
 
     const weeks = p.adjustment.weeks
     const weeksAdded = weeks.addedDates.length
-        ? weeks.addedDates.map(date => `<span style="${spanPadding}">${date}</span>`).join(', ')
-        : `<span>None</span>`
-    const weeksRemoved = weeks.removedDates.length
-        ? weeks.removedDates.map(date => `<span style="${spanPadding}">${date}</span>`).join(', ')
-        : `<span>None</span>`
+        ? `<tr style="${border} margin-bottom: .5rem;">
+             <td style="${tdPadding}">
+                <span style="${bold}">Weeks Added: </span>
+                    ${weeks.addedDates.map(date => `<span style="${spanPadding}">${date}</span>`).join(', ')}
+            </td>
+             <td style="${alignRight} ${bold}">${Currency.format(weeks.addedPrice)}</td>
+           </tr>`
+        : ``
 
-    const weeksSummary = `` +
-        `<tr style="${border} margin-bottom: .5rem;">
-            <td style="${tdPadding}"><span style="${bold}">Weeks Added: </span>${weeksAdded}</td>
-            <td style="${alignRight} ${bold}">${Currency.format(weeks.addedPrice)}</td>
-        </tr>
-        <tr style="${border}">
-            <td style="${tdPadding}"><span style="${bold}">Weeks Removed: </span>${weeksRemoved}</td>
-            <td style="${alignRight} ${bold}">${Currency.format(weeks.removedPrice)}</td>
-        </tr>`
+    const weeksRemoved = weeks.removedDates.length
+        ? `<tr style="${border} margin-bottom: .5rem;">
+             <td style="${tdPadding}">
+                <span style="${bold}">Weeks Removed: </span>
+                    ${weeks.removedDates.map(date => `<span style="${spanPadding}">${date}</span>`).join(', ')}
+            </td>
+             <td style="${alignRight} ${bold}">${Currency.format(weeks.removedPrice)}</td>
+           </tr>`
+        : ``
 
     const options = p.adjustment.options;
     const optionChanges = options.changes.map( opt =>
@@ -45,11 +48,7 @@ module.exports = p => {
         `<table style="${tableStyles} ${border} margin-bottom: 1rem;">
             <tbody>
                 <tr style="${bold} margin-bottom: .5rem;">Share/Delivery Options:</tr>
-                ${optionChanges}<br />
-                <tr><td>Weeks Affected: ${options.weeksAffected}</td></tr>
-                <tr><td>Original Weekly Options Price: ${Currency.format(options.originalWeeklyPrice)}</td></tr>
-                <tr><td>New Weekly Price: ${Currency.format(options.newWeeklyPrice)}</td></tr>
-                <tr><td>Weekly Price Adjustment: ${Currency.format(options.weeklyPriceAdjustment)}</td></tr>
+                ${optionChanges}
                 <br />
                 <tr>
                     <td style="padding-bottom: .5rem;">Total Options Price Adjustment:</td>
@@ -75,26 +74,13 @@ return `` +
 </table>
 <table style="${tableStyles} margin-bottom: 1rem;">
     <tbody>
-        ${weeksSummary}
+        ${weeksAdded}
+        ${weeksRemoved}
     </tbody>
 </table>
 ${optionsSummary}
-<table style="${tableStyles}">
-    <tbody>
-        <tr style="margin-top: 1rem; ${alignCenter}">
-            <td style="font-size: .9rem; padding-top: .75rem;">
-                <span>Prevous Share Balance:</span>
-                <span>${Currency.format(p.previousBalance)}</span>
-            </td>
-        </tr>
-        <tr style="${alignCenter}">
-            <td style="font-size: .9rem; padding-bottom: .75rem;">
-                <span>${p.adjustment.value > 0 ? 'New Charges' : 'Price Reduction'}: </span>
-                <span>${Currency.format( Math.abs(p.adjustment.value ) )}</span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<p style="margin: 1.5rem 0;">You currently have an outstanding balance of ${Currency.format(p.previousBalance)} on this share. With the ${p.adjustment.value > 0 ? 'new charges' : 'price reduction'}
+of ${Currency.format( Math.abs(p.adjustment.value ) )} from the above changes, your new balance comes to:</p>
 <p style="margin-bottom: 2rem; padding: .25rem; background-color: #aa0000; color: white; font-weight: bold; font-size: 1.2rem; text-align: center;">New Share Balance: ${Currency.format( newBalance )}</p>
 <p style="text-align: center;">${paymentMessage}</p>
 <p style="margin-top: 2rem; font-size: 1.3rem; color: #aa0000; text-align: center;">Thank you!</p>`

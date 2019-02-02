@@ -2,12 +2,12 @@ const Model = require('../models/__proto__')
 
 module.exports = Object.assign( {}, require('./__proto__'), {
 
-    DeliveryOptions: Object.create( Model, { resource: { value: 'deliveryoption' } } ),
-    GroupDropoffs: Object.create( Model, { resource: { value: 'groupdropoff' } } ),
+    SeasonalDeliveryOptions: require('../models/SeasonalDeliveryOptions'),
     MemberSelection: require('../models/MemberSelection'),
     MemberShareOption: Object.create( Model, { resource: { value: 'membershareoption' } } ),
     MemberSeasonalSelection: require('../models/MemberSeasonalSelection'),
     OrderOption: require('../models/OrderOption'),
+    SeasonalDropoffs: require('../models/SeasonalDropoffs'),
     ShareOptionOption: require('../models/ShareOptionOption'),
 
 
@@ -24,13 +24,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
             if( key === 'deliveryOption' ) {
                 if( this.editedFields.deliveryOption.newValue === 'group' ) return acc
-                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.oldValue )
-                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
-                newPrice = this.DeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).price
+                oldGroup = this.SeasonalDropoffs.data.find( option => option.name === this.editedFields.groupOption.oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.SeasonalDeliveryOptions.data.find( option => option.name === this.editedFields[ key ].oldValue ).price
+                newPrice = this.SeasonalDeliveryOptions.data.find( option => option.name === this.editedFields[ key ].newValue ).price
             } else if( key === 'groupOption' ) {
-                oldGroup = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].oldValue )
-                oldPrice = oldGroup ? oldGroup.price : this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.oldValue ).price
-                newPrice = this.GroupDropoffs.data.find( option => option.name === this.editedFields[ key ].newValue ).price
+                oldGroup = this.SeasonalDropoffs.data.find( option => option.name === this.editedFields[ key ].oldValue )
+                oldPrice = oldGroup ? oldGroup.price : this.SeasonalDeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.oldValue ).price
+                newPrice = this.SeasonalDropoffs.data.find( option => option.name === this.editedFields[ key ].newValue ).price
             } else {
                 const shareOptionId = this.OrderOption.data.find( option => option.key === key ).id
 
@@ -95,7 +95,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     getAdjustmentDescription() {
         const adjustment = Array.from( this.els.options.querySelectorAll('li.edited') ).reduce( (memo, el) => {
             const fieldName = el.getAttribute('data-name'),
-                  fieldLabel = this.capitalizeFirstLetter( fieldName ),
+                  fieldLabel = el.firstChild.textContent,
                   oldValue = this.editedFields[ fieldName ].oldValue
                     ? this.editedFields[ fieldName ].oldValue.toString()
                     : 'none',
@@ -120,11 +120,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     getDeliveryData( ) {
-        const patchId = this.model.delivery.data[0].membersharedelivery.id,
-              newDeliveryId = this.DeliveryOptions.data.find( option => option.name === this.editedFields.deliveryOption.newValue ).id,
-              dropoffId = ( this.editedFields.deliveryOption.newValue === 'group' )
-                ? this.GroupDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
-                : null
+        const patchId = this.model.delivery.data[0].membersharedelivery.id;
+        const deliveryValue = this.editedFields.deliveryOption.newValue || this.editedFields.deliveryOption.oldValue;
+        const newDeliveryId = this.SeasonalDeliveryOptions.data.find( option => option.name === deliveryValue ).id;
+        const dropoffId = this.editedFields.groupOption.newValue
+            ? this.SeasonalDropoffs.data.find( option => option.name === this.editedFields.groupOption.newValue ).id
+            : null
 
         return {
             id: patchId,
@@ -207,13 +208,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     renderDeliveryOptions() {
         const option = Object.assign( {}, this.model.delivery.data[0] )
 
-        this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Delivery Option', id: 'deliveryOption' } ), insertion: { el: this.els.options } } )
+        this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Delivery option', id: 'deliveryOption' } ), insertion: { el: this.els.options } } )
            
-        this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Group Option', id: 'groupOption' } ), insertion: { el: this.els.options } } )
+        this.slurpTemplate( { template: this.templates[ this.optionTemplate ]( { name: 'Group option', id: 'groupOption' } ), insertion: { el: this.els.options } } )
             
         if( this.optionTemplate === 'editableOption' ) {
 
-            this.DeliveryOptions.data.forEach( option =>
+            this.SeasonalDeliveryOptions.data.forEach( option =>
                 option.name === 'home' && !this.homeDeliveryAvailable
                     ? this.slurpTemplate( { template: this.templates.selectOption( { disabled: true, name: 'none', label: 'Out of Home Delivery Range' } ), insertion: { el: this.els.deliveryOption } } )
                     : this.slurpTemplate( { template: this.templates.selectOption( option ), insertion: { el: this.els.deliveryOption } } )
@@ -223,8 +224,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.editedFields.deliveryOption = { }
             this.editedFields.deliveryOption.oldValue = this.els.deliveryOption.value
 
-            this.GroupDropoffs.data.unshift( { name: 'none', label: 'None' } )
-            this.GroupDropoffs.data.forEach( option =>
+            this.SeasonalDropoffs.data.unshift( { name: 'none', label: 'None' } )
+            this.SeasonalDropoffs.data.forEach( option =>
                 this.slurpTemplate( { template: this.templates.selectOption( option ), insertion: { el: this.els.groupOption } } )
             )
 
@@ -295,7 +296,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         
         edits.forEach( el => {
             const fieldName = el.getAttribute('data-name'),
-                  fieldLabel = this.capitalizeFirstLetter( fieldName ),
+                  fieldLabel = el.firstChild.textContent,
                   oldValue = this.editedFields[ fieldName ].oldValue
                     ? this.editedFields[ fieldName ].oldValue.toString()
                     : 'none',
@@ -352,8 +353,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             seasonalAddOnOptionId: { operation: 'join', value: { table: 'seasonalAddOnOption', column: 'id' } }
         } } ) )
         .then( () => this.renderShareOptions() )
-        .then( () => this.DeliveryOptions.get() )
-        .then( () => this.GroupDropoffs.get() )
+        .then( () => this.SeasonalDeliveryOptions.get( { query: { shareid: share.id, deliveryoptionid: { operation: 'join', value: { table: 'deliveryoption', column: 'id' } } } } ) )
+        .then( () => this.SeasonalDropoffs.get( { query: { shareid: share.id, groupdropoffid: { operation: 'join', value: { table: 'groupdropoff', column: 'id' } } } } ) )
         .then( () => {
             this.renderDeliveryOptions()
             this.renderSeasonalItems()
