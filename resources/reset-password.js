@@ -5,7 +5,7 @@ Object.assign( ResetPassword.prototype, Base.prototype, {
 
     bcrypt: require('bcrypt-nodejs'),
 
-    email: require('../lib/Email'),
+    SendGrid: require('../lib/SendGrid'),
 
     User: require('./util/User'),
 
@@ -41,24 +41,29 @@ Object.assign( ResetPassword.prototype, Base.prototype, {
             .then( rows => {
                 if( rows.length !== 1 ) return this.respond( { stopChain: true, body: { message } } )
 
-                this.user.id = rows[0].id
+                const person = rows[0]
+                this.user.id = person.id
                 this.user.time = new Date().getTime()
 
                 return this.User.createToken.call(this)
-                .then( token =>
-                    this.email.send( {
+                .then( token => {
+                    const templateOpts = { name: person.name, token, url: this.reflectUrl() }
+
+                    return this.SendGrid.send( {
                         to: this.isProd ? this.body.email : process.env.TEST_EMAIL,
-                        from: 'eat.patchworkgardens@gmail.com',
-                        bodyType: 'html',
+                        from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                         subject: `Patchwork Gardens Password Reset`,
-                        body:
-                            `<div>Dear ${rows[0].name},</div>
-                            <div>Please click <a href="${this.reflectUrl()}/resetPassword/${token}">HERE</a> to reset your Patchwork Gardens password.</div>`
+                        html: this.Templates.EmailBase({ emailBody: this.Templates.ResetPassword(templateOpts) })
                     } )
-                )
+                } )
             } )
         )
         .then( () => this.respond( { body: { message } } ) )
+    },
+
+    Templates: {
+        EmailBase: require('../templates/EmailBase'),
+        ResetPassword: require('../templates/ResetPassword')
     }
 
 } )
