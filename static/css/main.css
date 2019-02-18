@@ -1506,6 +1506,9 @@ label {
   margin-top: 1.5rem;
   font-weight: bold;
 }
+.GetInvolved .positions >li {
+  margin: 0.5rem 0;
+}
 .GetInvolved .internships >div {
   margin: 2rem 0;
 }

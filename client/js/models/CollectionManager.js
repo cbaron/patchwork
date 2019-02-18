@@ -10,6 +10,10 @@ module.exports = Object.create( Object.assign( { }, require('./__proto__'), {
             add: false,
             delete: false
         },
+        OpenPositions: {
+            add: true,
+            delete: true
+        },
         Pages: {
             add: false,
             delete: false

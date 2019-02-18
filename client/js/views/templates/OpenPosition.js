@@ -1,0 +1,1 @@
+module.exports = p => `<li><a target="_blank" href="${p.documentUrl}">${p.name}</a></li>`

@@ -12,11 +12,6 @@ module.exports = {
                     name: 'description',
                     label: 'Description',
                     range: 'Text'
-                }, {
-                    name: 'openPositions',
-                    label: 'Open Positions',
-                    range: 'List',
-                    itemRange: 'String'
                 }
             ]
         }, {

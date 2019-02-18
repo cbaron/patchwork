@@ -35,6 +35,7 @@ module.exports={
 	MemberTypeahead: require('./views/templates/MemberTypeahead'),
 	Members: require('./views/templates/Members'),
 	Modal: require('./views/templates/Modal'),
+	OpenPosition: require('./views/templates/OpenPosition'),
 	OrderOptions: require('./views/templates/OrderOptions'),
 	Reporting: require('./views/templates/Reporting'),
 	ResetPassword: require('./views/templates/ResetPassword'),
