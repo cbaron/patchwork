@@ -313,7 +313,7 @@ Object.assign( MemberInfo.prototype, View.prototype, {
         customAddress = ( address !== this.user.get('address') || !addressModel || ( ! this._( addressModel.types ).contains( "street_address" ) ) ) ? true : false
 
         if( address === this.memberAddress ) {
-            customAddress = false
+            customAddress = !this.memberZipcode
             this.user.set( 'addressModel', Object.assign( this.user.get('addressModel') || {} , { postalCode: this.memberZipcode, types: [ "street_address" ]  } ) )
         }
 

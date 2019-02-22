@@ -66,7 +66,7 @@ Object.assign( Delivery.prototype, List.prototype, {
         
         if( homeDeliverySelected && this.user.get('customAddress') ) {
             this.modalView.show( {
-                body: this.templates.verifyAddress( { address: this.user.get('address'), zipCode: postalCode } ),
+                body: this.templates.verifyAddress( { address: this.user.get('address'), zipCode: postalCode || '' } ),
                 title: 'Verify Adress' } )
             .on( 'hidden', () => {
 
