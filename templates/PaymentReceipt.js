@@ -13,6 +13,5 @@ module.exports = p =>
         <tr><td style="font-size: 1rem; font-weight: bold;">Amount: ${Currency.format(p.total)}</td></tr>
     </tbody>
 </table>
-<p>If you believe a mistake has been made, or have any questions, 
-please contact us at <a href="mailto:eat.patchworkgardens@gmail.com">eat.patchworkgardens@gmail.com</a>.</p>
+<p>If you believe a mistake has been made or have any questions, please contact us by email or phone.</p>
 <p style="margin-top: 2rem; font-size: 1.3rem; color: #aa0000;">Thank you!</p>`

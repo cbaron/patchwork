@@ -58,7 +58,7 @@ module.exports = p => {
         </table>` : ``
 
     const paymentMessage = newBalance > 0
-        ? `Please send payment at your earliest convenience to: <br /><br />Patchwork Gardens<br />9057 W Third St<br />Dayton, OH 45417<br /><br />You may also log in to your account and pay online via credit card.`
+        ? `Please send payment at your earliest convenience to the address below. You may also log in to your account and pay online via credit card.`
         : `If your overall balance with Patchwork is now negative, we will mail a check to you in the near future.`
 
 return `` +
