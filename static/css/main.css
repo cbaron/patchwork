@@ -1465,6 +1465,24 @@ label {
 .Form {
   width: 100%;
 }
+.Form .form-group {
+  padding-right: 2rem;
+}
+.Form .form-box {
+  position: relative;
+}
+.Form .form-box .delete {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: -2.5rem;
+  display: flex;
+  align-items: center;
+}
+.Form .form-box .delete >svg {
+  height: 1.75rem;
+  cursor: pointer;
+}
 .Form .List .list.no-items {
   padding: 0rem;
 }

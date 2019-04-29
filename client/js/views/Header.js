@@ -7,6 +7,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         csaSignUpBtn: 'click',
         justify: 'click',
         navLinks: 'click',
+        shoppingBtn: 'click',
         signInBtn: 'click',
         signOutBtn: 'click',
         title: 'click',
@@ -45,6 +46,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'navigate', el.getAttribute('data-name') )
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
+
+    onShoppingBtnClick() { this.emit('navigate', 'shopping') },
 
     onSignInBtnClick() {
         if( this.displayingLogin ) return

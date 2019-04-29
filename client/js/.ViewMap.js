@@ -30,6 +30,7 @@ module.exports={
 	Seasons: require('./views/Seasons'),
 	ShareBox: require('./views/ShareBox'),
 	SharePatch: require('./views/SharePatch'),
+	Shopping: require('./views/Shopping'),
 	Signup: require('./views/Signup'),
 	Submitter: require('./views/Submitter'),
 	Toast: require('./views/Toast'),
@@ -37,6 +38,7 @@ module.exports={
 	TypeAhead: require('./views/TypeAhead'),
 	Unsubscribe: require('./views/Unsubscribe'),
 	Verify: require('./views/Verify'),
+	ViewList: require('./views/ViewList'),
 	WeekOptions: require('./views/WeekOptions'),
 	WeeklyReminder: require('./views/WeeklyReminder'),
 	modal: require('./views/modal')

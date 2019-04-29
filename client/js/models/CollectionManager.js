@@ -36,6 +36,10 @@ module.exports = Object.create( Object.assign( { }, require('./__proto__'), {
         shareoptionshare: {
             displayAttr: [ 'shareoption', 'share' ]
         },
+        ShoppingItems: {
+            add: true,
+            delete: true
+        },
         Staff: {
             add: true,
             delete: true

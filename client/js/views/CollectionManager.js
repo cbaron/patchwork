@@ -241,7 +241,12 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     createView( type, name, model ) {
         this.views[ name ] = this.factory.create( type, Reflect.apply( this.Views[ name ], this, [ model ] ) )
 
-        if( this.events.views[ name ] ) this.events.views[ name ].forEach( arr => this.views[ name ].on( arr[0], eventData => Reflect.apply( arr[1], this, [ eventData ] ) ) )
+        if( this.events.views[ name ] ) this.events.views[ name ].forEach(
+            arr => this.views[ name ].on( arr[0], eventData =>
+                Reflect.apply( arr[1], this, [ eventData ] )
+            )
+        )
+
         this.model.set( 'currentView', name )
     },
 

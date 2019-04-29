@@ -20,6 +20,7 @@ return `` +
                         <div data-js="userName"></div>
                         <ul class="account-menu fd-hidden" data-js="accountMenu">        
                             <li data-js="accountBtn">Your Account</li>
+                            <li data-js="shoppingBtn">Shopping</li>
                             <li data-js="signOutBtn">Sign Out</li>                         
                         </ul>
                     </div>

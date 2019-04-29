@@ -4,7 +4,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
 
     Flatpickr: require('flatpickr'),
 
-    events: Object.assign( Submitter.events, { form: 'submit', previewBtn: 'click' } ),
+    events: Object.assign( Submitter.events, { form: 'submit', deleteBtn: 'click', previewBtn: 'click' } ),
 
     onPreviewBtnClick( e ) {
         e.target.nextElementSibling.src = this.Format.ImageSrc( e.target.parentElement.previousElementSibling.value )
@@ -48,10 +48,12 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
             else if( attribute.range === 'Geography' ) { data[ attribute.name ] = Array.from( this.els[ attribute.name ].querySelectorAll('input') ).map( el => el.value ) }
             else if( typeof attribute.range === "object" ) { data[ attribute.name ] = this.views[ attribute.name ].getFormValues() }
             else if( attribute.range === "List" ) {
-                data[ attribute.name ] = Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
-                    const selector = attribute.itemRange === 'Text' ? '.item textarea' : '.item input'
-                    return this.getElementValue( itemEl.querySelector( selector ), { range: attribute.itemRange } )
-                } )
+                data[ attribute.name ] = attribute.itemView
+                    ? this.views[ attribute.name ].itemViews.map( view => view.getFormValues() )
+                    : Array.from( this.views[ attribute.name ].els.list.children ).map( itemEl => {
+                        const selector = attribute.itemRange === 'Text' ? '.item textarea' : '.item input'
+                        return this.getElementValue( itemEl.querySelector( selector ), { range: attribute.itemRange } )
+                      } )
             }
         } )
 
@@ -91,27 +93,59 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
                 this.subviewElements = [ { el, view: 'form', name: attribute.name } ]
                 this.renderSubviews()
             } else if( attribute.range === "List" ) {
-                const collectionData = this.model.git( attribute.name ) ? this.model.git( attribute.name ).map( datum => ( { value: datum } ) ) : [ ];
+                if( !this.Views ) this.Views = { }
 
-                this.Views[ attribute.name ] = {
-                    model: Object.create( this.model ).constructor( {
-                        add: true,
-                        collection: Object.create( this.Model ).constructor( collectionData, { meta: { key: 'value' } } ),
-                        delete: true,
-                        isDocumentList: false,
-                        draggable: 'listItem'
-                    } ),
-                    itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value, this.model.meta ] )
+                const view = attribute.itemView ? 'viewList' : 'list',
+                    collectionData = this.model.git( attribute.name )
+                        ? view === 'viewList'
+                            ? this.model.git( attribute.name )
+                            : this.model.git( attribute.name ).map( datum => ( { value: datum } ) )
+                        : [ ];
+
+                if( attribute.itemView ) {
+                    this.Views[ attribute.name ] = {
+                        model: Object.create( this.model ).constructor( {
+                            add: true,
+                            collection: Object.create( this.Model ).constructor(
+                                collectionData,
+                                { meta: this.model.meta }
+                            ),
+                            delete: true,
+                            view: attribute.itemView,
+                            range: attribute.itemRange
+                        } ),
+                        templateOpts: { }
+                    }
+                } else {
+                    this.Views[ attribute.name ] = {
+                        model: Object.create( this.model ).constructor( {
+                            add: true,
+                            collection: Object.create( this.Model ).constructor( collectionData, { meta: { key: 'value' } } ),
+                            delete: true,
+                            isDocumentList: false,
+                            draggable: 'listItem'
+                        } ),
+                        itemTemplate: datum => Reflect.apply( this.Format.GetFormField, this.Format, [ { range: attribute.itemRange }, datum.value, this.model.meta ] )
+                    }
                 }
+
                 const el = this.els[ attribute.name ]
                 delete this.els[ attribute.name ]
-                this.subviewElements = [ { el, view: 'list', name: attribute.name } ]
+                this.subviewElements = [ { el, view, name: attribute.name } ]
                 this.renderSubviews()
-                this.views[ attribute.name ].on( 'addClicked', () => this.views[ attribute.name ].add( { value: '' } ) )
-                this.views[ attribute.name ].on( 'deleteClicked', datum => this.views[ attribute.name ].remove( datum ) )
+
+                this.views[ attribute.name ].on( 'addClicked', () =>
+                    this.views[ attribute.name ].add( { value: '' } )
+                )
+
+                if( view === 'list' ) this.views[ attribute.name ].on( 'deleteClicked', datum =>
+                    this.views[ attribute.name ].remove( datum )
+                )
             }
         } )
     },
+
+    onDeleteBtnClick() { this.delete().catch( this.Error ) },
 
     onFormSubmit( e ) { e.preventDefault() },
 
