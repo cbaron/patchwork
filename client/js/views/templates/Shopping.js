@@ -1,6 +1,6 @@
 module.exports = p => {
   return `` +
   `<div>
-    Shopping
+    <div data-view="list" data-name="shoppingItems"></div>
   </div>`
 }

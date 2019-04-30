@@ -3019,6 +3019,49 @@ html.non-touch .AccountHome button:hover {
     margin-right: 0;
   }
 }
+.Shopping {
+  padding: 2rem;
+}
+.Shopping .List {
+  padding: 0;
+  margin: 0;
+}
+.Shopping .list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.Shopping .list >li {
+  width: 30%;
+  min-width: 320px;
+  margin: 0.5rem;
+  background-color: #fff5df;
+  border-radius: 0.5rem;
+}
+.Shopping .list >li >.item {
+  white-space: normal;
+  height: 100%;
+}
+.Shopping .shopping-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.25rem;
+}
+.Shopping .shopping-item .description {
+  flex: 1;
+}
+.Shopping .shopping-item .price {
+  color: #a00;
+}
+.Shopping .shopping-item .price >span {
+  margin-left: 1rem;
+}
+.Shopping .shopping-item >div {
+  padding: 0.5rem 0;
+}
+.Shopping .shopping-item img {
+  width: 100%;
+}
 .Signup .error {
   color: #a94442;
   display: none;

@@ -31,6 +31,7 @@ module.exports={
 	ShareBox: require('./views/ShareBox'),
 	SharePatch: require('./views/SharePatch'),
 	Shopping: require('./views/Shopping'),
+	ShoppingItem: require('./views/ShoppingItem'),
 	Signup: require('./views/Signup'),
 	Submitter: require('./views/Submitter'),
 	Toast: require('./views/Toast'),
