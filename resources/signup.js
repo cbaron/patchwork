@@ -198,8 +198,13 @@ Object.assign( Signup.prototype, Base.prototype, {
             this.user.state.signup = { }
             this.user = this._.omit( this.user, [ 'password', 'repeatpassword' ] )
 
-            const emailTo = [ this.body.member.email.toLowerCase() ]
-            if( this.body.member.secondaryEmail ) emailTo.push( this.body.member.secondaryEmail.toLowerCase() )
+            const email = this.body.member.email;
+            const secondaryEmail = this.body.member.secondaryEmail;
+            const emailTo = [email];
+
+            if( secondaryEmail && email.toLowerCase() !== secondaryEmail.toLowerCase() ) {
+                emailTo.push( secondaryEmail.toLowerCase() )
+            }
 
             return this.Q( this.User.createToken.call(this) )
             .then( token => {
@@ -226,7 +231,11 @@ Object.assign( Signup.prototype, Base.prototype, {
                     subject: 'Welcome to Patchwork Gardens CSA',
                     html: this.Templates.EmailBase({ emailBody: this.generateEmailBody() })
                 } ) )
-                .fail( err => console.log( "Error generating confirmation email : " + err.stack || err ) )
+                .fail( err => {
+                    console.log( `${new Date()} -- Error generating confirmation email : ${err.stack || err}` );
+                    console.log( `email to: ${emailTo}` );
+                    console.log( `body: ${JSON.stringify(this.body)}` );
+                } )
             } )
             .then( () => this.User.respondSetCookie.call( this, this.token, { } ) )
         }
