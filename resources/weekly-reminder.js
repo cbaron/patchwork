@@ -130,12 +130,13 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             }
 
             const opts = {
-                to: this.isProd ? val.recipients : process.env.TEST_EMAIL,
+                to: this.isProd ? 'Patchwork Gardens <eat.patchworkgardens@gmail.com>' : process.env.TEST_EMAIL,
                 from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
                 subject: val.subject,
                 html: this.Templates.emailBase({ emailBody })
             }
 
+            if( this.isProd ) opts.bcc = val.recipients
             if( this.body.attachments ) opts.attachments = this.body.attachments
 
             return opts
