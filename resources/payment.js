@@ -37,8 +37,13 @@ Object.assign( Payment.prototype, Base.prototype, {
     },
 
     notifyCustomer() {
-        const emailTo = [ this.body.person.email ]
-        if( this.body.person.secondaryEmail ) emailTo.push( this.body.person.secondaryEmail )
+        const email = this.body.person.email;
+        const secondaryEmail = this.body.person.secondaryEmail;
+        const emailTo = [email];
+
+        if( secondaryEmail && email !== secondaryEmail ) {
+            emailTo.push(secondaryEmail)
+        }
 
         return this.SendGrid.send( {
             to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,

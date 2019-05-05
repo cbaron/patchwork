@@ -8,12 +8,15 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     patchMemberShare() {
-        const weekPatch = this.views.weekOptions.getPatchData()
+        const weekPatch = this.views.weekOptions.getPatchData();
+        const email = this.selectedCustomer.person.data.email;
+        const secondaryEmail = this.selectedCustomer.person.data.secondaryEmail;
+        const emailTo = [email];
+        let weekDetail = ``;
 
-        let weekDetail = ``,
-            emailTo = [ this.selectedCustomer.person.data.email ]
-
-        if( this.selectedCustomer.person.data.secondaryEmail ) emailTo.push( this.selectedCustomer.person.data.secondaryEmail )
+        if( secondaryEmail && email !== secondaryEmail ) {
+            emailTo.push(secondaryEmail)
+        }
 
         if( weekPatch.addedDates.length || weekPatch.removedDates.length ) { weekDetail += ` ( ` }
 
