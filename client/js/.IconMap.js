@@ -9,5 +9,6 @@ module.exports={
 	"leftArrow": require('./views/templates/lib/leftArrow'),
 	"minus": require('./views/templates/lib/minus'),
 	"plus": require('./views/templates/lib/plus'),
-	"search": require('./views/templates/lib/search')
+	"search": require('./views/templates/lib/search'),
+	"shoppingCart": require('./views/templates/lib/shoppingCart')
 }

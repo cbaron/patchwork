@@ -1563,71 +1563,87 @@ label {
   height: auto;
   margin: 0;
 }
-.Header >div:nth-child(2) {
+.Header .header-content {
+  position: relative;
   background-color: #000;
   color: #fff;
   padding: 0.2rem 1rem;
   line-height: 1;
 }
-.Header >div:nth-child(2) >div:first-child {
+.Header .header-content .cart {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0.5rem;
+  right: 1.5rem;
+}
+.Header .header-content .cart >span:first-child {
+  width: 1.25rem;
+  height: 2rem;
+}
+.Header .header-content .cart >span:last-child {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.Header .header-content .title {
   text-align: center;
 }
-.Header >div:nth-child(2) >div:first-child >svg {
+.Header .header-content .title >svg {
   display: none;
 }
-.Header >div:nth-child(2) >div:first-child >div {
+.Header .header-content .title >div {
   font-size: 2.5rem;
   padding: 0.75rem 1rem 0.25rem;
   text-transform: uppercase;
 }
-.Header >div:nth-child(2) >div:first-child >div >span {
+.Header .header-content .title >div >span {
   cursor: pointer;
 }
-html.non-touch .Header >div:nth-child(2) >div:first-child >div >span:hover {
+html.non-touch .Header .header-content .title >div >span:hover {
   color: #ffc502;
   transition: color 0.3s ease-in-out;
 }
-.Header >div:nth-child(2) >div:nth-child(2) {
+.Header .header-content >.nav {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
-.Header >div:nth-child(2) >div:nth-child(2) >ul {
+.Header .header-content >.nav >ul {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
-.Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li,
-.Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child {
+.Header .header-content >.nav >ul:first-child >li,
+.Header .header-content >.nav >ul:last-child >li >div:first-child {
   padding: 0.5rem 0.75rem;
   margin: 0.15rem 0.25rem;
   font-size: 1.2rem;
   cursor: pointer;
 }
-.Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li:active,
-.Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child:active {
+.Header .header-content >.nav >ul:first-child >li:active,
+.Header .header-content >.nav >ul:last-child >li >div:first-child:active {
   opacity: 0.85;
 }
-html.non-touch .Header >div:nth-child(2) >div:nth-child(2) >ul:first-child >li:hover,
-html.non-touch .Header >div:nth-child(2) >div:nth-child(2) >ul:last-child >li >div:first-child:hover {
+html.non-touch .Header .header-content >.nav >ul:first-child >li:hover,
+html.non-touch .Header .header-content >.nav >ul:last-child >li >div:first-child:hover {
   background-color: #a00;
   transition: background-color 0.3s ease-in-out;
 }
-.Header >div:nth-child(2) >div:last-child {
+.Header .header-content >div:last-child {
   width: 100%;
   text-align: center;
   padding: 0.5rem 0.75rem;
   margin: 0.1rem 0.25rem;
 }
-.Header >div:nth-child(2) >div:last-child >span {
+.Header .header-content >div:last-child >span {
   color: #ffc502;
   font-weight: bold;
   font-size: 1.3rem;
   cursor: pointer;
 }
-html.non-touch .Header >div:nth-child(2) >div:last-child >span:hover {
+html.non-touch .Header .header-content >div:last-child >span:hover {
   background-color: initial;
   color: #ffd341;
 }
@@ -3022,7 +3038,7 @@ html.non-touch .AccountHome button:hover {
 .Shopping {
   padding: 2rem;
 }
-.Shopping .List {
+.Shopping .ViewList {
   padding: 0;
   margin: 0;
 }
@@ -3030,36 +3046,31 @@ html.non-touch .AccountHome button:hover {
   display: flex;
   flex-wrap: wrap;
 }
-.Shopping .list >li {
+.Shopping .list .shopping-item {
   width: 30%;
   min-width: 320px;
   margin: 0.5rem;
   background-color: #fff5df;
   border-radius: 0.5rem;
-}
-.Shopping .list >li >.item {
-  white-space: normal;
-  height: 100%;
-}
-.Shopping .shopping-item {
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 1.25rem;
 }
-.Shopping .shopping-item .description {
+.Shopping .list .shopping-item .description {
   flex: 1;
 }
-.Shopping .shopping-item .price {
+.Shopping .list .shopping-item .price {
   color: #a00;
 }
-.Shopping .shopping-item .price >span {
-  margin-left: 1rem;
+.Shopping .list .shopping-item .price >span {
+  margin-left: 0.75rem;
+  font-weight: bold;
+  font-size: 1.1rem;
 }
-.Shopping .shopping-item >div {
+.Shopping .list .shopping-item >div {
   padding: 0.5rem 0;
 }
-.Shopping .shopping-item img {
+.Shopping .list .shopping-item img {
   width: 100%;
 }
 .Signup .error {

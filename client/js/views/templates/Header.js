@@ -1,17 +1,21 @@
-module.exports = ( { opts, ImageSrc } ) => {
-    const fields = opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
+module.exports = p => {
+    const fields = p.opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
 
 return `` +
 `<div>
     <div>
-        <img data-src="${ImageSrc('header_sunrays')}" />
+        <img data-src="${p.ImageSrc('header_sunrays')}" />
     </div>
-    <div data-js="nav" class="fd-hidden">
-        <div>
-            ${require('./lib/justify')}
-            <div><span data-js="title" data-name="${opts.home.name}">${opts.home.label}</span></div>
+    <div data-js="nav" class="fd-hidden header-content">
+        <div class="cart" data-js="cart">
+            <span>${p.GetIcon('shoppingCart')}</span>
+            <span data-js="cartCount">(0)</span>
         </div>
-        <div>
+        <div class="title">
+            ${require('./lib/justify')}
+            <div><span data-js="title" data-name="${p.opts.home.name}">${p.opts.home.label}</span></div>
+        </div>
+        <div class="nav">
             <ul data-js="navLinks">${fields}</ul>
             <ul>
                 <li>

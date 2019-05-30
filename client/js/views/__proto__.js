@@ -320,9 +320,9 @@ module.exports = Object.assign( { }, require('../../../lib/MyObject').prototype,
 
         Array.from( fragment.querySelectorAll( `${selector}, ${viewSelector}, ${imgSelector}, ${bgImgSelector}` ) ).forEach( el => {
             if( el.hasAttribute( this.slurp.attr ) ) { this.slurpEl( el ) }
-            else if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
-            else if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
-            else if( el.hasAttribute( this.slurp.view ) ) {
+            if( el.hasAttribute( this.slurp.img ) ) return this.fadeInImage( el )
+            if( el.hasAttribute( this.slurp.bgImg ) ) return this.loadBgImage( el )
+            if( el.hasAttribute( this.slurp.view ) ) {
                 this.subviewElements.push( { el, view: el.getAttribute(this.slurp.view), name: el.getAttribute(this.slurp.name) } )
             }
         } )

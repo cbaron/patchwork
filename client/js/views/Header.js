@@ -75,7 +75,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.emit( 'navigate', '/' )
     },
 
-    onUser() { this.els.userName.textContent = `Hello, ${this.user.get('name')}` },
+    onUser() {
+        this.els.userName.textContent = `Hello, ${this.user.get('name')}`;
+        this.updateCartCount();
+    },
 
     onUserNameClick() { this.toggleAccountMenu() },
 
@@ -85,6 +88,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.toggleAccountUI()
 
         if( this.user.isLoggedIn() ) this.onUser()
+
+        this.user.on('change:cart', () => console.log('cart changed') );
 
         return this
     },
@@ -104,6 +109,13 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     toggleSignUpBtn( view ) {
         this.els.csaSignUpBtn.parentNode.classList.toggle( 'fd-hidden', view === 'home' )
+    },
+
+    updateCartCount() {
+        const cart = this.user.get('cart');
+        console.log(cart)
+        this.els.cart.classList.toggle('fd-hidden', !cart || !cart.length );
+        this.els.cartCount.textContent = cart ? `(${cart.length})` : '(0)';
     }
 
 } )

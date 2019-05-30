@@ -39,6 +39,17 @@ module.exports = Object.assign( { }, Super, {
         addBtn: 'click'
     },
 
+    async fetch() {
+        this.fetching = true
+
+        const newData = await this.collection.get()
+
+        this.populateList(newData)
+        this.fetched = true
+        this.fetching = false
+        this.emit('fetched')
+    },
+
     onAddBtnClick( e ) { this.add() },
 
     onItemViewDeleted( view ) {
@@ -51,8 +62,8 @@ module.exports = Object.assign( { }, Super, {
         this.emit( 'itemDeleted', view )
     },
 
-    populateList() {
-        let data = this.collection.data
+    populateList(data) {
+        data = data || this.collection.data
 
         if( !Array.isArray( data ) ) data = [ data ]
         if( !data.length ) data = [ { } ]
@@ -64,8 +75,12 @@ module.exports = Object.assign( { }, Super, {
         this.viewName = this.model.git('view')
         this.itemViews = [ ]
         this.collection = this.model.git('collection') || Object.create( this.Model )
+        console.log('postrender viewlist')
+        console.log(this.viewName)
+        console.log(this.model)
+        if( this.model.git('fetch') ) this.fetch().catch(this.Error)
 
-        this.populateList()
+        if( this.collection.data.length ) this.populateList()
         this.updateStyle()
 
         return this
