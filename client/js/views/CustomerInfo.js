@@ -39,10 +39,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     handleBlur( e ) {
-        const el = e.target,
-              field = this.fields.find( field => field.name === el.getAttribute('data-name') ),
-              fieldValue = el.textContent.trim(),
-              modelValue = this.model[ field.table ].data[ field.name ] || ''
+        const el = e.target;
+        const field = this.fields.find( field => field.name === el.getAttribute('data-name') );
+        const modelValue = this.model[ field.table ].data[ field.name ] || '';
+        let fieldValue = el.textContent.trim();
+
+        if( field.name === 'email' || field.name === 'secondaryEmail' ) fieldValue = fieldValue.toLowerCase()
 
         if( fieldValue !== modelValue ) {
             el.classList.add('edited')
