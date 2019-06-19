@@ -92,7 +92,10 @@ module.exports = { ...require('./__proto__'),
             }
 
             memo[ key ].recipients.push( customer.email )
-            if( customer.secondaryEmail ) memo[ key ].recipients.push( customer.secondaryEmail )
+
+            if( customer.secondaryEmail && customer.email.toLowerCase() !== customer.secondaryEmail.toLowerCase() ) {
+                memo[ key ].recipients.push( customer.secondaryEmail )
+            }
 
             return memo
 
