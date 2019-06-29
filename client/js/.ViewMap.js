@@ -6,6 +6,8 @@ module.exports={
 	AdminHeader: require('./views/AdminHeader'),
 	AdminPlus: require('./views/AdminPlus'),
 	ButtonFlow: require('./views/ButtonFlow'),
+	Cart: require('./views/Cart'),
+	CartItem: require('./views/CartItem'),
 	CollectionManager: require('./views/CollectionManager'),
 	Contact: require('./views/Contact'),
 	Csa: require('./views/Csa'),

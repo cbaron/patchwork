@@ -683,6 +683,86 @@ button.submitting {
 .ButtonFlow svg.link:hover {
   text-decoration: underline;
 }
+.Cart {
+  padding: 2rem;
+}
+.Cart h1 {
+  margin-left: 0;
+  padding-top: 0;
+}
+.Cart section {
+  padding: 0;
+  margin: 0;
+}
+.Cart .column-container {
+  display: flex;
+}
+.Cart .column-container .ViewList {
+  flex: 5;
+}
+.Cart .column-container .checkout-ui {
+  flex: 1;
+  margin-left: 1rem;
+  padding: 1rem;
+  background-color: #fff5df;
+  border-radius: 0.5rem;
+}
+.Cart .CartItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  background-color: #fff5df;
+  border-radius: 0.5rem;
+}
+.Cart .CartItem:first-child {
+  margin-top: 0;
+}
+.Cart .CartItem .image-container {
+  flex: 1;
+}
+.Cart .CartItem .image-container img {
+  width: 100%;
+}
+.Cart .CartItem .item-info {
+  flex: 5;
+  padding: 0 1rem;
+}
+.Cart .CartItem ul {
+  display: flex;
+}
+.Cart .CartItem ul:first-child >li {
+  color: #a00;
+}
+.Cart .CartItem ul >li {
+  padding: 0 0.5rem;
+}
+.Cart .CartItem ul >li:not(:first-child) {
+  text-align: right;
+}
+.Cart .CartItem ul >li:first-child {
+  flex: 1;
+}
+.Cart .CartItem ul >li:nth-child(2) {
+  flex: 1;
+}
+.Cart .CartItem ul >li:nth-child(3) {
+  flex: 1;
+}
+.Cart .CartItem ul >li:last-child {
+  flex: 1;
+}
+.Cart .CartItem .ex {
+  width: 2rem;
+  height: 2rem;
+  color: #f00;
+}
+.Cart .subtotal {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 .CollectionManager {
   display: flex;
   height: 100%;
@@ -1576,6 +1656,7 @@ label {
   align-items: center;
   top: 0.5rem;
   right: 1.5rem;
+  cursor: pointer;
 }
 .Header .header-content .cart >span:first-child {
   width: 1.25rem;

@@ -7,9 +7,6 @@ module.exports = { ...require('./__proto__'),
   },
 
   onAddToCartBtnClick(e) {
-    console.log('onaddtocartclick')
-    console.log(this.model)
-    const cart = this.user.get('cart') || [];
     const { _id, name, label, unit } = this.model.data;
     const selectedItem = {
       itemId: _id,
@@ -20,9 +17,15 @@ module.exports = { ...require('./__proto__'),
       quantity: this.selectedQuantity,
       price: this.itemPrice
     };
-    console.log(selectedItem);
-    
-    this.user.set('cart',)
+    let cart = [];
+
+    if (window.localStorage.getItem('cart')) {
+      cart = JSON.parse(window.localStorage.getItem('cart'));
+    };
+
+    cart.push(selectedItem)
+    window.localStorage.setItem('cart', JSON.stringify(cart));
+    this.user.trigger('cartChanged');
   },
 
   onAmountSelectChange(e) {

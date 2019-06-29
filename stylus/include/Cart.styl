@@ -1,0 +1,75 @@
+.Cart
+  padding: 2rem
+
+  h1
+    margin-left: 0
+    padding-top: 0
+
+  section
+    padding: 0
+    margin: 0
+
+  .column-container
+    display: flex
+
+    .ViewList
+      flex: 5
+    .checkout-ui
+      flex: 1
+      margin-left: 1rem
+      padding: 1rem
+      background-color: $light-manila
+      border-radius: .5rem
+
+  .CartItem
+    display: flex
+    align-items: center
+    width: 100%
+    margin: .5rem 0
+    padding: 1rem
+    background-color: $light-manila
+    border-radius: .5rem
+
+    &:first-child
+      margin-top: 0
+
+    .image-container
+      flex: 1
+      img
+        width: 100%
+
+    .item-info
+      flex: 5
+      padding: 0 1rem
+
+    ul
+      display: flex
+      &:first-child >li
+        color: $sun-red
+
+      >li
+        padding: 0 .5rem
+      >li:not(:first-child)
+        text-align: right
+
+      >li:first-child
+        flex: 1
+      >li:nth-child(2)
+        flex: 1
+      >li:nth-child(3)
+        flex: 1
+      >li:last-child
+        flex: 1
+    
+    .ex
+      width: 2rem
+      height: 2rem
+      color: $negative-red
+                  
+
+      
+  .subtotal
+      font-size: 1.2rem
+      font-weight: bold
+      margin-bottom: 1rem
+            

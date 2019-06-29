@@ -4,6 +4,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     events: {
         accountBtn: 'click',
+        cart: 'click',
         csaSignUpBtn: 'click',
         justify: 'click',
         navLinks: 'click',
@@ -22,6 +23,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.toggleAccountMenu()
         this.emit( 'navigate', 'account-home' )
     },
+
+    onCartClick() { this.emit('navigate', 'cart') },
 
     onCsaSignUpBtnClick() {
         this.checkForLogin()
@@ -47,7 +50,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         if( this.els.navLinks.classList.contains('is-mobile') ) this.els.navLinks.classList.remove('is-mobile')
     },
 
-    onShoppingBtnClick() { this.emit('navigate', 'shopping') },
+    onShoppingBtnClick() {
+        this.toggleAccountMenu()
+        this.emit('navigate', 'shopping')
+    },
 
     onSignInBtnClick() {
         if( this.displayingLogin ) return
@@ -77,6 +83,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onUser() {
         this.els.userName.textContent = `Hello, ${this.user.get('name')}`;
+        this.user.on('cartChanged', () => this.updateCartCount());
         this.updateCartCount();
     },
 
@@ -89,7 +96,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         if( this.user.isLoggedIn() ) this.onUser()
 
-        this.user.on('change:cart', () => console.log('cart changed') );
+        //window.addEventListener('storage', () => this.updateCartCount());
 
         return this
     },
@@ -112,10 +119,12 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateCartCount() {
-        const cart = this.user.get('cart');
-        console.log(cart)
-        this.els.cart.classList.toggle('fd-hidden', !cart || !cart.length );
-        this.els.cartCount.textContent = cart ? `(${cart.length})` : '(0)';
+        console.log('updatecartcount');
+        const cart = window.localStorage.getItem('cart');
+        const cartLength = cart ? JSON.parse(cart).length : 0;
+        console.log(cartLength);
+        this.els.cart.classList.toggle('fd-hidden', !cartLength );
+        this.els.cartCount.textContent = `(${cartLength})`;
     }
 
 } )
