@@ -191,6 +191,8 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
 
   requiresLogin: true,
 
+  requiresRole: 'admin',
+
   showSuccessModal() {
     this.ModalView.show({
       title: `Thank you!`,

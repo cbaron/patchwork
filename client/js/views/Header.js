@@ -8,7 +8,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         csaSignUpBtn: 'click',
         justify: 'click',
         navLinks: 'click',
-        shoppingBtn: 'click',
+        //shoppingBtn: 'click',
         signInBtn: 'click',
         signOutBtn: 'click',
         title: 'click',
@@ -87,7 +87,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.user.on('cartItemAdded', () => this.updateCartCount());
         this.user.on('cartItemDeleted', () => this.updateCartCount());
         this.user.on('cartCleared', () => this.updateCartCount());
-        if (this.user.isAdmin()) this.els.cart.classList.remove('fd-hidden');
+        this.els.cart.classList.toggle('fd-hidden', !this.user.isAdmin());
         this.updateCartCount();
     },
 

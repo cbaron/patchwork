@@ -1,6 +1,6 @@
 module.exports = p => {
     const fields = p.opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
-
+    // <li data-js="shoppingBtn">Shopping</li>
 return `` +
 `<div>
     <div>
@@ -24,7 +24,6 @@ return `` +
                         <div data-js="userName"></div>
                         <ul class="account-menu fd-hidden" data-js="accountMenu">        
                             <li data-js="accountBtn">Your Account</li>
-                            <li data-js="shoppingBtn">Shopping</li>
                             <li data-js="signOutBtn">Sign Out</li>                         
                         </ul>
                     </div>
