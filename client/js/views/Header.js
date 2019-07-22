@@ -70,6 +70,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
         this.toggleAccountUI()
         this.toggleAccountMenu()
+        this.els.cart.classList.add('fd-hidden');
 
         this.emit('signOutClicked')
 
@@ -83,7 +84,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onUser() {
         this.els.userName.textContent = `Hello, ${this.user.get('name')}`;
-        this.user.on('cartChanged', () => this.updateCartCount());
+        this.user.on('cartItemAdded', () => this.updateCartCount());
+        this.user.on('cartItemDeleted', () => this.updateCartCount());
+        this.user.on('cartCleared', () => this.updateCartCount());
+        if (this.user.isAdmin()) this.els.cart.classList.remove('fd-hidden');
         this.updateCartCount();
     },
 
@@ -95,8 +99,6 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.toggleAccountUI()
 
         if( this.user.isLoggedIn() ) this.onUser()
-
-        //window.addEventListener('storage', () => this.updateCartCount());
 
         return this
     },
@@ -119,11 +121,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
     },
 
     updateCartCount() {
-        console.log('updatecartcount');
         const cart = window.localStorage.getItem('cart');
         const cartLength = cart ? JSON.parse(cart).length : 0;
-        console.log(cartLength);
-        this.els.cart.classList.toggle('fd-hidden', !cartLength );
+
         this.els.cartCount.textContent = `(${cartLength})`;
     }
 

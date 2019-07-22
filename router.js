@@ -308,6 +308,7 @@ module.exports = new Router( {
             'reset-password': true,
             'seasonalAddOn': true,
             'seasonalAddOnOption': true,
+            'shopping-purchase': true,
             'signup': true,
             'user': true,
             'verify': true,

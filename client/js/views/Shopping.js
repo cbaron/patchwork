@@ -1,4 +1,6 @@
-module.exports = { ...require('./__proto__'),
+const CustomContent = require('./util/CustomContent')
+
+module.exports = { ...require('./__proto__'), ...CustomContent,
 
   ShoppingModel: require('../models/Shopping'),
 
@@ -13,6 +15,26 @@ module.exports = { ...require('./__proto__'),
         })
       }
     }
+  },
+
+  async onNavigation() {
+    try {
+      this.views.shoppingItems.clearItemViews();
+      await this.show();
+      await this.views.shoppingItems.fetch();
+    } catch(err) { this.Error(err) }
+  },
+
+  postRender() {
+    this.views.shoppingItems.on('fetched', () => {
+      if (!this.views.shoppingItems.itemViews.length) {
+        this.els.shoppingIntroText.textContent = 'We currently have no items for sale. Please check back again soon!';
+      } else {
+        CustomContent.postRender.call(this);
+      }
+    });
+
+    return this;
   },
 
   requiresLogin: true

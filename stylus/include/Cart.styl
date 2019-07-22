@@ -1,6 +1,12 @@
 .Cart
   padding: 2rem
 
+  .back-btn
+    color: $sun-red
+    text-decoration: underline
+    cursor: pointer
+    margin-bottom: 2rem
+
   h1
     margin-left: 0
     padding-top: 0
@@ -21,7 +27,7 @@
       background-color: $light-manila
       border-radius: .5rem
 
-  .CartItem
+  .CartItem >div:first-child
     display: flex
     align-items: center
     width: 100%
@@ -61,15 +67,68 @@
       >li:last-child
         flex: 1
     
-    .ex
-      width: 2rem
-      height: 2rem
-      color: $negative-red
-                  
+  .ex
+    width: 2rem
+    height: 2rem
+    cursor: pointer
 
-      
+  .CartItem .mobile-cart-item
+    display: none
+    flex: 1
+    align-items: center
+    width: 100%
+    padding: 1rem
+    background-color: $light-manila
+    border-radius: .5rem
+
+    >div
+      padding: .25rem
+      &:first-child
+        display: flex
+        align-items: center
+
+    .image-container
+      flex: 1
+      img
+        width: 100%
+
+    .icon-container
+      flex: 1
+      text-align: center
+
+    .item-info
+      >ul
+        >li
+          margin: .35rem 0
+          >div:first-child
+            color: $sun-red
+
   .subtotal
       font-size: 1.2rem
       font-weight: bold
       margin-bottom: 1rem
             
+  @media only screen and (max-width: 767px)
+    .column-container
+      display:block
+
+      .checkout-ui
+        margin-left: 0
+
+    .list
+      display: flex
+      justify-content: center
+      align-items: stretch
+      flex-wrap: wrap
+
+      .CartItem
+        margin: .5rem
+
+    .CartItem
+      width: 275px
+      >div:first-child
+        display: none
+      .mobile-cart-item
+        height: 100%
+        display: block
+        flex: 1

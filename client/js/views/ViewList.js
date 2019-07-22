@@ -8,6 +8,11 @@ module.exports = Object.assign( { }, Super, {
         this.updateStyle()
     },
 
+    clearItemViews() {
+        this.els.list.innerHTML = '';
+        this.itemViews = [];
+    },
+
     createItemViews( data ) {
         const fragment =
             data.reduce(
@@ -54,7 +59,6 @@ module.exports = Object.assign( { }, Super, {
 
     onItemViewDeleted( view ) {
         const viewIndex = this.itemViews.indexOf( view )
-
         this.itemViews.splice( viewIndex, 1 )
         this.els.container.scrollIntoView( { behavior: 'smooth' } )
         this.updateStyle()
@@ -66,7 +70,7 @@ module.exports = Object.assign( { }, Super, {
         data = data || this.collection.data
 
         if( !Array.isArray( data ) ) data = [ data ]
-        if( !data.length ) data = [ { } ]
+        if( !data.length ) return
 
         this.createItemViews( data )
     },
@@ -75,9 +79,7 @@ module.exports = Object.assign( { }, Super, {
         this.viewName = this.model.git('view')
         this.itemViews = [ ]
         this.collection = this.model.git('collection') || Object.create( this.Model )
-        console.log('postrender viewlist')
-        console.log(this.viewName)
-        console.log(this.model)
+
         if( this.model.git('fetch') ) this.fetch().catch(this.Error)
 
         if( this.collection.data.length ) this.populateList()

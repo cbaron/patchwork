@@ -17,7 +17,7 @@
             position: absolute
             display:flex
             align-items: center
-            top: .5rem
+            bottom: .5rem
             right: 1.5rem
             cursor: pointer
 
@@ -48,7 +48,7 @@
                             transition: color .3s ease-in-out
 
 
-        >.nav
+        .nav-links
             display: flex
             justify-content: center
             align-items: center
@@ -134,18 +134,18 @@
                         
 
     @media only screen and (min-width: 1500px)
-        >div:nth-child(2)
-            >div:first-child >div
+        .header-content
+            .title >div
                 font-size: 3rem
                 
             >ul li
                 font-size: 1.4rem
                 
     @media only screen and (max-width: 767px)
-        >div:nth-child(2)
+        .header-content
             position: relative
             
-            >div:first-child
+            .title
                 display: flex
                 align-items: center
                 
@@ -162,7 +162,7 @@
                     text-align: center
                     flex: 1
             
-            >div:nth-child(2)
+            .nav-links
                 display: block
   
                 >ul:first-child
@@ -215,14 +215,23 @@
                 top: 1.35rem
                     
     @media only screen and (max-width: 475px)
-        >div:nth-child(2)
-            >div:first-child
+        .header-content
+            .title
                 >div
                     font-size: 1.75rem
+
+            .cart
+                right: 1rem
+
+                >span:first-child
+                    width: .75rem
+                    height: 1.5rem
+
+                >span:last-child
+                    font-size: 1rem
                 
-            >ul
-                left: -12rem
-                width: 12rem
+            .nav-links >ul
+
                 
                 &:first-child >li, &:last-child >li >div:first-child
                     font-size: 1rem
@@ -231,22 +240,22 @@
                     transform: translateX(12rem)
                     
     @media only screen and (max-width: 425px)
-        >div:nth-child(2)
-            >div:first-child
+        .header-content
+            .title
                 >div
                     font-size: 1.5rem
                 svg
                     height: 1.25rem
                     
-            >div:nth-child(2) >ul:last-child >li >div:first-child
+            .nav-links >ul:last-child >li >div:first-child
                 font-size: .95rem
                 
             >div:last-child >span
                 font-size: 1.1rem
                     
     @media only screen and (max-width: 375px)
-        >div:nth-child(2)
-            >div:first-child
+       .header-content
+            .title
                 >div
                     font-size: 1.3rem
                     
@@ -254,8 +263,8 @@
             font-size: 1rem
                 
     @media only screen and (max-width: 350px)
-        >div:nth-child(2)
-            >div:first-child
+        .header-content
+            .title
                 >div
                     font-size: 1.2rem
                     

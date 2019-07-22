@@ -15,7 +15,7 @@ return `` +
             ${require('./lib/justify')}
             <div><span data-js="title" data-name="${p.opts.home.name}">${p.opts.home.label}</span></div>
         </div>
-        <div class="nav">
+        <div class="nav-links">
             <ul data-js="navLinks">${fields}</ul>
             <ul>
                 <li>

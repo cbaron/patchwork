@@ -7,7 +7,8 @@ module.exports = Object.assign( { }, Super, {
 
         const keyValue = datum[ this.key ]
         let insertion = { el: this.els.list }
-
+        console.log(this.collection)
+        console.log(datum)
         this.collection.add( datum )
         this.collection.store[ this.key ][ keyValue ] = datum
 

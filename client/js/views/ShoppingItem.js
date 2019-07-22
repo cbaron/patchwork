@@ -7,9 +7,10 @@ module.exports = { ...require('./__proto__'),
   },
 
   onAddToCartBtnClick(e) {
-    const { _id, name, label, unit } = this.model.data;
+    const { _id, available, name, label, unit } = this.model.data;
     const selectedItem = {
       itemId: _id,
+      available,
       name,
       label,
       unit,
@@ -21,11 +22,15 @@ module.exports = { ...require('./__proto__'),
 
     if (window.localStorage.getItem('cart')) {
       cart = JSON.parse(window.localStorage.getItem('cart'));
+      if (cart.find(({ itemId }) => itemId === _id )) {
+        return this.Toast.showMessage('error', `${label} already in cart.`)
+      };
     };
 
     cart.push(selectedItem)
     window.localStorage.setItem('cart', JSON.stringify(cart));
-    this.user.trigger('cartChanged');
+    this.user.trigger('cartItemAdded', selectedItem);
+    this.Toast.showMessage('success', `${selectedItem.label} added to your cart!`);
   },
 
   onAmountSelectChange(e) {

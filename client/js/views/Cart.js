@@ -1,8 +1,6 @@
-module.exports = { ...require('./__proto__'),
+const CustomContent = require('./util/CustomContent')
 
-  Templates: {
-    CartItem: require('./templates/CartItem')
-  },
+module.exports = { ...require('./__proto__'), ...CustomContent,
 
   Views: {
     cartContents() {
@@ -11,14 +9,14 @@ module.exports = { ...require('./__proto__'),
           collection: Object.create(this.Model).constructor(),
           view: 'CartItem',
           delete: false
-        }),
-
+        })
       }
     }
   },
 
   events: {
-      checkoutBtn: 'click'
+    backToShoppingBtn: 'click',
+    checkoutBtn: 'click'
   },
 
   deriveSubtotal() {
@@ -28,26 +26,54 @@ module.exports = { ...require('./__proto__'),
     }, 0)
   },
 
-  updateSubtotal() {
-      this.els.itemCount.textContent = `(${this.cart.length} items):`;
-      this.els.subtotal.textContent = this.Format.Currency.format(this.deriveSubtotal());
+  loadCart() {
+    this.cart = JSON.parse(window.localStorage.getItem('cart'));
+    this.els.noItemsMessage.classList.toggle('fd-hidden', this.cart.length);
+    this.els.checkoutUi.classList.toggle('fd-hidden', !this.cart.length);
+    this.cart.forEach(cartItem => this.views.cartContents.add(cartItem));
+  },
+
+  onBackToShoppingBtnClick() {
+    this.emit('navigate', 'shopping');
   },
 
   onCheckoutBtnClick() {
-      this.emit( 'navigate', 'checkout' )
+    this.emit('navigate', 'checkout');
   },
 
-  onNavigation() {
-      ( this.isHidden() ? this.show() : Promise.resolve() )
-      .then( () => this.els.container.scrollIntoView( { behavior: 'smooth' } ) )
-      .catch( this.Error )
+  async onNavigation() {
+    try {
+      this.views.cartContents.clearItemViews();
+      await this.show();
+      this.loadCart();
+      this.updateSubtotal();
+    } catch(err) { this.Error(err) }
   },
 
   postRender() {
-    this.cart = JSON.parse(window.localStorage.getItem('cart'));
-    this.cart.forEach(cartItem => this.views.cartContents.add(cartItem));
-    console.log(this.cart);
-    return this
-  }
+    CustomContent.postRender.call(this)
 
+    this.loadCart();
+    this.updateSubtotal();
+  
+    this.user.on('cartItemDeleted', () => {
+      this.cart = JSON.parse(window.localStorage.getItem('cart'));
+      this.els.noItemsMessage.classList.toggle('fd-hidden', this.cart.length);
+      this.els.checkoutUi.classList.toggle('fd-hidden', !this.cart.length);
+      this.updateSubtotal()
+    });
+    this.user.on('cartItemAdded', item => {
+      this.views.cartContents.add(item);
+      this.updateSubtotal();
+    });
+
+    return this;
+  },
+
+  requiresLogin: true,
+
+  updateSubtotal() {
+    this.cart = JSON.parse(window.localStorage.getItem('cart'));
+    this.els.subtotal.textContent = this.Format.Currency.format(this.deriveSubtotal());
+  }
 }

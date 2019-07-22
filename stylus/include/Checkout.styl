@@ -1,0 +1,135 @@
+.Checkout
+  padding: 2rem
+
+  .back-btn
+    color: $sun-red
+    text-decoration: underline
+    cursor: pointer
+    margin-bottom: 2rem
+
+  h1
+    margin-left: 0
+    padding-top: 0
+
+  section
+    padding: 0
+    margin: 0
+
+  .column-container
+    display: flex
+
+    .column-1, .column-2
+      flex: 1
+
+    .column-1, .column-2 .order-summary
+      padding: 1rem
+      background-color: $light-manila
+      border-radius: .5rem
+
+    .column-1
+      flex: 3
+      order: 1
+
+      .payment
+        margin-top: 2rem
+        text-align: center
+
+        >p
+          font-weight: bold
+
+        .payment-options
+          margin: 2rem 0
+          display: flex
+          justify-content: center
+      
+          .payment-option
+            background-color: $sun-yellow
+            color: black
+            border: 1px solid transparent
+            border-radius: .5rem
+            box-shadow: 3px 3px 5px $dark-grey
+            cursor: pointer
+            padding: .5rem .75rem
+            margin: .5rem
+            text-align: center
+            width: 15rem
+
+            &:hover:not(.selected)
+              background-color: lighten($sun-yellow, 15%)
+            
+            &.selected
+              background-color: $light-sun-red
+              color: white
+
+            >div:first-child
+              color: white
+              font-weight: bold
+                
+            >div:nth-child(2)
+              font-size: .8rem
+
+            >div:last-child
+              font-weight: bold
+
+        .Form          
+          .form-group
+            &:nth-child(4)
+                >input
+                    width: 4rem
+
+        .button-row
+          display: flex
+          justify-content: center
+
+          >button
+            position: relative
+            background-color: $sun-red
+            color: white
+            border: 1px solid transparent
+            padding: .5rem .75rem
+            width: 12rem
+            
+            &.has-spinner
+              background-color: lighten($sun-red, 25%)
+
+            &:hover:not(.disabled)
+              background-color: lighten($sun-red, 15%)
+
+    .column-2
+      flex: 2
+      order: 2
+      margin-left: 1rem
+
+      .order-summary >div:first-child
+        color: $sun-red
+        margin-bottom: .5rem
+        font-weight: bold
+
+      .checkout-items
+        padding-bottom: .5rem
+        border-bottom: 1px solid
+        margin-bottom: .5rem
+
+        .checkout-item
+          display: flex
+          justify-content: space-between
+
+          >li
+            margin-bottom: .5rem
+
+      .total
+        display: flex
+        justify-content: space-between
+        >div
+          font-size: 1.2rem
+          font-weight: bold
+          margin-bottom: 1rem
+
+            
+  @media only screen and (max-width: 950px)
+    .column-container
+      display: block
+      
+      .column-2
+        margin-left: 0
+        margin-bottom: 1rem

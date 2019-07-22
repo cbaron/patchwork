@@ -75,6 +75,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             this.views.seasons.views.orderDeleteButtonFlow.hideSync()
             this.selectedCustomer = customer
             this.views.customerInfo.reset( customer )
+            this.views.shoppingTransactions.update( customer )
             this.views.seasons.update( customer )
             this.views.orderOptions.hide()
             this.views.weekOptions.hide()
