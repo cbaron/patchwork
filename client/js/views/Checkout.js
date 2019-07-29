@@ -133,14 +133,23 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       const orderTotal = this.deriveTotal();
       const transactionData = {
         personId: this.user.id,
-        action: 'store purchase',
+        action: 'store order',
         paymentMethod: this.selectedPayment,
-        amountPaid: this.selectedPayment === 'credit card' ? orderTotal : 0,
         items: this.cart,
         orderTotal,
-        purchasedAt: new Date()
+        createdAt: new Date()
       };
       const transactionResult = await this.ShoppingTransaction.post(transactionData);
+
+      if (this.selectedPayment === 'credit card') {
+        const paymentTransactionResult = await this.ShoppingTransaction.post({
+          personId: this.user.id,
+          action: 'payment',
+          amountPaid: orderTotal,
+          createdAt: new Date()
+        })
+      }
+
       const paymentResponse = await this.Xhr({
         method: 'POST',
         resource: 'shopping-purchase',
@@ -154,6 +163,10 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       if (paymentResponse.error) {
         this.Toast.showMessage('error', paymentResponse.error);
         await this.Xhr({ method: 'DELETE', resource: 'ShoppingTransaction', id: transactionResult._id });
+
+        if (this.selectedPayment === 'credit card') {
+          await this.Xhr({ method: 'DELETE', resource: 'ShoppingTransaction', id: paymentTransactionResult._id });
+        };
       }
 
       await this.updateAvailability();

@@ -51,6 +51,7 @@ module.exports={
 	Shopping: require('./views/templates/Shopping'),
 	ShoppingItem: require('./views/templates/ShoppingItem'),
 	ShoppingTransactionDetails: require('./views/templates/ShoppingTransactionDetails'),
+	ShoppingTransactionDetailsItem: require('./views/templates/ShoppingTransactionDetailsItem'),
 	ShoppingTransactions: require('./views/templates/ShoppingTransactions'),
 	StaffProfile: require('./views/templates/StaffProfile'),
 	Toast: require('./views/templates/Toast'),

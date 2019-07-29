@@ -6,7 +6,7 @@ const Currency = new Intl.NumberFormat( 'en-US', {
 
 module.exports = p =>
 `<p>Dear ${p.name},</p>
-<p>We are sending you this email to confirm payment for the remaining balance on the following share:</p>
+<p>Thank you for your purchase from the Patchwork Store! Here is a summary for your records:</p>
 <table style="border-collapse: collapse; width: 100%; margin: 2rem 0;">
     <tbody>
         <tr><td style="color: #aa0000; font-size: 1rem;">${p.shareLabel}</td></tr>

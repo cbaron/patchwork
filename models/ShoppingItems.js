@@ -1,6 +1,16 @@
 module.exports = {
   attributes: [
     {
+      name: 'order',
+      label: 'Order',
+      range: 'String'
+    },
+    {
+      name: 'isDisplaying',
+      label: 'Is Displaying',
+      range: 'Boolean'
+    },
+    {
       name: 'name',
       label: 'Name',
       range: 'String'

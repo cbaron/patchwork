@@ -47,7 +47,8 @@ module.exports = Object.assign( { }, Super, {
     async fetch() {
         this.fetching = true
 
-        const newData = await this.collection.get()
+        const query = this.model.git('sort') ? { sort: this.model.git('sort') } : {};
+        const newData = await this.collection.get({ query });
 
         this.populateList(newData)
         this.fetched = true

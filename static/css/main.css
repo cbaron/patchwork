@@ -3370,6 +3370,36 @@ html.non-touch .AccountHome button:hover {
     justify-content: center;
   }
 }
+.ShoppingTransactions .ShoppingTransactionDetails {
+  margin: 1rem 0;
+}
+.ShoppingTransactions .ShoppingTransactionDetails h5 {
+  margin: 0;
+  margin-bottom: 0.25rem;
+  background-color: #a00;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem;
+}
+.ShoppingTransactions .ShoppingTransactionDetails .detail-item {
+  margin: 0.15rem 0;
+  padding: 0.35rem;
+  background-color: #fff5df;
+  border-radius: 0.35rem;
+}
+.ShoppingTransactions .balance {
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.ShoppingTransactions .Form {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #fff5df;
+}
+.ShoppingTransactions .Form .btn-row {
+  text-align: left;
+}
 .Signup .error {
   color: #a94442;
   display: none;
