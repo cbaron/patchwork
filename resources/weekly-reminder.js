@@ -3,7 +3,7 @@ const Base = require('./__proto__'),
 
 Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
-    SendGrid: require('../lib/SendGrid'),
+    // SendGrid: require('../lib/SendGrid'),
 
     SgMail: require('@sendgrid/mail'),
 
@@ -46,7 +46,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             JOIN share s on ms.shareid = s.id
             JOIN membersharedelivery msd on ms.id = msd.membershareid
             JOIN deliveryoption dop on msd.deliveryoptionid = dop.id
-            WHERE msd.deliveryoptionid = (SELECT id FROM deliveryoption where name = 'farm') AND now() BETWEEN s.startdate AND s.enddate
+            WHERE msd.deliveryoptionid = (SELECT id FROM deliveryoption where name = 'farm') AND now() BETWEEN s.startdate - INTERVAL '2 days' AND s.enddate
             ORDER BY p.name ASC`,
             [ ],
             { rowsOnly: true }
@@ -68,7 +68,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             JOIN deliveryoption dop on msd.deliveryoptionid = dop.id
             JOIN groupdropoff gd on msd.groupdropoffid = gd.id
             JOIN sharegroupdropoff sgd ON gd.id = sgd.groupdropoffid AND s.id = sgd.shareid
-            WHERE now() BETWEEN s.startdate AND s.enddate ${where}
+            WHERE now() BETWEEN s.startdate - INTERVAL '2 days' AND s.enddate ${where}
             ORDER BY p.name ASC`,
             vals,
             { rowsOnly: true }
@@ -89,7 +89,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             JOIN deliveryoption dop on msd.deliveryoptionid = dop.id
             LEFT JOIN zipcoderoute zcr ON m.zipcode = zcr.zipcode
             LEFT JOIN deliveryroute dr ON dr.id = zcr.routeid
-            WHERE now() BETWEEN s.startdate AND s.enddate
+            WHERE now() BETWEEN s.startdate - INTERVAL '2 days' AND s.enddate
             AND msd.deliveryoptionid = (SELECT id FROM deliveryoption WHERE name = 'home')
             ${where}
             ORDER BY p.name ASC`,
@@ -113,7 +113,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             JOIN deliveryoption dop on msd.deliveryoptionid = dop.id
             JOIN groupdropoff gd on msd.groupdropoffid = gd.id
             JOIN sharegroupdropoff sgd ON gd.id = sgd.groupdropoffid AND s.id = sgd.shareid
-            WHERE gd.name = $1 AND now() BETWEEN s.startdate AND s.enddate
+            WHERE gd.name = $1 AND now() BETWEEN s.startdate - INTERVAL '2 days' AND s.enddate
             ORDER BY p.name ASC`,
             [ this.query.selection ],
             { rowsOnly: true }
