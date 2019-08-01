@@ -5,6 +5,8 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
     SendGrid: require('../lib/SendGrid'),
 
+    SgMail: require('@sendgrid/mail'),
+
     db: {
         GET() {
             return this.query.category === 'newsletter'
@@ -143,9 +145,16 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
         } )
 
-        const result = await this.SendGrid.send( emails )
-        .catch( err => {
-            console.log( `Error generating reminder email : ${err.stack || err}` )
+        this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+        const result = await this.SgMail.send( emails )
+        .catch( error => {
+            console.log( `Error generating reminder email : ${error.toString()}` )
+            const { message, code, response } = error;
+            console.log(message);
+            console.log(code);
+            console.log(response);
+            console.log(error.stack);
             this.respond( { body: { error: 'Error generating reminder email.' } } )
         } )
 
