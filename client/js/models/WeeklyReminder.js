@@ -72,7 +72,9 @@ module.exports = { ...require('./__proto__'),
         }
 
         return list.reduce( ( memo, customer ) => {
-            const key = isNewsletter ? 'newsletter' : customer.dropoffName || customer.deliveryName
+            const key = isNewsletter ? 'newsletter' : customer.dropoffName || customer.deliveryName;
+            const email = customer.email.trim().toLowerCase();
+            const secondaryEmail = customer.secondaryEmail && customer.secondaryEmail.trim().toLowerCase();
             const type = this.emailIsCustom && this.replaceDefaultTemplate
                 ? 'custom'
                 : isNewsletter
@@ -91,15 +93,17 @@ module.exports = { ...require('./__proto__'),
                 }
             }
 
-            memo[ key ].recipients.push( customer.email )
+            if (!memo[key].recipients.includes(email)) {
+                memo[key].recipients.push(email);
+            };
+            
+            if (secondaryEmail && !memo[key].recipients.includes(secondaryEmail)) {
+                memo[key].recipients.push(secondaryEmail);
+            };
 
-            if( customer.secondaryEmail && customer.email.toLowerCase() !== customer.secondaryEmail.toLowerCase() ) {
-                memo[ key ].recipients.push( customer.secondaryEmail )
-            }
+            return memo;
 
-            return memo
-
-        }, { } )
+        }, {} )
     },
 
     resource: 'weekly-reminder'
