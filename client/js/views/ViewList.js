@@ -14,6 +14,8 @@ module.exports = Object.assign( { }, Super, {
     },
 
     createItemViews( data ) {
+        console.log('createItemViews')
+        console.log(data);
         const fragment =
             data.reduce(
                 ( fragment, datum ) => {
@@ -49,7 +51,8 @@ module.exports = Object.assign( { }, Super, {
 
         const query = this.model.git('sort') ? { sort: this.model.git('sort') } : {};
         const newData = await this.collection.get({ query });
-
+        console.log('newData');
+        console.log(newData);
         this.populateList(newData)
         this.fetched = true
         this.fetching = false

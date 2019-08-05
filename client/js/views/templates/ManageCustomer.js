@@ -5,7 +5,7 @@ module.exports = p =>
         <div data-view="memberTypeahead"></div>
     </div>
     <div data-view="customerInfo"></div>
-    <div data-view="shoppingTransactions"></div>
+    <div data-view="storeOrders"></div>
     <div data-view="seasons"></div>
     <div data-view="orderOptions"></div>
     <div data-view="weekOptions"></div>

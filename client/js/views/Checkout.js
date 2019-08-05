@@ -3,8 +3,10 @@ const CustomContent = require('./util/CustomContent')
 module.exports = { ...require('./__proto__'), ...CustomContent,
 
   ModalView: require('./modal'),
+  Member: require('../models/Member'),
   Shopping: require('../models/Shopping'),
-  ShoppingTransaction: require('../models/ShoppingTransaction'),
+  StoreOrder: require('../models/StoreOrder'),
+  StoreTransaction: require('../models/StoreTransaction'),
   Spinner: require('../plugins/spinner.js'),
 
   Templates: {
@@ -67,6 +69,12 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     }, 0)
   },
 
+  async getMemberId() {
+    const [memberRow] = await this.Member.get({ query: { personid: this.user.id } });
+    console.log(memberRow);
+    return memberRow.id;
+  },
+
   loadCart() {
     this.cart = JSON.parse(window.localStorage.getItem('cart'));
     
@@ -82,7 +90,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     this.els.ccWrapper.classList.add('fd-hidden');
     this.els.cashOption.classList.add('selected');
     this.els.ccOption.classList.remove('selected');
-    this.selectedPayment = 'cash/check';
+    this.selectedPayment = 'cash or check';
     this.views.creditCard.model.data.isPayingWithCreditCard = false;
   },
 
@@ -108,6 +116,12 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     } catch(err) { this.Error(err) }
   },
 
+  onSubmitEnd() {
+    this.els.submitOrderBtn.classList.remove('has-spinner');
+    this.spinner.stop();
+    this.isSubmitting = false;
+  },
+
   async onSubmitOrderBtnClick() {
     if (!this.selectedPayment) {
       return this.Toast.showMessage('error', 'Please select a method of payment');
@@ -130,23 +144,24 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
         return this.emit('navigate', '/cart');
       };
 
+      const memberId = await this.getMemberId();
       const orderTotal = this.deriveTotal();
-      const transactionData = {
-        personId: this.user.id,
-        action: 'store order',
+      const orderData = {
+        memberId,
         paymentMethod: this.selectedPayment,
-        items: this.cart,
-        orderTotal,
-        createdAt: new Date()
+        items: JSON.stringify(this.cart),
+        total: orderTotal
       };
-      const transactionResult = await this.ShoppingTransaction.post(transactionData);
 
+      const orderResult = await this.StoreOrder.post(orderData);
+      console.log('order result');
+      console.log(orderResult);
       if (this.selectedPayment === 'credit card') {
-        const paymentTransactionResult = await this.ShoppingTransaction.post({
-          personId: this.user.id,
+        const transactionResult = await this.StoreTransaction.post({
+          memberId,
+          orderId: orderResult.id,
           action: 'payment',
-          amountPaid: orderTotal,
-          createdAt: new Date()
+          amount: orderTotal
         })
       }
 
@@ -162,24 +177,23 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
 
       if (paymentResponse.error) {
         this.Toast.showMessage('error', paymentResponse.error);
-        await this.Xhr({ method: 'DELETE', resource: 'ShoppingTransaction', id: transactionResult._id });
 
         if (this.selectedPayment === 'credit card') {
-          await this.Xhr({ method: 'DELETE', resource: 'ShoppingTransaction', id: paymentTransactionResult._id });
+          await this.Xhr({ method: 'DELETE', resource: 'storeTransaction', id: paymentTransactionResult.id });
         };
+
+        await this.Xhr({ method: 'DELETE', resource: 'storeOrder', id: transactionResult.id });
+
+        return this.onSubmitEnd();
       }
 
       await this.updateAvailability();
-      this.els.submitOrderBtn.classList.remove('has-spinner');
-      this.spinner.stop();
-      this.isSubmitting = false;
+      this.onSubmitEnd();
       this.showSuccessModal();
     } catch(err) {
       this.Error(err);
       this.Toast.showMessage('error', 'There was a problem with your transaction. Please try again or contact support.');
-      this.spinner.stop();
-      this.els.submitOrderBtn.classList.remove('has-spinner');
-      this.isSubmitting = false;
+      this.onSubmitEnd();
     }
   },
 
@@ -216,6 +230,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     .on('submit', async () => {
       this.ModalView.hide();
       this.user.clearCart();
+      this.Shopping.data = {};
       await this.delete().catch(this.Error);
       this.emit('navigate', '/');
     })
