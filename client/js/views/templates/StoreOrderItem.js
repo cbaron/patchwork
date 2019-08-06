@@ -2,7 +2,8 @@ const Format = require('../../Format')
 
 module.exports = item => {
   return `` +
-  `<p class="detail-item">
-    ${item.label} (${item.amount.amount} ${item.unit}), Quantity: ${item.quantity}, ${Format.Currency.format(item.price)}
-  </p>`
+  `<div class="detail-item">
+    <span>${item.label} (${item.amount.amount} ${item.unit}, quantity: ${item.quantity}):</span>
+    <span>${Format.Currency.format(item.price)}</span>
+  </div>`
 };

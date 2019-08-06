@@ -71,7 +71,6 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
 
   async getMemberId() {
     const [memberRow] = await this.Member.get({ query: { personid: this.user.id } });
-    console.log(memberRow);
     return memberRow.id;
   },
 
@@ -154,14 +153,13 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       };
 
       const orderResult = await this.StoreOrder.post(orderData);
-      console.log('order result');
-      console.log(orderResult);
+
       if (this.selectedPayment === 'credit card') {
         const transactionResult = await this.StoreTransaction.post({
-          memberId,
           orderId: orderResult.id,
           action: 'payment',
-          amount: orderTotal
+          amount: orderTotal,
+          initiator: 'customer'
         })
       }
 

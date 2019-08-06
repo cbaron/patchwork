@@ -53,6 +53,7 @@ module.exports={
 	StaffProfile: require('./views/templates/StaffProfile'),
 	StoreOrderDetails: require('./views/templates/StoreOrderDetails'),
 	StoreOrderItem: require('./views/templates/StoreOrderItem'),
+	StoreOrderTransactionDetails: require('./views/templates/StoreOrderTransactionDetails'),
 	StoreOrders: require('./views/templates/StoreOrders'),
 	Toast: require('./views/templates/Toast'),
 	Transactions: require('./views/templates/Transactions'),

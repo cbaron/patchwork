@@ -17,19 +17,20 @@ module.exports = Object.create( {
     GET( resource ) {
         const table = resource.path[0],
             queryKeys = ( resource.path.length > 1 ) ? { id: resource.path[1] } : Object.keys( resource.query )
-
         if( queryKeys.includes( 'countOnly' ) ) return this.Postgres.query( `SELECT count(*) FROM "${table}"` )
 
         let paramCtr = 1,
             joins = [ ],
             selects = { [table]: true },
             where = [ ],
-            params = [ ]
+            params = [ ],
+            sort = ''
 
         queryKeys.forEach( key => {
             const datum = resource.query[key],
                 operation = typeof datum === 'object' ? datum.operation : `=`
 
+            if( key === 'sort' ) return sort = ` ORDER BY ${datum}`;
             if( ! [ '<', '>', '<=', '>=', '=', '<>', '!=', '~*', 'in', 'join', 'leftJoin' ].includes( operation ) ) { throw new Error('Invalid parameter') }
             if( operation === '~*' && !resource.user.roles.includes('admin') ) { throw new Error('Access Forbidden') }
             
@@ -46,12 +47,12 @@ module.exports = Object.create( {
                 params.push( typeof datum === 'object' ? datum.value : datum )
             }
         } )
-        
+
         where = paramCtr > 1 ? `WHERE ${where.join(' AND ')}` : ''
         joins = joins.join(' ')
         selects = Object.keys( selects ).map( tableName => this._getColumns( tableName, { extend: joins.length } ) ).join(', ')
 
-        return this.Postgres.query( `SELECT ${selects} FROM "${table}" ${joins} ${where}`, params )
+        return this.Postgres.query( `SELECT ${selects} FROM "${table}" ${joins} ${where}${sort}`, params )
     },
 
     PATCH( resource ) {

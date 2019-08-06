@@ -1,19 +1,52 @@
 .StoreOrders
   .StoreOrderDetails
-    margin: 1rem 0
-    h5
+    margin: 1rem 0 2.5rem
+    
+    .order-heading
+      display: flex
+      align-items: center
+      justify-content: space-between
       margin: 0
       margin-bottom: .25rem
       background-color: $sun-red
       color: white
       font-weight: bold
       padding: .5rem
+      border-radius: .25rem
 
-    .detail-item
+      &.cancelled
+        background-color: #888
+        color: #333
+
+      &.filled
+        background-color: green
+
+      .btn-row
+        >button
+          margin: 0 1rem
+          box-shadow: none
+          border-radius: .5rem
+
+    .section-title
+      padding: .35rem
+      font-weight: bold
+      background-color: $light-manila
+      text-transform: uppercase
+
+    .detail-item, .transaction-row
       margin: .15rem 0
       padding: .35rem
       background-color: $light-manila
       border-radius: .35rem
+
+    .detail-item >span:first-child
+      margin-right: .5rem
+
+    .transaction-row
+      >div:first-child
+        display: flex
+        >div
+          width: 145px
 
   .balance
     margin: 1rem 0

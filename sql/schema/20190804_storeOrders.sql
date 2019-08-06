@@ -12,8 +12,8 @@ CREATE TABLE "storeOrder" (
 CREATE TABLE "storeTransaction" (
     id                          SERIAL PRIMARY KEY,
     action                      VARCHAR(50),
+    initiator                   VARCHAR(50),
     amount                      REAL,
-    "memberId"                  INTEGER,
     "orderId"                   INTEGER REFERENCES "storeOrder"(id),
     "checkNumber"               TEXT,
     notes                       TEXT,

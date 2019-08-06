@@ -181,6 +181,7 @@ module.exports = Object.assign( { }, require('./__proto__'), Submitter, {
             this.emit( method === 'post' ? 'posted' : 'put', Object.assign( {}, this.model.data ) )
             this.model.data = { }
             this.clear()
+            this.emit('cleared');
             this.Toast.showMessage( 'success', this.toastSuccess || `Success` )
             return Promise.resolve()
         } )
