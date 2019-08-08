@@ -35,6 +35,7 @@ module.exports={
 	Locations: require('./views/templates/Locations'),
 	Login: require('./views/templates/Login'),
 	ManageCustomer: require('./views/templates/ManageCustomer'),
+	ManageOrders: require('./views/templates/ManageOrders'),
 	MemberInfo: require('./views/templates/MemberInfo'),
 	MemberTypeahead: require('./views/templates/MemberTypeahead'),
 	Members: require('./views/templates/Members'),

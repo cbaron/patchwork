@@ -11,11 +11,13 @@ module.exports = p => {
   `<div>
     <div data-js="orderHeading" class="order-heading ${headingClass}">
       <div>
+        <div>${p.model.name || ''}</div>
+        <div>Order No: ${p.model.id}</div>
         <div>${Moment(p.model.created).format("YYYY-MM-DD")}</div>
-        <div>Total: ${Format.Currency.format(p.model.total)}</div>
       </div>
       <div>
         <div>Status: <span data-js="status">${status}</span></div>
+        <div>Total: ${Format.Currency.format(p.model.total)}</div>
         <div>Balance: <span data-js="balance"></span></div>
       </div>
       <div class="btn-row">

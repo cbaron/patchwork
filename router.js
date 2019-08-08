@@ -300,6 +300,7 @@ module.exports = new Router( {
             'document': true,
             'food': true,
             'mail': true,
+            'manage-orders': true,
             'member-order': true,
             'never-receive': true,
             'newsletter': true,

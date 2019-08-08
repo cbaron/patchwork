@@ -1,0 +1,93 @@
+.ManageOrders
+  margin: 4rem 3rem 2rem
+
+  h1
+    text-align: center
+
+  button
+      display: inline-block
+      font-size: .9rem
+      border: 1px solid transparent
+      padding: .5rem .8rem
+      letter-spacing: 1px
+      margin: 0
+      text-align: center
+      border-radius: .25rem
+      color: black
+
+      html.non-touch &
+          &:hover
+              opacity: .8
+      &:focus
+          outline: 0
+
+  .select-row
+    display: flex
+    justify-content: center
+    align-items: center
+    margin: 1rem 0 3rem
+
+    button
+      margin-left: 1rem
+
+  .StoreOrderDetails
+    margin: 1rem 0 2.5rem
+    
+    .order-heading
+      display: flex
+      align-items: center
+      justify-content: space-between
+      margin: 0
+      margin-bottom: .25rem
+      background-color: $sun-red
+      color: white
+      font-weight: bold
+      padding: .5rem
+      border-radius: .25rem
+
+      &.cancelled
+        background-color: #888
+        color: #333
+
+      &.filled
+        background-color: green
+
+      .btn-row
+        >button
+          margin: 0 1rem
+          box-shadow: none
+          border-radius: .5rem
+
+    .section-title
+      padding: .35rem
+      font-weight: bold
+      background-color: $light-manila
+      text-transform: uppercase
+
+    .detail-item, .transaction-row
+      margin: .15rem 0
+      padding: .35rem
+      background-color: $light-manila
+      border-radius: .35rem
+
+    .detail-item >span:first-child
+      margin-right: .5rem
+
+    .transaction-row
+      >div:first-child
+        display: flex
+        >div
+          width: 145px
+
+  .balance
+    margin: 1rem 0
+    font-size: 1.2rem
+    font-weight: bold
+
+  .Form
+    margin: 2rem 0
+    padding: 1rem
+    background-color: $light-manila
+
+    .btn-row
+      text-align: left
