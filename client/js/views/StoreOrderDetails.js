@@ -5,7 +5,7 @@ module.exports = { ...require('./__proto__'),
 
   Templates: {
     StoreOrderTransactionDetails: require('./templates/StoreOrderTransactionDetails'),
-    StoreOrderItem: require('./templates/StoreOrderItem')
+    //StoreOrderItem: require('./templates/StoreOrderItem')
   },
 
   Views: {
@@ -27,6 +27,15 @@ module.exports = { ...require('./__proto__'),
           return {};
         },
         toastSuccess: 'Transaction added.'
+      }
+    },
+    storeOrderItems() {
+      return {
+        model: Object.create(this.Model).constructor({
+          collection: Object.create(this.Model).constructor(),
+          view: 'StoreOrderItem',
+          delete: false
+        })
       }
     }
   },
@@ -50,6 +59,25 @@ module.exports = { ...require('./__proto__'),
         }]
       ]
     }
+  },
+
+  async handleItemChecked(checkedItem, isFilled) {
+    const { id, items } = this.model.data;
+    const itemIndex = items.findIndex(
+      ({ itemId }) => itemId === checkedItem.itemId
+    );
+    const updatedItems = [
+      ...items.slice(0, itemIndex),
+      { ...items[itemIndex], isFilled },
+      ...items.slice(itemIndex + 1)
+    ];
+
+    this.model.set('items', updatedItems);
+
+    await this.StoreOrders.patch(id, {
+      items: JSON.stringify(updatedItems)
+    })
+    .catch(this.Error)
   },
 
   insertTransaction(transaction) {
@@ -128,20 +156,21 @@ module.exports = { ...require('./__proto__'),
   },
 
   renderItemsPurchased() {
-    this.model.data.items.forEach(item =>
-      this.slurpTemplate({
-        insertion: { el: this.els.itemsList },
-        template: this.Templates.StoreOrderItem(item)
+    this.views.storeOrderItems.clearItemViews();
+    this.views.storeOrderItems.createItemViews(this.model.data.items);
+
+    this.views.storeOrderItems.itemViews.forEach(itemView =>
+      itemView.on('itemChecked', checkedItem => {
+        const isFilled = itemView.els.fillItemCheckbox.checked;
+        this.handleItemChecked(checkedItem, isFilled);
       })
-    )
+    );
   },
 
   updateBalance() {
     const remainingBalance = this.StoreTransactions.data.reduce((memo, transaction) => {
-      if (transaction.action === 'payment') {
+      if (transaction.amount) {
         memo -= transaction.amount
-      } else if (transaction.action === 'refund') {
-        memo += transaction.amount
       }
 
       return memo;

@@ -2864,7 +2864,8 @@ html.non-touch .ManageOrders button:hover {
   margin-left: 1rem;
 }
 .ManageOrders .StoreOrderDetails {
-  margin: 1rem 0 2.5rem;
+  max-width: 1000px;
+  margin: 1rem auto 2.5rem;
 }
 .ManageOrders .StoreOrderDetails .order-heading {
   display: flex;
@@ -2903,8 +2904,16 @@ html.non-touch .ManageOrders button:hover {
   background-color: #fff5df;
   border-radius: 0.35rem;
 }
-.ManageOrders .StoreOrderDetails .detail-item >span:first-child {
+.ManageOrders .StoreOrderDetails .detail-item >div:first-child >span:first-child {
   margin-right: 0.5rem;
+}
+.ManageOrders .StoreOrderDetails .detail-item >div:last-child {
+  display: flex;
+  align-items: center;
+}
+.ManageOrders .StoreOrderDetails .detail-item >div:last-child >label {
+  color: #333;
+  font-weight: bold;
 }
 .ManageOrders .StoreOrderDetails .transaction-row >div:first-child {
   display: flex;
@@ -3518,6 +3527,7 @@ html.non-touch .ManageOrders button:hover {
   }
 }
 .StoreOrders .StoreOrderDetails {
+  max-width: 1000px;
   margin: 1rem 0 2.5rem;
 }
 .StoreOrders .StoreOrderDetails .order-heading {
@@ -3557,8 +3567,16 @@ html.non-touch .ManageOrders button:hover {
   background-color: #fff5df;
   border-radius: 0.35rem;
 }
-.StoreOrders .StoreOrderDetails .detail-item >span:first-child {
+.StoreOrders .StoreOrderDetails .detail-item >div:first-child >span:first-child {
   margin-right: 0.5rem;
+}
+.StoreOrders .StoreOrderDetails .detail-item >div:last-child {
+  display: flex;
+  align-items: center;
+}
+.StoreOrders .StoreOrderDetails .detail-item >div:last-child >label {
+  color: #333;
+  font-weight: bold;
 }
 .StoreOrders .StoreOrderDetails .transaction-row >div:first-child {
   display: flex;

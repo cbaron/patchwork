@@ -28,6 +28,7 @@ module.exports = p => {
     </div>
     <div data-js="itemsList">
       <div class="section-title">Items:</div>
+      <div data-view="viewList" data-name="storeOrderItems"></div>
     </div>
     <div data-js="transactions" class="transactions fd-hidden">
       <div class="section-title">Transactions:</div>

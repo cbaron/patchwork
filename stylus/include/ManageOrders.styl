@@ -31,7 +31,8 @@
       margin-left: 1rem
 
   .StoreOrderDetails
-    margin: 1rem 0 2.5rem
+    max-width: 1000px
+    margin: 1rem auto 2.5rem
     
     .order-heading
       display: flex
@@ -70,8 +71,15 @@
       background-color: $light-manila
       border-radius: .35rem
 
-    .detail-item >span:first-child
+    .detail-item >div:first-child >span:first-child
       margin-right: .5rem
+
+    .detail-item >div:last-child
+      display: flex
+      align-items: center
+      >label
+        color: #333
+        font-weight: bold
 
     .transaction-row
       >div:first-child

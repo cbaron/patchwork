@@ -38,6 +38,7 @@ module.exports={
 	ShoppingItem: require('./views/ShoppingItem'),
 	Signup: require('./views/Signup'),
 	StoreOrderDetails: require('./views/StoreOrderDetails'),
+	StoreOrderItem: require('./views/StoreOrderItem'),
 	StoreOrders: require('./views/StoreOrders'),
 	Submitter: require('./views/Submitter'),
 	Toast: require('./views/Toast'),

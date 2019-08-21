@@ -1,9 +1,15 @@
-const Format = require('../../Format')
+module.exports = ({ Currency, model }) => {
+  const checked = model.isFilled ? `checked` : ``;
 
-module.exports = item => {
   return `` +
   `<div class="detail-item">
-    <span>${item.label} (${item.amount.amount} ${item.unit}, quantity: ${item.quantity}):</span>
-    <span>${Format.Currency.format(item.price)}</span>
+    <div>
+      <span>${model.label} (${model.amount.amount} ${model.unit}, quantity: ${model.quantity}):</span>
+      <span>${Currency.format(model.price)}</span>
+    </div>
+    <div>
+      <label>Filled</label>
+      <input type="checkbox" data-js="fillItemCheckbox" ${checked} />
+    </div>
   </div>`
 };
