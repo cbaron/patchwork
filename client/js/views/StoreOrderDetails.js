@@ -4,14 +4,13 @@ module.exports = { ...require('./__proto__'),
   StoreTransactions: require('../models/StoreTransaction'),
 
   Templates: {
-    StoreOrderTransactionDetails: require('./templates/StoreOrderTransactionDetails'),
-    //StoreOrderItem: require('./templates/StoreOrderItem')
+    StoreOrderTransactionDetails: require('./templates/StoreOrderTransactionDetails')
   },
 
   Views: {
     addStoreTransaction() {
       return {
-        model: Object.create( this.Model ).constructor( { }, {
+        model: Object.create(this.StoreTransactions).constructor( { }, {
           attributes: require('../../../models/StoreTransaction').attributes,
           data: {
             initiator: 'admin',
@@ -21,7 +20,6 @@ module.exports = { ...require('./__proto__'),
             key: 'id',
             noPlaceholder: true
           },
-          resource: 'storeTransaction'
         }),
         templateOpts() {
           return {};
@@ -50,8 +48,14 @@ module.exports = { ...require('./__proto__'),
           this.views.addStoreTransaction.model.set('orderId', this.model.data.id);
           this.views.addStoreTransaction.model.set('initiator', 'admin');
         }],
-        ['posted', function(model) {
-          this.StoreTransactions.data.push(model);
+        ['posted', async function(model) {
+          await this.StoreTransactions.get({
+            query: {
+              orderId: this.model.data.id,
+              sort: 'created asc'
+            }
+          })
+
           this.els.transactions.classList.remove('fd-hidden');
           this.insertTransaction(model);
           this.updateBalance();
@@ -160,10 +164,9 @@ module.exports = { ...require('./__proto__'),
     this.views.storeOrderItems.createItemViews(this.model.data.items);
 
     this.views.storeOrderItems.itemViews.forEach(itemView =>
-      itemView.on('itemChecked', checkedItem => {
-        const isFilled = itemView.els.fillItemCheckbox.checked;
-        this.handleItemChecked(checkedItem, isFilled);
-      })
+      itemView.on('itemChecked', (checkedItem, isFilled) =>
+        this.handleItemChecked(checkedItem, isFilled)
+      )
     );
   },
 

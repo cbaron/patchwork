@@ -120,8 +120,13 @@ module.exports = Object.assign( { }, require('../../../lib/Model'), require('eve
     post( model ) {
         return this.Xhr( { method: 'post', resource: this.resource, headers: Object.assign( { v2: true }, this.headers || {} ), data: JSON.stringify( model || this.data ) } )
         .then( response => {
-            
-            if( Array.isArray( this.data ) ) { 
+            console.log('post response');
+            console.log(response);
+            console.log(this.resource);
+            console.log(this.data);
+            if( Array.isArray( this.data ) ) {
+                console.log('model post');
+                console.log(this.data);
                 this.data = this.data ? this.data.concat( response ) : [ response ]
                 if( this.store ) Object.keys( this.store ).forEach( attr => this._store( response, attr ) )
             } else {

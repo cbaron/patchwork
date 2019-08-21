@@ -11,8 +11,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
           collection: Object.create(this.ShoppingModel),
           view: 'ShoppingItem',
           delete: false,
-          fetch: true,
-          sort: { order: 1 }
+          fetch: true
         })
       }
     }
