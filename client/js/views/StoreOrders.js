@@ -15,6 +15,8 @@ module.exports = { ...require('./__proto__'),
   model: require('../models/StoreOrder'),
 
   async update(customer) {
+    this.model.data = {};
+
     await this.model.get({
       query: {
         memberId: customer.member.data.id,

@@ -22,6 +22,7 @@ module.exports = p =>
         <div data-view="form" data-name="personalInfo"></div>
     </div>
     <div class="fd-hidden" data-js="orderInfo">
+        <div data-view="storeOrders"></div>
         <div data-view="seasons"></div>
         <div data-view="orderOptions"></div>
         <div data-view="weekOptions"></div>

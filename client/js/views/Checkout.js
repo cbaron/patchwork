@@ -217,8 +217,6 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
 
   requiresLogin: true,
 
-  requiresRole: 'admin',
-
   showSuccessModal() {
     this.ModalView.show({
       title: `Thank you!`,
@@ -226,8 +224,8 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       confirmText: 'Done',
       hideCancelBtn: true
     })
-    .on('submit', async () => {
-      this.ModalView.hide();
+    .on('submit', () => this.ModalView.hide())
+    .on('hidden', async () => {
       this.user.clearCart();
       this.Shopping.data = {};
       await this.delete().catch(this.Error);

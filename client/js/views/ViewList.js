@@ -22,7 +22,7 @@ module.exports = Object.assign( { }, Super, {
                             attributes: this.model.git('range'),
                             meta: this.collection.meta
                         } ),
-                        templateOpts: { delete: true, hideButtonRow: true }
+                        templateOpts: { user: this.user }
                     }
 
                     const view = this.factory.create( this.viewName, Object.assign( opts, { storeFragment: true } ) )

@@ -1,13 +1,13 @@
 module.exports = p => {
     const fields = p.opts.fields.map( field => `<li data-name="${field.name}">${field.label}</li>` ).join('')
-    // <li data-js="shoppingBtn">Shopping</li>
+
 return `` +
 `<div>
     <div>
         <img data-src="${p.ImageSrc('header_sunrays')}" />
     </div>
     <div data-js="nav" class="fd-hidden header-content">
-        <div class="cart" data-js="cart">
+        <div class="cart fd-hidden" data-js="cart">
             <span>${p.GetIcon('shoppingCart')}</span>
             <span data-js="cartCount">(0)</span>
         </div>
@@ -22,7 +22,8 @@ return `` +
                     <div data-js="signInBtn" class="fd-hidden">Member Sign In</div>
                     <div class="member-ui" data-js="memberMenu" class="fd-hidden">
                         <div data-js="userName"></div>
-                        <ul class="account-menu fd-hidden" data-js="accountMenu">        
+                        <ul class="account-menu fd-hidden" data-js="accountMenu">
+                            <li class="fd-hidden" data-js="shoppingBtn">Shopping</li>     
                             <li data-js="accountBtn">Your Account</li>
                             <li data-js="signOutBtn">Sign Out</li>                         
                         </ul>

@@ -396,6 +396,13 @@ span.twitter-typeahead {
   text-transform: uppercase;
   margin-top: 0.75rem;
 }
+.AccountHome section {
+  margin: 0;
+  padding: 0;
+}
+.AccountHome .StoreOrders .StoreOrderDetails {
+  max-width: 750px;
+}
 .AccountHome .back-btn {
   cursor: pointer;
   margin-bottom: 1rem;
@@ -592,6 +599,9 @@ html.non-touch .AccountHome .account-nav >div:hover {
 .AdminPlus section {
   margin: 0;
   padding: 0;
+}
+.AdminPlus .StoreOrders .StoreOrderDetails {
+  max-width: 1000px;
 }
 .AdminPlus >div:first-child {
   display: flex;
@@ -3527,7 +3537,6 @@ html.non-touch .ManageOrders button:hover {
   }
 }
 .StoreOrders .StoreOrderDetails {
-  max-width: 1000px;
   margin: 1rem 0 2.5rem;
 }
 .StoreOrders .StoreOrderDetails .order-heading {

@@ -147,7 +147,10 @@ module.exports = { ...require('./__proto__'),
       }
     })
     .then(() => {
-      if (this.StoreTransactions.data.length) this.els.transactions.classList.remove('fd-hidden');
+      if (this.StoreTransactions.data.length && this.user.isAdmin()) {
+        this.els.transactions.classList.remove('fd-hidden');
+      };
+
       this.updateBalance();
 
       this.StoreTransactions.data.forEach(

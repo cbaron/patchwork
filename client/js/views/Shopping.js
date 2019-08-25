@@ -37,8 +37,6 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     return this;
   },
 
-  requiresLogin: true,
-
-  requiresRole: 'admin'
+  requiresLogin: true
 
 }

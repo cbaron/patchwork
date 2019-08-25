@@ -72,8 +72,6 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
 
   requiresLogin: true,
 
-  requiresRole: 'admin',
-
   updateSubtotal() {
     this.cart = JSON.parse(window.localStorage.getItem('cart'));
     this.els.subtotal.textContent = this.Format.Currency.format(this.deriveSubtotal());

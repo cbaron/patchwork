@@ -223,6 +223,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             const customer = this.Customer.data[0]
             this.selectedCustomer = customer
             
+            this.views.storeOrders.update(customer)
             this.views.orderOptions.hide()
             this.views.weekOptions.hide()
             this.views.sharePatch.reset();

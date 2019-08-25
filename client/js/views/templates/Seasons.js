@@ -1,11 +1,10 @@
 module.exports = p => {
-    const heading = p.opts.isAdmin ? 'All Seasons' : 'Your Orders',
-        instructions = p.opts.isAdmin ? `` : `<p>Select a share to view your order details.</p>`
+    const instructions = p.opts.isAdmin ? `` : `<p>Select a season to view your order details.</p>`
 
 return `` +
 `<div class="fd-hidden section">
     <div class="section-heading">
-        <h3>${heading}</h3>
+        <h3>CSA Seasons</h3>
         ${instructions}
     </div>
     <div class="table">
