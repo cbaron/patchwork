@@ -3,7 +3,7 @@ var Base = require('./__proto__'),
 
 Object.assign( ShoppingPayment.prototype, Base.prototype, {
 
-    SendGrid: require('../lib/SendGrid'),
+    SgMail: require('@sendgrid/mail'),
 
     Stripe: require('../lib/stripe'),
 
@@ -40,36 +40,44 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
       })     
     },
 
-    notifyCustomer() {
-      console.log('notify customer');
+    async notifyCustomer() {
       const email = this.user.email;
       const secondaryEmail = this.user.secondaryEmail;
       const emailTo = [email];
 
-      if( secondaryEmail && email !== secondaryEmail ) {
+      if( secondaryEmail && email.toLowerCase() !== secondaryEmail.toLowerCase() ) {
         emailTo.push(secondaryEmail)
       }
-      return Promise.resolve();
-      /*return this.SendGrid.send( {
-          to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
-          from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
-          subject: `Patchwork Gardens Payment Receipt`,
-          html: this.Templates.EmailBase({
-              emailBody: this.Templates.PaymentReceipt({
-                  name: this.user.name,
-                  shareLabel: this.body.share.label,
-                  total: this.body.total
-              })
+
+      this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      await this.SgMail.send({
+        to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
+        from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+        subject: `TEST -- Your Patchwork Gardens Store Order`,
+        html: this.Templates.EmailBase({
+          emailBody: this.Templates.ShoppingReceipt({
+            name: this.user.name,
+            items: this.body.items,
+            total: this.body.total,
+            isPayingWithCreditCard: this.body.isPayingWithCreditCard
           })
-      } )
-      .catch( e => Promise.resolve( console.log( 'Failed to send payment details to customer.' ) ) )*/
+        })
+      })
+      .catch(error => {
+        console.log(`Failed to send confirmation email to customer: ${error.toString()}`);
+        const { message, code, response } = error;
+        console.log(message);
+        console.log(code);
+        console.log(response);
+        console.log(error.stack);
+        return Promise.resolve();
+      })
     },
 
     async POST() {
       await this.slurpBody()
-      console.log('shopping purchase');
-      console.log(this.body);
-      console.log(this.user);
+
       if (!this.user.id) throw Error("401")
 
       if (this.body.isPayingWithCreditCard) {

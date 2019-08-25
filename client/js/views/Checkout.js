@@ -169,7 +169,8 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
         data: JSON.stringify({
           ...this.views.creditCard.model.data,
           ...this.views.creditCard.getFormValues(),
-          total: orderTotal
+          total: orderTotal,
+          items: this.cart
         })
       })
 

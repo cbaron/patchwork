@@ -3,8 +3,6 @@ const Base = require('./__proto__'),
 
 Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
-    // SendGrid: require('../lib/SendGrid'),
-
     SgMail: require('@sendgrid/mail'),
 
     db: {
