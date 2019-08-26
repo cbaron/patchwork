@@ -27,7 +27,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
   },
 
   loadCart() {
-    this.cart = JSON.parse(window.localStorage.getItem('cart'));
+    this.cart = JSON.parse(window.localStorage.getItem('cart')) || [];
     this.els.noItemsMessage.classList.toggle('fd-hidden', this.cart.length);
     this.els.checkoutUi.classList.toggle('fd-hidden', !this.cart.length);
     this.cart.forEach(cartItem => this.views.cartContents.add(cartItem));
@@ -46,7 +46,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       this.views.cartContents.clearItemViews();
       await this.show();
       this.loadCart();
-      this.updateSubtotal();
+      if (this.cart.length) this.updateSubtotal();
     } catch(err) { this.Error(err) }
   },
 
@@ -54,13 +54,13 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     CustomContent.postRender.call(this)
 
     this.loadCart();
-    this.updateSubtotal();
+    if (this.cart.length) this.updateSubtotal();
   
     this.user.on('cartItemDeleted', () => {
-      this.cart = JSON.parse(window.localStorage.getItem('cart'));
+      this.cart = JSON.parse(window.localStorage.getItem('cart')) || [];
       this.els.noItemsMessage.classList.toggle('fd-hidden', this.cart.length);
       this.els.checkoutUi.classList.toggle('fd-hidden', !this.cart.length);
-      this.updateSubtotal()
+      if (this.cart.length) this.updateSubtotal();
     });
     this.user.on('cartItemAdded', item => {
       this.views.cartContents.add(item);

@@ -87,8 +87,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         this.user.on('cartItemAdded', () => this.updateCartCount());
         this.user.on('cartItemDeleted', () => this.updateCartCount());
         this.user.on('cartCleared', () => this.updateCartCount());
-        this.els.cart.classList.toggle('fd-hidden', !this.user.isAdmin());
-        //this.els.cart.classList.remove('fd-hidden');
+        this.els.cart.classList.remove('fd-hidden');
         this.updateCartCount();
     },
 

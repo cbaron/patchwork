@@ -23,7 +23,7 @@ return `` +
                     <div class="member-ui" data-js="memberMenu" class="fd-hidden">
                         <div data-js="userName"></div>
                         <ul class="account-menu fd-hidden" data-js="accountMenu">
-                            <li class="fd-hidden" data-js="shoppingBtn">Shopping</li>     
+                            <li data-js="shoppingBtn">Shopping</li>     
                             <li data-js="accountBtn">Your Account</li>
                             <li data-js="signOutBtn">Sign Out</li>                         
                         </ul>
