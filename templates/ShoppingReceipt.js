@@ -36,6 +36,11 @@ module.exports = p => {
   </table>
   <p style="margin-bottom: 2rem; padding: .25rem; background-color: #aa0000; color: white; font-weight: bold; font-size: 1.2rem; text-align: center;">Order Total: ${Currency.format(p.total)}</p>
   <p style="text-align: center;">${paymentMessage}</p>
-  <p style="text-align: center;">Your purchases will be included with your next CSA box. If you are not currently receiving a box, you may pick up your purchases at the farm.</p>
+  <p style="text-align: center;">
+    If currently available, your order will be included with your next CSA box. 
+    Otherwise, we will schedule delivery for a future date. If you are not currently receiving a box, 
+    then you may pick up your order at the farm on Thursday between 4 - 7PM. 
+    We will be in touch shortly to confirm delivery or pick-up for your order.
+  </p>
   <p style="margin-top: 2rem; font-size: 1.3rem; color: #aa0000; text-align: center;">Thank you!</p>`
 }
