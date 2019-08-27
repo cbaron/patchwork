@@ -5,7 +5,6 @@ module.exports = Object.assign( { }, Super, {
     add( datum={} ) {
         this.createItemViews( [ datum ] )
         this.itemViews[ this.itemViews.length - 1 ].els.container.scrollIntoView( { behavior: 'smooth' } )
-        this.updateStyle()
     },
 
     clearItemViews() {
@@ -22,7 +21,11 @@ module.exports = Object.assign( { }, Super, {
                             attributes: this.model.git('range'),
                             meta: this.collection.meta
                         } ),
-                        templateOpts: { user: this.user }
+                        templateOpts: {
+                            delete: false,
+                            hideButtonRow: true,
+                            user: this.user
+                        }
                     }
 
                     const view = this.factory.create( this.viewName, Object.assign( opts, { storeFragment: true } ) )
@@ -61,7 +64,6 @@ module.exports = Object.assign( { }, Super, {
         const viewIndex = this.itemViews.indexOf( view )
         this.itemViews.splice( viewIndex, 1 )
         this.els.container.scrollIntoView( { behavior: 'smooth' } )
-        this.updateStyle()
 
         this.emit( 'itemDeleted', view )
     },
@@ -83,7 +85,6 @@ module.exports = Object.assign( { }, Super, {
         if( this.model.git('fetch') ) this.fetch().catch(this.Error)
 
         if( this.collection.data.length ) this.populateList()
-        this.updateStyle()
 
         return this
     },
@@ -92,16 +93,6 @@ module.exports = Object.assign( { }, Super, {
         return this.itemViews.length > 1
             ? Promise.all( this.itemViews.slice(1).map( itemView => itemView.delete() ) ).catch( this.Error )
             : Promise.resolve()
-    },
-
-    updateStyle() {
-        if( !this.model.git('delete') ) return
-
-        this.els.container.classList.toggle( 'can-delete', this.itemViews.length > 1 )
-
-        this.itemViews.forEach( view =>
-            view.els.deleteBtn.classList.toggle( 'fd-hidden', this.itemViews.length === 1 )
-        )
     }
 
 } )
