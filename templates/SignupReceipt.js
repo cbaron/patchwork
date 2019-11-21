@@ -64,6 +64,7 @@ module.exports = p => {
         return `` +
         `<p style="margin-top: 3rem; font-size: 1.2rem; font-weight: bold; color: #aa0000; text-align: center;">${share.label}</p>
         <p>${share.description}</p>
+        <p>You will receive your first box on ${share.firstDeliveryDate}.</p>
         ${skipDays}
         <p style="${subheadingStyles}">Share Options</p>
         ${shareOptions}

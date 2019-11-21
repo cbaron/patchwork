@@ -20,7 +20,7 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             deliveryDate = this.moment( this.get('startdate') ),
             endDate = this.moment( this.get('enddate') ),
             nextDeliveryCutoff = this.determineNextDeliveryCutoff( now.day() ),
-            startDay = startDay = deliveryDate.day()
+            startDay = deliveryDate.day()
 
         if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])
 
@@ -28,10 +28,14 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             deliveryDate.add( 1, 'days' )
             startDay = this.moment( deliveryDate ).day()
         }
-        
+
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
             var model = new this.DeliveryDate( deliveryDate, { parse: true } )
-            if( deliveryDate.diff( nextDeliveryCutoff ) < 0 ) model.set( { unselectable: true } )
+
+            if( deliveryDate.diff( nextDeliveryCutoff ) < 0 ) {
+                model.set( { unselectable: true } )
+            }
+
             dates.push( model )
             deliveryDate.add( 7, 'days' )
         }
@@ -92,11 +96,13 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
     },
 
     getSelectedDates() {
-        this.set( { selectedDates:
-            this._( this.get('deliveryDates')
-                .reject( deliveryDay => deliveryDay.get('unselectable') ) )
-                .reject( deliveryDay => this._(this.get('skipDays')).contains( deliveryDay.id ) )
-        } )
+        const skipDays = this.get('skipDays');
+        const selectedDates = this.get('deliveryDates').filter(date => {
+            const isSkipDay = skipDays && skipDays.length && skipDays.includes(date.id);
+            return ! isSkipDay && ! date.get('unselectable')
+        });
+
+        this.set('selectedDates', selectedDates);
     },
 
     getShareOptions() {

@@ -27,15 +27,18 @@ Object.assign( PickupDates.prototype, List.prototype, {
             if( this.model.has('skipDays') &&
                 this.model.get('skipDays').length &&
                 Object.keys( this.itemViews ).length == this.items.length ) {
-
-                this.model.set( { skipDays:
+                this.model.set({ skipDays:
                     this.model.get('skipDays').filter( skipDayId => {
-                        if( this.items.get( skipDayId ) ) { this.unselectItem( this.items.get( skipDayId ) ); return true }
+                        if( this.items.get( skipDayId ) ) {
+                            this.unselectItem( this.items.get( skipDayId ) )
+                            return true 
+                        }
+
                         return false;
-                    } )
-                } )
+                    })
+                })
             }
-        } )
+        })
         
         this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
 

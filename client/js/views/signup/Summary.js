@@ -53,6 +53,7 @@ Object.assign( Summary.prototype, View.prototype, {
                 options: share.get('selectedOptions'),
                 seasonalAddOns: share.get('seasonalAddOns'),
                 delivery: this._( share.get('selectedDelivery') ).pick( [ 'deliveryoptionid', 'groupdropoffid', 'description' ] ),
+                firstDeliveryDate: `${share.get('selectedDates')[0].get('month')} ${share.get('selectedDates')[0].get('dayOfMonth')}`,
                 skipDays: ( skipDays ) ? skipDays.map( skipDayId => share.get('deliveryDates').get(skipDayId).get('date') ) : undefined,
                 total: share.get('total'),
                 selectedDelivery: templateOptShare.selectedDelivery,
@@ -105,6 +106,7 @@ Object.assign( Summary.prototype, View.prototype, {
 
     getTemplateOptions() {
         var spaceTwoTab = "\r\n\t\t"
+
         return {
             containerClass: this.containerClass,
             shares: this.signupData.shares.map( share => {

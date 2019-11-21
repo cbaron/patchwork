@@ -69,13 +69,14 @@ Object.assign( DateSelection.prototype, List.prototype, {
         }
 
         if( valid ) {
-            //.reject( deliveryDay => deliveryDay.get('unselectable') )
+            this.items.forEach(shareItem => {
+                const deliveryDates = shareItem.get('deliveryDates');
+                const skipDateItems = deliveryDates.filter(dateItem =>
+                    ! this.itemViews[shareItem.id].selectedItems[dateItem.id]
+                );
 
-            this.items.forEach( item => item.set( 'skipDays',
-                this._( item.get('deliveryDates')
-                    .reject( deliveryDay => ( this.itemViews[ item.id ].selectedItems[ deliveryDay.id ] ) ? true : false ) )
-                    .map( deliveryDay => deliveryDay.id )
-            ) )
+                shareItem.set('skipDays', skipDateItems.map(skipDateItem => skipDateItem.id));
+            })
         }
 
         return valid
