@@ -21,7 +21,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     'categories': 'click'
   },
 
-  async filterItems(category) {
+  filterItems(category) {
     const newDisplayedItems = category === 'all'
       ? this.views.shoppingItems.collection.data
       : this.views.shoppingItems.collection.data.filter(item => item.category === category);
