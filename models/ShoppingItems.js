@@ -21,6 +21,11 @@ module.exports = {
       range: 'String'
     },
     {
+      name: 'category',
+      label: 'Category',
+      range: 'String'
+    },
+    {
       name: 'available',
       label: 'Available',
       range: 'Float'

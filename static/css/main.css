@@ -3443,15 +3443,37 @@ html.non-touch .ManageOrders button:hover {
   margin-left: 0;
   padding-top: 0;
 }
-.Shopping .ViewList {
+.Shopping .content {
+  display: flex;
+}
+.Shopping .content .categories-sidebar {
+  flex: 1;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  padding-left: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fff5df;
+}
+.Shopping .content .categories-sidebar h4 {
+  color: #a00;
+  margin-bottom: 0.75rem;
+}
+.Shopping .content .categories-sidebar ul li {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.Shopping .content .ViewList {
+  flex: 6;
   padding: 0;
   margin: 0;
 }
-.Shopping .list {
+.Shopping .content .list {
   display: flex;
   flex-wrap: wrap;
 }
-.Shopping .list .shopping-item {
+.Shopping .content .list .shopping-item {
   width: 30%;
   min-width: 320px;
   margin: 0.5rem;
@@ -3461,25 +3483,42 @@ html.non-touch .ManageOrders button:hover {
   flex-direction: column;
   padding: 1.25rem;
 }
-.Shopping .list .shopping-item .description {
+.Shopping .content .list .shopping-item .name {
+  font-weight: bold;
+}
+.Shopping .content .list .shopping-item .description {
   flex: 1;
 }
-.Shopping .list .shopping-item .price {
+.Shopping .content .list .shopping-item .price {
   color: #a00;
 }
-.Shopping .list .shopping-item .price >span {
+.Shopping .content .list .shopping-item .price >span {
   margin-left: 0.75rem;
   font-weight: bold;
   font-size: 1.1rem;
 }
-.Shopping .list .shopping-item >div {
+.Shopping .content .list .shopping-item >div {
   padding: 0.5rem 0;
 }
-.Shopping .list .shopping-item img {
+.Shopping .content .list .shopping-item img {
   width: 100%;
 }
 @media only screen and (max-width: 767px) {
-  .Shopping .list {
+  .Shopping .content {
+    display: block;
+  }
+  .Shopping .content .categories-sidebar h4 {
+    text-align: center;
+  }
+  .Shopping .content .categories-sidebar ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .Shopping .content .categories-sidebar ul li {
+    margin: 0.5rem 1rem;
+  }
+  .Shopping .content .list {
     justify-content: center;
   }
 }
