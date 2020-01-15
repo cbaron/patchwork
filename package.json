@@ -34,7 +34,7 @@
     "browserify": "14.5.0",
     "flatpickr": "^4.4.3",
     "intl": "^1.2.5",
-    "jquery": "2.2.4",
+    "jquery": "3.4.0",
     "livereload": "git://github.com/cbaron/node-livereload.git#master",
     "path": "^0.12.7",
     "pikaday": "git://github.com/dbushell/Pikaday.git#1.5.1",
