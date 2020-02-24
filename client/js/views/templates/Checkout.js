@@ -14,6 +14,13 @@ module.exports = p => {
         </div>
       </div>
       <div class="column-1">
+        <div data-js="deliveryDateSelection" class="fd-hidden delivery-selection">
+          <label>Choose Your Delivery Date</label>
+          <span data-js="optionIcon" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          <select data-js="input" class="form-control">
+            <option value="" unselectable></option>
+          </select>    
+        </div>
         <p data-js="checkoutIntroText"></p>
         <div class="payment">
           <p>Please select a method of payment.</p>

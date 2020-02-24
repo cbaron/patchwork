@@ -78,6 +78,7 @@ module.exports = {
 
         this.Xhr( { method: 'get', resource: 'Pages', qs: JSON.stringify( { name: this.documentName } ) } )
         .then( data => {
+            this.pageData = data;
             this.processObject( null, data );
             [ ...this.els.container.querySelectorAll('.link') ].forEach( el => el.addEventListener( 'click', () => this.onLinkClick( el ) ) )
         } )

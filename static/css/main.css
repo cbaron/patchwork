@@ -873,6 +873,13 @@ button.submitting {
   flex: 3;
   order: 1;
 }
+.Checkout .column-container .column-1 .delivery-selection {
+  margin: 1rem 0;
+}
+.Checkout .column-container .column-1 .delivery-selection .glyphicon-info-sign {
+  color: #a00;
+  cursor: pointer;
+}
 .Checkout .column-container .column-1 .payment {
   margin-top: 2rem;
   text-align: center;

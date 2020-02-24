@@ -251,6 +251,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
     },
 
     getDisplayValue( meta, datum, schema ) {
+        if( meta.label ) return meta.label;
         if( !Object.keys( datum ).length ) return `<div>New ${this.model.git('currentCollection')}</div>`
         if( this.Templates[ meta.displayAttr ] ) return this.Templates[ meta.displayAttr ]( datum )
 

@@ -44,6 +44,11 @@ module.exports = Object.create( Object.assign( { }, require('./__proto__'), {
             add: true,
             delete: true
         },
+        StoreDeliveryOptions: {
+            add: false,
+            delete: false,
+            label: 'Set Store Delivery Options'
+        },
         zipcoderoute: {
             displayAttr: [ 'zipcode', 'deliveryroute' ]
         }

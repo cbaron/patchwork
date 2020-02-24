@@ -1,13 +1,23 @@
-const CustomContent = require('./util/CustomContent')
+const CustomContent = require('./util/CustomContent');
+const Super = require('./__proto__');
 
 module.exports = { ...require('./__proto__'), ...CustomContent,
 
+  CurrentShare: require('../models/CurrentShare'),
+  Delivery: require('../models/Delivery'),
   ModalView: require('./modal'),
   Member: require('../models/Member'),
+  MemberSeason: require('../models/MemberSeason'),
   Shopping: require('../models/Shopping'),
+  StoreDeliveryOptions: require('../models/StoreDeliveryOptions'),
   StoreOrder: require('../models/StoreOrder'),
   StoreTransaction: require('../models/StoreTransaction'),
   Spinner: require('../plugins/spinner.js'),
+
+  DeliveryOption: Object.create( Super.Model, { resource: { value: 'deliveryoption' } } ),
+  GroupDropoffs: Object.create( Super.Model, { resource: { value: 'groupdropoff' } } ),
+  Route: Object.create( Super.Model, { resource: { value: 'deliveryroute' } } ),
+  SkipWeeks: Object.create( Super.Model, { resource: { value: 'membershareskipweek' } } ),
 
   Templates: {
     CheckoutItem: require('./templates/CheckoutItem')
@@ -37,6 +47,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
   events: {
     cashOption: 'click',
     ccOption: 'click',
+    optionIcon: 'click',
     submitOrderBtn: 'click'
   },
 
@@ -69,9 +80,89 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     }, 0)
   },
 
-  async getMemberId() {
-    const [memberRow] = await this.Member.get({ query: { personid: this.user.id } });
-    return memberRow.id;
+  async determineDeliveryDateOptions(dayOfWeek) {
+    console.log('determine');
+    console.log(dayOfWeek);
+    await this.StoreDeliveryOptions.get();
+    console.log(this.StoreDeliveryOptions.data);
+    const cutoffDays = this.StoreDeliveryOptions.data[0].daysBeforeDeliveryCutoff;
+    console.log(cutoffDays);
+    //this.els.deliveryDay.textContent = this.Moment().isoWeekday( dayOfWeek ).format('dddd')
+    this.dates = [ ]
+
+    if (!Number.isInteger(dayOfWeek)) return this;
+
+    const now = this.Moment();
+    //const nextDeliveryCutoff = now;
+    const endDate = this.Moment(this.currentMemberSeasonData.enddate);
+        
+    let deliveryDate = this.Moment(this.currentMemberSeasonData.startdate),
+      startDay = deliveryDate.day()
+
+    while( startDay != dayOfWeek ) {
+      deliveryDate.add( 1, 'days' )
+      startDay = this.Moment( deliveryDate ).day()
+    }
+    
+    while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
+      const isSkipWeek = Boolean(
+        this.SkipWeeks.data.find(
+          week => this.Moment(week.date).week() === this.Moment(deliveryDate).week()
+        )
+      );
+      console.log(isSkipWeek);
+      console.log(this.Moment(deliveryDate).format('YYYY-MM-DD'));
+      console.log(deliveryDate.diff(now, 'days'))
+      if (deliveryDate.diff(now, 'days') >= 0) {
+        this.dates.push( {
+          date: this.Moment( deliveryDate ),
+          //unselectable: Boolean( deliveryDate.diff( nextDeliveryCutoff ) < 0 ),
+          //selected: !isSkipWeek
+        })
+      }
+
+      deliveryDate.add( 7, 'days' )
+
+    }
+    console.log(this.dates);
+    return this
+  },
+
+  async getDayOfWeek() {
+    const delivery = this.Delivery.data[0]
+    console.log('get day of week');
+    console.log(delivery);
+    
+    if (delivery.groupdropoff.id) {
+      const response = await this.Xhr({
+        method: 'get',
+        resource: 'sharegroupdropoff',
+        qs: JSON.stringify({
+          shareid: this.model.share.id,
+          groupdropoffid: delivery.groupdropoff.id
+        })
+      })
+
+      return response[0].dayofweek;
+    }
+    
+    if (delivery.deliveryoption.name === 'farm') {
+      return this.Route.data.find( route => route.label == 'farm' ).dayofweek
+    }
+
+    const zipCodeRoute = await this.Xhr({
+      method: 'get',
+      resource: 'zipcoderoute',
+      qs: JSON.stringify({
+        zipcode: this.member.zipcode,
+        routeid: {
+          operation: 'join',
+          value: { table: 'deliveryroute', column: 'id' }
+        }
+      })
+    })
+
+    return zipCodeRoute[0]['deliveryroute.dayofweek'];
   },
 
   loadCart() {
@@ -113,6 +204,14 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       this.loadCart();
       this.updateTotal();
     } catch(err) { this.Error(err) }
+  },
+
+  onOptionIconClick() {
+    this.ModalView.show({
+      title: 'Delivery Date',
+      body: this.pageData[0].deliveryDatePopupText,
+      hideFooter: true
+    });
   },
 
   onSubmitEnd() {
@@ -211,6 +310,63 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
       radius: 16,
       scale: 0.6
     })
+
+    this.Member.get({
+      query: { personid: this.user.id }
+    })
+    .then(([memberRow]) => {
+      console.log(memberRow);
+      this.member = memberRow;
+      return this.MemberSeason.get({
+        query: {
+          memberid: memberRow.id,
+          shareid: {
+            operation: 'join',
+            value: {
+              table: 'share',
+              column: 'id'
+            }
+          }
+        }
+      })
+    })
+    .then(() => this.CurrentShare.get())
+    .then(() => {
+      const currentMemberSeason = this.MemberSeason.data.find(season =>
+          season.id === this.CurrentShare.data.id
+      );
+      console.log(currentMemberSeason);
+      //console.log(this.MemberSeason.data)
+      console.log('current share data');
+      console.log(this.CurrentShare.data);
+      if (!Boolean(currentMemberSeason)) return Promise.resolve();
+
+      this.currentMemberSeasonData = currentMemberSeason;
+
+      return this.Delivery.get({
+        query: {
+          membershareid: currentMemberSeason.membershareid,
+          deliveryoptionid: {
+            operation: 'join',
+            value: { table: 'deliveryoption', column: 'id' }
+          },
+          groupdropoffid: {
+            operation: 'leftJoin',
+            value: { table: 'groupdropoff', column: 'id' }
+          }
+        }
+      })
+      .then(() => this.Route.get())
+      .then(() => this.SkipWeeks.get({
+        query: { membershareid: currentMemberSeason.membershareid }
+      }))
+      .then(() => this.getDayOfWeek())
+      .then(dayOfWeek => {
+        this.determineDeliveryDateOptions(dayOfWeek)
+        return Promise.resolve()
+      })      
+    })
+    .catch(this.Error)
 
     return this;
   },
