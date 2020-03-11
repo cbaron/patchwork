@@ -13,6 +13,7 @@ module.exports = { ...require('./__proto__'),
   },
 
   events: {
+    filterSelect: 'change',
     submitQueryBtn: 'click'
   },
   
@@ -24,6 +25,9 @@ module.exports = { ...require('./__proto__'),
     };
 
     switch(this.els.filterSelect.value) {
+      case 'summary':
+        query.from = this.els.from.value;
+        query.to = this.els.to.value;
       case 'open':
         query.isFilled = false;
         break;
@@ -42,6 +46,12 @@ module.exports = { ...require('./__proto__'),
     await this.model.get({ query });
   },
 
+  onFilterSelectChange(e) {
+    console.log(this.els.filterSelect.value);
+    if (!this.els.filterSelect.value === 'summary') return;
+    this.els.dateSearch.classList.remove('fd-hidden');
+  },
+
   async onSubmitQueryBtnClick() {
     await this.executeQuery().catch(this.Error);
     this.renderOrders();
@@ -49,7 +59,19 @@ module.exports = { ...require('./__proto__'),
 
   renderOrders() {
     this.views.orderDetails.clearItemViews();
-    this.views.orderDetails.createItemViews(this.model.data);
+    return this.els.filterSelect.value === 'summary'
+      ? this.renderOrderSummaryTable()
+      : this.views.orderDetails.createItemViews(this.model.data);
+  },
+
+  renderOrderSummaryTable() {
+    console.log('renderordersummary');
+    console.log(this.els.from.value);
+    if (!this.els.from.value || !this.els.to.value) return;
+
+    this.slurpTemplate({
+      el: { insertion: this.els.orderSummaryTable },
+      template: this.Templates.OrderSummaryTable(this.model.data);
   },
 
   requiresLogin: true,
