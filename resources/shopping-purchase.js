@@ -53,6 +53,7 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
 
       await this.SgMail.send({
         to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
+        bcc: 'eat.patchworkgardens@gmail.com',
         from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
         subject: `Your Patchwork Gardens Store Order`,
         html: this.Templates.EmailBase({
