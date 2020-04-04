@@ -1,5 +1,7 @@
 module.exports = { ...require('./__proto__'),
 
+  Pikaday: require('pikaday'),
+
   Views: {
     orderDetails() {
       return {
@@ -14,6 +16,7 @@ module.exports = { ...require('./__proto__'),
 
   events: {
     filterSelect: 'change',
+    orderSummaryTable: 'click',
     submitQueryBtn: 'click'
   },
   
@@ -47,14 +50,25 @@ module.exports = { ...require('./__proto__'),
   },
 
   onFilterSelectChange(e) {
-    console.log(this.els.filterSelect.value);
     if (!this.els.filterSelect.value === 'summary') return;
     this.els.dateSearch.classList.remove('fd-hidden');
+  },
+
+  onOrderSummaryTableClick(e) {
+    const tableRow = e.target.closest('tr');
+    if (!tableRow) return;
+    tableRow.classList.toggle('selected');
   },
 
   async onSubmitQueryBtnClick() {
     await this.executeQuery().catch(this.Error);
     this.renderOrders();
+  },
+
+  postRender() {
+    new this.Pikaday({ field: this.els.from, format: 'YYYY-MM-DD' });
+    new this.Pikaday({ field: this.els.to, format: 'YYYY-MM-DD' });
+    return this;
   },
 
   renderOrders() {
@@ -65,17 +79,20 @@ module.exports = { ...require('./__proto__'),
   },
 
   renderOrderSummaryTable() {
-    console.log('renderordersummary');
-    console.log(this.els.from.value);
     if (!this.els.from.value || !this.els.to.value) return;
-
+    this.els.orderSummaryTable.innerHTML = '';
     this.slurpTemplate({
-      el: { insertion: this.els.orderSummaryTable },
-      template: this.Templates.OrderSummaryTable(this.model.data);
+      insertion: { el: this.els.orderSummaryTable },
+      template: this.Templates.OrderSummaryTable(this.model.data)
+    });
   },
 
   requiresLogin: true,
 
-  requiresRole: 'admin'
+  requiresRole: 'admin',
+
+  Templates: {
+    OrderSummaryTable: require('./templates/OrderSummaryTable')
+  }
 
 }

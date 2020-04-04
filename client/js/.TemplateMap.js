@@ -42,6 +42,7 @@ module.exports={
 	Modal: require('./views/templates/Modal'),
 	OpenPosition: require('./views/templates/OpenPosition'),
 	OrderOptions: require('./views/templates/OrderOptions'),
+	OrderSummaryTable: require('./views/templates/OrderSummaryTable'),
 	Reporting: require('./views/templates/Reporting'),
 	ResetPassword: require('./views/templates/ResetPassword'),
 	SeasonalAddOn: require('./views/templates/SeasonalAddOn'),
