@@ -51,6 +51,8 @@ module.exports = { ...require('./__proto__'),
 
   onFilterSelectChange(e) {
     if (this.els.filterSelect.value !== 'summary') {
+      this.els.from.value = '';
+      this.els.to.values = '';
       this.els.dateSearch.classList.add('fd-hidden');
       this.els.orderSummaryTable.innerHTML = '';
       return;
