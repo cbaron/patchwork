@@ -3853,6 +3853,7 @@ html.non-touch .ManageOrders button:hover {
   border: 1px solid transparent;
   padding: 0.5rem 0.75rem;
   width: 12rem;
+  position: relative;
 }
 .Summary .payment .button-row >button.disabled {
   background-color: #ccc;

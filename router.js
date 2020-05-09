@@ -290,6 +290,7 @@ module.exports = new Router( {
             'accountInfo': true,
             'auth': true,
             'check-email': true,
+            'client-errors': true,
             'Collection': true,
             'currentFarmDelivery': true,
             'currentGroupDelivery': true,
