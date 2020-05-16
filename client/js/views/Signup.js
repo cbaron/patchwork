@@ -32,8 +32,8 @@ Object.assign( Signup.prototype, MyView.prototype, {
     noShares() {
         this.templateData.leftBtn.hide()
         this.templateData.rightBtn.hide()
-
-        this.instances.shares.templateData.header.text('There are no shares available at this time')
+        this.instances.shares.templateData.sharesHeader.text('');
+        this.instances.shares.templateData.noSharesMessage.removeClass('fd-hidden');
     },
 
     onNavigation( path ) {
