@@ -27,7 +27,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         views: {
             creditCard: [
                 [ 'posted', function() {
-                    this.views.seasons.select( this.memberShareId )
+                    this.views.seasons.select( this.memberShareId );
+                } ],
+                [ 'cleared', function() {
+                    this.setCustomerData();
                 } ]
             ]
         }
@@ -44,8 +47,9 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             const customer = this.Customer.data[0]
             if( !customer ) return
 
-            this.views.creditCard.model.set( 'member', customer.member.data )
-            this.views.creditCard.model.set( 'person', customer.person.data )
+            this.member = customer.member;
+            this.person = customer.person;
+            this.setCustomerData();
 
             this.selectedCustomer = customer
 
@@ -63,7 +67,7 @@ module.exports = Object.assign( {}, require('./__proto__'), {
                     this.slideIn( this.els.total, 'right' )
 
                     this.els.ccWrapper.classList.toggle( 'fd-hidden', this.balance <= 0 )
-                    if( this.balance > 0 ) this.slideIn( this.els.ccWrapper, 'right' )
+                    this.slideIn( this.els.ccWrapper, 'right' )
                 } )
                 .catch( this.Error )
             } )
@@ -73,6 +77,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         .catch( this.Error )
 
         return this
+    },
+
+    setCustomerData() {
+        this.views.creditCard.model.set( 'member', this.member.data )
+        this.views.creditCard.model.set( 'person', this.person.data )
     },
 
     update( customer, share, memberShareId ) {
