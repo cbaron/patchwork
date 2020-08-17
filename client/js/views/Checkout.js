@@ -94,11 +94,13 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
   },
 
   onCcOptionClick() {
+    console.log('onccoptioinclick');
     this.els.ccWrapper.classList.remove('fd-hidden')
     this.els.ccOption.classList.add('selected');
     this.els.cashOption.classList.remove('selected');
     this.selectedPayment = 'credit card';
     this.views.creditCard.model.data.isPayingWithCreditCard = true;
+    console.log(this.selectedPayment)
   },
 
   async onNavigation() {
@@ -134,6 +136,7 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
     this.els.submitOrderBtn.classList.add('has-spinner')
 
     try {
+      let transactionResult;
       const unavailableItems = await this.checkAvailability();
 
       if (unavailableItems.length) {
@@ -151,11 +154,10 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
         items: JSON.stringify(this.cart),
         total: orderTotal
       };
-
       const orderResult = await this.StoreOrder.post(orderData);
 
       if (this.selectedPayment === 'credit card') {
-        const transactionResult = await this.StoreTransaction.post({
+        transactionResult = await this.StoreTransaction.post({
           orderId: orderResult.id,
           action: 'payment',
           amount: orderTotal,
@@ -178,10 +180,10 @@ module.exports = { ...require('./__proto__'), ...CustomContent,
         this.Toast.showMessage('error', paymentResponse.error);
 
         if (this.selectedPayment === 'credit card') {
-          await this.Xhr({ method: 'DELETE', resource: 'storeTransaction', id: paymentTransactionResult.id });
+          await this.Xhr({ method: 'DELETE', resource: 'storeTransaction', id: transactionResult.id });
         };
 
-        await this.Xhr({ method: 'DELETE', resource: 'storeOrder', id: transactionResult.id });
+        await this.Xhr({ method: 'DELETE', resource: 'storeOrder', id: orderResult.id });
 
         return this.onSubmitEnd();
       }
