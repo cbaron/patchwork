@@ -13,6 +13,7 @@ module.exports = p => {
         <option value="open">Open Orders</option>
         <option value="filled">Filled Orders</option>
         <option value="cancelled">Cancelled Orders</option>
+        <option value="unpaid">Unpaid Orders</option>
       </select>
       <button data-js="submitQueryBtn" class="btn-yellow">Submit</button>
     </div>

@@ -40,6 +40,8 @@ module.exports = { ...require('./__proto__'),
       case 'cancelled':
         query.isCancelled = true;
         break;
+      case 'unpaid':
+        query.isUnpaid = true;
       default:
         break;
     }
