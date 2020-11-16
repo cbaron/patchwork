@@ -26,6 +26,7 @@ module.exports={
 	Login: require('./views/Login'),
 	ManageCustomer: require('./views/ManageCustomer'),
 	ManageOrders: require('./views/ManageOrders'),
+	ManageSkipDates: require('./views/ManageSkipDates'),
 	MemberTypeahead: require('./views/MemberTypeahead'),
 	MyView: require('./views/MyView'),
 	OrderOptions: require('./views/OrderOptions'),

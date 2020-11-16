@@ -1,0 +1,74 @@
+.ManageSkipDates
+  button
+      font-size: 1rem
+      margin: 0 .5rem
+      padding: .5rem 0
+      width: 5rem
+      
+  label
+      margin-right: .5rem
+      margin-left: 1rem
+
+  h4
+      text-align: center
+      font-size: 1.2rem
+      font-weight: bold
+      color: $sun-red
+      margin-top: 6rem
+
+  form
+      text-align: center
+      margin: 2rem 0
+      
+      >div:first-child, >div:nth-child(2) >div
+          display: flex
+          align-items: center
+          justify-content: center
+          margin-bottom: 1.5rem
+
+  .results
+    margin-top: 2rem
+    display: flex
+    justify-content: center
+    ol
+        display: flex
+        flex-wrap: wrap
+        margin-top: 1rem
+        width: 26rem
+        
+        .delivery-date
+            width: 5rem
+            background-color: $dark-grey
+            box-shadow: 1px 2px 5px $dark-grey
+            color: $grey
+            cursor: pointer
+            padding: .65rem
+            margin: 1px
+            text-align: center
+            line-height: 1.2
+            
+            &:not(.unselectable):not(.not-admin)
+                html.non-touch &
+                    &:hover
+                        color: $light-grey
+            
+            &.selected
+                background-color: $sun-red
+                color: white
+                &.edited
+                    border: 1px solid $bright-green
+            
+            &.unselectable
+                background-color: $dark-grey
+                color: black
+                cursor: not-allowed
+                opacity: .4
+                
+            &.not-admin
+                cursor: default
+                
+            &.edited
+                border: 1px solid $light-sun-red
+                
+            >div:not(:first-child)
+                font-weight: bold

@@ -1,11 +1,9 @@
 module.exports = require('backbone').Model.extend( Object.assign( { }, require('../../../lib/MyObject').prototype, {
 
     Collection: require('backbone').Collection,
-
     DeliveryDate: require('./DeliveryDate'),
-
+    ShareSkipDates: require('./ShareSkipDate'),
     Dropoff: require('./Dropoff'),
-
     dayOfWeekMap: require('./DeliveryRoute').prototype.dayOfWeekMap,
 
     determineNextDeliveryCutoff( dayOfWeek ) {
@@ -20,7 +18,8 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
             deliveryDate = this.moment( this.get('startdate') ),
             endDate = this.moment( this.get('enddate') ),
             nextDeliveryCutoff = this.determineNextDeliveryCutoff( now.day() ),
-            startDay = deliveryDate.day()
+            startDay = deliveryDate.day(),
+            seasonSkipDates = this.ShareSkipDates.data.filter(date => date.shareId === this.id);
 
         if( ! Number.isInteger( deliveryDay ) ) return new this.Collection([])
 
@@ -30,9 +29,12 @@ module.exports = require('backbone').Model.extend( Object.assign( { }, require('
         }
 
         while( endDate.diff( deliveryDate, 'days' ) >= 0 ) {
-            var model = new this.DeliveryDate( deliveryDate, { parse: true } )
+            var model = new this.DeliveryDate( deliveryDate, { parse: true } );
+            const isSkipDate = seasonSkipDates.find(seasonSkipDate =>
+                new Date(seasonSkipDate.date).getTime() === new Date(deliveryDate).getTime()  
+            );
 
-            if( deliveryDate.diff( nextDeliveryCutoff ) < 0 ) {
+            if (deliveryDate.diff( nextDeliveryCutoff ) < 0 || isSkipDate) {
                 model.set( { unselectable: true } )
             }
 

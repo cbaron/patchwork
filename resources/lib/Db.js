@@ -83,13 +83,13 @@ module.exports = Object.create( {
     },
 
     POST( resource ) {
-        const bodyKeys = Object.keys( resource.body ),
-            name = resource.path[0],
-            valuesString = bodyKeys.map( ( key, i ) => {
-                const column = this.Postgres.tables[ name ].columns.find( col => col.name === key )
-                return column.range === 'Geography'
-                    ? `ST_MakePoint( $${i+1}, $${i+2} )`
-                    : `$${i+1}`
+        const bodyKeys = Object.keys( resource.body );
+        const name = resource.path[0];
+        const valuesString = bodyKeys.map( ( key, i ) => {
+            const column = this.Postgres.tables[ name ].columns.find( col => col.name === key );
+            return column.range === 'Geography'
+                ? `ST_MakePoint( $${i+1}, $${i+2} )`
+                : `$${i+1}`
             } ).join(', ')
 
         let values = [ ]

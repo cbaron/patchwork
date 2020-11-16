@@ -4,6 +4,7 @@ var List = require('../util/List'),
 Object.assign( PickupDates.prototype, List.prototype, {
 
     ItemView: require('./PickupDate'),
+    ShareSkipDates: require('../../models/ShareSkipDate'),
 
     getItemViewOptions() { return { container: this.templateData.dates } },
 
@@ -14,36 +15,38 @@ Object.assign( PickupDates.prototype, List.prototype, {
     },
 
     postRender() {
-        this.valid = true
+        this.ShareSkipDates.get()
+        .then(() => {
+            this.valid = true
 
-        this.on( 'itemSelected', model => {
-            this.templateData.container.removeClass('has-error')
-            this.updateShare()
-        } )
+            this.on( 'itemSelected', model => {
+                this.templateData.container.removeClass('has-error')
+                this.updateShare()
+            } )
+            this.on( 'itemUnselected', model => this.updateShare() )
+            this.on( 'itemAdded', () => {
+                if( this.model.has('skipDays') &&
+                    this.model.get('skipDays').length &&
+                    Object.keys( this.itemViews ).length == this.items.length ) {
+                    this.model.set({ skipDays:
+                        this.model.get('skipDays').filter( skipDayId => {
+                            if( this.items.get( skipDayId ) ) {
+                                this.unselectItem( this.items.get( skipDayId ) )
+                                return true 
+                            }
 
-        this.on( 'itemUnselected', model => this.updateShare() )
-
-        this.on( 'itemAdded', () => {
-            if( this.model.has('skipDays') &&
-                this.model.get('skipDays').length &&
-                Object.keys( this.itemViews ).length == this.items.length ) {
-                this.model.set({ skipDays:
-                    this.model.get('skipDays').filter( skipDayId => {
-                        if( this.items.get( skipDayId ) ) {
-                            this.unselectItem( this.items.get( skipDayId ) )
-                            return true 
-                        }
-
-                        return false;
+                            return false;
+                        })
                     })
-                })
-            }
+                }
+            })
+            
+            this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
+            List.prototype.postRender.call( this )
         })
-        
-        this.model.on( 'change:selectedDelivery', () => this.items.reset( this.itemModels() ) )
+        .catch( e => new this.Error(e) )
 
-
-        List.prototype.postRender.call( this )
+        return this;
     },
 
     requiresLogin: false,

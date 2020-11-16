@@ -5,7 +5,8 @@ module.exports = Object.assign( {}, require('./__proto__'), {
         'manageCustomerBtn': 'click',
         'manageOrdersBtn': 'click',
         'reportingBtn': 'click',
-        'weeklyReminderBtn' : 'click'
+        'weeklyReminderBtn': 'click',
+        'manageSkipDatesBtn': 'click'
     },
 
     model: {
@@ -15,6 +16,11 @@ module.exports = Object.assign( {}, require('./__proto__'), {
             label: 'Collection Manager',
             roles: new Set( [ 'admin' ] ),
             url: 'collection-manager'
+        },
+        manageSkipDates: {
+            label: 'Skip Dates',
+            roles: new Set( [ 'admin' ] ),
+            url: 'manage-skip-dates'
         },
         reporting: { label: '~_~ Reporting ~_~', roles: new Set( [ 'admin' ] ), url: 'reporting' },
         weeklyReminder: { label: 'Weekly Reminder', roles: new Set( [ 'admin' ] ), url: 'weekly-reminder' }
@@ -30,6 +36,10 @@ module.exports = Object.assign( {}, require('./__proto__'), {
 
     onManageOrdersBtnClick() {
         this.emit( 'navigate', 'admin-plus/manage-orders' )
+    },
+
+    onManageSkipDatesBtnClick() {
+        this.emit('navigate', 'admin-plus/manage-skip-dates')
     },
 
     onNavigation( path ) {
