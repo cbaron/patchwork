@@ -93,11 +93,11 @@ module.exports = { ...require('./__proto__'),
                 }
             }
 
-            if (!memo[key].recipients.includes(email)) {
+            if (!memo[key].recipients.includes(email) && email !== 'eat.patchworkgardens@gmail.com') {
                 memo[key].recipients.push(email);
             };
             
-            if (secondaryEmail && !memo[key].recipients.includes(secondaryEmail)) {
+            if (secondaryEmail && !memo[key].recipients.includes(secondaryEmail) && email !== 'eat.patchworkgardens@gmail.com') {
                 memo[key].recipients.push(secondaryEmail);
             };
 

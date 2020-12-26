@@ -145,7 +145,7 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
 
         this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        const result = await this.SgMail.send( emails )
+        await this.SgMail.send( emails )
         .catch( error => {
             console.log( `Error generating reminder email : ${error.toString()}` )
             const { message, code, response } = error;

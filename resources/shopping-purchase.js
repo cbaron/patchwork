@@ -49,11 +49,8 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
         emailTo.push(secondaryEmail)
       }
 
-      this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-      await this.SgMail.send({
+      const opts = {
         to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
-        bcc: 'eat.patchworkgardens@gmail.com',
         from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
         subject: `Your Patchwork Gardens Store Order`,
         html: this.Templates.EmailBase({
@@ -64,7 +61,15 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
             isPayingWithCreditCard: this.body.isPayingWithCreditCard
           })
         })
-      })
+      };
+
+      if (email !== 'eat.patchworkgardens@gmail.com') {
+        opts.bcc = 'eat.patchworkgardens@gmail.com'
+      }
+
+      this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      await this.SgMail.send(opts)
       .catch(error => {
         console.log(`Failed to send confirmation email to customer: ${error.toString()}`);
         const { message, code, response } = error;
