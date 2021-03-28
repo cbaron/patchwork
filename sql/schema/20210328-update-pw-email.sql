@@ -1,0 +1,1 @@
+UPDATE contactinfo SET email='eat@patchworkgardens.net' WHERE email='eat.patchworkgardens@gmail.com';
