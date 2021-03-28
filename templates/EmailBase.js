@@ -36,7 +36,7 @@ module.exports = ({ emailBody }) =>
                 <tr style="background-color: black; color: #e7e7e7;">
                     <td style="padding: 1rem; font-size: .95rem; font-weight: bold; text-align: center;">
                         <p style="margin: 0;">Patchwork Gardens<br />9057 W Third St<br />Dayton, OH 45417<br />(937) 835-5807<br />
-                            <a style="color: #ffc502; text-decoration: none;" href="mailto:eat.patchworkgardens@gmail.com">eat.patchworkgardens@gmail.com</a><br />
+                            <a style="color: #ffc502; text-decoration: none;" href="mailto:eat@patchworkgardens.net">eat@patchworkgardens.net</a><br />
                             <a style="color: #ffc502; text-decoration: none;" href="https://patchworkgardens.net">https://patchworkgardens.net</a>
                         </p>
                     </td>

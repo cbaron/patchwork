@@ -12,7 +12,7 @@ Object.assign( Mail.prototype, BaseResource.prototype, {
             return this.Q(
                 this.SendGrid.send( {
                     to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,
-                    from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                    from: 'Patchwork Gardens <eat@patchworkgardens.net>',
                     subject: this.body.subject,
                     html: this.Templates.EmailBase({ emailBody: this.Templates.PaymentReminder(this.body) })
                 } )

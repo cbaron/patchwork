@@ -56,7 +56,7 @@ Object.assign( MemberOrder.prototype, Base.prototype, {
 
         return this.SendGrid.send( {
             to: process.env.NODE_ENV === 'production' ? this.body.to : process.env.TEST_EMAIL,
-            from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+            from: 'Patchwork Gardens <eat@patchworkgardens.net>',
             subject: `Patchwork Gardens CSA: ${this.body.shareLabel} Adjustment`,
             html: this.Templates.EmailBase({ emailBody: this.Templates.OrderUpdateReceipt(this.body) })
         } )

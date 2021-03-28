@@ -130,8 +130,8 @@ Object.assign( WeeklyReminder.prototype, Base.prototype, {
             }
 
             const opts = {
-                to: this.isProd ? 'Patchwork Gardens <eat.patchworkgardens@gmail.com>' : process.env.TEST_EMAIL,
-                from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                to: this.isProd ? 'Patchwork Gardens <eat@patchworkgardens.net>' : process.env.TEST_EMAIL,
+                from: 'Patchwork Gardens <eat@patchworkgardens.net>',
                 subject: val.subject,
                 html: this.Templates.emailBase({ emailBody })
             }

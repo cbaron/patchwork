@@ -51,11 +51,11 @@ Object.assign( Signup.prototype, Base.prototype, {
             return this.rollbackShareQueries()
             .fail( e => {
                 console.log( this.format( '%s Error rolling back after failed payment : %s -- body -- %s', new Date(), e.stack || e, JSON.stringify(this.body) ) )
-                this.error = "Error rolling back after failed payment.  Please contact us at eat.patchworkgardens@gmail.com"
+                this.error = "Error rolling back after failed payment.  Please contact us at eat@patchworkgardens.net"
             } )
             .then( () => {
                 console.log( this.format( '%s Failed payment : %s -- body -- %s', new Date(), failedPayment.stack || failedPayment, JSON.stringify(this.body) ) )
-                if( !this.error ) this.error = `Payment failed. Please try again or contact us at eat.patchworkgardens@gmail.com for support.`
+                if( !this.error ) this.error = `Payment failed. Please try again or contact us at eat@patchworkgardens.net for support.`
             } ) 
         } )
         .then( charge => {
@@ -216,7 +216,7 @@ Object.assign( Signup.prototype, Base.prototype, {
 
                 return this.Q( this.SendGrid.send( {
                     to: this.isProd ? this.body.member.email.toLowerCase() : process.env.TEST_EMAIL,
-                    from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                    from: 'Patchwork Gardens <eat@patchworkgardens.net>',
                     subject: `Patchwork Gardens Email Verification`,
                     html: this.Templates.EmailBase({ emailBody: this.Templates.EmailVerification( templateOpts ) })
                 } ) )
@@ -227,7 +227,7 @@ Object.assign( Signup.prototype, Base.prototype, {
 
                 return this.Q( this.SendGrid.send( {
                     to: this.isProd ? emailTo : process.env.TEST_EMAIL,
-                    from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                    from: 'Patchwork Gardens <eat@patchworkgardens.net>',
                     subject: 'Welcome to Patchwork Gardens CSA',
                     html: this.Templates.EmailBase({ emailBody: this.generateEmailBody() })
                 } ) )

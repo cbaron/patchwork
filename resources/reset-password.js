@@ -51,7 +51,7 @@ Object.assign( ResetPassword.prototype, Base.prototype, {
 
                     return this.SendGrid.send( {
                         to: this.isProd ? this.body.email : process.env.TEST_EMAIL,
-                        from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+                        from: 'Patchwork Gardens <eat@patchworkgardens.net>',
                         subject: `Patchwork Gardens Password Reset`,
                         html: this.Templates.EmailBase({ emailBody: this.Templates.ResetPassword(templateOpts) })
                     } )

@@ -51,7 +51,7 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
 
       const opts = {
         to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
-        from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+        from: 'Patchwork Gardens <eat@patchworkgardens.net>',
         subject: `Your Patchwork Gardens Store Order`,
         html: this.Templates.EmailBase({
           emailBody: this.Templates.ShoppingReceipt({
@@ -63,8 +63,8 @@ Object.assign( ShoppingPayment.prototype, Base.prototype, {
         })
       };
 
-      if (email !== 'eat.patchworkgardens@gmail.com') {
-        opts.bcc = 'eat.patchworkgardens@gmail.com'
+      if (email !== 'eat@patchworkgardens.net') {
+        opts.bcc = 'eat@patchworkgardens.net'
       }
 
       this.SgMail.setApiKey(process.env.SENDGRID_API_KEY);

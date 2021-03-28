@@ -47,7 +47,7 @@ Object.assign( Payment.prototype, Base.prototype, {
 
         return this.SendGrid.send( {
             to: process.env.NODE_ENV === 'production' ? emailTo : process.env.TEST_EMAIL,
-            from: 'Patchwork Gardens <eat.patchworkgardens@gmail.com>',
+            from: 'Patchwork Gardens <eat@patchworkgardens.net>',
             subject: `Patchwork Gardens Payment Receipt`,
             html: this.Templates.EmailBase({
                 emailBody: this.Templates.PaymentReceipt({

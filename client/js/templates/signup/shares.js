@@ -5,8 +5,8 @@ module.exports = p =>
     <h2 data-js="sharesHeader">Please select which season(s) you would like to join us</h2>
     <p data-js="noSharesMessage" class="no-shares-message fd-hidden">
         We are currently full for the 2020 Summer season. Please email us to put your name on the waiting list. Email:
-        <a href="mailto:eat.patchworkgardens@gmail.com">
-            eat.patchworkgardens@gmail.com 
+        <a href="mailto:eat@patchworkgardens.net">
+            eat@patchworkgardens.net 
         </a>
     </p>
     <ul data-js="shares"></ul>

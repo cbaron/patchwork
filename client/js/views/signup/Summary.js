@@ -322,7 +322,7 @@ Object.assign( Summary.prototype, View.prototype, {
             title: 'Hmmm',
             body: ( opts && opts.error )
                 ? opts.error
-                : 'There was a problem.  Please contact us at eat.patchworkgardens@gmail.com.  We apologize for the inconvenience.',
+                : 'There was a problem.  Please contact us at eat@patchworkgardens.net.  We apologize for the inconvenience.',
             hideCancelBtn: true,
             confirmText: 'Okay' } )
         .on( 'submit', () => this.modalView.hide() )
