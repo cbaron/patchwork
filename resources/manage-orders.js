@@ -37,7 +37,7 @@ Object.assign(ManageOrders.prototype, Base.prototype, {
         JOIN person p ON p.id = m.personid
         ${where}
         ORDER BY o.created ${direction}
-        LIMIT 50`,
+        LIMIT 300`,
         values
       );
     }
