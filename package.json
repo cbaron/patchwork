@@ -18,7 +18,7 @@
     "pg-query-stream": "^1.0.0",
     "pg-transaction": "^1.0.4",
     "q": "^1.4.1",
-    "stripe": "^4.4.0",
+    "stripe": "^11.1.0",
     "uuid-v4": "^0.1.0"
   },
   "devDependencies": {
