@@ -73,7 +73,7 @@ module.exports = Object.assign( { }, require('./__proto__'), {
                         resource: collectionName
                     } ),
                     delete: true,
-                    pageSize: 100,
+                    pageSize: 500,
                     skip: 0,
                     sort: { 'label': 1 },
                     scrollPagination: true
