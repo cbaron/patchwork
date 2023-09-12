@@ -1,5 +1,5 @@
 module.exports = p => {
-    const attachmentMessage = p.hasAttachment ? `<p>Also attached is this week's newsletter. Enjoy!</p>` : ``
+    const attachmentMessage = p.hasAttachment ? `<p>Also attached is this month's newsletter. Enjoy!</p>` : ``
 
 return `` +
 `<p>Hello!</p>
